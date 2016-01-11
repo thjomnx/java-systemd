@@ -1,0 +1,20 @@
+# Java classes
+*.class
+
+# Output directories
+build/
+target/
+
+# Eclipse / idea
+.idea
+.project
+.classpath
+.settings/
+
+# Windows specific stuff
+[Dd]esktop.ini
+[Tt]humbs.db
+
+# OSX specific stuff
+.DS_Store/
+/bin/
