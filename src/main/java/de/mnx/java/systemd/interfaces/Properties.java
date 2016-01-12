@@ -21,6 +21,12 @@ import org.freedesktop.dbus.Variant;
 @DBusInterfaceName(value = SYSTEMD_PROPERTIES_NAME)
 public interface Properties extends DBusInterface {
 
+    String NAME_VERSION = "Version";
+    String NAME_ARCHITECTURE = "Architecture";
+    String NAME_ENVIRONMENT = "Environment";
+    String NAME_SHOW_STATUS = "ShowStatus";
+    String NAME_SYSTEM_STATE = "SystemState";
+
     @DBusMemberName(value = "Get")
     Variant<?> getProperty(String iface, String property);
 

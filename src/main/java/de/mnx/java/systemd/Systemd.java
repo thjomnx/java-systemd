@@ -11,6 +11,9 @@
 
 package de.mnx.java.systemd;
 
+import java.util.Vector;
+
+import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
@@ -18,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import de.mnx.java.systemd.interfaces.Manager;
 import de.mnx.java.systemd.interfaces.Properties;
-import de.mnx.java.systemd.types.UnitFileStatus;
+import de.mnx.java.systemd.utils.PropertyAccessor;
 
 public final class Systemd {
 
@@ -35,7 +38,7 @@ public final class Systemd {
     private DBusConnection dbus;
 
     private Manager manager;
-    private Properties properties;
+    private PropertyAccessor properties;
 
     private Systemd() {
         // Do nothing (singleton)
@@ -79,7 +82,9 @@ public final class Systemd {
         }
 
         try {
-            properties = dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, Properties.class);
+            Properties props = dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, Properties.class);
+
+            properties = new PropertyAccessor(props);
         }
         catch (final DBusException e) {
             LOG.error("Unable to get remote object " + SYSTEMD_PROPERTIES_NAME, e);
@@ -94,16 +99,34 @@ public final class Systemd {
         }
     }
 
-    public UnitFileStatus[] listUnitFiles() {
-        return manager.listUnitFiles();
+    public String introspect() throws DBusException {
+        Introspectable intro = dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, Introspectable.class);
+
+        return intro.Introspect();
+    }
+
+    public Manager manager() {
+        return manager;
     }
 
     public String getVersion() {
-        return (String) properties.getProperty(SYSTEMD_MANAGER_NAME, "Version").getValue();
+        return properties.getString(Properties.NAME_VERSION);
     }
 
     public String getArchitecture() {
-        return (String) properties.getProperty(SYSTEMD_MANAGER_NAME, "Architecture").getValue();
+        return properties.getString(Properties.NAME_ARCHITECTURE);
+    }
+
+    public Vector<String> getEnvironment() {
+        return properties.getVector(Properties.NAME_ENVIRONMENT);
+    }
+
+    public boolean getStatus() {
+        return properties.getBoolean(Properties.NAME_SHOW_STATUS);
+    }
+
+    public String getSystemState() {
+        return properties.getString(Properties.NAME_SYSTEM_STATE);
     }
 
 }

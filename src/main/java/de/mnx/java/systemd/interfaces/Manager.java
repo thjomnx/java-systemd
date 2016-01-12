@@ -22,6 +22,9 @@ import de.mnx.java.systemd.types.UnitFileStatus;
 @DBusInterfaceName(value = SYSTEMD_MANAGER_NAME)
 public interface Manager extends DBusInterface {
 
+    @DBusMemberName(value = "Dump")
+    String dump();
+
     @DBusMemberName(value = "ListUnitFiles")
     UnitFileStatus[] listUnitFiles();
 
