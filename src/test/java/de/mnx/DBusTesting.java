@@ -1,3 +1,13 @@
+/*
+ * Java-systemd implementation
+ * Copyright (c) 2016 Markus Enax
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of either the GNU Lesser General Public License Version 2 or the
+ * Academic Free Licence Version 2.1.
+ *
+ * Full licence texts are included in the COPYING file with this program.
+ */
 
 package de.mnx;
 
@@ -12,9 +22,9 @@ public class DBusTesting {
         try {
             System.out.println(Systemd.bus().getVersion());
             System.out.println(Systemd.bus().getArchitecture());
-            
+
             UnitFileStatus[] unitFiles = Systemd.bus().listUnitFiles();
-            
+
             for (UnitFileStatus unitFile : unitFiles) {
                 System.out.println(unitFile.getFile() + " :: " + unitFile.getStatus());
             }
@@ -22,7 +32,7 @@ public class DBusTesting {
         catch (final DBusException e) {
             e.printStackTrace();
         }
-        
+
         System.exit(0);
     }
 
