@@ -11,23 +11,26 @@
 
 package de.mnx.java.systemd.interfaces;
 
-import static de.mnx.java.systemd.Systemd.SYSTEMD_PROPERTIES_NAME;
+import static de.mnx.java.systemd.Systemd.SYSTEMD_MANAGER_NAME;
+
+import java.util.List;
 
 import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.DBusMemberName;
-import org.freedesktop.dbus.Variant;
 
-@DBusInterfaceName(value = SYSTEMD_PROPERTIES_NAME)
-public interface Properties extends DBusInterface {
+import de.mnx.java.systemd.types.UnitFileStatus;
 
-    String NAME_VERSION = "Version";
-    String NAME_ARCHITECTURE = "Architecture";
-    String NAME_ENVIRONMENT = "Environment";
-    String NAME_SHOW_STATUS = "ShowStatus";
-    String NAME_SYSTEM_STATE = "SystemState";
+@DBusInterfaceName(value = SYSTEMD_MANAGER_NAME)
+public interface ManagerInterface extends DBusInterface {
 
-    @DBusMemberName(value = "Get")
-    Variant<?> getProperty(String iface, String property);
+    @DBusMemberName(value = "ListUnitFiles")
+    List<UnitFileStatus> listUnitFiles();
+
+    @DBusMemberName(value = "GetUnit")
+    DBusInterface getUnit(final String name);
+
+    @DBusMemberName(value = "Dump")
+    String dump();
 
 }

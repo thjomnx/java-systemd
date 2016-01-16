@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.mnx.java.systemd.utils;
+package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_MANAGER_NAME;
 
@@ -17,26 +17,33 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.Variant;
 
-import de.mnx.java.systemd.interfaces.Properties;
+import de.mnx.java.systemd.interfaces.PropertyInterface;
 
-public final class PropertyAccessor {
+public final class Properties extends InterfaceAdapter {
 
-    private Properties iface;
+    public static final String NAME_VERSION = "Version";
+    public static final String NAME_ARCHITECTURE = "Architecture";
+    public static final String NAME_ENVIRONMENT = "Environment";
+    public static final String NAME_SHOW_STATUS = "ShowStatus";
+    public static final String NAME_SYSTEM_STATE = "SystemState";
 
-    public PropertyAccessor(final Properties iface) {
-        this.iface = iface;
+    Properties(final PropertyInterface iface) {
+        super(iface);
     }
 
-    public Properties getInterface() {
-        return iface;
+    @Override
+    public PropertyInterface getInterface() {
+        return (PropertyInterface) super.getInterface();
     }
 
     public Variant<?> getVariant(final String name) {
-        return iface.getProperty(SYSTEMD_MANAGER_NAME, name);
+        return getInterface().getProperty(SYSTEMD_MANAGER_NAME, name);
     }
 
     public boolean getBoolean(final String name) {
-        return (boolean) getVariant(name).getValue();
+        Boolean value = (Boolean) getVariant(name).getValue();
+
+        return value.booleanValue();
     }
 
     public String getString(final String name) {

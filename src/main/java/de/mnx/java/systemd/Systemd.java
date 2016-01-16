@@ -19,9 +19,8 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mnx.java.systemd.interfaces.Manager;
-import de.mnx.java.systemd.interfaces.Properties;
-import de.mnx.java.systemd.utils.PropertyAccessor;
+import de.mnx.java.systemd.interfaces.ManagerInterface;
+import de.mnx.java.systemd.interfaces.PropertyInterface;
 
 public final class Systemd {
 
@@ -38,7 +37,7 @@ public final class Systemd {
     private DBusConnection dbus;
 
     private Manager manager;
-    private PropertyAccessor properties;
+    private Properties properties;
 
     private Systemd() {
         // Do nothing (singleton)
@@ -73,7 +72,7 @@ public final class Systemd {
         }
 
         try {
-            manager = dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, Manager.class);
+            manager = new Manager(dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, ManagerInterface.class));
         }
         catch (final DBusException e) {
             LOG.error("Unable to get remote object " + SYSTEMD_MANAGER_NAME, e);
@@ -82,9 +81,7 @@ public final class Systemd {
         }
 
         try {
-            Properties props = dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, Properties.class);
-
-            properties = new PropertyAccessor(props);
+            properties = new Properties(dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, PropertyInterface.class));
         }
         catch (final DBusException e) {
             LOG.error("Unable to get remote object " + SYSTEMD_PROPERTIES_NAME, e);
