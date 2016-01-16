@@ -18,3 +18,6 @@ target/
 # OSX specific stuff
 .DS_Store/
 /bin/
+
+# Generated classes from dbus-java
+org/
