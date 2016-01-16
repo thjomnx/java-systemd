@@ -11,27 +11,37 @@
 
 package de.mnx.java.systemd.types;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.freedesktop.dbus.Position;
 import org.freedesktop.dbus.Struct;
 
 public class UnitFileStatus extends Struct {
 
+    public enum Status {
+        ENABLED,
+        DISABLED,
+        STATIC,
+        INDIRECT;
+    }
+
     @Position(0)
-    private final String file;
+    private final Path path;
 
     @Position(1)
-    private final String status;
+    private final Status status;
 
-    public UnitFileStatus(final String file, final String status) {
-        this.file = file;
-        this.status = status;
+    public UnitFileStatus(final String path, final String status) {
+        this.path = Paths.get(path);
+        this.status = Status.valueOf(status.toUpperCase());
     }
 
-    public String getFile() {
-        return file;
+    public Path getPath() {
+        return path;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
