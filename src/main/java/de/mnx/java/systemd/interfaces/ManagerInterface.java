@@ -11,8 +11,6 @@
 
 package de.mnx.java.systemd.interfaces;
 
-import static de.mnx.java.systemd.Systemd.SYSTEMD_MANAGER_NAME;
-
 import java.util.List;
 
 import org.freedesktop.dbus.DBusInterface;
@@ -21,7 +19,7 @@ import org.freedesktop.dbus.DBusMemberName;
 
 import de.mnx.java.systemd.types.UnitFileStatus;
 
-@DBusInterfaceName(value = SYSTEMD_MANAGER_NAME)
+@DBusInterfaceName(value = de.mnx.java.systemd.adapters.Manager.SERVICE_NAME)
 public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "ListUnitFiles")

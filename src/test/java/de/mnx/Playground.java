@@ -11,60 +11,85 @@
 
 package de.mnx;
 
+import java.util.List;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.exceptions.DBusExecutionException;
 
-import de.mnx.java.systemd.Manager;
 import de.mnx.java.systemd.Systemd;
-import de.mnx.java.systemd.Unit;
+import de.mnx.java.systemd.adapters.Manager;
+import de.mnx.java.systemd.adapters.Service;
+import de.mnx.java.systemd.types.UnitFileStatus;
 
 public class Playground {
 
-    public Playground() {
-        // Do nothing
+    private Playground() {
+        // Do nothing (static class)
     }
 
-    public void introspect() throws DBusException {
-        System.out.println(Systemd.bus().introspect());
+    public static void introspect(final Systemd systemd) throws DBusException {
+        System.out.println(systemd.introspect());
     }
 
-    public void properties() throws DBusException  {
-        System.out.println(Systemd.bus().getVersion());
-        System.out.println(Systemd.bus().getArchitecture());
+    public static void properties(final Manager manager) throws DBusException  {
+        System.out.println("Version: " + manager.getVersion());
+        System.out.println("Architecture: " + manager.getArchitecture());
 
-        System.out.println(Systemd.bus().getEnvironment());
+        System.out.println("Environment: " + manager.getEnvironment());
 
-        System.out.println(Systemd.bus().getStatus());
-        System.out.println(Systemd.bus().getSystemState());
+        System.out.println("Status: " + manager.getStatus());
+        System.out.println("SystemState: " + manager.getSystemState());
     }
 
-    public void methods() throws DBusException  {
-        Manager manager = Systemd.bus().manager();
+    public static void methods(final Manager manager) throws DBusException  {
+//        Service cronie = manager.getService("cronie");
+//        System.out.println("Object path: " + cronie.getObjectPath());
+//        System.out.println("MainPDI: " + cronie.getProcessId());
 
-        Unit unit = manager.getUnit("cronie.service");
-        System.out.println(unit.getObjectPath());
+        List<UnitFileStatus> list = manager.listUnitFiles();
 
-//        List<UnitFileStatus> list = manager.listUnitFiles();
-//
-//        for (UnitFileStatus item : list) {
-//            System.out.println(item.getPath() + " : " + item.getStatus().toString().toLowerCase());
-//        }
+        for (UnitFileStatus item : list) {
+            System.out.println(item.getPath() + " : " + item.getStatus().toString().toLowerCase());
+        }
+
+        for (UnitFileStatus item : list) {
+            if (item.getStatus().equals(UnitFileStatus.Status.ENABLED)) {
+                String path = item.getPath().getFileName().toString();
+
+                if (path.endsWith(".service")) {
+                    String serviceName = path.substring(0, path.indexOf(".service"));
+
+                    try {
+                        Service service = manager.getService(serviceName);
+                        System.out.println("Object path: " + service.getObjectPath());
+                        System.out.println("MainPDI: " + service.getProcessId());
+                    }
+                    catch (final DBusExecutionException e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
+            }
+        }
 
 //        System.out.println(manager.dump());
     }
 
     public static void main(String[] args) {
-        Playground playground = new Playground();
+        Systemd systemd = new Systemd();
 
         try {
-//            playground.introspect();
-            playground.properties();
-            playground.methods();
+            systemd.connect();
+
+            introspect(systemd);
+            properties(systemd.getManager());
+            methods(systemd.getManager());
         }
-        catch (final DBusException | DBusExecutionException e) {
+        catch (final Exception e) {
             e.printStackTrace();
         }
         finally {
+            systemd.disconnect();
+
             System.exit(0);
         }
     }

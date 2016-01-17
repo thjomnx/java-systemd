@@ -11,14 +11,12 @@
 
 package de.mnx.java.systemd.interfaces;
 
-import static de.mnx.java.systemd.Systemd.SYSTEMD_PROPERTIES_NAME;
-
 import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.DBusMemberName;
 import org.freedesktop.dbus.Variant;
 
-@DBusInterfaceName(value = SYSTEMD_PROPERTIES_NAME)
+@DBusInterfaceName(value = de.mnx.java.systemd.adapters.InterfaceAdapter.Properties.SERVICE_NAME)
 public interface PropertyInterface extends DBusInterface {
 
     @DBusMemberName(value = "Get")

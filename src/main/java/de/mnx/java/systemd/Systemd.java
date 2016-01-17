@@ -11,57 +11,30 @@
 
 package de.mnx.java.systemd;
 
-import java.util.Vector;
-
 import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mnx.java.systemd.interfaces.ManagerInterface;
-import de.mnx.java.systemd.interfaces.PropertyInterface;
+import de.mnx.java.systemd.adapters.Manager;
 
 public final class Systemd {
 
-    public static final String DBUS_BUS_NAME = "org.freedesktop.systemd1";
-    public static final String DBUS_OBJECT_PATH = "/org/freedesktop/systemd1";
-
-    public static final String SYSTEMD_MANAGER_NAME = "org.freedesktop.systemd1.Manager";
-    public static final String SYSTEMD_PROPERTIES_NAME = "org.freedesktop.DBus.Properties";
+    public static final String SYSTEMD_DBUS_NAME = "org.freedesktop.systemd1";
+    public static final String SYSTEMD_OBJECT_PATH = "/org/freedesktop/systemd1";
 
     private static final Logger LOG = LoggerFactory.getLogger(Systemd.class);
-
-    private static Systemd instance;
 
     private DBusConnection dbus;
 
     private Manager manager;
-    private Properties properties;
 
-    private Systemd() {
+    public Systemd() {
         // Do nothing (singleton)
     }
 
-    public static final Systemd bus() throws DBusException {
-        if (instance == null) {
-            instance = new Systemd();
-            instance.connect();
-
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-
-                @Override
-                public void run() {
-                    instance.disconnect();
-                }
-
-            });
-        }
-
-        return instance;
-    }
-
-    private void connect() throws DBusException {
+    public void connect() throws DBusException {
         try {
             dbus = DBusConnection.getConnection(DBusConnection.SYSTEM);
         }
@@ -70,60 +43,30 @@ public final class Systemd {
 
             throw e;
         }
-
-        try {
-            manager = new Manager(dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, ManagerInterface.class));
-        }
-        catch (final DBusException e) {
-            LOG.error("Unable to get remote object " + SYSTEMD_MANAGER_NAME, e);
-
-            throw e;
-        }
-
-        try {
-            properties = new Properties(dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, PropertyInterface.class));
-        }
-        catch (final DBusException e) {
-            LOG.error("Unable to get remote object " + SYSTEMD_PROPERTIES_NAME, e);
-
-            throw e;
-        }
     }
 
-    private void disconnect() {
+    public void disconnect() {
         if (dbus != null) {
             dbus.disconnect();
         }
     }
 
+    DBusConnection getConnection() {
+        return dbus;
+    }
+
     public String introspect() throws DBusException {
-        Introspectable intro = dbus.getRemoteObject(DBUS_BUS_NAME, DBUS_OBJECT_PATH, Introspectable.class);
+        Introspectable intro = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, Introspectable.class);
 
         return intro.Introspect();
     }
 
-    public Manager manager() {
+    public Manager getManager() throws DBusException {
+        if (manager == null) {
+            manager = Manager.create(dbus);
+        }
+
         return manager;
-    }
-
-    public String getVersion() {
-        return properties.getString(Properties.NAME_VERSION);
-    }
-
-    public String getArchitecture() {
-        return properties.getString(Properties.NAME_ARCHITECTURE);
-    }
-
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Properties.NAME_ENVIRONMENT);
-    }
-
-    public boolean getStatus() {
-        return properties.getBoolean(Properties.NAME_SHOW_STATUS);
-    }
-
-    public String getSystemState() {
-        return properties.getString(Properties.NAME_SYSTEM_STATE);
     }
 
 }

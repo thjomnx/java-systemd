@@ -9,14 +9,15 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.mnx.java.systemd;
+package de.mnx.java.systemd.adapters;
 
+import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
 
-public class Unit extends InterfaceAdapter {
+public abstract class Unit extends InterfaceAdapter {
 
-    public Unit(final DBusInterface iface) {
-        super(iface);
+    protected Unit(final DBusConnection dbus, final DBusInterface iface) {
+        super(dbus, iface);
     }
 
 }
