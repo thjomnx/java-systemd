@@ -42,9 +42,9 @@ public class Playground {
     }
 
     public static void methods(final Manager manager) throws DBusException  {
-//        Service cronie = manager.getService("cronie");
-//        System.out.println("Object path: " + cronie.getObjectPath());
-//        System.out.println("MainPDI: " + cronie.getProcessId());
+        Service cronie = manager.getService("cronie");
+        System.out.println("Object path: " + cronie.getObjectPath());
+        System.out.println("MainPDI: " + cronie.getProcessId());
 
         List<UnitFileStatus> list = manager.listUnitFiles();
 

@@ -18,10 +18,11 @@ import java.util.List;
 import java.util.Vector;
 
 import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.mnx.java.systemd.Systemd;
 import de.mnx.java.systemd.interfaces.ManagerInterface;
+import de.mnx.java.systemd.interfaces.ServiceInterface;
 import de.mnx.java.systemd.types.UnitFileStatus;
 
 public class Manager extends InterfaceAdapter {
@@ -55,9 +56,11 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnitFiles();
     }
 
-    public Service getService(final String name) {
+    public Service getService(final String name) throws DBusException {
         String service = name.endsWith(".service") ? name : name + ".service";
-        DBusInterface iface = getInterface().getUnit(service);
+        String objectPath = SYSTEMD_OBJECT_PATH + "/unit/" + Systemd.escapePath(service);
+
+        ServiceInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, objectPath, ServiceInterface.class);
 
         return new Service(dbus, iface);
     }

@@ -11,6 +11,9 @@
 
 package de.mnx.java.systemd;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -24,14 +27,30 @@ public final class Systemd {
     public static final String SYSTEMD_DBUS_NAME = "org.freedesktop.systemd1";
     public static final String SYSTEMD_OBJECT_PATH = "/org/freedesktop/systemd1";
 
-    private static final Logger LOG = LoggerFactory.getLogger(Systemd.class);
+    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
+
+    private static final Logger log = LoggerFactory.getLogger(Systemd.class);
 
     private DBusConnection dbus;
 
     private Manager manager;
 
     public Systemd() {
-        // Do nothing (singleton)
+        // Do nothing (lazy implementation)
+    }
+
+    public static final String escapePath(final CharSequence path) {
+        StringBuffer escaped = new StringBuffer();
+        Matcher matcher = PATH_ESCAPE_PATTERN.matcher(path);
+
+        while (matcher.find()) {
+            String replacement = '_' + Integer.toHexString((int) matcher.group().charAt(0));
+            matcher.appendReplacement(escaped, replacement);
+        }
+
+        matcher.appendTail(escaped);
+
+        return escaped.toString();
     }
 
     public void connect() throws DBusException {
@@ -39,7 +58,7 @@ public final class Systemd {
             dbus = DBusConnection.getConnection(DBusConnection.SYSTEM);
         }
         catch (final DBusException e) {
-            LOG.error("Unable to connect to system bus", e);
+            log.error("Unable to connect to system bus", e);
 
             throw e;
         }

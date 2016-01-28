@@ -11,12 +11,14 @@
 
 package de.mnx.java.systemd.adapters;
 
+import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
 
 public class Service extends Unit {
 
-    public static final String SERVICE_NAME = "org.freedesktop.systemd1.Service";
+    public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Service";
 
     public static final String PROPERTY_MAIN_PID= "MainPID";
 
