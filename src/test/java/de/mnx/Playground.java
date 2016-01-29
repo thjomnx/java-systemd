@@ -11,10 +11,7 @@
 
 package de.mnx;
 
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
-import org.freedesktop.dbus.exceptions.DBusExecutionException;
 
 import de.mnx.java.systemd.Systemd;
 import de.mnx.java.systemd.adapters.Manager;
@@ -43,44 +40,28 @@ public class Playground {
     }
 
     public static void methods(final Manager manager) throws DBusException  {
-        List<UnitFileStatus> ufs = manager.listUnitFiles();
-
-        for (UnitFileStatus item : ufs) {
+        for (UnitFileStatus item : manager.listUnitFiles()) {
             System.out.println(item.getPath() + " : " + item.getStatus().toString().toLowerCase());
         }
 
-        for (UnitFileStatus item : ufs) {
-            if (item.getStatus().equals(UnitFileStatus.Status.ENABLED)) {
-                String path = item.getPath().getFileName().toString();
+        for (UnitStatus unit : manager.listUnits()) {
+            System.out.println(unit.getUnitName() + ":");
+            System.out.println("  Description: " + unit.getUnitDescription());
+            System.out.println("  LoadState: " + unit.getLoadState());
+            System.out.println("  ActiveState: " + unit.getActiveState());
+            System.out.println("  SubState: " + unit.getSubState());
+            System.out.println("  FollowingUnit: " + unit.getFollowingUnit());
+            System.out.println("  ObjectPath: " + unit.getUnitObjectPath());
+            System.out.println("  JobID: " + unit.getJobId());
+            System.out.println("  JobType: " + unit.getJobType());
+            System.out.println("  JobObjectPath: " + unit.getJobObjectPath());
 
-                if (path.endsWith(".service")) {
-                    String serviceName = path.substring(0, path.indexOf(".service"));
-
-                    try {
-                        Service service = manager.getService(serviceName);
-                        System.out.println("ObjectPath: " + service.getObjectPath());
-                        System.out.println("MainPID: " + service.getProcessId());
-                    }
-                    catch (final DBusExecutionException e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
+            if (unit.getUnitName().endsWith(".service") && unit.getActiveState().equals("active") && unit.getSubState().equals("running")) {
+                Service service = manager.getService(unit.getUnitName());
+                System.out.println("  Runtime statistics:");
+                System.out.println("    MainPID: " + service.getProcessId());
             }
-        }
 
-        List<UnitStatus> us = manager.listUnits();
-
-        for (UnitStatus item : us) {
-            System.out.println(item.getUnitName() + ":");
-            System.out.println("  Description: " + item.getUnitDescription());
-            System.out.println("  LoadState: " + item.getLoadState());
-            System.out.println("  ActiveState: " + item.getActiveState());
-            System.out.println("  SubState: " + item.getSubState());
-            System.out.println("  FollowingUnit: " + item.getFollowingUnit());
-            System.out.println("  ObjectPath: " + item.getUnitObjectPath());
-            System.out.println("  JobID: " + item.getJobId());
-            System.out.println("  JobType: " + item.getJobType());
-            System.out.println("  JobObjectPath: " + item.getJobObjectPath());
             System.out.println();
         }
 
