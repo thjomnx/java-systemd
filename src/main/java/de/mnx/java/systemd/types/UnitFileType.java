@@ -15,9 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.freedesktop.dbus.Position;
-import org.freedesktop.dbus.Struct;
 
-public class UnitFileStatus extends Struct {
+public class UnitFileType extends BaseType {
 
     public enum Status {
         ENABLED,
@@ -32,9 +31,15 @@ public class UnitFileStatus extends Struct {
     @Position(1)
     private final Status status;
 
-    public UnitFileStatus(final String path, final String status) {
+    public UnitFileType(final String path, final String status) {
+        super();
+
         this.path = Paths.get(path);
-        this.status = Status.valueOf(status.toUpperCase());
+        this.status = Status.valueOf(normalize(status));
+    }
+
+    public String getSummary() {
+        return String.format("%s %s", path, status.toString().toLowerCase());
     }
 
     public Path getPath() {

@@ -23,8 +23,8 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.mnx.java.systemd.Systemd;
 import de.mnx.java.systemd.interfaces.ManagerInterface;
 import de.mnx.java.systemd.interfaces.ServiceInterface;
-import de.mnx.java.systemd.types.UnitFileStatus;
-import de.mnx.java.systemd.types.UnitStatus;
+import de.mnx.java.systemd.types.UnitFileType;
+import de.mnx.java.systemd.types.UnitType;
 
 public class Manager extends InterfaceAdapter {
 
@@ -53,11 +53,11 @@ public class Manager extends InterfaceAdapter {
         return (ManagerInterface) super.getInterface();
     }
 
-    public List<UnitFileStatus> listUnitFiles() {
+    public List<UnitFileType> listUnitFiles() {
         return getInterface().listUnitFiles();
     }
 
-    public List<UnitStatus> listUnits() {
+    public List<UnitType> listUnits() {
         return getInterface().listUnits();
     }
 

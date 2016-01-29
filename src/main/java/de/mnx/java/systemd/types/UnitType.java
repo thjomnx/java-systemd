@@ -13,10 +13,25 @@ package de.mnx.java.systemd.types;
 
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.Position;
-import org.freedesktop.dbus.Struct;
 import org.freedesktop.dbus.UInt32;
 
-public class UnitStatus extends Struct {
+public class UnitType extends BaseType {
+
+    public enum LoadState {
+        LOADED,
+        ERROR,
+        MASKED,
+        NOT_FOUND
+    }
+
+    public enum ActiveState {
+        ACTIVE,
+        RELOADING,
+        INACTIVE,
+        FAILED,
+        ACTIVATING,
+        DEACTIVATING
+    }
 
     @Position(0)
     private final String unitName;
@@ -25,10 +40,10 @@ public class UnitStatus extends Struct {
     private final String unitDescription;
 
     @Position(2)
-    private final String loadState;
+    private final LoadState loadState;
 
     @Position(3)
-    private final String activeState;
+    private final ActiveState activeState;
 
     @Position(4)
     private final String subState;
@@ -40,7 +55,7 @@ public class UnitStatus extends Struct {
     private final Path unitObjectPath;
 
     @Position(7)
-    private final UInt32 jobId;
+    private final int jobId;
 
     @Position(8)
     private final String jobType;
@@ -48,19 +63,39 @@ public class UnitStatus extends Struct {
     @Position(9)
     private final Path jobObjectPath;
 
-    public UnitStatus(final String unitName, final String unitDescription, final String loadState,
+    public UnitType(final String unitName, final String unitDescription, final String loadState,
             final String activeState, final String subState, final String followingUnit, final Path unitObjectPath,
             final UInt32 jobId, String jobType, final Path jobObjectPath) {
+        super();
+
         this.unitName = unitName;
         this.unitDescription = unitDescription;
-        this.loadState = loadState;
-        this.activeState = activeState;
+        this.loadState = LoadState.valueOf(normalize(loadState));
+        this.activeState = ActiveState.valueOf(normalize(activeState));
         this.subState = subState;
         this.followingUnit = followingUnit;
         this.unitObjectPath = unitObjectPath;
-        this.jobId = jobId;
+        this.jobId = jobId.intValue();
         this.jobType = jobType;
         this.jobObjectPath = jobObjectPath;
+    }
+
+    public String getSummary() {
+        StringBuilder summary = new StringBuilder(500);
+        summary.append(unitName).append(System.lineSeparator());
+        summary.append(String.format(" Description: %s", unitDescription)).append(System.lineSeparator());
+        summary.append(String.format(" LoadState: %s", loadState.toString().toLowerCase())).append(System.lineSeparator());
+        summary.append(String.format(" ActiveState: %s", activeState.toString().toLowerCase())).append(System.lineSeparator());
+        summary.append(String.format(" SubState: %s", subState)).append(System.lineSeparator());
+        summary.append(String.format(" FollowingUnit: %s", followingUnit)).append(System.lineSeparator());
+        summary.append(String.format(" ObjectPath: %s", unitObjectPath)).append(System.lineSeparator());
+        summary.append(String.format(" JobID: %d", jobId)).append(System.lineSeparator());
+        summary.append(String.format(" JobType: %s", jobType)).append(System.lineSeparator());
+        summary.append(String.format(" JobObjectPath: %s", jobObjectPath));
+
+        summary.trimToSize();
+
+        return summary.toString();
     }
 
     public String getUnitName() {
@@ -71,11 +106,11 @@ public class UnitStatus extends Struct {
         return unitDescription;
     }
 
-    public String getLoadState() {
+    public LoadState getLoadState() {
         return loadState;
     }
 
-    public String getActiveState() {
+    public ActiveState getActiveState() {
         return activeState;
     }
 
@@ -91,7 +126,7 @@ public class UnitStatus extends Struct {
         return unitObjectPath;
     }
 
-    public UInt32 getJobId() {
+    public int getJobId() {
         return jobId;
     }
 
