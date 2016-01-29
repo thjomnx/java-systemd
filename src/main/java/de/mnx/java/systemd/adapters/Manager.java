@@ -24,6 +24,7 @@ import de.mnx.java.systemd.Systemd;
 import de.mnx.java.systemd.interfaces.ManagerInterface;
 import de.mnx.java.systemd.interfaces.ServiceInterface;
 import de.mnx.java.systemd.types.UnitFileStatus;
+import de.mnx.java.systemd.types.UnitStatus;
 
 public class Manager extends InterfaceAdapter {
 
@@ -54,6 +55,10 @@ public class Manager extends InterfaceAdapter {
 
     public List<UnitFileStatus> listUnitFiles() {
         return getInterface().listUnitFiles();
+    }
+
+    public List<UnitStatus> listUnits() {
+        return getInterface().listUnits();
     }
 
     public Service getService(final String name) throws DBusException {
