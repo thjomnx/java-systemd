@@ -11,6 +11,7 @@
 
 package de.mnx.java.systemd;
 
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,6 +52,10 @@ public final class Systemd {
         matcher.appendTail(escaped);
 
         return escaped.toString();
+    }
+
+    public static final Date timestampToDate(final long timestamp) {
+        return new Date(timestamp / 1000);
     }
 
     public void connect() throws DBusException {

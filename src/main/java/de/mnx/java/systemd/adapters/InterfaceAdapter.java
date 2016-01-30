@@ -11,11 +11,12 @@
 
 package de.mnx.java.systemd.adapters;
 
+import java.math.BigInteger;
 import java.util.Vector;
 
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.UInt64;
 import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
@@ -90,10 +91,40 @@ public abstract class InterfaceAdapter implements DBusInterface {
             return value.booleanValue();
         }
 
+        public byte getByte(final String propertyName) {
+            Byte value = (Byte) getVariant(propertyName).getValue();
+
+            return value.byteValue();
+        }
+
+        public short getShort(final String propertyName) {
+            Number value = (Number) getVariant(propertyName).getValue();
+
+            return value.shortValue();
+        }
+
         public int getInteger(final String propertyName) {
-            UInt32 value = (UInt32) getVariant(propertyName).getValue();
+            Number value = (Number) getVariant(propertyName).getValue();
 
             return value.intValue();
+        }
+
+        public long getLong(final String propertyName) {
+            Number value = (Number) getVariant(propertyName).getValue();
+
+            return value.longValue();
+        }
+
+        public BigInteger getBigInteger(final String propertyName) {
+            UInt64 value = (UInt64) getVariant(propertyName).getValue();
+
+            return value.value();
+        }
+
+        public double getDouble(final String propertyName) {
+            Number value = (Number) getVariant(propertyName).getValue();
+
+            return value.doubleValue();
         }
 
         public String getString(final String propertyName) {
