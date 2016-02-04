@@ -83,11 +83,19 @@ public class Playground {
 
         Service polkit = manager.getService("polkit");
         System.out.println("\n'polkit' properties:");
+        System.out.println("Environment: " + polkit.getEnvironment());
+        System.out.println("ExecReload: " + polkit.getExecReload());
+        System.out.println("ExecStart: " + polkit.getExecStart());
+        System.out.println("ExecStartPost: " + polkit.getExecStartPost());
+        System.out.println("ExecStartPre: " + polkit.getExecStartPre());
+        System.out.println("ExecStop: " + polkit.getExecStop());
+        System.out.println("ExecStopPost: " + polkit.getExecStopPost());
         System.out.println("MainPID: " + polkit.getMainPID());
         System.out.println("SELinuxContext: " + polkit.getSELinuxContext());
         System.out.println("StandardError: " + polkit.getStandardError());
         System.out.println("StandardInput: " + polkit.getStandardInput());
         System.out.println("StandardOutput: " + polkit.getStandardOutput());
+        System.out.println("Type: " + polkit.getType());
 
         System.out.println();
 

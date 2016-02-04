@@ -13,8 +13,14 @@ package de.mnx.java.systemd.adapters;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
+import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.UInt64;
 
 public class Service extends Unit {
 
@@ -26,8 +32,48 @@ public class Service extends Unit {
         initProperties(SERVICE_NAME);
     }
 
-    public long getMainPID() {
-        return properties.getLong("MainPID");
+    public Vector<String> getEnvironment() {
+        return properties.getVector("Environment");
+    }
+
+    public List<ExecutionInfo> getExecReload() {
+        return transformExecVector(properties.getVector("ExecReload"));
+    }
+
+    public List<ExecutionInfo> getExecStart() {
+        return transformExecVector(properties.getVector("ExecStart"));
+    }
+
+    public List<ExecutionInfo> getExecStartPost() {
+        return transformExecVector(properties.getVector("ExecStartPost"));
+    }
+
+    public List<ExecutionInfo> getExecStartPre() {
+        return transformExecVector(properties.getVector("ExecStartPre"));
+    }
+
+    public List<ExecutionInfo> getExecStop() {
+        return transformExecVector(properties.getVector("ExecStop"));
+    }
+
+    public List<ExecutionInfo> getExecStopPost() {
+        return transformExecVector(properties.getVector("ExecStopPost"));
+    }
+
+    private List<ExecutionInfo> transformExecVector(final Vector<Object[]> vector) {
+        List<ExecutionInfo> execs = new ArrayList<>(vector.size());
+
+        for (Object[] array : vector) {
+            ExecutionInfo exec = new ExecutionInfo(array);
+
+            execs.add(exec);
+        }
+
+        return execs;
+    }
+
+    public int getMainPID() {
+        return properties.getInteger("MainPID");
     }
 
     public SELinuxContext getSELinuxContext() {
@@ -46,6 +92,107 @@ public class Service extends Unit {
 
     public String getStandardOutput() {
         return properties.getString("StandardOutput");
+    }
+
+    public String getType() {
+        return properties.getString("Type");
+    }
+
+    public static class ExecutionInfo {
+
+        private final String binaryPath;
+        private final Vector<String> arguments;
+        private final boolean failOnUncleanExit;
+        private final long lastStartTimestamp;
+        private final long lastStartTimestampMonotonic;
+        private final long lastFinishTimestamp;
+        private final long lastFinishTimestampMonotonic;
+        private final int processId;
+        private final int lastExitCode;
+        private final int lastExitStatus;
+
+        @SuppressWarnings("unchecked")
+        public ExecutionInfo(final Object[] array) {
+            this.binaryPath = (String) array[0];
+            this.arguments = (Vector<String>) array[1];
+            this.failOnUncleanExit = (boolean) array[2];
+            this.lastStartTimestamp = ((UInt64) array[3]).longValue();
+            this.lastStartTimestampMonotonic = ((UInt64) array[4]).longValue();
+            this.lastFinishTimestamp = ((UInt64) array[5]).longValue();
+            this.lastFinishTimestampMonotonic = ((UInt64) array[6]).longValue();
+            this.processId = ((UInt32) array[7]).intValue();
+            this.lastExitCode = (int) array[8];
+            this.lastExitStatus = (int) array[9];
+        }
+
+        public String getBinaryPath() {
+            return binaryPath;
+        }
+
+        public Vector<String> getArguments() {
+            return arguments;
+        }
+
+        public boolean isFailOnUncleanExit() {
+            return failOnUncleanExit;
+        }
+
+        public long getLastStartTimestamp() {
+            return lastStartTimestamp;
+        }
+
+        public long getLastStartTimestampMonotonic() {
+            return lastStartTimestampMonotonic;
+        }
+
+        public long getLastFinishTimestamp() {
+            return lastFinishTimestamp;
+        }
+
+        public long getLastFinishTimestampMonotonic() {
+            return lastFinishTimestampMonotonic;
+        }
+
+        public int getProcessId() {
+            return processId;
+        }
+
+        public int getLastExitCode() {
+            return lastExitCode;
+        }
+
+        public int getLastExitStatus() {
+            return lastExitStatus;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("ExecutionInfo [binaryPath=");
+            builder.append(binaryPath);
+            builder.append(", arguments=");
+            builder.append(arguments);
+            builder.append(", failOnUncleanExit=");
+            builder.append(failOnUncleanExit);
+            builder.append(", lastStartTimestamp=");
+            builder.append(lastStartTimestamp);
+            builder.append(", lastStartTimestampMonotonic=");
+            builder.append(lastStartTimestampMonotonic);
+            builder.append(", lastFinishTimestamp=");
+            builder.append(lastFinishTimestamp);
+            builder.append(", lastFinishTimestampMonotonic=");
+            builder.append(lastFinishTimestampMonotonic);
+            builder.append(", processId=");
+            builder.append(processId);
+            builder.append(", lastExitCode=");
+            builder.append(lastExitCode);
+            builder.append(", lastExitStatus=");
+            builder.append(lastExitStatus);
+            builder.append("]");
+
+            return builder.toString();
+        }
+
     }
 
     // TODO Rename variables to their real meaning
@@ -70,7 +217,7 @@ public class Service extends Unit {
 
         @Override
         public String toString() {
-            return "[prefixed=" + prefixed + ", userData=" + userData + "]";
+            return String.format("SELinuxContext [prefixed=%s, userData=%s]", prefixed, userData);
         }
 
     }
@@ -99,7 +246,7 @@ public class Service extends Unit {
 .Delegate                        property  b              false                                    -
 .DeviceAllow                     property  a(ss)          0                                        -
 .DevicePolicy                    property  s              "auto"                                   -
-.Environment                     property  as             0                                        const
+  .Environment                     property  as             0                                        const
 .EnvironmentFiles                property  a(sb)          0                                        const
 .ExecMainCode                    property  i              0                                        emits-change
 .ExecMainExitTimestamp           property  t              0                                        emits-change
@@ -108,12 +255,12 @@ public class Service extends Unit {
 .ExecMainStartTimestamp          property  t              1454158017072144                         emits-change
 .ExecMainStartTimestampMonotonic property  t              7581134                                  emits-change
 .ExecMainStatus                  property  i              0                                        emits-change
-.ExecReload                      property  a(sasbttttuii) 1 "/usr/bin/kill" 3 "/usr/bin/kill" "... emits-invalidation
-.ExecStart                       property  a(sasbttttuii) 1 "/usr/bin/crond" 2 "/usr/bin/crond"... emits-invalidation
-.ExecStartPost                   property  a(sasbttttuii) 0                                        emits-invalidation
-.ExecStartPre                    property  a(sasbttttuii) 0                                        emits-invalidation
-.ExecStop                        property  a(sasbttttuii) 0                                        emits-invalidation
-.ExecStopPost                    property  a(sasbttttuii) 0                                        emits-invalidation
+  .ExecReload                      property  a(sasbttttuii) 1 "/usr/bin/kill" 3 "/usr/bin/kill" "... emits-invalidation
+  .ExecStart                       property  a(sasbttttuii) 1 "/usr/bin/crond" 2 "/usr/bin/crond"... emits-invalidation
+  .ExecStartPost                   property  a(sasbttttuii) 0                                        emits-invalidation
+  .ExecStartPre                    property  a(sasbttttuii) 0                                        emits-invalidation
+  .ExecStop                        property  a(sasbttttuii) 0                                        emits-invalidation
+  .ExecStopPost                    property  a(sasbttttuii) 0                                        emits-invalidation
 .FailureAction                   property  s              "none"                                   const
 .FileDescriptorStoreMax          property  u              0                                        const
 .Group                           property  s              ""                                       const
@@ -208,7 +355,7 @@ public class Service extends Unit {
 .TimeoutStartUSec                property  t              90000000                                 const
 .TimeoutStopUSec                 property  t              90000000                                 const
 .TimerSlackNSec                  property  t              50000                                    const
-.Type                            property  s              "simple"                                 const
+  .Type                            property  s              "simple"                                 const
 .UMask                           property  u              18                                       const
 .USBFunctionDescriptors          property  s              ""                                       emits-change
 .USBFunctionStrings              property  s              ""                                       emits-change
