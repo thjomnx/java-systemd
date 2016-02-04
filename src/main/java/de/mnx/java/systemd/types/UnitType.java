@@ -70,8 +70,8 @@ public class UnitType extends BaseType {
 
         this.unitName = unitName;
         this.unitDescription = unitDescription;
-        this.loadState = LoadState.valueOf(normalize(loadState));
-        this.activeState = ActiveState.valueOf(normalize(activeState));
+        this.loadState = LoadState.valueOf(BaseType.normalize(loadState));
+        this.activeState = ActiveState.valueOf(BaseType.normalize(activeState));
         this.subState = subState;
         this.followingUnit = followingUnit;
         this.unitObjectPath = unitObjectPath;

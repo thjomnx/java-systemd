@@ -30,7 +30,6 @@ public abstract class InterfaceAdapter implements DBusInterface {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final DBusConnection dbus;
-    protected Properties properties;
 
     private final DBusInterface iface;
 
@@ -39,7 +38,9 @@ public abstract class InterfaceAdapter implements DBusInterface {
         this.iface = iface;
     }
 
-    protected void initProperties(final String serviceName) {
+    protected Properties createProperties(final String serviceName) {
+        Properties properties;
+
         try {
             properties = new Properties(serviceName, dbus.getRemoteObject(Systemd.SYSTEMD_DBUS_NAME, iface.getObjectPath(), PropertyInterface.class));
         }
@@ -48,6 +49,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
 
             properties = null;
         }
+
+        return properties;
     }
 
     @Override

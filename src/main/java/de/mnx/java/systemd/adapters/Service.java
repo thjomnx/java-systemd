@@ -26,10 +26,16 @@ public class Service extends Unit {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Service";
 
+    private Properties properties;
+
     public Service(final DBusConnection dbus, final DBusInterface iface) {
         super(dbus, iface);
 
-        initProperties(SERVICE_NAME);
+        this.properties = createProperties(SERVICE_NAME);
+    }
+
+    public String getControlGroup() {
+        return properties.getString("ControlGroup");
     }
 
     public Vector<String> getEnvironment() {
@@ -37,43 +43,35 @@ public class Service extends Unit {
     }
 
     public List<ExecutionInfo> getExecReload() {
-        return transformExecVector(properties.getVector("ExecReload"));
+        return ExecutionInfo.transform(properties.getVector("ExecReload"));
     }
 
     public List<ExecutionInfo> getExecStart() {
-        return transformExecVector(properties.getVector("ExecStart"));
+        return ExecutionInfo.transform(properties.getVector("ExecStart"));
     }
 
     public List<ExecutionInfo> getExecStartPost() {
-        return transformExecVector(properties.getVector("ExecStartPost"));
+        return ExecutionInfo.transform(properties.getVector("ExecStartPost"));
     }
 
     public List<ExecutionInfo> getExecStartPre() {
-        return transformExecVector(properties.getVector("ExecStartPre"));
+        return ExecutionInfo.transform(properties.getVector("ExecStartPre"));
     }
 
     public List<ExecutionInfo> getExecStop() {
-        return transformExecVector(properties.getVector("ExecStop"));
+        return ExecutionInfo.transform(properties.getVector("ExecStop"));
     }
 
     public List<ExecutionInfo> getExecStopPost() {
-        return transformExecVector(properties.getVector("ExecStopPost"));
-    }
-
-    private List<ExecutionInfo> transformExecVector(final Vector<Object[]> vector) {
-        List<ExecutionInfo> execs = new ArrayList<>(vector.size());
-
-        for (Object[] array : vector) {
-            ExecutionInfo exec = new ExecutionInfo(array);
-
-            execs.add(exec);
-        }
-
-        return execs;
+        return ExecutionInfo.transform(properties.getVector("ExecStopPost"));
     }
 
     public int getMainPID() {
         return properties.getInteger("MainPID");
+    }
+
+    public String getResult() {
+        return properties.getString("Result");
     }
 
     public SELinuxContext getSELinuxContext() {
@@ -123,6 +121,18 @@ public class Service extends Unit {
             this.processId = ((UInt32) array[7]).intValue();
             this.lastExitCode = (int) array[8];
             this.lastExitStatus = (int) array[9];
+        }
+
+        private static List<ExecutionInfo> transform(final Vector<Object[]> vector) {
+            List<ExecutionInfo> execs = new ArrayList<>(vector.size());
+
+            for (Object[] array : vector) {
+                ExecutionInfo exec = new ExecutionInfo(array);
+
+                execs.add(exec);
+            }
+
+            return execs;
         }
 
         public String getBinaryPath() {
@@ -241,7 +251,7 @@ public class Service extends Unit {
 .CPUUsageNSec                    property  t              18446744073709551615                     -
 .Capabilities                    property  s              ""                                       const
 .CapabilityBoundingSet           property  t              18446744073709551615                     const
-.ControlGroup                    property  s              "/system.slice/cronie.service"           -
+  .ControlGroup                    property  s              "/system.slice/cronie.service"           -
 .ControlPID                      property  u              0                                        emits-change
 .Delegate                        property  b              false                                    -
 .DeviceAllow                     property  a(ss)          0                                        -
@@ -314,7 +324,7 @@ public class Service extends Unit {
 .Restart                         property  s              "always"                                 const
 .RestartUSec                     property  t              100000                                   const
 .RestrictAddressFamilies         property  (bas)          false 0                                  const
-.Result                          property  s              "success"                                emits-change
+  .Result                          property  s              "success"                                emits-change
 .RootDirectory                   property  s              ""                                       const
 .RootDirectoryStartOnly          property  b              false                                    const
 .RuntimeDirectory                property  as             0                                        const

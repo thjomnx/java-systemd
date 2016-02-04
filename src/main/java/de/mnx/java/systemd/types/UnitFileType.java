@@ -35,7 +35,7 @@ public class UnitFileType extends BaseType {
         super();
 
         this.path = Paths.get(path);
-        this.status = Status.valueOf(normalize(status));
+        this.status = Status.valueOf(BaseType.normalize(status));
     }
 
     public String getSummary() {

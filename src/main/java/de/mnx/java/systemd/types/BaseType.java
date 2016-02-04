@@ -13,13 +13,13 @@ package de.mnx.java.systemd.types;
 
 import org.freedesktop.dbus.Struct;
 
-abstract class BaseType extends Struct {
+public abstract class BaseType extends Struct {
 
     protected BaseType() {
         super();
     }
 
-    protected String normalize(final String value) {
+    public static String normalize(final String value) {
         return value != null ? value.replace('-', '_').toUpperCase() : value;
     }
 

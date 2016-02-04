@@ -30,10 +30,12 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Manager";
 
+    private Properties properties;
+
     private Manager(final DBusConnection dbus, final ManagerInterface iface) {
         super(dbus, iface);
 
-        initProperties(SERVICE_NAME);
+        this.properties = createProperties(SERVICE_NAME);
     }
 
     public static Manager create(final DBusConnection dbus) throws DBusException {

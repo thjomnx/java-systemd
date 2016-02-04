@@ -65,37 +65,60 @@ public class Playground {
     }
 
     public static void methods(final Manager manager) throws DBusException  {
+//        System.out.println();
+//
 //        for (UnitFileType unitFile : manager.listUnitFiles()) {
 //            System.out.println(unitFile.getSummary());
 //        }
 
+//        System.out.println();
+//
 //        for (UnitType unit : manager.listUnits()) {
 //            System.out.println(unit.getSummary());
 //
 //            if (unit.getUnitName().endsWith(".service") && unit.getSubState().equals("running")) {
 //                Service service = manager.getService(unit.getUnitName());
 //                System.out.println(" Runtime statistics:");
-//                System.out.println("  MainPID: " + service.getProcessId());
+//                System.out.println("  MainPID: " + service.getMainPID());
 //            }
 //
 //            System.out.println();
 //        }
 
+        System.out.println();
+
         Service polkit = manager.getService("polkit");
-        System.out.println("\n'polkit' properties:");
+        System.out.println("'polkit' properties:");
         System.out.println("Environment: " + polkit.getEnvironment());
-        System.out.println("ExecReload: " + polkit.getExecReload());
-        System.out.println("ExecStart: " + polkit.getExecStart());
-        System.out.println("ExecStartPost: " + polkit.getExecStartPost());
-        System.out.println("ExecStartPre: " + polkit.getExecStartPre());
-        System.out.println("ExecStop: " + polkit.getExecStop());
-        System.out.println("ExecStopPost: " + polkit.getExecStopPost());
         System.out.println("MainPID: " + polkit.getMainPID());
-        System.out.println("SELinuxContext: " + polkit.getSELinuxContext());
-        System.out.println("StandardError: " + polkit.getStandardError());
-        System.out.println("StandardInput: " + polkit.getStandardInput());
-        System.out.println("StandardOutput: " + polkit.getStandardOutput());
         System.out.println("Type: " + polkit.getType());
+
+        System.out.println();
+
+        Service cronie = manager.getService("cronie");
+        System.out.println("'cronie' properties (unit interface):");
+        System.out.println("WantedBy: " + cronie.getWantedBy());
+        System.out.println("LoadState: " + cronie.getLoadState());
+        System.out.println("ActiveState: " + cronie.getActiveState());
+
+        System.out.println();
+
+        System.out.println("'cronie' properties:");
+        System.out.println("ControlGroup: " + cronie.getControlGroup());
+        System.out.println("Environment: " + cronie.getEnvironment());
+        System.out.println("ExecReload: " + cronie.getExecReload());
+        System.out.println("ExecStart: " + cronie.getExecStart());
+        System.out.println("ExecStartPost: " + cronie.getExecStartPost());
+        System.out.println("ExecStartPre: " + cronie.getExecStartPre());
+        System.out.println("ExecStop: " + cronie.getExecStop());
+        System.out.println("ExecStopPost: " + cronie.getExecStopPost());
+        System.out.println("MainPID: " + cronie.getMainPID());
+        System.out.println("Result: " + cronie.getResult());
+        System.out.println("SELinuxContext: " + cronie.getSELinuxContext());
+        System.out.println("StandardError: " + cronie.getStandardError());
+        System.out.println("StandardInput: " + cronie.getStandardInput());
+        System.out.println("StandardOutput: " + cronie.getStandardOutput());
+        System.out.println("Type: " + cronie.getType());
 
         System.out.println();
 
