@@ -11,42 +11,33 @@
 
 package de.mnx.java.systemd.types;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import org.freedesktop.dbus.Position;
+import org.freedesktop.dbus.Struct;
 
-public class UnitFileType extends BaseType {
-
-    public enum Status {
-        ENABLED,
-        DISABLED,
-        STATIC,
-        INDIRECT;
-    }
+public class UnitFileType extends Struct {
 
     @Position(0)
-    private final Path path;
+    private final String path;
 
     @Position(1)
-    private final Status status;
+    private final String status;
 
     public UnitFileType(final String path, final String status) {
         super();
 
-        this.path = Paths.get(path);
-        this.status = Status.valueOf(BaseType.normalize(status));
+        this.path = path;
+        this.status = status;
     }
 
     public String getSummary() {
-        return String.format("%s %s", path, status.toString().toLowerCase());
+        return String.format("%s %s", path, status);
     }
 
-    public Path getPath() {
+    public String getPath() {
         return path;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 

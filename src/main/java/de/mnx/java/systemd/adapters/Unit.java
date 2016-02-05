@@ -18,10 +18,6 @@ import java.util.Vector;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
 
-import de.mnx.java.systemd.types.BaseType;
-import de.mnx.java.systemd.types.UnitType.ActiveState;
-import de.mnx.java.systemd.types.UnitType.LoadState;
-
 public abstract class Unit extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Unit";
@@ -38,12 +34,12 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getVector("WantedBy");
     }
 
-    public LoadState getLoadState() {
-        return LoadState.valueOf(BaseType.normalize(properties.getString("LoadState")));
+    public String getLoadState() {
+        return properties.getString("LoadState");
     }
 
-    public ActiveState getActiveState() {
-        return ActiveState.valueOf(BaseType.normalize(properties.getString("ActiveState")));
+    public String getActiveState() {
+        return properties.getString("ActiveState");
     }
 
 }

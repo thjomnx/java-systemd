@@ -13,25 +13,10 @@ package de.mnx.java.systemd.types;
 
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.Position;
+import org.freedesktop.dbus.Struct;
 import org.freedesktop.dbus.UInt32;
 
-public class UnitType extends BaseType {
-
-    public enum LoadState {
-        LOADED,
-        ERROR,
-        MASKED,
-        NOT_FOUND
-    }
-
-    public enum ActiveState {
-        ACTIVE,
-        RELOADING,
-        INACTIVE,
-        FAILED,
-        ACTIVATING,
-        DEACTIVATING
-    }
+public class UnitType extends Struct {
 
     @Position(0)
     private final String unitName;
@@ -40,10 +25,10 @@ public class UnitType extends BaseType {
     private final String unitDescription;
 
     @Position(2)
-    private final LoadState loadState;
+    private final String loadState;
 
     @Position(3)
-    private final ActiveState activeState;
+    private final String activeState;
 
     @Position(4)
     private final String subState;
@@ -70,8 +55,8 @@ public class UnitType extends BaseType {
 
         this.unitName = unitName;
         this.unitDescription = unitDescription;
-        this.loadState = LoadState.valueOf(BaseType.normalize(loadState));
-        this.activeState = ActiveState.valueOf(BaseType.normalize(activeState));
+        this.loadState = loadState;
+        this.activeState = activeState;
         this.subState = subState;
         this.followingUnit = followingUnit;
         this.unitObjectPath = unitObjectPath;
@@ -84,8 +69,8 @@ public class UnitType extends BaseType {
         StringBuilder summary = new StringBuilder(500);
         summary.append(unitName).append(System.lineSeparator());
         summary.append(String.format(" Description: %s", unitDescription)).append(System.lineSeparator());
-        summary.append(String.format(" LoadState: %s", loadState.toString().toLowerCase())).append(System.lineSeparator());
-        summary.append(String.format(" ActiveState: %s", activeState.toString().toLowerCase())).append(System.lineSeparator());
+        summary.append(String.format(" LoadState: %s", loadState)).append(System.lineSeparator());
+        summary.append(String.format(" ActiveState: %s", activeState)).append(System.lineSeparator());
         summary.append(String.format(" SubState: %s", subState)).append(System.lineSeparator());
         summary.append(String.format(" FollowingUnit: %s", followingUnit)).append(System.lineSeparator());
         summary.append(String.format(" ObjectPath: %s", unitObjectPath)).append(System.lineSeparator());
@@ -106,11 +91,11 @@ public class UnitType extends BaseType {
         return unitDescription;
     }
 
-    public LoadState getLoadState() {
+    public String getLoadState() {
         return loadState;
     }
 
-    public ActiveState getActiveState() {
+    public String getActiveState() {
         return activeState;
     }
 
