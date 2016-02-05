@@ -74,7 +74,7 @@ public class Manager extends InterfaceAdapter {
         return properties.getString("Architecture");
     }
 
-    public boolean getConfirmSpawn() {
+    public boolean isConfirmSpawn() {
         return properties.getBoolean("ConfirmSpawn");
     }
 
@@ -82,12 +82,16 @@ public class Manager extends InterfaceAdapter {
         return properties.getString("ControlGroup");
     }
 
-    public boolean getDefaultBlockIOAccounting() {
+    public boolean isDefaultBlockIOAccounting() {
         return properties.getBoolean("DefaultBlockIOAccounting");
     }
 
-    public boolean getDefaultCPUAccounting() {
+    public boolean isDefaultCPUAccounting() {
         return properties.getBoolean("DefaultCPUAccounting");
+    }
+
+    public boolean isDefaultMemoryAccounting() {
+        return properties.getBoolean("DefaultMemoryAccounting");
     }
 
     public String getDefaultStandardError() {
@@ -96,6 +100,10 @@ public class Manager extends InterfaceAdapter {
 
     public String getDefaultStandardOutput() {
         return properties.getString("DefaultStandardOutput");
+    }
+
+    public boolean isDefaultTasksAccounting() {
+        return properties.getBoolean("DefaultTasksAccounting");
     }
 
     public Vector<String> getEnvironment() {
@@ -126,6 +134,14 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong("KernelTimestampMonotonic");
     }
 
+    public long getLoaderTimestamp() {
+        return properties.getLong("LoaderTimestamp");
+    }
+
+    public long getLoaderTimestampMonotonic() {
+        return properties.getLong("LoaderTimestampMonotonic");
+    }
+
     public String getLogLevel() {
         return properties.getString("LogLevel");
     }
@@ -134,24 +150,32 @@ public class Manager extends InterfaceAdapter {
         return properties.getString("LogTarget");
     }
 
-    public int getNumFailedJobs() {
+    public int getNFailedJobs() {
         return properties.getInteger("NFailedJobs");
     }
 
-    public int getNumFailedUnits() {
+    public int getNFailedUnits() {
         return properties.getInteger("NFailedUnits");
     }
 
-    public int getNumInstalledJobs() {
+    public int getNInstalledJobs() {
         return properties.getInteger("NInstalledJobs");
     }
 
-    public int getNumJobs() {
+    public int getNJobs() {
         return properties.getInteger("NJobs");
+    }
+
+    public int getNNames() {
+        return properties.getInteger("NNames");
     }
 
     public double getProgress() {
         return properties.getDouble("Progress");
+    }
+
+    public long getRuntimeWatchdogUSec() {
+        return properties.getLong("RuntimeWatchdogUSec");
     }
 
     public long getSecurityFinishTimestamp() {
@@ -170,8 +194,12 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong("SecurityStartTimestampMonotonic");
     }
 
-    public boolean getStatus() {
+    public boolean isShowStatus() {
         return properties.getBoolean("ShowStatus");
+    }
+
+    public long getShutdownWatchdogUSec() {
+        return properties.getLong("ShutdownWatchdogUSec");
     }
 
     public String getSystemState() {
@@ -182,8 +210,28 @@ public class Manager extends InterfaceAdapter {
         return properties.getString("Tainted");
     }
 
+    public long getTimerSlackNSec() {
+        return properties.getLong("TimerSlackNSec");
+    }
+
     public Vector<String> getUnitPath() {
         return properties.getVector("UnitPath");
+    }
+
+    public long getUnitsLoadFinishTimestamp() {
+        return properties.getLong("UnitsLoadFinishTimestamp");
+    }
+
+    public long getUnitsLoadFinishTimestampMonotonic() {
+        return properties.getLong("UnitsLoadFinishTimestampMonotonic");
+    }
+
+    public long getUnitsLoadStartTimestamp() {
+        return properties.getLong("UnitsLoadStartTimestamp");
+    }
+
+    public long getUnitsLoadStartTimestampMonotonic() {
+        return properties.getLong("UnitsLoadStartTimestampMonotonic");
     }
 
     public long getUserspaceTimestamp() {
@@ -225,13 +273,13 @@ public class Manager extends InterfaceAdapter {
 .DefaultLimitRTTIME                 property  t                18446744073709551615                     const
 .DefaultLimitSIGPENDING             property  t                48013                                    const
 .DefaultLimitSTACK                  property  t                18446744073709551615                     const
-.DefaultMemoryAccounting            property  b                false                                    const
+  .DefaultMemoryAccounting            property  b                false                                    const
 .DefaultRestartUSec                 property  t                100000                                   const
   .DefaultStandardError               property  s                "journal"                                const
   .DefaultStandardOutput              property  s                "journal"                                const
 .DefaultStartLimitBurst             property  u                5                                        const
 .DefaultStartLimitInterval          property  t                10000000                                 const
-.DefaultTasksAccounting             property  b                true                                     const
+  .DefaultTasksAccounting             property  b                true                                     const
 .DefaultTasksMax                    property  t                512                                      const
 .DefaultTimeoutStartUSec            property  t                90000000                                 const
 .DefaultTimeoutStopUSec             property  t                90000000                                 const
@@ -251,31 +299,31 @@ public class Manager extends InterfaceAdapter {
   .InitRDTimestampMonotonic           property  t                0                                        const
   .KernelTimestamp                    property  t                1454158009491011                         const
   .KernelTimestampMonotonic           property  t                0                                        const
-.LoaderTimestamp                    property  t                0                                        const
-.LoaderTimestampMonotonic           property  t                0                                        const
+  .LoaderTimestamp                    property  t                0                                        const
+  .LoaderTimestampMonotonic           property  t                0                                        const
   .LogLevel                           property  s                "info"                                   writable
   .LogTarget                          property  s                "journal-or-kmsg"                        writable
   .NFailedJobs                        property  u                0                                        -
   .NFailedUnits                       property  u                0                                        emits-change
   .NInstalledJobs                     property  u                112                                      -
   .NJobs                              property  u                0                                        -
-.NNames                             property  u                239                                      -
+  .NNames                             property  u                239                                      -
   .Progress                           property  d                1                                        -
-.RuntimeWatchdogUSec                property  t                0                                        writable
+  .RuntimeWatchdogUSec                property  t                0                                        writable
   .SecurityFinishTimestamp            property  t                1454158016368154                         const
   .SecurityFinishTimestampMonotonic   property  t                6877144                                  const
   .SecurityStartTimestamp             property  t                1454158016367424                         const
   .SecurityStartTimestampMonotonic    property  t                6876413                                  const
   .ShowStatus                         property  b                true                                     const
-.ShutdownWatchdogUSec               property  t                600000000                                writable
+  .ShutdownWatchdogUSec               property  t                600000000                                writable
   .SystemState                        property  s                "running"                                -
   .Tainted                            property  s                ""                                       const
-.TimerSlackNSec                     property  t                50000                                    const
+  .TimerSlackNSec                     property  t                50000                                    const
   .UnitPath                           property  as               5 "/etc/systemd/system" "/run/systemd... const
-.UnitsLoadFinishTimestamp           property  t                1454158016467501                         const
-.UnitsLoadFinishTimestampMonotonic  property  t                6976491                                  const
-.UnitsLoadStartTimestamp            property  t                1454158016426735                         const
-.UnitsLoadStartTimestampMonotonic   property  t                6935724                                  const
+  .UnitsLoadFinishTimestamp           property  t                1454158016467501                         const
+  .UnitsLoadFinishTimestampMonotonic  property  t                6976491                                  const
+  .UnitsLoadStartTimestamp            property  t                1454158016426735                         const
+  .UnitsLoadStartTimestampMonotonic   property  t                6935724                                  const
   .UserspaceTimestamp                 property  t                1454158016364525                         const
   .UserspaceTimestampMonotonic        property  t                6873515                                  const
   .Version                            property  s                "228"                                    const
