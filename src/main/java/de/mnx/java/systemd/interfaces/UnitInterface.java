@@ -14,12 +14,12 @@ package de.mnx.java.systemd.interfaces;
 import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.DBusMemberName;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.Path;
 
-@DBusInterfaceName(value = de.mnx.java.systemd.Properties.SERVICE_NAME)
-public interface PropertyInterface extends DBusInterface {
+@DBusInterfaceName(value = de.mnx.java.systemd.Unit.SERVICE_NAME)
+public interface UnitInterface extends DBusInterface {
 
-    @DBusMemberName(value = "Get")
-    Variant<?> getProperty(String iface, String property);
+    @DBusMemberName(value = "Start")
+    Path start(final String mode);
 
 }

@@ -13,9 +13,9 @@ package de.mnx;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.mnx.java.systemd.Manager;
+import de.mnx.java.systemd.Service;
 import de.mnx.java.systemd.Systemd;
-import de.mnx.java.systemd.adapters.Manager;
-import de.mnx.java.systemd.adapters.Service;
 
 public class Playground {
 
@@ -140,30 +140,40 @@ public class Playground {
         Service cronie = manager.getService("cronie");
         System.out.println("'cronie' properties (unit interface):");
         System.out.println("ActiveState: " + cronie.getActiveState());
+        System.out.println("Description: " + cronie.getDescription());
+        System.out.println("Id: " + cronie.getId());
         System.out.println("LoadState: " + cronie.getLoadState());
+        System.out.println("Names: " + cronie.getNames());
+        System.out.println("SourcePath: " + cronie.getSourcePath());
+        System.out.println("StopWhenUnneeded: " + cronie.isStopWhenUnneeded());
+        System.out.println("SubState: " + cronie.getSubState());
+        System.out.println("Transient: " + cronie.isTransient());
+        System.out.println("TriggeredBy: " + cronie.getTriggeredBy());
+        System.out.println("Triggers: " + cronie.getTriggers());
+
         System.out.println("WantedBy: " + cronie.getWantedBy());
         System.out.println("Wants: " + cronie.getWants());
 
         System.out.println();
 
-//        System.out.println("'cronie' properties:");
-//        System.out.println("ControlGroup: " + cronie.getControlGroup());
-//        System.out.println("Environment: " + cronie.getEnvironment());
-//        System.out.println("ExecReload: " + cronie.getExecReload());
-//        System.out.println("ExecStart: " + cronie.getExecStart());
-//        System.out.println("ExecStartPost: " + cronie.getExecStartPost());
-//        System.out.println("ExecStartPre: " + cronie.getExecStartPre());
-//        System.out.println("ExecStop: " + cronie.getExecStop());
-//        System.out.println("ExecStopPost: " + cronie.getExecStopPost());
-//        System.out.println("MainPID: " + cronie.getMainPID());
-//        System.out.println("Result: " + cronie.getResult());
-//        System.out.println("SELinuxContext: " + cronie.getSELinuxContext());
-//        System.out.println("StandardError: " + cronie.getStandardError());
-//        System.out.println("StandardInput: " + cronie.getStandardInput());
-//        System.out.println("StandardOutput: " + cronie.getStandardOutput());
-//        System.out.println("Type: " + cronie.getType());
-//
-//        System.out.println();
+        System.out.println("'cronie' properties (service interface):");
+        System.out.println("ControlGroup: " + cronie.getControlGroup());
+        System.out.println("Environment: " + cronie.getEnvironment());
+        System.out.println("ExecReload: " + cronie.getExecReload());
+        System.out.println("ExecStart: " + cronie.getExecStart());
+        System.out.println("ExecStartPost: " + cronie.getExecStartPost());
+        System.out.println("ExecStartPre: " + cronie.getExecStartPre());
+        System.out.println("ExecStop: " + cronie.getExecStop());
+        System.out.println("ExecStopPost: " + cronie.getExecStopPost());
+        System.out.println("MainPID: " + cronie.getMainPID());
+        System.out.println("Result: " + cronie.getResult());
+        System.out.println("SELinuxContext: " + cronie.getSELinuxContext());
+        System.out.println("StandardError: " + cronie.getStandardError());
+        System.out.println("StandardInput: " + cronie.getStandardInput());
+        System.out.println("StandardOutput: " + cronie.getStandardOutput());
+        System.out.println("Type: " + cronie.getType());
+
+        System.out.println();
 
 //        System.out.println(manager.dump());
     }

@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.mnx.java.systemd.adapters;
+package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 
@@ -18,20 +18,29 @@ import java.util.List;
 import java.util.Vector;
 
 import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.UInt32;
 import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.exceptions.DBusException;
+
+import de.mnx.java.systemd.interfaces.ServiceInterface;
 
 public class Service extends Unit {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Service";
 
-    private Properties properties;
+    private final ServiceInterface iface;
+    private final Properties properties;
 
-    public Service(final DBusConnection dbus, final DBusInterface iface) {
-        super(dbus, iface);
+    Service(final DBusConnection dbus, final ServiceInterface iface) throws DBusException {
+        super(dbus, iface.getObjectPath());
 
-        this.properties = createProperties(SERVICE_NAME);
+        this.iface = iface;
+        this.properties = new Properties(dbus, SERVICE_NAME, iface.getObjectPath());
+    }
+
+    @Override
+    protected ServiceInterface getInterface() {
+        return iface;
     }
 
     public String getControlGroup() {

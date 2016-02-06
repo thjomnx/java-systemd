@@ -11,10 +11,9 @@
 
 package de.mnx.java.systemd.interfaces;
 
-import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusInterfaceName;
 
-@DBusInterfaceName(value = de.mnx.java.systemd.adapters.Service.SERVICE_NAME)
-public interface ServiceInterface extends DBusInterface {
+@DBusInterfaceName(value = de.mnx.java.systemd.Service.SERVICE_NAME)
+public interface ServiceInterface extends UnitInterface {
 
 }

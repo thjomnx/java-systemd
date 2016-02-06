@@ -21,8 +21,6 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mnx.java.systemd.adapters.Manager;
-
 public final class Systemd {
 
     public static final String SYSTEMD_DBUS_NAME = "org.freedesktop.systemd1";
@@ -33,7 +31,6 @@ public final class Systemd {
     private static final Logger log = LoggerFactory.getLogger(Systemd.class);
 
     private DBusConnection dbus;
-
     private Manager manager;
 
     public Systemd() {
@@ -87,7 +84,7 @@ public final class Systemd {
 
     public Manager getManager() throws DBusException {
         if (manager == null) {
-            manager = Manager.create(dbus);
+            manager = new Manager(dbus);
         }
 
         return manager;

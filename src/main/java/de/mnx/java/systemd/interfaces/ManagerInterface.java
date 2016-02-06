@@ -20,7 +20,7 @@ import org.freedesktop.dbus.DBusMemberName;
 import de.mnx.java.systemd.types.UnitFileType;
 import de.mnx.java.systemd.types.UnitType;
 
-@DBusInterfaceName(value = de.mnx.java.systemd.adapters.Manager.SERVICE_NAME)
+@DBusInterfaceName(value = de.mnx.java.systemd.Manager.SERVICE_NAME)
 public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "ListUnitFiles")

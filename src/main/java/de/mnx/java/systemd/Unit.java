@@ -9,33 +9,102 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.mnx.java.systemd.adapters;
+package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 
 import java.util.Vector;
 
 import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.DBusInterface;
+import org.freedesktop.dbus.Path;
+import org.freedesktop.dbus.exceptions.DBusException;
+
+import de.mnx.java.systemd.interfaces.UnitInterface;
 
 public abstract class Unit extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Unit";
 
-    private Properties properties;
+    public static enum Mode {
+        REPLACE("replace"),
+        FAIL("fail"),
+        ISOLATE("isolate"),
+        IGNORE_DEPENDENCIES("ignore-dependencies"),
+        IGNORE_REQUIREMENTS("ignore-requirements");
 
-    protected Unit(final DBusConnection dbus, final DBusInterface iface) {
-        super(dbus, iface);
+        private String value;
 
-        this.properties = createProperties(SERVICE_NAME);
+        private Mode(final String value) {
+            this.value = value;
+        }
+
+        public final String getValue() {
+            return value;
+        }
+
+    }
+
+    private final UnitInterface iface;
+    private final Properties properties;
+
+    protected Unit(final DBusConnection dbus, final String objectPath) throws DBusException {
+        super(dbus);
+
+        this.iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, objectPath, UnitInterface.class);
+        this.properties = new Properties(dbus, SERVICE_NAME, objectPath);
+    }
+
+    @Override
+    protected UnitInterface getInterface() {
+        return iface;
+    }
+
+    public Path start(final Mode mode) {
+        return null; // TODO
     }
 
     public String getActiveState() {
         return properties.getString("ActiveState");
     }
 
+    public String getDescription() {
+        return properties.getString("Description");
+    }
+
+    public String getId() {
+        return properties.getString("Id");
+    }
+
     public String getLoadState() {
         return properties.getString("LoadState");
+    }
+
+    public Vector<String> getNames() {
+        return properties.getVector("Names");
+    }
+
+    public String getSourcePath() {
+        return properties.getString("SourcePath");
+    }
+
+    public boolean isStopWhenUnneeded() {
+        return properties.getBoolean("StopWhenUnneeded");
+    }
+
+    public String getSubState() {
+        return properties.getString("SubState");
+    }
+
+    public boolean isTransient() {
+        return properties.getBoolean("Transient");
+    }
+
+    public Vector<String> getTriggeredBy() {
+        return properties.getVector("TriggeredBy");
+    }
+
+    public Vector<String> getTriggers() {
+        return properties.getVector("Triggers");
     }
 
     public Vector<String> getWantedBy() {
@@ -56,9 +125,10 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .ResetFailed                     method    -         -                                        -
 .Restart                         method    s         o                                        -
 .SetProperties                   method    ba(sv)    -                                        -
-.Start                           method    s         o                                        -
+  .Start                           method    s         o                                        -
 .Stop                            method    s         o                                        -
 .TryRestart                      method    s         o                                        -
+
 .ActiveEnterTimestamp            property  t         1454763448044889                         emits-change
 .ActiveEnterTimestampMonotonic   property  t         7533431                                  emits-change
 .ActiveExitTimestamp             property  t         0                                        emits-change
@@ -85,12 +155,12 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .Conflicts                       property  as        1 "shutdown.target"                      const
 .ConsistsOf                      property  as        0                                        const
 .DefaultDependencies             property  b         true                                     const
-.Description                     property  s         "Periodic Command Scheduler"             const
+  .Description                     property  s         "Periodic Command Scheduler"             const
 .Documentation                   property  as        0                                        const
 .DropInPaths                     property  as        0                                        const
 .Following                       property  s         ""                                       -
 .FragmentPath                    property  s         "/usr/lib/systemd/system/cronie.service" const
-.Id                              property  s         "cronie.service"                         const
+  .Id                              property  s         "cronie.service"                         const
 .IgnoreOnIsolate                 property  b         false                                    const
 .InactiveEnterTimestamp          property  t         0                                        emits-change
 .InactiveEnterTimestampMonotonic property  t         0                                        emits-change
@@ -103,7 +173,7 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .JoinsNamespaceOf                property  as        0                                        const
 .LoadError                       property  (ss)      "" ""                                    const
   .LoadState                       property  s         "loaded"                                 const
-.Names                           property  as        1 "cronie.service"                       const
+  .Names                           property  as        1 "cronie.service"                       const
 .NeedDaemonReload                property  b         false                                    const
 .NetClass                        property  u         0                                        -
 .OnFailure                       property  as        0                                        const
@@ -118,14 +188,14 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .RequiresMountsFor               property  as        0                                        const
 .Requisite                       property  as        0                                        const
 .RequisiteOf                     property  as        0                                        const
-.SourcePath                      property  s         ""                                       const
-.StopWhenUnneeded                property  b         false                                    const
-.SubState                        property  s         "running"                                emits-change
-.Transient                       property  b         false                                    const
-.TriggeredBy                     property  as        0                                        const
-.Triggers                        property  as        0                                        const
-.UnitFilePreset                  property  s         "disabled"                               -
-.UnitFileState                   property  s         "enabled"                                -
+  .SourcePath                      property  s         ""                                       const
+  .StopWhenUnneeded                property  b         false                                    const
+  .SubState                        property  s         "running"                                emits-change
+  .Transient                       property  b         false                                    const
+  .TriggeredBy                     property  as        0                                        const
+  .Triggers                        property  as        0                                        const
+  .UnitFilePreset                  property  s         "disabled"                               -
+  .UnitFileState                   property  s         "enabled"                                -
   .WantedBy                        property  as        1 "multi-user.target"                    const
   .Wants                           property  as        0                                        const
 

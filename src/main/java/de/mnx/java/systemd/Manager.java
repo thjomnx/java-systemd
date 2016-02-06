@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.mnx.java.systemd.adapters;
+package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 import static de.mnx.java.systemd.Systemd.SYSTEMD_OBJECT_PATH;
@@ -21,7 +21,6 @@ import java.util.Vector;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.mnx.java.systemd.Systemd;
 import de.mnx.java.systemd.interfaces.ManagerInterface;
 import de.mnx.java.systemd.interfaces.ServiceInterface;
 import de.mnx.java.systemd.types.UnitFileType;
@@ -31,23 +30,19 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Manager";
 
-    private Properties properties;
+    private final ManagerInterface iface;
+    private final Properties properties;
 
-    private Manager(final DBusConnection dbus, final ManagerInterface iface) {
-        super(dbus, iface);
+    Manager(final DBusConnection dbus) throws DBusException {
+        super(dbus);
 
-        this.properties = createProperties(SERVICE_NAME);
-    }
-
-    public static Manager create(final DBusConnection dbus) throws DBusException {
-        ManagerInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, ManagerInterface.class);
-
-        return new Manager(dbus, iface);
+        this.iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, ManagerInterface.class);
+        this.properties = new Properties(dbus, SERVICE_NAME, SYSTEMD_OBJECT_PATH);
     }
 
     @Override
     public ManagerInterface getInterface() {
-        return (ManagerInterface) super.getInterface();
+        return iface;
     }
 
     public List<UnitFileType> listUnitFiles() {
