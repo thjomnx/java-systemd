@@ -32,13 +32,18 @@ public abstract class Unit extends InterfaceAdapter {
         IGNORE_DEPENDENCIES("ignore-dependencies"),
         IGNORE_REQUIREMENTS("ignore-requirements");
 
-        private String value;
+        private final String value;
 
         private Mode(final String value) {
             this.value = value;
         }
 
         public final String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
             return value;
         }
 
