@@ -139,11 +139,19 @@ public class Playground {
 
         Service cronie = manager.getService("cronie");
         System.out.println("'cronie' properties (unit interface):");
+        System.out.println("ActiveEnterTimestamp: " + cronie.getActiveEnterTimestamp());
+        System.out.println("ActiveEnterTimestampMonotonic: " + cronie.getActiveEnterTimestampMonotonic());
+        System.out.println("ActiveExitTimestamp: " + cronie.getActiveExitTimestamp());
+        System.out.println("ActiveExitTimestampMonotonic: " + cronie.getActiveExitTimestampMonotonic());
         System.out.println("ActiveState: " + cronie.getActiveState());
+        System.out.println("After: " + cronie.getAfter());
+        System.out.println("Conflicts: " + cronie.getConflicts());
         System.out.println("Description: " + cronie.getDescription());
+        System.out.println("FragmentPath: " + cronie.getFragmentPath());
         System.out.println("Id: " + cronie.getId());
         System.out.println("LoadState: " + cronie.getLoadState());
         System.out.println("Names: " + cronie.getNames());
+        System.out.println("NeedDaemonReload: " + cronie.isNeedDaemonReload());
         System.out.println("SourcePath: " + cronie.getSourcePath());
         System.out.println("StopWhenUnneeded: " + cronie.isStopWhenUnneeded());
         System.out.println("SubState: " + cronie.getSubState());

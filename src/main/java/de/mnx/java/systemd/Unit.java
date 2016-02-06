@@ -25,7 +25,29 @@ public abstract class Unit extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Unit";
 
-    public static enum Mode {
+    public enum Who {
+        MAIN("main"),
+        CONTROL("control"),
+        ALL("all");
+
+        private final String value;
+
+        private Who(final String value) {
+            this.value = value;
+        }
+
+        public final String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+    }
+
+    public enum Mode {
         REPLACE("replace"),
         FAIL("fail"),
         ISOLATE("isolate"),
@@ -62,6 +84,46 @@ public abstract class Unit extends InterfaceAdapter {
         return (UnitInterface) super.getInterface();
     }
 
+    public void kill(final Who who, final int signal) {
+        getInterface().kill(who.getValue(), signal);
+    }
+
+    public Path reload(final Mode mode) {
+        return reload(mode.getValue());
+    }
+
+    public Path reload(final String mode) {
+        return getInterface().reload(mode);
+    }
+
+    public Path reloadOrRestart(final Mode mode) {
+        return reloadOrRestart(mode.getValue());
+    }
+
+    public Path reloadOrRestart(final String mode) {
+        return getInterface().reloadOrRestart(mode);
+    }
+
+    public Path reloadOrTryRestart(final Mode mode) {
+        return reloadOrTryRestart(mode.getValue());
+    }
+
+    public Path reloadOrTryRestart(final String mode) {
+        return getInterface().reloadOrTryRestart(mode);
+    }
+
+    public void resetFailed() {
+        getInterface().resetFailed();
+    }
+
+    public Path restart(final Mode mode) {
+        return restart(mode.getValue());
+    }
+
+    public Path restart(final String mode) {
+        return getInterface().restart(mode);
+    }
+
     public Path start(final Mode mode) {
         return start(mode.getValue());
     }
@@ -78,12 +140,48 @@ public abstract class Unit extends InterfaceAdapter {
         return getInterface().stop(mode);
     }
 
+    public Path tryRestart(final Mode mode) {
+        return tryRestart(mode.getValue());
+    }
+
+    public Path tryRestart(final String mode) {
+        return getInterface().tryRestart(mode);
+    }
+
+    public long getActiveEnterTimestamp() {
+        return properties.getLong("ActiveEnterTimestamp");
+    }
+
+    public long getActiveEnterTimestampMonotonic() {
+        return properties.getLong("ActiveEnterTimestampMonotonic");
+    }
+
+    public long getActiveExitTimestamp() {
+        return properties.getLong("ActiveExitTimestamp");
+    }
+
+    public long getActiveExitTimestampMonotonic() {
+        return properties.getLong("ActiveExitTimestampMonotonic");
+    }
+
     public String getActiveState() {
         return properties.getString("ActiveState");
     }
 
+    public Vector<String> getAfter() {
+        return properties.getVector("After");
+    }
+
+    public Vector<String> getConflicts() {
+        return properties.getVector("Conflicts");
+    }
+
     public String getDescription() {
         return properties.getString("Description");
+    }
+
+    public String getFragmentPath() {
+        return properties.getString("FragmentPath");
     }
 
     public String getId() {
@@ -96,6 +194,10 @@ public abstract class Unit extends InterfaceAdapter {
 
     public Vector<String> getNames() {
         return properties.getVector("Names");
+    }
+
+    public boolean isNeedDaemonReload() {
+        return properties.getBoolean("NeedDaemonReload");
     }
 
     public String getSourcePath() {
@@ -133,23 +235,23 @@ public abstract class Unit extends InterfaceAdapter {
     /**
      *
 NAME                             TYPE      SIGNATURE RESULT/VALUE                             FLAGS
-.Kill                            method    si        -                                        -
-.Reload                          method    s         o                                        -
-.ReloadOrRestart                 method    s         o                                        -
-.ReloadOrTryRestart              method    s         o                                        -
-.ResetFailed                     method    -         -                                        -
-.Restart                         method    s         o                                        -
+  .Kill                            method    si        -                                        -
+  .Reload                          method    s         o                                        -
+  .ReloadOrRestart                 method    s         o                                        -
+  .ReloadOrTryRestart              method    s         o                                        -
+  .ResetFailed                     method    -         -                                        -
+  .Restart                         method    s         o                                        -
 .SetProperties                   method    ba(sv)    -                                        -
   .Start                           method    s         o                                        -
-.Stop                            method    s         o                                        -
-.TryRestart                      method    s         o                                        -
+  .Stop                            method    s         o                                        -
+  .TryRestart                      method    s         o                                        -
 
-.ActiveEnterTimestamp            property  t         1454763448044889                         emits-change
-.ActiveEnterTimestampMonotonic   property  t         7533431                                  emits-change
-.ActiveExitTimestamp             property  t         0                                        emits-change
-.ActiveExitTimestampMonotonic    property  t         0                                        emits-change
+  .ActiveEnterTimestamp            property  t         1454763448044889                         emits-change
+  .ActiveEnterTimestampMonotonic   property  t         7533431                                  emits-change
+  .ActiveExitTimestamp             property  t         0                                        emits-change
+  .ActiveExitTimestampMonotonic    property  t         0                                        emits-change
   .ActiveState                     property  s         "active"                                 emits-change
-.After                           property  as        4 "systemd-journald.socket" "sysinit.... const
+  .After                           property  as        4 "systemd-journald.socket" "sysinit.... const
 .AllowIsolate                    property  b         false                                    const
 .AssertResult                    property  b         true                                     emits-change
 .AssertTimestamp                 property  t         1454763448044462                         emits-change
@@ -167,14 +269,14 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .ConditionTimestampMonotonic     property  t         7533004                                  emits-change
 .Conditions                      property  a(sbbsi)  0                                        -
 .ConflictedBy                    property  as        0                                        const
-.Conflicts                       property  as        1 "shutdown.target"                      const
+  .Conflicts                       property  as        1 "shutdown.target"                      const
 .ConsistsOf                      property  as        0                                        const
 .DefaultDependencies             property  b         true                                     const
   .Description                     property  s         "Periodic Command Scheduler"             const
 .Documentation                   property  as        0                                        const
 .DropInPaths                     property  as        0                                        const
 .Following                       property  s         ""                                       -
-.FragmentPath                    property  s         "/usr/lib/systemd/system/cronie.service" const
+  .FragmentPath                    property  s         "/usr/lib/systemd/system/cronie.service" const
   .Id                              property  s         "cronie.service"                         const
 .IgnoreOnIsolate                 property  b         false                                    const
 .InactiveEnterTimestamp          property  t         0                                        emits-change
@@ -189,7 +291,7 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .LoadError                       property  (ss)      "" ""                                    const
   .LoadState                       property  s         "loaded"                                 const
   .Names                           property  as        1 "cronie.service"                       const
-.NeedDaemonReload                property  b         false                                    const
+  .NeedDaemonReload                property  b         false                                    const
 .NetClass                        property  u         0                                        -
 .OnFailure                       property  as        0                                        const
 .OnFailureJobMode                property  s         "replace"                                const
