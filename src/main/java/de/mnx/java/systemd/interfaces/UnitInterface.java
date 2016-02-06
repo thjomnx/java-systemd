@@ -22,4 +22,7 @@ public interface UnitInterface extends DBusInterface {
     @DBusMemberName(value = "Start")
     Path start(final String mode);
 
+    @DBusMemberName(value = "Stop")
+    Path stop(final String mode);
+
 }

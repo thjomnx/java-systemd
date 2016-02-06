@@ -175,6 +175,10 @@ public class Playground {
 
         System.out.println();
 
+        System.out.println("'cronie' methods (unit interface, work only with privileges):");
+//        System.out.println("Start: " + cronie.start(Mode.FAIL));
+//        System.out.println("Stop: " + cronie.stop(Mode.FAIL));
+
 //        System.out.println(manager.dump());
     }
 

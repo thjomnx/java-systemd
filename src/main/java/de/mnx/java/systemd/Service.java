@@ -28,19 +28,23 @@ public class Service extends Unit {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Service";
 
-    private final ServiceInterface iface;
     private final Properties properties;
 
-    Service(final DBusConnection dbus, final ServiceInterface iface) throws DBusException {
-        super(dbus, iface.getObjectPath());
+    private Service(final DBusConnection dbus, final ServiceInterface iface) throws DBusException {
+        super(dbus, iface);
 
-        this.iface = iface;
-        this.properties = new Properties(dbus, SERVICE_NAME, iface.getObjectPath());
+        this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
+    }
+
+    static Service create(final DBusConnection dbus, final String objectPath) throws DBusException {
+        ServiceInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, objectPath, ServiceInterface.class);
+
+        return new Service(dbus, iface);
     }
 
     @Override
-    protected ServiceInterface getInterface() {
-        return iface;
+    public ServiceInterface getInterface() {
+        return (ServiceInterface) super.getInterface();
     }
 
     public String getControlGroup() {

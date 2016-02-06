@@ -84,7 +84,7 @@ public final class Systemd {
 
     public Manager getManager() throws DBusException {
         if (manager == null) {
-            manager = new Manager(dbus);
+            manager = Manager.create(dbus);
         }
 
         return manager;

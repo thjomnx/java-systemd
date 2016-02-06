@@ -22,8 +22,11 @@ public abstract class InterfaceAdapter implements DBusInterface {
 
     protected final DBusConnection dbus;
 
-    protected InterfaceAdapter(final DBusConnection dbus) {
+    private final DBusInterface iface;
+
+    protected InterfaceAdapter(final DBusConnection dbus, final DBusInterface iface) {
         this.dbus = dbus;
+        this.iface = iface;
     }
 
     @Override
@@ -36,6 +39,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
         return getInterface().isRemote();
     }
 
-    protected abstract DBusInterface getInterface();
+    public DBusInterface getInterface() {
+        return iface;
+    }
 
 }

@@ -22,7 +22,6 @@ import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.mnx.java.systemd.interfaces.ManagerInterface;
-import de.mnx.java.systemd.interfaces.ServiceInterface;
 import de.mnx.java.systemd.types.UnitFileType;
 import de.mnx.java.systemd.types.UnitType;
 
@@ -30,19 +29,23 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Manager";
 
-    private final ManagerInterface iface;
     private final Properties properties;
 
-    Manager(final DBusConnection dbus) throws DBusException {
-        super(dbus);
+    private Manager(final DBusConnection dbus, final ManagerInterface iface) throws DBusException {
+        super(dbus, iface);
 
-        this.iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, ManagerInterface.class);
-        this.properties = new Properties(dbus, SERVICE_NAME, SYSTEMD_OBJECT_PATH);
+        this.properties = Properties.create(dbus, SYSTEMD_OBJECT_PATH, SERVICE_NAME);
+    }
+
+    static Manager create(final DBusConnection dbus) throws DBusException {
+        ManagerInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, ManagerInterface.class);
+
+        return new Manager(dbus, iface);
     }
 
     @Override
     public ManagerInterface getInterface() {
-        return iface;
+        return (ManagerInterface) super.getInterface();
     }
 
     public List<UnitFileType> listUnitFiles() {
@@ -57,9 +60,7 @@ public class Manager extends InterfaceAdapter {
         String service = name.endsWith(".service") ? name : name + ".service";
         String objectPath = SYSTEMD_OBJECT_PATH + "/unit/" + Systemd.escapePath(service);
 
-        ServiceInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, objectPath, ServiceInterface.class);
-
-        return new Service(dbus, iface);
+        return Service.create(dbus, objectPath);
     }
 
     public String dump() {

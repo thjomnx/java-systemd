@@ -49,23 +49,33 @@ public abstract class Unit extends InterfaceAdapter {
 
     }
 
-    private final UnitInterface iface;
     private final Properties properties;
 
-    protected Unit(final DBusConnection dbus, final String objectPath) throws DBusException {
-        super(dbus);
+    protected Unit(final DBusConnection dbus, final UnitInterface iface) throws DBusException {
+        super(dbus, iface);
 
-        this.iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, objectPath, UnitInterface.class);
-        this.properties = new Properties(dbus, SERVICE_NAME, objectPath);
+        this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
     @Override
-    protected UnitInterface getInterface() {
-        return iface;
+    public UnitInterface getInterface() {
+        return (UnitInterface) super.getInterface();
     }
 
     public Path start(final Mode mode) {
-        return null; // TODO
+        return start(mode.getValue());
+    }
+
+    public Path start(final String mode) {
+        return getInterface().start(mode);
+    }
+
+    public Path stop(final Mode mode) {
+        return stop(mode.getValue());
+    }
+
+    public Path stop(final String mode) {
+        return getInterface().stop(mode);
     }
 
     public String getActiveState() {

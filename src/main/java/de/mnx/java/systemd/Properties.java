@@ -25,19 +25,23 @@ public class Properties extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = "org.freedesktop.DBus.Properties";
 
-    private final PropertyInterface iface;
     private final String serviceName;
 
-    Properties(final DBusConnection dbus, final String serviceName, final String objectPath) throws DBusException {
-        super(dbus);
+    private Properties(final DBusConnection dbus, final PropertyInterface iface, final String serviceName) {
+        super(dbus, iface);
 
-        this.iface = dbus.getRemoteObject(Systemd.SYSTEMD_DBUS_NAME, objectPath, PropertyInterface.class);
         this.serviceName = serviceName;
+    }
+
+    static Properties create(final DBusConnection dbus, final String objectPath, final String serviceName) throws DBusException {
+        PropertyInterface iface = dbus.getRemoteObject(Systemd.SYSTEMD_DBUS_NAME, objectPath, PropertyInterface.class);
+
+        return new Properties(dbus, iface, serviceName);
     }
 
     @Override
     public PropertyInterface getInterface() {
-        return iface;
+        return (PropertyInterface) super.getInterface();
     }
 
     public Variant<?> getVariant(final String propertyName) {
