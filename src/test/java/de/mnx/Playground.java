@@ -34,13 +34,44 @@ public class Playground {
         System.out.println("ControlGroup: " + manager.getControlGroup());
         System.out.println("DefaultBlockIOAccounting: " + manager.isDefaultBlockIOAccounting());
         System.out.println("DefaultCPUAccounting: " + manager.isDefaultCPUAccounting());
+        System.out.println("DefaultLimitAS: " + manager.getDefaultLimitAS());
+        System.out.println("DefaultLimitCORE: " + manager.getDefaultLimitCORE());
+        System.out.println("DefaultLimitCPU: " + manager.getDefaultLimitCPU());
+        System.out.println("DefaultLimitDATA: " + manager.getDefaultLimitDATA());
+        System.out.println("DefaultLimitFSIZE: " + manager.getDefaultLimitFSIZE());
+        System.out.println("DefaultLimitLOCKS: " + manager.getDefaultLimitLOCKS());
+        System.out.println("DefaultLimitMEMLOCK: " + manager.getDefaultLimitMEMLOCK());
+        System.out.println("DefaultLimitMSGQUEUE: " + manager.getDefaultLimitMSGQUEUE());
+        System.out.println("DefaultLimitNICE: " + manager.getDefaultLimitNICE());
+        System.out.println("DefaultLimitNOFILE: " + manager.getDefaultLimitNOFILE());
+        System.out.println("DefaultLimitNPROC: " + manager.getDefaultLimitNPROC());
+        System.out.println("DefaultLimitRSS: " + manager.getDefaultLimitRSS());
+        System.out.println("DefaultLimitRTPRIO: " + manager.getDefaultLimitRTPRIO());
+        System.out.println("DefaultLimitRTTIME: " + manager.getDefaultLimitRTTIME());
+        System.out.println("DefaultLimitSIGPENDING: " + manager.getDefaultLimitSIGPENDING());
+        System.out.println("DefaultLimitSTACK: " + manager.getDefaultLimitSTACK());
         System.out.println("DefaultMemoryAccounting: " + manager.isDefaultMemoryAccounting());
+        System.out.println("DefaultRestartUSec: " + manager.getDefaultRestartUSec());
         System.out.println("DefaultStandardError: " + manager.getDefaultStandardError());
         System.out.println("DefaultStandardOutput: " + manager.getDefaultStandardOutput());
+        System.out.println("DefaultStartLimitBurst: " + manager.getDefaultStartLimitBurst());
+        System.out.println("DefaultStartLimitInterval: " + manager.getDefaultStartLimitInterval());
         System.out.println("DefaultTasksAccounting: " + manager.isDefaultTasksAccounting());
+        System.out.println("DefaultTasksMax: " + manager.getDefaultTasksMax());
+        System.out.println("DefaultTimeoutStartUSec: " + manager.getDefaultTimeoutStartUSec());
+        System.out.println("DefaultTimeoutStopUSec: " + manager.getDefaultTimeoutStopUSec());
+        System.out.println("DefaultTimerAccuracyUSec: " + manager.getDefaultTimerAccuracyUSec());
         System.out.println("Environment: " + manager.getEnvironment());
         System.out.println("ExitCode: " + manager.getExitCode());
         System.out.println("Features: " + manager.getFeatures());
+        System.out.println("FinishTimestamp: " + manager.getFinishTimestamp());
+        System.out.println("FinishTimestampMonotonic: " + manager.getFinishTimestampMonotonic());
+        System.out.println("FirmwareTimestamp: " + manager.getFirmwareTimestamp());
+        System.out.println("FirmwareTimestampMonotonic: " + manager.getFirmwareTimestampMonotonic());
+        System.out.println("GeneratorsFinishTimestamp: " + manager.getGeneratorsFinishTimestamp());
+        System.out.println("GeneratorsFinishTimestampMonotonic: " + manager.getGeneratorsFinishTimestampMonotonic());
+        System.out.println("GeneratorsStartTimestamp: " + manager.getGeneratorsStartTimestamp());
+        System.out.println("GeneratorsStartTimestampMonotonic: " + manager.getGeneratorsStartTimestampMonotonic());
         System.out.println("InitRDTimestamp: " + manager.getInitRDTimestamp() + " (" + Systemd.timestampToDate(manager.getInitRDTimestamp()) + ")");
         System.out.println("InitRDTimestampMonotonic: " + manager.getInitRDTimestampMonotonic());
         System.out.println("KernelTimestamp: " + manager.getKernelTimestamp() + " (" + Systemd.timestampToDate(manager.getKernelTimestamp()) + ")");
@@ -108,30 +139,31 @@ public class Playground {
 
         Service cronie = manager.getService("cronie");
         System.out.println("'cronie' properties (unit interface):");
-        System.out.println("WantedBy: " + cronie.getWantedBy());
-        System.out.println("LoadState: " + cronie.getLoadState());
         System.out.println("ActiveState: " + cronie.getActiveState());
+        System.out.println("LoadState: " + cronie.getLoadState());
+        System.out.println("WantedBy: " + cronie.getWantedBy());
+        System.out.println("Wants: " + cronie.getWants());
 
         System.out.println();
 
-        System.out.println("'cronie' properties:");
-        System.out.println("ControlGroup: " + cronie.getControlGroup());
-        System.out.println("Environment: " + cronie.getEnvironment());
-        System.out.println("ExecReload: " + cronie.getExecReload());
-        System.out.println("ExecStart: " + cronie.getExecStart());
-        System.out.println("ExecStartPost: " + cronie.getExecStartPost());
-        System.out.println("ExecStartPre: " + cronie.getExecStartPre());
-        System.out.println("ExecStop: " + cronie.getExecStop());
-        System.out.println("ExecStopPost: " + cronie.getExecStopPost());
-        System.out.println("MainPID: " + cronie.getMainPID());
-        System.out.println("Result: " + cronie.getResult());
-        System.out.println("SELinuxContext: " + cronie.getSELinuxContext());
-        System.out.println("StandardError: " + cronie.getStandardError());
-        System.out.println("StandardInput: " + cronie.getStandardInput());
-        System.out.println("StandardOutput: " + cronie.getStandardOutput());
-        System.out.println("Type: " + cronie.getType());
-
-        System.out.println();
+//        System.out.println("'cronie' properties:");
+//        System.out.println("ControlGroup: " + cronie.getControlGroup());
+//        System.out.println("Environment: " + cronie.getEnvironment());
+//        System.out.println("ExecReload: " + cronie.getExecReload());
+//        System.out.println("ExecStart: " + cronie.getExecStart());
+//        System.out.println("ExecStartPost: " + cronie.getExecStartPost());
+//        System.out.println("ExecStartPre: " + cronie.getExecStartPre());
+//        System.out.println("ExecStop: " + cronie.getExecStop());
+//        System.out.println("ExecStopPost: " + cronie.getExecStopPost());
+//        System.out.println("MainPID: " + cronie.getMainPID());
+//        System.out.println("Result: " + cronie.getResult());
+//        System.out.println("SELinuxContext: " + cronie.getSELinuxContext());
+//        System.out.println("StandardError: " + cronie.getStandardError());
+//        System.out.println("StandardInput: " + cronie.getStandardInput());
+//        System.out.println("StandardOutput: " + cronie.getStandardOutput());
+//        System.out.println("Type: " + cronie.getType());
+//
+//        System.out.println();
 
 //        System.out.println(manager.dump());
     }

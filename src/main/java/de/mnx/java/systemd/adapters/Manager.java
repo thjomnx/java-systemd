@@ -14,6 +14,7 @@ package de.mnx.java.systemd.adapters;
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 import static de.mnx.java.systemd.Systemd.SYSTEMD_OBJECT_PATH;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
@@ -90,8 +91,76 @@ public class Manager extends InterfaceAdapter {
         return properties.getBoolean("DefaultCPUAccounting");
     }
 
+    public BigInteger getDefaultLimitAS() {
+        return properties.getBigInteger("DefaultLimitAS");
+    }
+
+    public BigInteger getDefaultLimitCORE() {
+        return properties.getBigInteger("DefaultLimitCORE");
+    }
+
+    public BigInteger getDefaultLimitCPU() {
+        return properties.getBigInteger("DefaultLimitCPU");
+    }
+
+    public BigInteger getDefaultLimitDATA() {
+        return properties.getBigInteger("DefaultLimitDATA");
+    }
+
+    public BigInteger getDefaultLimitFSIZE() {
+        return properties.getBigInteger("DefaultLimitFSIZE");
+    }
+
+    public BigInteger getDefaultLimitLOCKS() {
+        return properties.getBigInteger("DefaultLimitLOCKS");
+    }
+
+    public BigInteger getDefaultLimitMEMLOCK() {
+        return properties.getBigInteger("DefaultLimitMEMLOCK");
+    }
+
+    public BigInteger getDefaultLimitMSGQUEUE() {
+        return properties.getBigInteger("DefaultLimitMSGQUEUE");
+    }
+
+    public BigInteger getDefaultLimitNICE() {
+        return properties.getBigInteger("DefaultLimitNICE");
+    }
+
+    public BigInteger getDefaultLimitNOFILE() {
+        return properties.getBigInteger("DefaultLimitNOFILE");
+    }
+
+    public BigInteger getDefaultLimitNPROC() {
+        return properties.getBigInteger("DefaultLimitNPROC");
+    }
+
+    public BigInteger getDefaultLimitRSS() {
+        return properties.getBigInteger("DefaultLimitRSS");
+    }
+
+    public BigInteger getDefaultLimitRTPRIO() {
+        return properties.getBigInteger("DefaultLimitRTPRIO");
+    }
+
+    public BigInteger getDefaultLimitRTTIME() {
+        return properties.getBigInteger("DefaultLimitRTTIME");
+    }
+
+    public BigInteger getDefaultLimitSIGPENDING() {
+        return properties.getBigInteger("DefaultLimitSIGPENDING");
+    }
+
+    public BigInteger getDefaultLimitSTACK() {
+        return properties.getBigInteger("DefaultLimitSTACK");
+    }
+
     public boolean isDefaultMemoryAccounting() {
         return properties.getBoolean("DefaultMemoryAccounting");
+    }
+
+    public long getDefaultRestartUSec() {
+        return properties.getLong("DefaultRestartUSec");
     }
 
     public String getDefaultStandardError() {
@@ -102,8 +171,32 @@ public class Manager extends InterfaceAdapter {
         return properties.getString("DefaultStandardOutput");
     }
 
+    public long getDefaultStartLimitBurst() {
+        return properties.getLong("DefaultStartLimitBurst");
+    }
+
+    public BigInteger getDefaultStartLimitInterval() {
+        return properties.getBigInteger("DefaultStartLimitInterval");
+    }
+
     public boolean isDefaultTasksAccounting() {
         return properties.getBoolean("DefaultTasksAccounting");
+    }
+
+    public BigInteger getDefaultTasksMax() {
+        return properties.getBigInteger("DefaultTasksMax");
+    }
+
+    public long getDefaultTimeoutStartUSec() {
+        return properties.getLong("DefaultTimeoutStartUSec");
+    }
+
+    public long getDefaultTimeoutStopUSec() {
+        return properties.getLong("DefaultTimeoutStopUSec");
+    }
+
+    public long getDefaultTimerAccuracyUSec() {
+        return properties.getLong("DefaultTimerAccuracyUSec");
     }
 
     public Vector<String> getEnvironment() {
@@ -116,6 +209,38 @@ public class Manager extends InterfaceAdapter {
 
     public String getFeatures() {
         return properties.getString("Features");
+    }
+
+    public long getFinishTimestamp() {
+        return properties.getLong("FinishTimestamp");
+    }
+
+    public long getFinishTimestampMonotonic() {
+        return properties.getLong("FinishTimestampMonotonic");
+    }
+
+    public long getFirmwareTimestamp() {
+        return properties.getLong("FirmwareTimestamp");
+    }
+
+    public long getFirmwareTimestampMonotonic() {
+        return properties.getLong("FirmwareTimestampMonotonic");
+    }
+
+    public long getGeneratorsFinishTimestamp() {
+        return properties.getLong("GeneratorsFinishTimestamp");
+    }
+
+    public long getGeneratorsFinishTimestampMonotonic() {
+        return properties.getLong("GeneratorsFinishTimestampMonotonic");
+    }
+
+    public long getGeneratorsStartTimestamp() {
+        return properties.getLong("GeneratorsStartTimestamp");
+    }
+
+    public long getGeneratorsStartTimestampMonotonic() {
+        return properties.getLong("GeneratorsStartTimestampMonotonic");
     }
 
     public long getInitRDTimestamp() {
@@ -150,24 +275,24 @@ public class Manager extends InterfaceAdapter {
         return properties.getString("LogTarget");
     }
 
-    public int getNFailedJobs() {
-        return properties.getInteger("NFailedJobs");
+    public long getNFailedJobs() {
+        return properties.getLong("NFailedJobs");
     }
 
-    public int getNFailedUnits() {
-        return properties.getInteger("NFailedUnits");
+    public long getNFailedUnits() {
+        return properties.getLong("NFailedUnits");
     }
 
-    public int getNInstalledJobs() {
-        return properties.getInteger("NInstalledJobs");
+    public long getNInstalledJobs() {
+        return properties.getLong("NInstalledJobs");
     }
 
-    public int getNJobs() {
-        return properties.getInteger("NJobs");
+    public long getNJobs() {
+        return properties.getLong("NJobs");
     }
 
-    public int getNNames() {
-        return properties.getInteger("NNames");
+    public long getNNames() {
+        return properties.getLong("NNames");
     }
 
     public double getProgress() {
@@ -249,85 +374,5 @@ public class Manager extends InterfaceAdapter {
     public String getVirtualization() {
         return properties.getString("Virtualization");
     }
-
-    /**
-     *
-  .Architecture                       property  s                "x86-64"                                 const
-  .ConfirmSpawn                       property  b                false                                    const
-  .ControlGroup                       property  s                ""                                       -
-  .DefaultBlockIOAccounting           property  b                false                                    const
-  .DefaultCPUAccounting               property  b                false                                    const
-.DefaultLimitAS                     property  t                18446744073709551615                     const
-.DefaultLimitCORE                   property  t                18446744073709551615                     const
-.DefaultLimitCPU                    property  t                18446744073709551615                     const
-.DefaultLimitDATA                   property  t                18446744073709551615                     const
-.DefaultLimitFSIZE                  property  t                18446744073709551615                     const
-.DefaultLimitLOCKS                  property  t                18446744073709551615                     const
-.DefaultLimitMEMLOCK                property  t                65536                                    const
-.DefaultLimitMSGQUEUE               property  t                819200                                   const
-.DefaultLimitNICE                   property  t                0                                        const
-.DefaultLimitNOFILE                 property  t                4096                                     const
-.DefaultLimitNPROC                  property  t                48013                                    const
-.DefaultLimitRSS                    property  t                18446744073709551615                     const
-.DefaultLimitRTPRIO                 property  t                0                                        const
-.DefaultLimitRTTIME                 property  t                18446744073709551615                     const
-.DefaultLimitSIGPENDING             property  t                48013                                    const
-.DefaultLimitSTACK                  property  t                18446744073709551615                     const
-  .DefaultMemoryAccounting            property  b                false                                    const
-.DefaultRestartUSec                 property  t                100000                                   const
-  .DefaultStandardError               property  s                "journal"                                const
-  .DefaultStandardOutput              property  s                "journal"                                const
-.DefaultStartLimitBurst             property  u                5                                        const
-.DefaultStartLimitInterval          property  t                10000000                                 const
-  .DefaultTasksAccounting             property  b                true                                     const
-.DefaultTasksMax                    property  t                512                                      const
-.DefaultTimeoutStartUSec            property  t                90000000                                 const
-.DefaultTimeoutStopUSec             property  t                90000000                                 const
-.DefaultTimerAccuracyUSec           property  t                60000000                                 const
-  .Environment                        property  as               3 "LANG=en_US.UTF-8" "LC_COLLATE=C" "... -
-  .ExitCode                           property  y                0                                        -
-  .Features                           property  s                "+PAM -AUDIT -SELINUX -IMA -APPARMOR ... const
-.FinishTimestamp                    property  t                1454158054001184                         const
-.FinishTimestampMonotonic           property  t                43163488                                 const
-.FirmwareTimestamp                  property  t                0                                        const
-.FirmwareTimestampMonotonic         property  t                0                                        const
-.GeneratorsFinishTimestamp          property  t                1454158016424302                         const
-.GeneratorsFinishTimestampMonotonic property  t                6933292                                  const
-.GeneratorsStartTimestamp           property  t                1454158016391533                         const
-.GeneratorsStartTimestampMonotonic  property  t                6900522                                  const
-  .InitRDTimestamp                    property  t                0                                        const
-  .InitRDTimestampMonotonic           property  t                0                                        const
-  .KernelTimestamp                    property  t                1454158009491011                         const
-  .KernelTimestampMonotonic           property  t                0                                        const
-  .LoaderTimestamp                    property  t                0                                        const
-  .LoaderTimestampMonotonic           property  t                0                                        const
-  .LogLevel                           property  s                "info"                                   writable
-  .LogTarget                          property  s                "journal-or-kmsg"                        writable
-  .NFailedJobs                        property  u                0                                        -
-  .NFailedUnits                       property  u                0                                        emits-change
-  .NInstalledJobs                     property  u                112                                      -
-  .NJobs                              property  u                0                                        -
-  .NNames                             property  u                239                                      -
-  .Progress                           property  d                1                                        -
-  .RuntimeWatchdogUSec                property  t                0                                        writable
-  .SecurityFinishTimestamp            property  t                1454158016368154                         const
-  .SecurityFinishTimestampMonotonic   property  t                6877144                                  const
-  .SecurityStartTimestamp             property  t                1454158016367424                         const
-  .SecurityStartTimestampMonotonic    property  t                6876413                                  const
-  .ShowStatus                         property  b                true                                     const
-  .ShutdownWatchdogUSec               property  t                600000000                                writable
-  .SystemState                        property  s                "running"                                -
-  .Tainted                            property  s                ""                                       const
-  .TimerSlackNSec                     property  t                50000                                    const
-  .UnitPath                           property  as               5 "/etc/systemd/system" "/run/systemd... const
-  .UnitsLoadFinishTimestamp           property  t                1454158016467501                         const
-  .UnitsLoadFinishTimestampMonotonic  property  t                6976491                                  const
-  .UnitsLoadStartTimestamp            property  t                1454158016426735                         const
-  .UnitsLoadStartTimestampMonotonic   property  t                6935724                                  const
-  .UserspaceTimestamp                 property  t                1454158016364525                         const
-  .UserspaceTimestampMonotonic        property  t                6873515                                  const
-  .Version                            property  s                "228"                                    const
-  .Virtualization                     property  s                ""                                       const
-     */
 
 }
