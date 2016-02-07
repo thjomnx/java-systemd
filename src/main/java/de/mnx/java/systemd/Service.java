@@ -218,7 +218,7 @@ public class Service extends Unit {
 
     }
 
-    // TODO Rename variables to their real meaning
+    // TODO Rename 'prefixed' variable to match its real purpose
     // http://systemd-devel.freedesktop.narkive.com/6xnzKsRp/patch-export-selinuxcontext-on-the-bus-as-a-structure
     public static class SELinuxContext {
 

@@ -172,6 +172,22 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getVector("After");
     }
 
+    public boolean isAllowIsolate() {
+        return properties.getBoolean("AllowIsolate");
+    }
+
+    public boolean isAssertResult() {
+        return properties.getBoolean("AssertResult");
+    }
+
+    public long getAssertTimestamp() {
+        return properties.getLong("AssertTimestamp");
+    }
+
+    public long getAssertTimestampMonotonic() {
+        return properties.getLong("AssertTimestampMonotonic");
+    }
+
     public Vector<String> getBefore() {
         return properties.getVector("Before");
     }
@@ -184,28 +200,64 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getVector("BoundBy");
     }
 
-    public boolean isCanIsolate() {
+    public boolean canIsolate() {
         return properties.getBoolean("CanIsolate");
     }
 
-    public boolean isCanReload() {
+    public boolean canReload() {
         return properties.getBoolean("CanReload");
     }
 
-    public boolean isCanStart() {
+    public boolean canStart() {
         return properties.getBoolean("CanStart");
     }
 
-    public boolean isCanStop() {
+    public boolean canStop() {
         return properties.getBoolean("CanStop");
+    }
+
+    public boolean getConditionResult() {
+        return properties.getBoolean("ConditionResult");
+    }
+
+    public long getConditionTimestamp() {
+        return properties.getLong("ConditionTimestamp");
+    }
+
+    public long getConditionTimestampMonotonic() {
+        return properties.getLong("ConditionTimestampMonotonic");
+    }
+
+    public Vector<String> getConflictedBy() {
+        return properties.getVector("ConflictedBy");
     }
 
     public Vector<String> getConflicts() {
         return properties.getVector("Conflicts");
     }
 
+    public Vector<String> getConsistsOf() {
+        return properties.getVector("ConsistsOf");
+    }
+
+    public boolean hasDefaultDependencies() {
+        return properties.getBoolean("DefaultDependencies");
+    }
+
     public String getDescription() {
         return properties.getString("Description");
+    }
+
+    public Vector<String> getDocumentation() {
+        return properties.getVector("Documentation");
+    }
+
+    public Vector<String> getDropInPaths() {
+        return properties.getVector("DropInPaths");
+    }
+
+    public String getFollowing() {
+        return properties.getString("Following");
     }
 
     public String getFragmentPath() {
@@ -214,6 +266,42 @@ public abstract class Unit extends InterfaceAdapter {
 
     public String getId() {
         return properties.getString("Id");
+    }
+
+    public boolean isIgnoreOnIsolate() {
+        return properties.getBoolean("IgnoreOnIsolate");
+    }
+
+    public long getInactiveEnterTimestamp() {
+        return properties.getLong("InactiveEnterTimestamp");
+    }
+
+    public long getInactiveEnterTimestampMonotonic() {
+        return properties.getLong("InactiveEnterTimestampMonotonic");
+    }
+
+    public long getInactiveExitTimestamp() {
+        return properties.getLong("InactiveExitTimestamp");
+    }
+
+    public long getInactiveExitTimestampMonotonic() {
+        return properties.getLong("InactiveExitTimestampMonotonic");
+    }
+
+    public String getJobTimeoutAction() {
+        return properties.getString("JobTimeoutAction");
+    }
+
+    public String getJobTimeoutRebootArgument() {
+        return properties.getString("JobTimeoutRebootArgument");
+    }
+
+    public long getJobTimeoutUSec() {
+        return properties.getLong("JobTimeoutUSec");
+    }
+
+    public Vector<String> getJoinsNamespaceOf() {
+        return properties.getVector("JoinsNamespaceOf");
     }
 
     public String getLoadState() {
@@ -332,10 +420,10 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .ActiveExitTimestampMonotonic    property  t         0                                        emits-change
   .ActiveState                     property  s         "active"                                 emits-change
   .After                           property  as        4 "systemd-journald.socket" "sysinit.... const
-.AllowIsolate                    property  b         false                                    const
-.AssertResult                    property  b         true                                     emits-change
-.AssertTimestamp                 property  t         1454763448044462                         emits-change
-.AssertTimestampMonotonic        property  t         7533004                                  emits-change
+  .AllowIsolate                    property  b         false                                    const
+  .AssertResult                    property  b         true                                     emits-change
+  .AssertTimestamp                 property  t         1454763448044462                         emits-change
+  .AssertTimestampMonotonic        property  t         7533004                                  emits-change
 .Asserts                         property  a(sbbsi)  0                                        -
   .Before                          property  as        2 "shutdown.target" "multi-user.target"  const
   .BindsTo                         property  as        0                                        const
@@ -344,30 +432,30 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .CanReload                       property  b         true                                     const
   .CanStart                        property  b         true                                     const
   .CanStop                         property  b         true                                     const
-.ConditionResult                 property  b         true                                     emits-change
-.ConditionTimestamp              property  t         1454763448044461                         emits-change
-.ConditionTimestampMonotonic     property  t         7533004                                  emits-change
+  .ConditionResult                 property  b         true                                     emits-change
+  .ConditionTimestamp              property  t         1454763448044461                         emits-change
+  .ConditionTimestampMonotonic     property  t         7533004                                  emits-change
 .Conditions                      property  a(sbbsi)  0                                        -
-.ConflictedBy                    property  as        0                                        const
+  .ConflictedBy                    property  as        0                                        const
   .Conflicts                       property  as        1 "shutdown.target"                      const
-.ConsistsOf                      property  as        0                                        const
-.DefaultDependencies             property  b         true                                     const
+  .ConsistsOf                      property  as        0                                        const
+  .DefaultDependencies             property  b         true                                     const
   .Description                     property  s         "Periodic Command Scheduler"             const
-.Documentation                   property  as        0                                        const
-.DropInPaths                     property  as        0                                        const
-.Following                       property  s         ""                                       -
+  .Documentation                   property  as        0                                        const
+  .DropInPaths                     property  as        0                                        const
+  .Following                       property  s         ""                                       -
   .FragmentPath                    property  s         "/usr/lib/systemd/system/cronie.service" const
   .Id                              property  s         "cronie.service"                         const
-.IgnoreOnIsolate                 property  b         false                                    const
-.InactiveEnterTimestamp          property  t         0                                        emits-change
-.InactiveEnterTimestampMonotonic property  t         0                                        emits-change
-.InactiveExitTimestamp           property  t         1454763448044889                         emits-change
-.InactiveExitTimestampMonotonic  property  t         7533431                                  emits-change
+  .IgnoreOnIsolate                 property  b         false                                    const
+  .InactiveEnterTimestamp          property  t         0                                        emits-change
+  .InactiveEnterTimestampMonotonic property  t         0                                        emits-change
+  .InactiveExitTimestamp           property  t         1454763448044889                         emits-change
+  .InactiveExitTimestampMonotonic  property  t         7533431                                  emits-change
 .Job                             property  (uo)      0 "/"                                    emits-change
-.JobTimeoutAction                property  s         "none"                                   const
-.JobTimeoutRebootArgument        property  s         ""                                       const
-.JobTimeoutUSec                  property  t         0                                        const
-.JoinsNamespaceOf                property  as        0                                        const
+  .JobTimeoutAction                property  s         "none"                                   const
+  .JobTimeoutRebootArgument        property  s         ""                                       const
+  .JobTimeoutUSec                  property  t         0                                        const
+  .JoinsNamespaceOf                property  as        0                                        const
 .LoadError                       property  (ss)      "" ""                                    const
   .LoadState                       property  s         "loaded"                                 const
   .Names                           property  as        1 "cronie.service"                       const
@@ -395,7 +483,6 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .UnitFileState                   property  s         "enabled"                                -
   .WantedBy                        property  as        1 "multi-user.target"                    const
   .Wants                           property  as        0                                        const
-
      */
 
 }
