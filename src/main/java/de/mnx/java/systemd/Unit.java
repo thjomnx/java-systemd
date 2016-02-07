@@ -172,6 +172,34 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getVector("After");
     }
 
+    public Vector<String> getBefore() {
+        return properties.getVector("Before");
+    }
+
+    public Vector<String> getBindsTo() {
+        return properties.getVector("BindsTo");
+    }
+
+    public Vector<String> getBoundBy() {
+        return properties.getVector("BoundBy");
+    }
+
+    public boolean canIsolate() {
+        return properties.getBoolean("CanIsolate");
+    }
+
+    public boolean canReload() {
+        return properties.getBoolean("CanReload");
+    }
+
+    public boolean canStart() {
+        return properties.getBoolean("CanStart");
+    }
+
+    public boolean canStop() {
+        return properties.getBoolean("CanStop");
+    }
+
     public Vector<String> getConflicts() {
         return properties.getVector("Conflicts");
     }
@@ -198,6 +226,58 @@ public abstract class Unit extends InterfaceAdapter {
 
     public boolean isNeedDaemonReload() {
         return properties.getBoolean("NeedDaemonReload");
+    }
+
+    public long getNetClass() {
+        return properties.getLong("NetClass");
+    }
+
+    public Vector<String> getOnFailure() {
+        return properties.getVector("OnFailure");
+    }
+
+    public String getOnFailureJobMode() {
+        return properties.getString("OnFailureJobMode");
+    }
+
+    public Vector<String> getPartOf() {
+        return properties.getVector("PartOf");
+    }
+
+    public Vector<String> getPropagatesReloadTo() {
+        return properties.getVector("PropagatesReloadTo");
+    }
+
+    public boolean isRefuseManualStart() {
+        return properties.getBoolean("RefuseManualStart");
+    }
+
+    public boolean isRefuseManualStop() {
+        return properties.getBoolean("RefuseManualStop");
+    }
+
+    public Vector<String> getReloadPropagatedFrom() {
+        return properties.getVector("ReloadPropagatedFrom");
+    }
+
+    public Vector<String> getRequiredBy() {
+        return properties.getVector("RequiredBy");
+    }
+
+    public Vector<String> getRequires() {
+        return properties.getVector("Requires");
+    }
+
+    public Vector<String> getRequiresMountsFor() {
+        return properties.getVector("RequiresMountsFor");
+    }
+
+    public Vector<String> getRequisite() {
+        return properties.getVector("Requisite");
+    }
+
+    public Vector<String> getRequisiteOf() {
+        return properties.getVector("RequisiteOf");
     }
 
     public String getSourcePath() {
@@ -257,13 +337,13 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
 .AssertTimestamp                 property  t         1454763448044462                         emits-change
 .AssertTimestampMonotonic        property  t         7533004                                  emits-change
 .Asserts                         property  a(sbbsi)  0                                        -
-.Before                          property  as        2 "shutdown.target" "multi-user.target"  const
-.BindsTo                         property  as        0                                        const
-.BoundBy                         property  as        0                                        const
-.CanIsolate                      property  b         false                                    const
-.CanReload                       property  b         true                                     const
-.CanStart                        property  b         true                                     const
-.CanStop                         property  b         true                                     const
+  .Before                          property  as        2 "shutdown.target" "multi-user.target"  const
+  .BindsTo                         property  as        0                                        const
+  .BoundBy                         property  as        0                                        const
+  .CanIsolate                      property  b         false                                    const
+  .CanReload                       property  b         true                                     const
+  .CanStart                        property  b         true                                     const
+  .CanStop                         property  b         true                                     const
 .ConditionResult                 property  b         true                                     emits-change
 .ConditionTimestamp              property  t         1454763448044461                         emits-change
 .ConditionTimestampMonotonic     property  t         7533004                                  emits-change
@@ -292,19 +372,19 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .LoadState                       property  s         "loaded"                                 const
   .Names                           property  as        1 "cronie.service"                       const
   .NeedDaemonReload                property  b         false                                    const
-.NetClass                        property  u         0                                        -
-.OnFailure                       property  as        0                                        const
-.OnFailureJobMode                property  s         "replace"                                const
-.PartOf                          property  as        0                                        const
-.PropagatesReloadTo              property  as        0                                        const
-.RefuseManualStart               property  b         false                                    const
-.RefuseManualStop                property  b         false                                    const
-.ReloadPropagatedFrom            property  as        0                                        const
-.RequiredBy                      property  as        0                                        const
-.Requires                        property  as        2 "sysinit.target" "system.slice"        const
-.RequiresMountsFor               property  as        0                                        const
-.Requisite                       property  as        0                                        const
-.RequisiteOf                     property  as        0                                        const
+  .NetClass                        property  u         0                                        -
+  .OnFailure                       property  as        0                                        const
+  .OnFailureJobMode                property  s         "replace"                                const
+  .PartOf                          property  as        0                                        const
+  .PropagatesReloadTo              property  as        0                                        const
+  .RefuseManualStart               property  b         false                                    const
+  .RefuseManualStop                property  b         false                                    const
+  .ReloadPropagatedFrom            property  as        0                                        const
+  .RequiredBy                      property  as        0                                        const
+  .Requires                        property  as        2 "sysinit.target" "system.slice"        const
+  .RequiresMountsFor               property  as        0                                        const
+  .Requisite                       property  as        0                                        const
+  .RequisiteOf                     property  as        0                                        const
   .SourcePath                      property  s         ""                                       const
   .StopWhenUnneeded                property  b         false                                    const
   .SubState                        property  s         "running"                                emits-change
