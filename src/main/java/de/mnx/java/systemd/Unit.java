@@ -184,19 +184,19 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getVector("BoundBy");
     }
 
-    public boolean canIsolate() {
+    public boolean isCanIsolate() {
         return properties.getBoolean("CanIsolate");
     }
 
-    public boolean canReload() {
+    public boolean isCanReload() {
         return properties.getBoolean("CanReload");
     }
 
-    public boolean canStart() {
+    public boolean isCanStart() {
         return properties.getBoolean("CanStart");
     }
 
-    public boolean canStop() {
+    public boolean isCanStop() {
         return properties.getBoolean("CanStop");
     }
 

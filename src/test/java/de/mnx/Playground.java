@@ -148,10 +148,10 @@ public class Playground {
         System.out.println("Before: " + cronie.getBefore());
         System.out.println("BindsTo: " + cronie.getBindsTo());
         System.out.println("BoundBy: " + cronie.getBoundBy());
-        System.out.println("CanIsolate: " + cronie.canIsolate());
-        System.out.println("CanReload: " + cronie.canReload());
-        System.out.println("CanStart: " + cronie.canStart());
-        System.out.println("CanStop: " + cronie.canStop());
+        System.out.println("CanIsolate: " + cronie.isCanIsolate());
+        System.out.println("CanReload: " + cronie.isCanReload());
+        System.out.println("CanStart: " + cronie.isCanStart());
+        System.out.println("CanStop: " + cronie.isCanStop());
         System.out.println("Conflicts: " + cronie.getConflicts());
         System.out.println("Description: " + cronie.getDescription());
         System.out.println("FragmentPath: " + cronie.getFragmentPath());
