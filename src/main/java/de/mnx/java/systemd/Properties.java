@@ -91,7 +91,7 @@ public class Properties extends InterfaceAdapter {
     }
 
     public String getString(final String propertyName) {
-        return (String) getVariant(propertyName).getValue();
+        return String.valueOf(getVariant(propertyName).getValue());
     }
 
     @SuppressWarnings("unchecked")
