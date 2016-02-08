@@ -304,6 +304,12 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getVector("JoinsNamespaceOf");
     }
 
+    public LoadError getLoadError() {
+    	Object[] array = (Object[]) properties.getVariant("LoadError").getValue();
+    	
+    	return new LoadError(array);
+    }
+    
     public String getLoadState() {
         return properties.getString("LoadState");
     }
@@ -398,6 +404,31 @@ public abstract class Unit extends InterfaceAdapter {
 
     public Vector<String> getWants() {
         return properties.getVector("Wants");
+    }
+    
+    public static class LoadError {
+
+		private final String id;
+    	private final String message;
+    	
+    	public LoadError(final Object[] array) {
+    		this.id = String.valueOf(array[0]);
+    		this.message = String.valueOf(array[1]);
+    	}
+    	
+    	public String getId() {
+    		return id;
+    	}
+    	
+    	public String getMessage() {
+    		return message;
+    	}
+    	
+    	@Override
+		public String toString() {
+			return String.format("LoadError [id=%s, message=%s]", id, message);
+		}
+    	
     }
 
     /**

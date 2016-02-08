@@ -178,6 +178,7 @@ public class Playground {
         System.out.println("JobTimeoutRebootArgument: " + cronie.getJobTimeoutRebootArgument());
         System.out.println("JobTimeoutUSec: " + cronie.getJobTimeoutUSec());
         System.out.println("JoinsNamespaceOf: " + cronie.getJoinsNamespaceOf());
+        System.out.println("LoadError: " + cronie.getLoadError());
         System.out.println("LoadState: " + cronie.getLoadState());
         System.out.println("Names: " + cronie.getNames());
         System.out.println("NeedDaemonReload: " + cronie.isNeedDaemonReload());

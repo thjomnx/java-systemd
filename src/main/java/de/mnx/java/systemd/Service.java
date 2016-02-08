@@ -124,7 +124,7 @@ public class Service extends Unit {
 
         @SuppressWarnings("unchecked")
         public ExecutionInfo(final Object[] array) {
-            this.binaryPath = (String) array[0];
+            this.binaryPath = String.valueOf(array[0]);
             this.arguments = (Vector<String>) array[1];
             this.failOnUncleanExit = (boolean) array[2];
             this.lastStartTimestamp = ((UInt64) array[3]).longValue();
