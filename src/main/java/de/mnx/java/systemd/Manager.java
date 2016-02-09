@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
+import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -48,6 +49,12 @@ public class Manager extends InterfaceAdapter {
         return (ManagerInterface) super.getInterface();
     }
 
+    public String introspect() throws DBusException {
+        Introspectable intro = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, Introspectable.class);
+
+        return intro.Introspect();
+    }
+
     public List<UnitFileType> listUnitFiles() {
         return getInterface().listUnitFiles();
     }
@@ -57,8 +64,8 @@ public class Manager extends InterfaceAdapter {
     }
 
     public Service getService(final String name) throws DBusException {
-        String service = name.endsWith(".service") ? name : name + ".service";
-        String objectPath = SYSTEMD_OBJECT_PATH + "/unit/" + Systemd.escapePath(service);
+        String service = Unit.normalizeName(name, Service.UNIT_SUFFIX);
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(service);
 
         return Service.create(dbus, objectPath);
     }

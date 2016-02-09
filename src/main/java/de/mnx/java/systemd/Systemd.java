@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
@@ -74,12 +73,6 @@ public final class Systemd {
 
     DBusConnection getConnection() {
         return dbus;
-    }
-
-    public String introspect() throws DBusException {
-        Introspectable intro = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, Introspectable.class);
-
-        return intro.Introspect();
     }
 
     public Manager getManager() throws DBusException {

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.UInt32;
 import org.freedesktop.dbus.UInt64;
@@ -27,6 +28,7 @@ import de.mnx.java.systemd.interfaces.ServiceInterface;
 public class Service extends Unit {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Service";
+    public static final String UNIT_SUFFIX = ".service";
 
     private final Properties properties;
 
@@ -45,6 +47,12 @@ public class Service extends Unit {
     @Override
     public ServiceInterface getInterface() {
         return (ServiceInterface) super.getInterface();
+    }
+
+    public String introspect() throws DBusException {
+        Introspectable intro = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, getInterface().getObjectPath(), Introspectable.class);
+
+        return intro.Introspect();
     }
 
     public String getControlGroup() {

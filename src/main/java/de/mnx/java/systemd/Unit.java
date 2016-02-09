@@ -12,6 +12,7 @@
 package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
+import static de.mnx.java.systemd.Systemd.SYSTEMD_OBJECT_PATH;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import de.mnx.java.systemd.interfaces.UnitInterface;
 public abstract class Unit extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Unit";
+    public static final String OBJECT_PATH = SYSTEMD_OBJECT_PATH + "/unit/";
 
     public enum Who {
         MAIN("main"),
@@ -81,6 +83,10 @@ public abstract class Unit extends InterfaceAdapter {
         super(dbus, iface);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
+    }
+
+    public static String normalizeName(final String name, final String suffix) {
+        return name.endsWith(suffix) ? name : name + suffix;
     }
 
     @Override

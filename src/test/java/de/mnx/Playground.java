@@ -23,8 +23,9 @@ public class Playground {
         // Do nothing (static class)
     }
 
-    public static void introspect(final Systemd systemd) throws DBusException {
-        System.out.println(systemd.introspect());
+    public static void introspect(final Manager manager) throws DBusException {
+        System.out.println(manager.introspect());
+        System.out.println(manager.getService("cronie.service").introspect());
     }
 
     public static void properties(final Manager manager) throws DBusException  {
@@ -242,7 +243,7 @@ public class Playground {
         try {
             systemd.connect();
 
-//            introspect(systemd);
+//            introspect(systemd.getManager());
             properties(systemd.getManager());
             methods(systemd.getManager());
         }
