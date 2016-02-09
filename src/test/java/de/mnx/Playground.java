@@ -149,6 +149,7 @@ public class Playground {
         System.out.println("AssertResult: " + cronie.isAssertResult());
         System.out.println("AssertTimestamp: " + cronie.getAssertTimestamp());
         System.out.println("AssertTimestampMonotonic: " + cronie.getAssertTimestampMonotonic());
+        System.out.println("Asserts: " + cronie.getAsserts());
         System.out.println("Before: " + cronie.getBefore());
         System.out.println("BindsTo: " + cronie.getBindsTo());
         System.out.println("BoundBy: " + cronie.getBoundBy());
@@ -159,6 +160,7 @@ public class Playground {
         System.out.println("ConditionResult: " + cronie.getConditionResult());
         System.out.println("ConditionTimestamp: " + cronie.getConditionTimestamp());
         System.out.println("ConditionTimestampMonotonic: " + cronie.getConditionTimestampMonotonic());
+        System.out.println("Conditions: " + cronie.getConditions());
         System.out.println("ConflictedBy: " + cronie.getConflictedBy());
         System.out.println("Conflicts: " + cronie.getConflicts());
         System.out.println("ConsistsOf: " + cronie.getConsistsOf());
@@ -174,6 +176,7 @@ public class Playground {
         System.out.println("InactiveEnterTimestampMonotonic: " + cronie.getInactiveEnterTimestampMonotonic());
         System.out.println("InactiveExitTimestamp: " + cronie.getInactiveExitTimestamp());
         System.out.println("InactiveExitTimestampMonotonic: " + cronie.getInactiveExitTimestampMonotonic());
+        System.out.println("Job: " + cronie.getJob());
         System.out.println("JobTimeoutAction: " + cronie.getJobTimeoutAction());
         System.out.println("JobTimeoutRebootArgument: " + cronie.getJobTimeoutRebootArgument());
         System.out.println("JobTimeoutUSec: " + cronie.getJobTimeoutUSec());

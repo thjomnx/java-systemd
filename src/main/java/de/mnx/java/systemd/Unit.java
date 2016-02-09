@@ -13,10 +13,13 @@ package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Path;
+import org.freedesktop.dbus.UInt32;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.mnx.java.systemd.interfaces.UnitInterface;
@@ -188,6 +191,10 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getLong("AssertTimestampMonotonic");
     }
 
+    public List<ConditionInfo> getAsserts() {
+        return ConditionInfo.transform(properties.getVector("Asserts"));
+    }
+
     public Vector<String> getBefore() {
         return properties.getVector("Before");
     }
@@ -226,6 +233,10 @@ public abstract class Unit extends InterfaceAdapter {
 
     public long getConditionTimestampMonotonic() {
         return properties.getLong("ConditionTimestampMonotonic");
+    }
+
+    public List<ConditionInfo> getConditions() {
+        return ConditionInfo.transform(properties.getVector("Conditions"));
     }
 
     public Vector<String> getConflictedBy() {
@@ -288,6 +299,12 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getLong("InactiveExitTimestampMonotonic");
     }
 
+    public JobInfo getJob() {
+        Object[] array = (Object[]) properties.getVariant("Job").getValue();
+
+        return new JobInfo(array);
+    }
+
     public String getJobTimeoutAction() {
         return properties.getString("JobTimeoutAction");
     }
@@ -306,10 +323,10 @@ public abstract class Unit extends InterfaceAdapter {
 
     public LoadError getLoadError() {
     	Object[] array = (Object[]) properties.getVariant("LoadError").getValue();
-    	
+
     	return new LoadError(array);
     }
-    
+
     public String getLoadState() {
         return properties.getString("LoadState");
     }
@@ -405,30 +422,123 @@ public abstract class Unit extends InterfaceAdapter {
     public Vector<String> getWants() {
         return properties.getVector("Wants");
     }
-    
+
+    public static class ConditionInfo {
+
+        private final String type;
+        private final boolean trigger;
+        private final boolean reversed;
+        private final String value;
+        private final int status;
+
+        public ConditionInfo(final Object[] array) {
+            this.type = String.valueOf(array[0]);
+            this.trigger = (boolean) array[1];
+            this.reversed = (boolean) array[2];
+            this.value = String.valueOf(array[3]);
+            this.status = (int) array[4];
+        }
+
+        private static List<ConditionInfo> transform(final Vector<Object[]> vector) {
+            List<ConditionInfo> conds = new ArrayList<>(vector.size());
+
+            for (Object[] array : vector) {
+                ConditionInfo cond = new ConditionInfo(array);
+
+                conds.add(cond);
+            }
+
+            return conds;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public boolean isTrigger() {
+            return trigger;
+        }
+
+        public boolean isReversed() {
+            return reversed;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("ConditionInfo [type=");
+            builder.append(type);
+            builder.append(", trigger=");
+            builder.append(trigger);
+            builder.append(", reversed=");
+            builder.append(reversed);
+            builder.append(", value=");
+            builder.append(value);
+            builder.append(", status=");
+            builder.append(status);
+            builder.append("]");
+
+            return builder.toString();
+        }
+
+    }
+
+    public static class JobInfo {
+
+        private final long id;
+        private final Path objectPath;
+
+        public JobInfo(final Object[] array) {
+            this.id = ((UInt32) array[0]).longValue();
+            this.objectPath = (Path) array[1];
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public Path getObjectPath() {
+            return objectPath;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("JobInfo [id=%s, objectPath=%s]", id, objectPath);
+        }
+
+    }
+
     public static class LoadError {
 
 		private final String id;
     	private final String message;
-    	
+
     	public LoadError(final Object[] array) {
     		this.id = String.valueOf(array[0]);
     		this.message = String.valueOf(array[1]);
     	}
-    	
+
     	public String getId() {
     		return id;
     	}
-    	
+
     	public String getMessage() {
     		return message;
     	}
-    	
+
     	@Override
 		public String toString() {
 			return String.format("LoadError [id=%s, message=%s]", id, message);
 		}
-    	
+
     }
 
     /**
@@ -455,7 +565,7 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .AssertResult                    property  b         true                                     emits-change
   .AssertTimestamp                 property  t         1454763448044462                         emits-change
   .AssertTimestampMonotonic        property  t         7533004                                  emits-change
-.Asserts                         property  a(sbbsi)  0                                        -
+  .Asserts                         property  a(sbbsi)  0                                        -
   .Before                          property  as        2 "shutdown.target" "multi-user.target"  const
   .BindsTo                         property  as        0                                        const
   .BoundBy                         property  as        0                                        const
@@ -466,7 +576,7 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .ConditionResult                 property  b         true                                     emits-change
   .ConditionTimestamp              property  t         1454763448044461                         emits-change
   .ConditionTimestampMonotonic     property  t         7533004                                  emits-change
-.Conditions                      property  a(sbbsi)  0                                        -
+  .Conditions                      property  a(sbbsi)  0                                        -
   .ConflictedBy                    property  as        0                                        const
   .Conflicts                       property  as        1 "shutdown.target"                      const
   .ConsistsOf                      property  as        0                                        const
@@ -482,12 +592,12 @@ NAME                             TYPE      SIGNATURE RESULT/VALUE               
   .InactiveEnterTimestampMonotonic property  t         0                                        emits-change
   .InactiveExitTimestamp           property  t         1454763448044889                         emits-change
   .InactiveExitTimestampMonotonic  property  t         7533431                                  emits-change
-.Job                             property  (uo)      0 "/"                                    emits-change
+  .Job                             property  (uo)      0 "/"                                    emits-change
   .JobTimeoutAction                property  s         "none"                                   const
   .JobTimeoutRebootArgument        property  s         ""                                       const
   .JobTimeoutUSec                  property  t         0                                        const
   .JoinsNamespaceOf                property  as        0                                        const
-.LoadError                       property  (ss)      "" ""                                    const
+  .LoadError                       property  (ss)      "" ""                                    const
   .LoadState                       property  s         "loaded"                                 const
   .Names                           property  as        1 "cronie.service"                       const
   .NeedDaemonReload                property  b         false                                    const
