@@ -13,6 +13,7 @@ package de.mnx.java.systemd;
 
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -85,6 +86,106 @@ public class Service extends Unit {
 
     public List<ExecutionInfo> getExecStopPost() {
         return ExecutionInfo.transform(properties.getVector("ExecStopPost"));
+    }
+
+    public String getFailureAction() {
+        return properties.getString("FailureAction");
+    }
+
+    public long getFileDescriptorStoreMax() {
+        return properties.getLong("FileDescriptorStoreMax");
+    }
+
+    public String getGroup() {
+        return properties.getString("Group");
+    }
+
+    public boolean isGuessMainPID() {
+        return properties.getBoolean("GuessMainPID");
+    }
+
+    public int getIOScheduling() {
+        return properties.getInteger("IOScheduling");
+    }
+
+    public boolean isIgnoreSIGPIPE() {
+        return properties.getBoolean("IgnoreSIGPIPE");
+    }
+
+    public Vector<String> getInaccessibleDirectories() {
+        return properties.getVector("InaccessibleDirectories");
+    }
+
+    public String getKillMode() {
+        return properties.getString("KillMode");
+    }
+
+    public int getKillSignal() {
+        return properties.getInteger("KillSignal");
+    }
+
+    public BigInteger getLimitAS() {
+        return properties.getBigInteger("LimitAS");
+    }
+
+    public BigInteger getLimitCORE() {
+        return properties.getBigInteger("LimitCORE");
+    }
+
+    public BigInteger getLimitCPU() {
+        return properties.getBigInteger("LimitCPU");
+    }
+
+    public BigInteger getLimitDATA() {
+        return properties.getBigInteger("LimitDATA");
+    }
+
+    public BigInteger getLimitFSIZE() {
+        return properties.getBigInteger("LimitFSIZE");
+    }
+
+    public BigInteger getLimitLOCKS() {
+        return properties.getBigInteger("LimitLOCKS");
+    }
+
+    public BigInteger getLimitMEMLOCK() {
+        return properties.getBigInteger("LimitMEMLOCK");
+    }
+
+    public BigInteger getLimitMSGQUEUE() {
+        return properties.getBigInteger("LimitMSGQUEUE");
+    }
+
+    public BigInteger getLimitNICE() {
+        return properties.getBigInteger("LimitNICE");
+    }
+
+    public BigInteger getLimitNOFILE() {
+        return properties.getBigInteger("LimitNOFILE");
+    }
+
+    public BigInteger getLimitNPROC() {
+        return properties.getBigInteger("LimitNPROC");
+    }
+
+    public BigInteger getLimitRSS() {
+        return properties.getBigInteger("LimitRSS");
+    }
+
+    public BigInteger getLimitRTPRIO() {
+        return properties.getBigInteger("LimitRTPRIO");
+    }
+
+    public BigInteger getLimitRTTIME() {
+        return properties.getBigInteger("LimitRTTIME");
+    }
+
+    public BigInteger getLimitSIGPENDING() {
+        return properties.getBigInteger("LimitSIGPENDING");
+    }
+
+    public BigInteger getLimitSTACK() {
+        return properties.getBigInteger("LimitSTACK");
     }
 
     public int getMainPID() {
@@ -292,31 +393,31 @@ public class Service extends Unit {
   .ExecStartPre                    property  a(sasbttttuii) 0                                        emits-invalidation
   .ExecStop                        property  a(sasbttttuii) 0                                        emits-invalidation
   .ExecStopPost                    property  a(sasbttttuii) 0                                        emits-invalidation
-.FailureAction                   property  s              "none"                                   const
-.FileDescriptorStoreMax          property  u              0                                        const
-.Group                           property  s              ""                                       const
-.GuessMainPID                    property  b              true                                     const
-.IOScheduling                    property  i              0                                        const
-.IgnoreSIGPIPE                   property  b              true                                     const
-.InaccessibleDirectories         property  as             0                                        const
-.KillMode                        property  s              "process"                                const
-.KillSignal                      property  i              15                                       const
-.LimitAS                         property  t              18446744073709551615                     const
-.LimitCORE                       property  t              18446744073709551615                     const
-.LimitCPU                        property  t              18446744073709551615                     const
-.LimitDATA                       property  t              18446744073709551615                     const
-.LimitFSIZE                      property  t              18446744073709551615                     const
-.LimitLOCKS                      property  t              18446744073709551615                     const
-.LimitMEMLOCK                    property  t              65536                                    const
-.LimitMSGQUEUE                   property  t              819200                                   const
-.LimitNICE                       property  t              0                                        const
-.LimitNOFILE                     property  t              4096                                     const
-.LimitNPROC                      property  t              48013                                    const
-.LimitRSS                        property  t              18446744073709551615                     const
-.LimitRTPRIO                     property  t              0                                        const
-.LimitRTTIME                     property  t              18446744073709551615                     const
-.LimitSIGPENDING                 property  t              48013                                    const
-.LimitSTACK                      property  t              18446744073709551615                     const
+  .FailureAction                   property  s              "none"                                   const
+  .FileDescriptorStoreMax          property  u              0                                        const
+  .Group                           property  s              ""                                       const
+  .GuessMainPID                    property  b              true                                     const
+  .IOScheduling                    property  i              0                                        const
+  .IgnoreSIGPIPE                   property  b              true                                     const
+  .InaccessibleDirectories         property  as             0                                        const
+  .KillMode                        property  s              "process"                                const
+  .KillSignal                      property  i              15                                       const
+  .LimitAS                         property  t              18446744073709551615                     const
+  .LimitCORE                       property  t              18446744073709551615                     const
+  .LimitCPU                        property  t              18446744073709551615                     const
+  .LimitDATA                       property  t              18446744073709551615                     const
+  .LimitFSIZE                      property  t              18446744073709551615                     const
+  .LimitLOCKS                      property  t              18446744073709551615                     const
+  .LimitMEMLOCK                    property  t              65536                                    const
+  .LimitMSGQUEUE                   property  t              819200                                   const
+  .LimitNICE                       property  t              0                                        const
+  .LimitNOFILE                     property  t              4096                                     const
+  .LimitNPROC                      property  t              48013                                    const
+  .LimitRSS                        property  t              18446744073709551615                     const
+  .LimitRTPRIO                     property  t              0                                        const
+  .LimitRTTIME                     property  t              18446744073709551615                     const
+  .LimitSIGPENDING                 property  t              48013                                    const
+  .LimitSTACK                      property  t              18446744073709551615                     const
   .MainPID                         property  u              369                                      emits-change
 .MemoryAccounting                property  b              false                                    -
 .MemoryCurrent                   property  t              18446744073709551615                     -
