@@ -552,19 +552,4 @@ public abstract class Unit extends InterfaceAdapter {
 
     }
 
-    /**
-     *
-NAME                             TYPE      SIGNATURE RESULT/VALUE                             FLAGS
-  .Kill                            method    si        -                                        -
-  .Reload                          method    s         o                                        -
-  .ReloadOrRestart                 method    s         o                                        -
-  .ReloadOrTryRestart              method    s         o                                        -
-  .ResetFailed                     method    -         -                                        -
-  .Restart                         method    s         o                                        -
-.SetProperties                   method    ba(sv)    -                                        -
-  .Start                           method    s         o                                        -
-  .Stop                            method    s         o                                        -
-  .TryRestart                      method    s         o                                        -
-     */
-
 }
