@@ -60,8 +60,40 @@ public class Service extends Unit {
         return properties.getString("ControlGroup");
     }
 
+    public String getDevicePolicy() {
+        return properties.getString("DevicePolicy");
+    }
+
     public Vector<String> getEnvironment() {
         return properties.getVector("Environment");
+    }
+
+    public int getExecMainCode() {
+        return properties.getInteger("ExecMainCode");
+    }
+
+    public long getExecMainExitTimestamp() {
+        return properties.getLong("ExecMainExitTimestamp");
+    }
+
+    public long getExecMainExitTimestampMonotonic() {
+        return properties.getLong("ExecMainExitTimestampMonotonic");
+    }
+
+    public long getExecMainPID() {
+        return properties.getLong("ExecMainPID");
+    }
+
+    public long getExecMainStartTimestamp() {
+        return properties.getLong("ExecMainStartTimestamp");
+    }
+
+    public long getExecMainStartTimestampMonotonic() {
+        return properties.getLong("ExecMainStartTimestampMonotonic");
+    }
+
+    public int getExecMainStatus() {
+        return properties.getInteger("ExecMainStatus");
     }
 
     public List<ExecutionInfo> getExecReload() {
@@ -214,8 +246,88 @@ public class Service extends Unit {
         return properties.getString("StandardOutput");
     }
 
+    public String getTTYPath() {
+        return properties.getString("TTYPath");
+    }
+
+    public boolean isTTYReset() {
+        return properties.getBoolean("TTYReset");
+    }
+
+    public boolean isTTYVHangup() {
+        return properties.getBoolean("TTYVHangup");
+    }
+
+    public boolean isTTYVTDisallocate() {
+        return properties.getBoolean("TTYVTDisallocate");
+    }
+
+    public boolean hasTasksAccounting() {
+        return properties.getBoolean("TasksAccounting");
+    }
+
+    public long getTasksCurrent() {
+        return properties.getLong("TasksCurrent");
+    }
+
+    public long getTasksMax() {
+        return properties.getLong("TasksMax");
+    }
+
+    public long getTimeoutStartUSec() {
+        return properties.getLong("TimeoutStartUSec");
+    }
+
+    public long getTimeoutStopUSec() {
+        return properties.getLong("TimeoutStopUSec");
+    }
+
+    public long getTimerSlackNSec() {
+        return properties.getLong("TimerSlackNSec");
+    }
+
     public String getType() {
         return properties.getString("Type");
+    }
+
+    public long getUMask() {
+        return properties.getLong("UMask");
+    }
+
+    public String getUSBFunctionDescriptors() {
+        return properties.getString("USBFunctionDescriptors");
+    }
+
+    public String getUSBFunctionStrings() {
+        return properties.getString("USBFunctionStrings");
+    }
+
+    public String getUser() {
+        return properties.getString("User");
+    }
+
+    public String getUtmpIdentifier() {
+        return properties.getString("UtmpIdentifier");
+    }
+
+    public String getUtmpMode() {
+        return properties.getString("UtmpMode");
+    }
+
+    public long getWatchdogTimestamp() {
+        return properties.getLong("WatchdogTimestamp");
+    }
+
+    public long getWatchdogTimestampMonotonic() {
+        return properties.getLong("WatchdogTimestampMonotonic");
+    }
+
+    public long getWatchdogUSec() {
+        return properties.getLong("WatchdogUSec");
+    }
+
+    public String getWorkingDirectory() {
+        return properties.getString("WorkingDirectory");
     }
 
     public static class ExecutionInfo {
@@ -377,16 +489,16 @@ public class Service extends Unit {
 .ControlPID                      property  u              0                                        emits-change
 .Delegate                        property  b              false                                    -
 .DeviceAllow                     property  a(ss)          0                                        -
-.DevicePolicy                    property  s              "auto"                                   -
+  .DevicePolicy                    property  s              "auto"                                   -
   .Environment                     property  as             0                                        const
 .EnvironmentFiles                property  a(sb)          0                                        const
-.ExecMainCode                    property  i              0                                        emits-change
-.ExecMainExitTimestamp           property  t              0                                        emits-change
-.ExecMainExitTimestampMonotonic  property  t              0                                        emits-change
-.ExecMainPID                     property  u              369                                      emits-change
-.ExecMainStartTimestamp          property  t              1454158017072144                         emits-change
-.ExecMainStartTimestampMonotonic property  t              7581134                                  emits-change
-.ExecMainStatus                  property  i              0                                        emits-change
+  .ExecMainCode                    property  i              0                                        emits-change
+  .ExecMainExitTimestamp           property  t              0                                        emits-change
+  .ExecMainExitTimestampMonotonic  property  t              0                                        emits-change
+  .ExecMainPID                     property  u              369                                      emits-change
+  .ExecMainStartTimestamp          property  t              1454158017072144                         emits-change
+  .ExecMainStartTimestampMonotonic property  t              7581134                                  emits-change
+  .ExecMainStatus                  property  i              0                                        emits-change
   .ExecReload                      property  a(sasbttttuii) 1 "/usr/bin/kill" 3 "/usr/bin/kill" "... emits-invalidation
   .ExecStart                       property  a(sasbttttuii) 1 "/usr/bin/crond" 2 "/usr/bin/crond"... emits-invalidation
   .ExecStartPost                   property  a(sasbttttuii) 0                                        emits-invalidation
@@ -477,27 +589,27 @@ public class Service extends Unit {
 .SystemCallArchitectures         property  as             0                                        const
 .SystemCallErrorNumber           property  i              0                                        const
 .SystemCallFilter                property  (bas)          false 0                                  const
-.TTYPath                         property  s              ""                                       const
-.TTYReset                        property  b              false                                    const
-.TTYVHangup                      property  b              false                                    const
-.TTYVTDisallocate                property  b              false                                    const
-.TasksAccounting                 property  b              true                                     -
-.TasksCurrent                    property  t              1                                        -
-.TasksMax                        property  t              512                                      -
-.TimeoutStartUSec                property  t              90000000                                 const
-.TimeoutStopUSec                 property  t              90000000                                 const
-.TimerSlackNSec                  property  t              50000                                    const
+  .TTYPath                         property  s              ""                                       const
+  .TTYReset                        property  b              false                                    const
+  .TTYVHangup                      property  b              false                                    const
+  .TTYVTDisallocate                property  b              false                                    const
+  .TasksAccounting                 property  b              true                                     -
+  .TasksCurrent                    property  t              1                                        -
+  .TasksMax                        property  t              512                                      -
+  .TimeoutStartUSec                property  t              90000000                                 const
+  .TimeoutStopUSec                 property  t              90000000                                 const
+  .TimerSlackNSec                  property  t              50000                                    const
   .Type                            property  s              "simple"                                 const
-.UMask                           property  u              18                                       const
-.USBFunctionDescriptors          property  s              ""                                       emits-change
-.USBFunctionStrings              property  s              ""                                       emits-change
-.User                            property  s              ""                                       const
-.UtmpIdentifier                  property  s              ""                                       const
-.UtmpMode                        property  s              "init"                                   const
-.WatchdogTimestamp               property  t              1454158017072175                         -
-.WatchdogTimestampMonotonic      property  t              7581165                                  -
-.WatchdogUSec                    property  t              0                                        const
-.WorkingDirectory                property  s              ""                                       const
+  .UMask                           property  u              18                                       const
+  .USBFunctionDescriptors          property  s              ""                                       emits-change
+  .USBFunctionStrings              property  s              ""                                       emits-change
+  .User                            property  s              ""                                       const
+  .UtmpIdentifier                  property  s              ""                                       const
+  .UtmpMode                        property  s              "init"                                   const
+  .WatchdogTimestamp               property  t              1454158017072175                         -
+  .WatchdogTimestampMonotonic      property  t              7581165                                  -
+  .WatchdogUSec                    property  t              0                                        const
+  .WorkingDirectory                property  s              ""                                       const
      */
 
 }

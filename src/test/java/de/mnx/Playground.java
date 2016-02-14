@@ -213,7 +213,15 @@ public class Playground {
 
         System.out.println("'cronie' properties (service interface):");
         System.out.println("ControlGroup: " + cronie.getControlGroup());
+        System.out.println("DevicePolicy: " + cronie.getDevicePolicy());
         System.out.println("Environment: " + cronie.getEnvironment());
+        System.out.println("ExecMainCode: " + cronie.getExecMainCode());
+        System.out.println("ExecMainExitTimestamp: " + cronie.getExecMainExitTimestamp());
+        System.out.println("ExecMainExitTimestampMonotonic: " + cronie.getExecMainExitTimestampMonotonic());
+        System.out.println("ExecMainPID: " + cronie.getExecMainPID());
+        System.out.println("ExecMainStartTimestamp: " + cronie.getExecMainStartTimestamp());
+        System.out.println("ExecMainStartTimestampMonotonic: " + cronie.getExecMainStartTimestampMonotonic());
+        System.out.println("ExecMainStatus: " + cronie.getExecMainStatus());
         System.out.println("ExecReload: " + cronie.getExecReload());
         System.out.println("ExecStart: " + cronie.getExecStart());
         System.out.println("ExecStartPost: " + cronie.getExecStartPost());
@@ -251,7 +259,27 @@ public class Playground {
         System.out.println("StandardError: " + cronie.getStandardError());
         System.out.println("StandardInput: " + cronie.getStandardInput());
         System.out.println("StandardOutput: " + cronie.getStandardOutput());
+        System.out.println("TTYPath: " + cronie.getTTYPath());
+        System.out.println("TTYReset: " + cronie.isTTYReset());
+        System.out.println("TTYVHangup: " + cronie.isTTYVHangup());
+        System.out.println("TTYVTDisallocate: " + cronie.isTTYVTDisallocate());
+        System.out.println("TasksAccounting: " + cronie.hasTasksAccounting());
+        System.out.println("TasksCurrent: " + cronie.getTasksCurrent());
+        System.out.println("TasksMax: " + cronie.getTasksMax());
+        System.out.println("TimeoutStartUSec: " + cronie.getTimeoutStartUSec());
+        System.out.println("TimeoutStopUSec: " + cronie.getTimeoutStopUSec());
+        System.out.println("TimerSlackNSec: " + cronie.getTimerSlackNSec());
         System.out.println("Type: " + cronie.getType());
+        System.out.println("UMask: " + cronie.getUMask());
+        System.out.println("USBFunctionDescriptors: " + cronie.getUSBFunctionDescriptors());
+        System.out.println("USBFunctionStrings: " + cronie.getUSBFunctionStrings());
+        System.out.println("User: " + cronie.getUser());
+        System.out.println("UtmpIdentifier: " + cronie.getUtmpIdentifier());
+        System.out.println("UtmpMode: " + cronie.getUtmpMode());
+        System.out.println("WatchdogTimestamp: " + cronie.getWatchdogTimestamp());
+        System.out.println("WatchdogTimestampMonotonic: " + cronie.getWatchdogTimestampMonotonic());
+        System.out.println("WatchdogUSec: " + cronie.getWatchdogUSec());
+        System.out.println("WorkingDirectory: " + cronie.getWorkingDirectory());
 
         System.out.println();
 
