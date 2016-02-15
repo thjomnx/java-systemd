@@ -16,7 +16,7 @@ import org.freedesktop.dbus.Position;
 import org.freedesktop.dbus.Struct;
 import org.freedesktop.dbus.UInt32;
 
-public class UnitType extends Struct {
+public class UnitType extends Struct implements Comparable<UnitType> {
 
     @Position(0)
     private final String unitName;
@@ -121,6 +121,16 @@ public class UnitType extends Struct {
 
     public Path getJobObjectPath() {
         return jobObjectPath;
+    }
+
+    @Override
+    public int compareTo(final UnitType o) {
+        if (o == null) {
+            return Integer.MAX_VALUE;
+        }
+        else {
+            return unitName.compareTo(o.unitName);
+        }
     }
 
 }

@@ -11,6 +11,9 @@
 
 package de.mnx;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.mnx.java.systemd.Manager;
@@ -112,13 +115,19 @@ public class Playground {
     public static void methods(final Manager manager) throws DBusException  {
         System.out.println();
 
-        for (UnitFileType unitFile : manager.listUnitFiles()) {
+        List<UnitFileType> unitFiles = manager.listUnitFiles();
+        Collections.sort(unitFiles);
+
+        for (UnitFileType unitFile : unitFiles) {
             System.out.println(unitFile.getSummary());
         }
 
         System.out.println();
 
-        for (UnitType unit : manager.listUnits()) {
+        List<UnitType> units = manager.listUnits();
+        Collections.sort(units);
+
+        for (UnitType unit : units) {
             System.out.println(unit.getSummary());
 
             if (unit.getUnitName().endsWith(".service") && unit.getSubState().equals("running")) {

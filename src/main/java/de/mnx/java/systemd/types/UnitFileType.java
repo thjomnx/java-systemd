@@ -14,7 +14,7 @@ package de.mnx.java.systemd.types;
 import org.freedesktop.dbus.Position;
 import org.freedesktop.dbus.Struct;
 
-public class UnitFileType extends Struct {
+public class UnitFileType extends Struct implements Comparable<UnitFileType> {
 
     @Position(0)
     private final String path;
@@ -39,6 +39,16 @@ public class UnitFileType extends Struct {
 
     public String getStatus() {
         return status;
+    }
+
+    @Override
+    public int compareTo(final UnitFileType o) {
+        if (o == null) {
+            return Integer.MAX_VALUE;
+        }
+        else {
+            return path.compareTo(o.path);
+        }
     }
 
 }
