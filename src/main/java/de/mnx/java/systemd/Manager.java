@@ -60,11 +60,25 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnits();
     }
 
+    public Device getDevice(final String name) throws DBusException {
+        String device = Unit.normalizeName(name, Device.UNIT_SUFFIX);
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(device);
+
+        return Device.create(dbus, objectPath);
+    }
+
     public Service getService(final String name) throws DBusException {
         String service = Unit.normalizeName(name, Service.UNIT_SUFFIX);
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(service);
 
         return Service.create(dbus, objectPath);
+    }
+
+    public Target getTarget(final String name) throws DBusException {
+        String target = Unit.normalizeName(name, Target.UNIT_SUFFIX);
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(target);
+
+        return Target.create(dbus, objectPath);
     }
 
     public String dump() {

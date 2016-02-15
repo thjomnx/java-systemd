@@ -16,9 +16,11 @@ import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.mnx.java.systemd.Device;
 import de.mnx.java.systemd.Manager;
 import de.mnx.java.systemd.Service;
 import de.mnx.java.systemd.Systemd;
+import de.mnx.java.systemd.Target;
 import de.mnx.java.systemd.types.UnitFileType;
 import de.mnx.java.systemd.types.UnitType;
 
@@ -365,7 +367,21 @@ public class Playground {
 //        System.out.println("Start: " + cronie.start(Mode.FAIL));
 //        System.out.println("Stop: " + cronie.stop(Mode.FAIL));
 
+        System.out.println();
+
+        Target basic = manager.getTarget("basic");
+        System.out.println("'basic' properties (target interface, none present for now):");
+        System.out.println("ObjectPath: " + basic.getObjectPath());
+
+        System.out.println();
+
+        Device sda1 = manager.getDevice("dev-sda1");
+        System.out.println("'sda1' properties (device interface):");
+        System.out.println("SysFSPath: " + sda1.getSysFSPath());
+
 //        System.out.println(manager.dump());
+
+        System.out.println();
     }
 
     public static void main(String[] args) {
