@@ -56,8 +56,76 @@ public class Service extends Unit {
         return intro.Introspect();
     }
 
+    public boolean getBlockIOAccounting() {
+        return properties.getBoolean("BlockIOAccounting");
+    }
+
+    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
+        return BlockIODeviceWeight.transform(properties.getVector("BlockIODeviceWeight"));
+    }
+
+    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
+        return BlockIOBandwidth.transform(properties.getVector("BlockIOReadBandwidth"));
+    }
+
+    public BigInteger getBlockIOWeight() {
+        return properties.getBigInteger("BlockIOWeight");
+    }
+
+    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
+        return BlockIOBandwidth.transform(properties.getVector("BlockIOWriteBandwidth"));
+    }
+
+    public String getBusName() {
+        return properties.getString("BusName");
+    }
+
+    public boolean getCPUAccounting() {
+        return properties.getBoolean("CPUAccounting");
+    }
+
+    public BigInteger getCPUQuotaPerSecUSec() {
+        return properties.getBigInteger("CPUQuotaPerSecUSec");
+    }
+
+    public int getCPUSchedulingPolicy() {
+        return properties.getInteger("CPUSchedulingPolicy");
+    }
+
+    public int getCPUSchedulingPriority() {
+        return properties.getInteger("CPUSchedulingPriority");
+    }
+
+    public boolean isCPUSchedulingResetOnFork() {
+        return properties.getBoolean("CPUSchedulingResetOnFork");
+    }
+
+    public BigInteger getCPUShares() {
+        return properties.getBigInteger("CPUShares");
+    }
+
+    public BigInteger getCPUUsageNSec() {
+        return properties.getBigInteger("CPUUsageNSec");
+    }
+
+    public String getCapabilities() {
+        return properties.getString("Capabilities");
+    }
+
+    public BigInteger getCapabilityBoundingSet() {
+        return properties.getBigInteger("CapabilityBoundingSet");
+    }
+
     public String getControlGroup() {
         return properties.getString("ControlGroup");
+    }
+
+    public long getControlPID() {
+        return properties.getLong("ControlPID");
+    }
+
+    public boolean doesDelegate() {
+        return properties.getBoolean("Delegate");
     }
 
     public String getDevicePolicy() {
@@ -224,14 +292,154 @@ public class Service extends Unit {
         return properties.getInteger("MainPID");
     }
 
+    public boolean hasMemoryAccounting() {
+        return properties.getBoolean("MemoryAccounting");
+    }
+
+    public BigInteger getMemoryCurrent() {
+        return properties.getBigInteger("MemoryCurrent");
+    }
+
+    public BigInteger getMemoryLimit() {
+        return properties.getBigInteger("MemoryLimit");
+    }
+
+    public BigInteger getMountFlags() {
+        return properties.getBigInteger("MountFlags");
+    }
+
+    public long getNFileDescriptorStore() {
+        return properties.getLong("NFileDescriptorStore");
+    }
+
+    public int getNice() {
+        return properties.getInteger("Nice");
+    }
+
+    public boolean canNoNewPrivileges() {
+        return properties.getBoolean("NoNewPrivileges");
+    }
+
+    public boolean isNonBlocking() {
+        return properties.getBoolean("NonBlocking");
+    }
+
+    public String getNotifyAccess() {
+        return properties.getString("NotifyAccess");
+    }
+
+    public int getOOMScoreAdjust() {
+        return properties.getInteger("OOMScoreAdjust");
+    }
+
+    public String getPAMName() {
+        return properties.getString("PAMName");
+    }
+
+    public String getPIDFile() {
+        return properties.getString("PIDFile");
+    }
+
+    public Vector<String> getPassEnvironment() {
+        return properties.getVector("PassEnvironment");
+    }
+
+    public boolean isPermissionsStartOnly() {
+        return properties.getBoolean("PermissionsStartOnly");
+    }
+
+    public String getPersonality() {
+        return properties.getString("Personality");
+    }
+
+    public boolean hasPrivateDevices() {
+        return properties.getBoolean("PrivateDevices");
+    }
+
+    public boolean hasPrivateNetwork() {
+        return properties.getBoolean("PrivateNetwork");
+    }
+
+    public boolean hasPrivateTmp() {
+        return properties.getBoolean("PrivateTmp");
+    }
+
+    public String getProtectHome() {
+        return properties.getString("ProtectHome");
+    }
+
+    public String getProtectSystem() {
+        return properties.getString("ProtectSystem");
+    }
+
+    public Vector<String> getReadOnlyDirectories() {
+        return properties.getVector("ReadOnlyDirectories");
+    }
+
+    public Vector<String> getReadWriteDirectories() {
+        return properties.getVector("ReadWriteDirectories");
+    }
+
+    public String getRebootArgument() {
+        return properties.getString("RebootArgument");
+    }
+
+    public boolean isRemainAfterExit() {
+        return properties.getBoolean("RemainAfterExit");
+    }
+
+    public String getRestart() {
+        return properties.getString("Restart");
+    }
+
+    public long getRestartUSec() {
+        return properties.getLong("RestartUSec");
+    }
+
     public String getResult() {
         return properties.getString("Result");
+    }
+
+    public String getRootDirectory() {
+        return properties.getString("RootDirectory");
+    }
+
+    public boolean isRootDirectoryStartOnly() {
+        return properties.getBoolean("RootDirectoryStartOnly");
+    }
+
+    public Vector<String> getRuntimeDirectory() {
+        return properties.getVector("RuntimeDirectory");
+    }
+
+    public long getRuntimeDirectoryMode() {
+        return properties.getLong("RuntimeDirectoryMode");
     }
 
     public SELinuxContext getSELinuxContext() {
         Object[] array = (Object[]) properties.getVariant("SELinuxContext").getValue();
 
         return new SELinuxContext((boolean) array[0], (String) array[1]);
+    }
+
+    public boolean isSameProcessGroup() {
+        return properties.getBoolean("SameProcessGroup");
+    }
+
+    public int getSecureBits() {
+        return properties.getInteger("SecureBits");
+    }
+
+    public boolean isSendSIGHUP() {
+        return properties.getBoolean("SendSIGHUP");
+    }
+
+    public boolean isSendSIGKILL() {
+        return properties.getBoolean("SendSIGKILL");
+    }
+
+    public String getSlice() {
+        return properties.getString("Slice");
     }
 
     public String getStandardError() {
@@ -244,6 +452,66 @@ public class Service extends Unit {
 
     public String getStandardOutput() {
         return properties.getString("StandardOutput");
+    }
+
+    public String getStartLimitAction() {
+        return properties.getString("StartLimitAction");
+    }
+
+    public long getStartLimitBurst() {
+        return properties.getLong("StartLimitBurst");
+    }
+
+    public BigInteger getStartLimitInterval() {
+        return properties.getBigInteger("StartLimitInterval");
+    }
+
+    public BigInteger getStartupBlockIOWeight() {
+        return properties.getBigInteger("StartupBlockIOWeight");
+    }
+
+    public BigInteger getStartupCPUShares() {
+        return properties.getBigInteger("StartupCPUShares");
+    }
+
+    public int getStatusErrno() {
+        return properties.getInteger("StatusErrno");
+    }
+
+    public String getStatusText() {
+        return properties.getString("StatusText");
+    }
+
+    public Vector<String> getSupplementaryGroups() {
+        return properties.getVector("SupplementaryGroups");
+    }
+
+    public int getSyslogFacility() {
+        return properties.getInteger("SyslogFacility");
+    }
+
+    public String getSyslogIdentifier() {
+        return properties.getString("SyslogIdentifier");
+    }
+
+    public int getSyslogLevel() {
+        return properties.getInteger("SyslogLevel");
+    }
+
+    public boolean hasSyslogLevelPrefix() {
+        return properties.getBoolean("SyslogLevelPrefix");
+    }
+
+    public int getSyslogPriority() {
+        return properties.getInteger("SyslogPriority");
+    }
+
+    public Vector<String> getSystemCallArchitectures() {
+        return properties.getVector("SystemCallArchitectures");
+    }
+
+    public int getSystemCallErrorNumber() {
+        return properties.getInteger("SystemCallErrorNumber");
     }
 
     public String getTTYPath() {
@@ -328,6 +596,86 @@ public class Service extends Unit {
 
     public String getWorkingDirectory() {
         return properties.getString("WorkingDirectory");
+    }
+
+    protected static class BlockIOPath {
+
+        protected final String filePath;
+
+        protected BlockIOPath(final Object filePath) {
+            this.filePath = String.valueOf(filePath);
+        }
+
+        public String getFilePath() {
+            return filePath;
+        }
+
+    }
+
+    public static class BlockIODeviceWeight extends BlockIOPath {
+
+        private final BigInteger weight;
+
+        public BlockIODeviceWeight(final Object[] array) {
+            super(array[0]);
+
+            this.weight = ((UInt64) array[1]).value();
+        }
+
+        private static List<BlockIODeviceWeight> transform(final Vector<Object[]> vector) {
+            List<BlockIODeviceWeight> weights = new ArrayList<>(vector.size());
+
+            for (Object[] array : vector) {
+                BlockIODeviceWeight weight = new BlockIODeviceWeight(array);
+
+                weights.add(weight);
+            }
+
+            return weights;
+        }
+
+        public BigInteger getWeight() {
+            return weight;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("BlockIODeviceWeight [filePath=%s, weight=%s]", filePath, weight);
+        }
+
+    }
+
+    public static class BlockIOBandwidth extends BlockIOPath {
+
+        private final BigInteger bandwidth;
+
+        public BlockIOBandwidth(final Object[] array) {
+            super(array[0]);
+
+            this.bandwidth = ((UInt64) array[1]).value();
+        }
+
+        private static List<BlockIOBandwidth> transform(final Vector<Object[]> vector) {
+            List<BlockIOBandwidth> bandwidths = new ArrayList<>(vector.size());
+
+            for (Object[] array : vector) {
+                BlockIOBandwidth bandwidth = new BlockIOBandwidth(array);
+
+                bandwidths.add(bandwidth);
+            }
+
+            return bandwidths;
+        }
+
+        public BigInteger getBandwidth() {
+            return bandwidth;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("BlockIOBandwidth [filePath=%s, bandwidth=%s]", filePath, bandwidth);
+        }
+
     }
 
     public static class ExecutionInfo {
@@ -469,25 +817,25 @@ public class Service extends Unit {
     /**
      *
 .AppArmorProfile                 property  (bs)           false ""                                 const
-.BlockIOAccounting               property  b              false                                    -
-.BlockIODeviceWeight             property  a(st)          0                                        -
-.BlockIOReadBandwidth            property  a(st)          0                                        -
-.BlockIOWeight                   property  t              18446744073709551615                     -
-.BlockIOWriteBandwidth           property  a(st)          0                                        -
-.BusName                         property  s              ""                                       const
-.CPUAccounting                   property  b              false                                    -
+  .BlockIOAccounting               property  b              false                                    -
+  .BlockIODeviceWeight             property  a(st)          0                                        -
+  .BlockIOReadBandwidth            property  a(st)          0                                        -
+  .BlockIOWeight                   property  t              18446744073709551615                     -
+  .BlockIOWriteBandwidth           property  a(st)          0                                        -
+  .BusName                         property  s              ""                                       const
+  .CPUAccounting                   property  b              false                                    -
 .CPUAffinity                     property  ay             0                                        const
-.CPUQuotaPerSecUSec              property  t              18446744073709551615                     -
-.CPUSchedulingPolicy             property  i              0                                        const
-.CPUSchedulingPriority           property  i              0                                        const
-.CPUSchedulingResetOnFork        property  b              false                                    const
-.CPUShares                       property  t              18446744073709551615                     -
-.CPUUsageNSec                    property  t              18446744073709551615                     -
-.Capabilities                    property  s              ""                                       const
-.CapabilityBoundingSet           property  t              18446744073709551615                     const
+  .CPUQuotaPerSecUSec              property  t              18446744073709551615                     -
+  .CPUSchedulingPolicy             property  i              0                                        const
+  .CPUSchedulingPriority           property  i              0                                        const
+  .CPUSchedulingResetOnFork        property  b              false                                    const
+  .CPUShares                       property  t              18446744073709551615                     -
+  .CPUUsageNSec                    property  t              18446744073709551615                     -
+  .Capabilities                    property  s              ""                                       const
+  .CapabilityBoundingSet           property  t              18446744073709551615                     const
   .ControlGroup                    property  s              "/system.slice/cronie.service"           -
-.ControlPID                      property  u              0                                        emits-change
-.Delegate                        property  b              false                                    -
+  .ControlPID                      property  u              0                                        emits-change
+  .Delegate                        property  b              false                                    -
 .DeviceAllow                     property  a(ss)          0                                        -
   .DevicePolicy                    property  s              "auto"                                   -
   .Environment                     property  as             0                                        const
@@ -531,63 +879,63 @@ public class Service extends Unit {
   .LimitSIGPENDING                 property  t              48013                                    const
   .LimitSTACK                      property  t              18446744073709551615                     const
   .MainPID                         property  u              369                                      emits-change
-.MemoryAccounting                property  b              false                                    -
-.MemoryCurrent                   property  t              18446744073709551615                     -
-.MemoryLimit                     property  t              18446744073709551615                     -
-.MountFlags                      property  t              0                                        const
-.NFileDescriptorStore            property  u              0                                        -
-.Nice                            property  i              0                                        const
-.NoNewPrivileges                 property  b              false                                    const
-.NonBlocking                     property  b              false                                    const
-.NotifyAccess                    property  s              "none"                                   const
-.OOMScoreAdjust                  property  i              0                                        const
-.PAMName                         property  s              ""                                       const
-.PIDFile                         property  s              ""                                       const
-.PassEnvironment                 property  as             0                                        const
-.PermissionsStartOnly            property  b              false                                    const
-.Personality                     property  s              ""                                       const
-.PrivateDevices                  property  b              false                                    const
-.PrivateNetwork                  property  b              false                                    const
-.PrivateTmp                      property  b              false                                    const
-.ProtectHome                     property  s              "no"                                     const
-.ProtectSystem                   property  s              "no"                                     const
-.ReadOnlyDirectories             property  as             0                                        const
-.ReadWriteDirectories            property  as             0                                        const
-.RebootArgument                  property  s              ""                                       const
-.RemainAfterExit                 property  b              false                                    const
-.Restart                         property  s              "always"                                 const
-.RestartUSec                     property  t              100000                                   const
+  .MemoryAccounting                property  b              false                                    -
+  .MemoryCurrent                   property  t              18446744073709551615                     -
+  .MemoryLimit                     property  t              18446744073709551615                     -
+  .MountFlags                      property  t              0                                        const
+  .NFileDescriptorStore            property  u              0                                        -
+  .Nice                            property  i              0                                        const
+  .NoNewPrivileges                 property  b              false                                    const
+  .NonBlocking                     property  b              false                                    const
+  .NotifyAccess                    property  s              "none"                                   const
+  .OOMScoreAdjust                  property  i              0                                        const
+  .PAMName                         property  s              ""                                       const
+  .PIDFile                         property  s              ""                                       const
+  .PassEnvironment                 property  as             0                                        const
+  .PermissionsStartOnly            property  b              false                                    const
+  .Personality                     property  s              ""                                       const
+  .PrivateDevices                  property  b              false                                    const
+  .PrivateNetwork                  property  b              false                                    const
+  .PrivateTmp                      property  b              false                                    const
+  .ProtectHome                     property  s              "no"                                     const
+  .ProtectSystem                   property  s              "no"                                     const
+  .ReadOnlyDirectories             property  as             0                                        const
+  .ReadWriteDirectories            property  as             0                                        const
+  .RebootArgument                  property  s              ""                                       const
+  .RemainAfterExit                 property  b              false                                    const
+  .Restart                         property  s              "always"                                 const
+  .RestartUSec                     property  t              100000                                   const
 .RestrictAddressFamilies         property  (bas)          false 0                                  const
   .Result                          property  s              "success"                                emits-change
-.RootDirectory                   property  s              ""                                       const
-.RootDirectoryStartOnly          property  b              false                                    const
-.RuntimeDirectory                property  as             0                                        const
-.RuntimeDirectoryMode            property  u              493                                      const
+  .RootDirectory                   property  s              ""                                       const
+  .RootDirectoryStartOnly          property  b              false                                    const
+  .RuntimeDirectory                property  as             0                                        const
+  .RuntimeDirectoryMode            property  u              493                                      const
   .SELinuxContext                  property  (bs)           false ""                                 const
-.SameProcessGroup                property  b              false                                    const
-.SecureBits                      property  i              0                                        const
-.SendSIGHUP                      property  b              false                                    const
-.SendSIGKILL                     property  b              true                                     const
-.Slice                           property  s              "system.slice"                           -
+  .SameProcessGroup                property  b              false                                    const
+  .SecureBits                      property  i              0                                        const
+  .SendSIGHUP                      property  b              false                                    const
+  .SendSIGKILL                     property  b              true                                     const
+  .Slice                           property  s              "system.slice"                           -
 .SmackProcessLabel               property  (bs)           false ""                                 const
   .StandardError                   property  s              "inherit"                                const
   .StandardInput                   property  s              "null"                                   const
   .StandardOutput                  property  s              "journal"                                const
-.StartLimitAction                property  s              "none"                                   const
-.StartLimitBurst                 property  u              5                                        const
-.StartLimitInterval              property  t              10000000                                 const
-.StartupBlockIOWeight            property  t              18446744073709551615                     -
-.StartupCPUShares                property  t              18446744073709551615                     -
-.StatusErrno                     property  i              0                                        emits-change
-.StatusText                      property  s              ""                                       emits-change
-.SupplementaryGroups             property  as             0                                        const
-.SyslogFacility                  property  i              3                                        const
-.SyslogIdentifier                property  s              ""                                       const
-.SyslogLevel                     property  i              6                                        const
-.SyslogLevelPrefix               property  b              true                                     const
-.SyslogPriority                  property  i              30                                       const
-.SystemCallArchitectures         property  as             0                                        const
-.SystemCallErrorNumber           property  i              0                                        const
+  .StartLimitAction                property  s              "none"                                   const
+  .StartLimitBurst                 property  u              5                                        const
+  .StartLimitInterval              property  t              10000000                                 const
+  .StartupBlockIOWeight            property  t              18446744073709551615                     -
+  .StartupCPUShares                property  t              18446744073709551615                     -
+  .StatusErrno                     property  i              0                                        emits-change
+  .StatusText                      property  s              ""                                       emits-change
+  .SupplementaryGroups             property  as             0                                        const
+  .SyslogFacility                  property  i              3                                        const
+  .SyslogIdentifier                property  s              ""                                       const
+  .SyslogLevel                     property  i              6                                        const
+  .SyslogLevelPrefix               property  b              true                                     const
+  .SyslogPriority                  property  i              30                                       const
+  .SystemCallArchitectures         property  as             0                                        const
+  .SystemCallErrorNumber           property  i              0                                        const
 .SystemCallFilter                property  (bas)          false 0                                  const
   .TTYPath                         property  s              ""                                       const
   .TTYReset                        property  b              false                                    const
