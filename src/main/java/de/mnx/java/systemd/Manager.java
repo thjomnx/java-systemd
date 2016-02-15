@@ -11,9 +11,6 @@
 
 package de.mnx.java.systemd;
 
-import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
-import static de.mnx.java.systemd.Systemd.SYSTEMD_OBJECT_PATH;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
@@ -28,18 +25,18 @@ import de.mnx.java.systemd.types.UnitType;
 
 public class Manager extends InterfaceAdapter {
 
-    public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Manager";
+    public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Manager";
 
     private final Properties properties;
 
     private Manager(final DBusConnection dbus, final ManagerInterface iface) throws DBusException {
         super(dbus, iface);
 
-        this.properties = Properties.create(dbus, SYSTEMD_OBJECT_PATH, SERVICE_NAME);
+        this.properties = Properties.create(dbus, Systemd.OBJECT_PATH, SERVICE_NAME);
     }
 
     static Manager create(final DBusConnection dbus) throws DBusException {
-        ManagerInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, ManagerInterface.class);
+        ManagerInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class);
 
         return new Manager(dbus, iface);
     }
@@ -50,7 +47,7 @@ public class Manager extends InterfaceAdapter {
     }
 
     public String introspect() throws DBusException {
-        Introspectable intro = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, SYSTEMD_OBJECT_PATH, Introspectable.class);
+        Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, Introspectable.class);
 
         return intro.Introspect();
     }

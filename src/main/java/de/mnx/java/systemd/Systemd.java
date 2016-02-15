@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 
 public final class Systemd {
 
-    public static final String SYSTEMD_DBUS_NAME = "org.freedesktop.systemd1";
-    public static final String SYSTEMD_OBJECT_PATH = "/org/freedesktop/systemd1";
+    public static final String SERVICE_NAME = "org.freedesktop.systemd1";
+    public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
 
     public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
 

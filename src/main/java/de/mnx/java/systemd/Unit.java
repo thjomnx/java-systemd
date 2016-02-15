@@ -11,9 +11,6 @@
 
 package de.mnx.java.systemd;
 
-import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
-import static de.mnx.java.systemd.Systemd.SYSTEMD_OBJECT_PATH;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -29,8 +26,8 @@ import de.mnx.java.systemd.types.LoadError;
 
 public abstract class Unit extends InterfaceAdapter {
 
-    public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Unit";
-    public static final String OBJECT_PATH = SYSTEMD_OBJECT_PATH + "/unit/";
+    public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Unit";
+    public static final String OBJECT_PATH = Systemd.OBJECT_PATH + "/unit/";
 
     public enum Who {
         MAIN("main"),

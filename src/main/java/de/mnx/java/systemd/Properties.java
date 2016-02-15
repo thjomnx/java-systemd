@@ -34,7 +34,7 @@ public class Properties extends InterfaceAdapter {
     }
 
     static Properties create(final DBusConnection dbus, final String objectPath, final String serviceName) throws DBusException {
-        PropertyInterface iface = dbus.getRemoteObject(Systemd.SYSTEMD_DBUS_NAME, objectPath, PropertyInterface.class);
+        PropertyInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, PropertyInterface.class);
 
         return new Properties(dbus, iface, serviceName);
     }

@@ -11,8 +11,6 @@
 
 package de.mnx.java.systemd;
 
-import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
@@ -29,7 +27,7 @@ import de.mnx.java.systemd.types.SELinuxContext;
 
 public class Service extends Unit {
 
-    public static final String SERVICE_NAME = SYSTEMD_DBUS_NAME + ".Service";
+    public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
 
     private final Properties properties;
@@ -41,7 +39,7 @@ public class Service extends Unit {
     }
 
     static Service create(final DBusConnection dbus, final String objectPath) throws DBusException {
-        ServiceInterface iface = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, objectPath, ServiceInterface.class);
+        ServiceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ServiceInterface.class);
 
         return new Service(dbus, iface);
     }
@@ -52,7 +50,7 @@ public class Service extends Unit {
     }
 
     public String introspect() throws DBusException {
-        Introspectable intro = dbus.getRemoteObject(SYSTEMD_DBUS_NAME, getInterface().getObjectPath(), Introspectable.class);
+        Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, getInterface().getObjectPath(), Introspectable.class);
 
         return intro.Introspect();
     }

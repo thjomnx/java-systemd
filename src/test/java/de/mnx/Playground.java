@@ -16,6 +16,8 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.mnx.java.systemd.Manager;
 import de.mnx.java.systemd.Service;
 import de.mnx.java.systemd.Systemd;
+import de.mnx.java.systemd.types.UnitFileType;
+import de.mnx.java.systemd.types.UnitType;
 
 public class Playground {
 
@@ -108,25 +110,25 @@ public class Playground {
     }
 
     public static void methods(final Manager manager) throws DBusException  {
-//        System.out.println();
-//
-//        for (UnitFileType unitFile : manager.listUnitFiles()) {
-//            System.out.println(unitFile.getSummary());
-//        }
+        System.out.println();
 
-//        System.out.println();
-//
-//        for (UnitType unit : manager.listUnits()) {
-//            System.out.println(unit.getSummary());
-//
-//            if (unit.getUnitName().endsWith(".service") && unit.getSubState().equals("running")) {
-//                Service service = manager.getService(unit.getUnitName());
-//                System.out.println(" Runtime statistics:");
-//                System.out.println("  MainPID: " + service.getMainPID());
-//            }
-//
-//            System.out.println();
-//        }
+        for (UnitFileType unitFile : manager.listUnitFiles()) {
+            System.out.println(unitFile.getSummary());
+        }
+
+        System.out.println();
+
+        for (UnitType unit : manager.listUnits()) {
+            System.out.println(unit.getSummary());
+
+            if (unit.getUnitName().endsWith(".service") && unit.getSubState().equals("running")) {
+                Service service = manager.getService(unit.getUnitName());
+                System.out.println(" Runtime statistics:");
+                System.out.println("  MainPID: " + service.getMainPID());
+            }
+
+            System.out.println();
+        }
 
         System.out.println();
 
