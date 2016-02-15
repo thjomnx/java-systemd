@@ -14,17 +14,18 @@ package de.mnx.java.systemd;
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 import static de.mnx.java.systemd.Systemd.SYSTEMD_OBJECT_PATH;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.UInt32;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.mnx.java.systemd.interfaces.UnitInterface;
+import de.mnx.java.systemd.types.Condition;
+import de.mnx.java.systemd.types.Job;
+import de.mnx.java.systemd.types.LoadError;
 
 public abstract class Unit extends InterfaceAdapter {
 
@@ -202,8 +203,8 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getLong("AssertTimestampMonotonic");
     }
 
-    public List<ConditionInfo> getAsserts() {
-        return ConditionInfo.transform(properties.getVector("Asserts"));
+    public List<Condition> getAsserts() {
+        return Condition.list(properties.getVector("Asserts"));
     }
 
     public Vector<String> getBefore() {
@@ -246,8 +247,8 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getLong("ConditionTimestampMonotonic");
     }
 
-    public List<ConditionInfo> getConditions() {
-        return ConditionInfo.transform(properties.getVector("Conditions"));
+    public List<Condition> getConditions() {
+        return Condition.list(properties.getVector("Conditions"));
     }
 
     public Vector<String> getConflictedBy() {
@@ -310,10 +311,10 @@ public abstract class Unit extends InterfaceAdapter {
         return properties.getLong("InactiveExitTimestampMonotonic");
     }
 
-    public JobInfo getJob() {
+    public Job getJob() {
         Object[] array = (Object[]) properties.getVariant("Job").getValue();
 
-        return new JobInfo(array);
+        return new Job(array);
     }
 
     public String getJobTimeoutAction() {
@@ -432,124 +433,6 @@ public abstract class Unit extends InterfaceAdapter {
 
     public Vector<String> getWants() {
         return properties.getVector("Wants");
-    }
-
-    public static class ConditionInfo {
-
-        private final String type;
-        private final boolean trigger;
-        private final boolean reversed;
-        private final String value;
-        private final int status;
-
-        public ConditionInfo(final Object[] array) {
-            this.type = String.valueOf(array[0]);
-            this.trigger = (boolean) array[1];
-            this.reversed = (boolean) array[2];
-            this.value = String.valueOf(array[3]);
-            this.status = (int) array[4];
-        }
-
-        private static List<ConditionInfo> transform(final Vector<Object[]> vector) {
-            List<ConditionInfo> conds = new ArrayList<>(vector.size());
-
-            for (Object[] array : vector) {
-                ConditionInfo cond = new ConditionInfo(array);
-
-                conds.add(cond);
-            }
-
-            return conds;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public boolean isTrigger() {
-            return trigger;
-        }
-
-        public boolean isReversed() {
-            return reversed;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("ConditionInfo [type=");
-            builder.append(type);
-            builder.append(", trigger=");
-            builder.append(trigger);
-            builder.append(", reversed=");
-            builder.append(reversed);
-            builder.append(", value=");
-            builder.append(value);
-            builder.append(", status=");
-            builder.append(status);
-            builder.append("]");
-
-            return builder.toString();
-        }
-
-    }
-
-    public static class JobInfo {
-
-        private final long id;
-        private final Path objectPath;
-
-        public JobInfo(final Object[] array) {
-            this.id = ((UInt32) array[0]).longValue();
-            this.objectPath = (Path) array[1];
-        }
-
-        public long getId() {
-            return id;
-        }
-
-        public Path getObjectPath() {
-            return objectPath;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("JobInfo [id=%s, objectPath=%s]", id, objectPath);
-        }
-
-    }
-
-    public static class LoadError {
-
-		private final String id;
-    	private final String message;
-
-    	public LoadError(final Object[] array) {
-    		this.id = String.valueOf(array[0]);
-    		this.message = String.valueOf(array[1]);
-    	}
-
-    	public String getId() {
-    		return id;
-    	}
-
-    	public String getMessage() {
-    		return message;
-    	}
-
-    	@Override
-		public String toString() {
-			return String.format("LoadError [id=%s, message=%s]", id, message);
-		}
-
     }
 
 }

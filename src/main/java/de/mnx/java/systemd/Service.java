@@ -14,17 +14,18 @@ package de.mnx.java.systemd;
 import static de.mnx.java.systemd.Systemd.SYSTEMD_DBUS_NAME;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.UInt32;
-import org.freedesktop.dbus.UInt64;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.mnx.java.systemd.interfaces.ServiceInterface;
+import de.mnx.java.systemd.types.BlockIOBandwidth;
+import de.mnx.java.systemd.types.BlockIODeviceWeight;
+import de.mnx.java.systemd.types.ExecutionInfo;
+import de.mnx.java.systemd.types.SELinuxContext;
 
 public class Service extends Unit {
 
@@ -61,11 +62,11 @@ public class Service extends Unit {
     }
 
     public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.transform(properties.getVector("BlockIODeviceWeight"));
+        return BlockIODeviceWeight.list(properties.getVector("BlockIODeviceWeight"));
     }
 
     public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.transform(properties.getVector("BlockIOReadBandwidth"));
+        return BlockIOBandwidth.list(properties.getVector("BlockIOReadBandwidth"));
     }
 
     public BigInteger getBlockIOWeight() {
@@ -73,7 +74,7 @@ public class Service extends Unit {
     }
 
     public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.transform(properties.getVector("BlockIOWriteBandwidth"));
+        return BlockIOBandwidth.list(properties.getVector("BlockIOWriteBandwidth"));
     }
 
     public String getBusName() {
@@ -165,27 +166,27 @@ public class Service extends Unit {
     }
 
     public List<ExecutionInfo> getExecReload() {
-        return ExecutionInfo.transform(properties.getVector("ExecReload"));
+        return ExecutionInfo.list(properties.getVector("ExecReload"));
     }
 
     public List<ExecutionInfo> getExecStart() {
-        return ExecutionInfo.transform(properties.getVector("ExecStart"));
+        return ExecutionInfo.list(properties.getVector("ExecStart"));
     }
 
     public List<ExecutionInfo> getExecStartPost() {
-        return ExecutionInfo.transform(properties.getVector("ExecStartPost"));
+        return ExecutionInfo.list(properties.getVector("ExecStartPost"));
     }
 
     public List<ExecutionInfo> getExecStartPre() {
-        return ExecutionInfo.transform(properties.getVector("ExecStartPre"));
+        return ExecutionInfo.list(properties.getVector("ExecStartPre"));
     }
 
     public List<ExecutionInfo> getExecStop() {
-        return ExecutionInfo.transform(properties.getVector("ExecStop"));
+        return ExecutionInfo.list(properties.getVector("ExecStop"));
     }
 
     public List<ExecutionInfo> getExecStopPost() {
-        return ExecutionInfo.transform(properties.getVector("ExecStopPost"));
+        return ExecutionInfo.list(properties.getVector("ExecStopPost"));
     }
 
     public String getFailureAction() {
@@ -596,222 +597,6 @@ public class Service extends Unit {
 
     public String getWorkingDirectory() {
         return properties.getString("WorkingDirectory");
-    }
-
-    protected static class BlockIOPath {
-
-        protected final String filePath;
-
-        protected BlockIOPath(final Object filePath) {
-            this.filePath = String.valueOf(filePath);
-        }
-
-        public String getFilePath() {
-            return filePath;
-        }
-
-    }
-
-    public static class BlockIODeviceWeight extends BlockIOPath {
-
-        private final BigInteger weight;
-
-        public BlockIODeviceWeight(final Object[] array) {
-            super(array[0]);
-
-            this.weight = ((UInt64) array[1]).value();
-        }
-
-        private static List<BlockIODeviceWeight> transform(final Vector<Object[]> vector) {
-            List<BlockIODeviceWeight> weights = new ArrayList<>(vector.size());
-
-            for (Object[] array : vector) {
-                BlockIODeviceWeight weight = new BlockIODeviceWeight(array);
-
-                weights.add(weight);
-            }
-
-            return weights;
-        }
-
-        public BigInteger getWeight() {
-            return weight;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("BlockIODeviceWeight [filePath=%s, weight=%s]", filePath, weight);
-        }
-
-    }
-
-    public static class BlockIOBandwidth extends BlockIOPath {
-
-        private final BigInteger bandwidth;
-
-        public BlockIOBandwidth(final Object[] array) {
-            super(array[0]);
-
-            this.bandwidth = ((UInt64) array[1]).value();
-        }
-
-        private static List<BlockIOBandwidth> transform(final Vector<Object[]> vector) {
-            List<BlockIOBandwidth> bandwidths = new ArrayList<>(vector.size());
-
-            for (Object[] array : vector) {
-                BlockIOBandwidth bandwidth = new BlockIOBandwidth(array);
-
-                bandwidths.add(bandwidth);
-            }
-
-            return bandwidths;
-        }
-
-        public BigInteger getBandwidth() {
-            return bandwidth;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("BlockIOBandwidth [filePath=%s, bandwidth=%s]", filePath, bandwidth);
-        }
-
-    }
-
-    public static class ExecutionInfo {
-
-        private final String binaryPath;
-        private final Vector<String> arguments;
-        private final boolean failOnUncleanExit;
-        private final long lastStartTimestamp;
-        private final long lastStartTimestampMonotonic;
-        private final long lastFinishTimestamp;
-        private final long lastFinishTimestampMonotonic;
-        private final int processId;
-        private final int lastExitCode;
-        private final int lastExitStatus;
-
-        @SuppressWarnings("unchecked")
-        public ExecutionInfo(final Object[] array) {
-            this.binaryPath = String.valueOf(array[0]);
-            this.arguments = (Vector<String>) array[1];
-            this.failOnUncleanExit = (boolean) array[2];
-            this.lastStartTimestamp = ((UInt64) array[3]).longValue();
-            this.lastStartTimestampMonotonic = ((UInt64) array[4]).longValue();
-            this.lastFinishTimestamp = ((UInt64) array[5]).longValue();
-            this.lastFinishTimestampMonotonic = ((UInt64) array[6]).longValue();
-            this.processId = ((UInt32) array[7]).intValue();
-            this.lastExitCode = (int) array[8];
-            this.lastExitStatus = (int) array[9];
-        }
-
-        private static List<ExecutionInfo> transform(final Vector<Object[]> vector) {
-            List<ExecutionInfo> execs = new ArrayList<>(vector.size());
-
-            for (Object[] array : vector) {
-                ExecutionInfo exec = new ExecutionInfo(array);
-
-                execs.add(exec);
-            }
-
-            return execs;
-        }
-
-        public String getBinaryPath() {
-            return binaryPath;
-        }
-
-        public Vector<String> getArguments() {
-            return arguments;
-        }
-
-        public boolean isFailOnUncleanExit() {
-            return failOnUncleanExit;
-        }
-
-        public long getLastStartTimestamp() {
-            return lastStartTimestamp;
-        }
-
-        public long getLastStartTimestampMonotonic() {
-            return lastStartTimestampMonotonic;
-        }
-
-        public long getLastFinishTimestamp() {
-            return lastFinishTimestamp;
-        }
-
-        public long getLastFinishTimestampMonotonic() {
-            return lastFinishTimestampMonotonic;
-        }
-
-        public int getProcessId() {
-            return processId;
-        }
-
-        public int getLastExitCode() {
-            return lastExitCode;
-        }
-
-        public int getLastExitStatus() {
-            return lastExitStatus;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append("ExecutionInfo [binaryPath=");
-            builder.append(binaryPath);
-            builder.append(", arguments=");
-            builder.append(arguments);
-            builder.append(", failOnUncleanExit=");
-            builder.append(failOnUncleanExit);
-            builder.append(", lastStartTimestamp=");
-            builder.append(lastStartTimestamp);
-            builder.append(", lastStartTimestampMonotonic=");
-            builder.append(lastStartTimestampMonotonic);
-            builder.append(", lastFinishTimestamp=");
-            builder.append(lastFinishTimestamp);
-            builder.append(", lastFinishTimestampMonotonic=");
-            builder.append(lastFinishTimestampMonotonic);
-            builder.append(", processId=");
-            builder.append(processId);
-            builder.append(", lastExitCode=");
-            builder.append(lastExitCode);
-            builder.append(", lastExitStatus=");
-            builder.append(lastExitStatus);
-            builder.append("]");
-
-            return builder.toString();
-        }
-
-    }
-
-    // TODO Rename 'prefixed' variable to match its real purpose
-    // http://systemd-devel.freedesktop.narkive.com/6xnzKsRp/patch-export-selinuxcontext-on-the-bus-as-a-structure
-    public static class SELinuxContext {
-
-        private final boolean prefixed;
-        private final String userData;
-
-        public SELinuxContext(final boolean prefix, final String userData) {
-            this.prefixed = prefix;
-            this.userData = userData;
-        }
-
-        public boolean isPrefixed() {
-            return prefixed;
-        }
-
-        public String getUserData() {
-            return userData;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("SELinuxContext [prefixed=%s, userData=%s]", prefixed, userData);
-        }
-
     }
 
     /**
