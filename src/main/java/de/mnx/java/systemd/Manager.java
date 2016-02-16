@@ -60,25 +60,124 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnits();
     }
 
+    public Automount getAutomount(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Automount.UNIT_SUFFIX));
+
+        return Automount.create(dbus, objectPath);
+    }
+
     public Device getDevice(final String name) throws DBusException {
-        String device = Unit.normalizeName(name, Device.UNIT_SUFFIX);
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(device);
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Device.UNIT_SUFFIX));
 
         return Device.create(dbus, objectPath);
     }
 
+    public Mount getMount(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Mount.UNIT_SUFFIX));
+
+        return Mount.create(dbus, objectPath);
+    }
+
+    public Path getPath(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Path.UNIT_SUFFIX));
+
+        return Path.create(dbus, objectPath);
+    }
+
+    public Scope getScope(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Scope.UNIT_SUFFIX));
+
+        return Scope.create(dbus, objectPath);
+    }
+
     public Service getService(final String name) throws DBusException {
-        String service = Unit.normalizeName(name, Service.UNIT_SUFFIX);
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(service);
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Service.UNIT_SUFFIX));
 
         return Service.create(dbus, objectPath);
     }
 
+    public Slice getSlice(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Slice.UNIT_SUFFIX));
+
+        return Slice.create(dbus, objectPath);
+    }
+
+    public Snapshot getSnapshot(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Snapshot.UNIT_SUFFIX));
+
+        return Snapshot.create(dbus, objectPath);
+    }
+
+    public Socket getSocket(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Socket.UNIT_SUFFIX));
+
+        return Socket.create(dbus, objectPath);
+    }
+
+    public Swap getSwap(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Swap.UNIT_SUFFIX));
+
+        return Swap.create(dbus, objectPath);
+    }
+
     public Target getTarget(final String name) throws DBusException {
-        String target = Unit.normalizeName(name, Target.UNIT_SUFFIX);
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(target);
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Target.UNIT_SUFFIX));
 
         return Target.create(dbus, objectPath);
+    }
+
+    public Timer getTimer(final String name) throws DBusException {
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Timer.UNIT_SUFFIX));
+
+        return Timer.create(dbus, objectPath);
+    }
+
+    public Unit getUnit(final String fullName) throws DBusException {
+        String suffix = fullName.substring(fullName.lastIndexOf('.'));
+        Unit unit;
+
+        switch (suffix) {
+            case Automount.UNIT_SUFFIX:
+                unit = getAutomount(fullName);
+                break;
+            case Device.UNIT_SUFFIX:
+                unit = getDevice(fullName);
+                break;
+            case Mount.UNIT_SUFFIX:
+                unit = getMount(fullName);
+                break;
+            case Path.UNIT_SUFFIX:
+                unit = getPath(fullName);
+                break;
+            case Scope.UNIT_SUFFIX:
+                unit = getScope(fullName);
+                break;
+            case Service.UNIT_SUFFIX:
+                unit = getService(fullName);
+                break;
+            case Slice.UNIT_SUFFIX:
+                unit = getSlice(fullName);
+                break;
+            case Snapshot.UNIT_SUFFIX:
+                unit = getSnapshot(fullName);
+                break;
+            case Socket.UNIT_SUFFIX:
+                unit = getSocket(fullName);
+                break;
+            case Swap.UNIT_SUFFIX:
+                unit = getSwap(fullName);
+                break;
+            case Target.UNIT_SUFFIX:
+                unit = getTarget(fullName);
+                break;
+            case Timer.UNIT_SUFFIX:
+                unit = getTimer(fullName);
+                break;
+            default:
+                throw new IllegalArgumentException("Unable to determine unit type by name suffix");
+        }
+
+        return unit;
     }
 
     public String dump() {
