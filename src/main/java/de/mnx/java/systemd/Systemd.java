@@ -37,7 +37,7 @@ public final class Systemd {
     }
 
     public static final String escapePath(final CharSequence path) {
-        StringBuffer escaped = new StringBuffer();
+        StringBuffer escaped = new StringBuffer(path.length());
         Matcher matcher = PATH_ESCAPE_PATTERN.matcher(path);
 
         while (matcher.find()) {
