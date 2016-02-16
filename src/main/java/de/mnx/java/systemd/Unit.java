@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -90,6 +91,12 @@ public abstract class Unit extends InterfaceAdapter {
     @Override
     public UnitInterface getInterface() {
         return (UnitInterface) super.getInterface();
+    }
+
+    public String introspect() throws DBusException {
+        Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, getInterface().getObjectPath(), Introspectable.class);
+
+        return intro.Introspect();
     }
 
     public void kill(final Who who, final int signal) {

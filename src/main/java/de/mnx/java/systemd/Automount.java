@@ -11,7 +11,6 @@
 
 package de.mnx.java.systemd;
 
-import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -39,12 +38,6 @@ public class Automount extends Unit {
     @Override
     public AutomountInterface getInterface() {
         return (AutomountInterface) super.getInterface();
-    }
-
-    public String introspect() throws DBusException {
-        Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, getInterface().getObjectPath(), Introspectable.class);
-
-        return intro.Introspect();
     }
 
     public String getWhere() {

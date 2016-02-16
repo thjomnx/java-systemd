@@ -32,7 +32,18 @@ public class Playground {
 
     public static void introspect(final Manager manager) throws DBusException {
         System.out.println(manager.introspect());
-        System.out.println(manager.getService("cronie.service").introspect());
+        System.out.println(manager.getAutomount("proc-sys-fs-binfmt_misc").introspect());
+//        System.out.println(manager.getDevice("").introspect());
+        System.out.println(manager.getMount("tmp").introspect());
+        System.out.println(manager.getPath("systemd-ask-password-wall").introspect());
+//        System.out.println(manager.getScope("").introspect());
+        System.out.println(manager.getService("cronie").introspect());
+        System.out.println(manager.getSlice("system").introspect());
+//        System.out.println(manager.getSnapshot("").introspect());
+        System.out.println(manager.getSocket("dbus").introspect());
+//        System.out.println(manager.getSwap("").introspect());
+        System.out.println(manager.getTarget("basic").introspect());
+        System.out.println(manager.getTimer("shadow").introspect());
     }
 
     public static void properties(final Manager manager) throws DBusException  {

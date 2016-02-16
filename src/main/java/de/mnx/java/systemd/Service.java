@@ -15,7 +15,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
-import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -47,12 +46,6 @@ public class Service extends Unit {
     @Override
     public ServiceInterface getInterface() {
         return (ServiceInterface) super.getInterface();
-    }
-
-    public String introspect() throws DBusException {
-        Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, getInterface().getObjectPath(), Introspectable.class);
-
-        return intro.Introspect();
     }
 
     public boolean getBlockIOAccounting() {
