@@ -23,16 +23,19 @@ public class Device extends Unit {
 
     private final Properties properties;
 
-    private Device(final DBusConnection dbus, final DeviceInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Device(final DBusConnection dbus, final DeviceInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Device create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Device create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         DeviceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, DeviceInterface.class);
 
-        return new Device(dbus, iface);
+        return new Device(dbus, iface, name);
     }
 
     @Override

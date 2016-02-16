@@ -76,11 +76,14 @@ public abstract class Unit extends InterfaceAdapter {
 
     }
 
+    protected final String name;
+
     private final Properties properties;
 
-    protected Unit(final DBusConnection dbus, final UnitInterface iface) throws DBusException {
+    protected Unit(final DBusConnection dbus, final UnitInterface iface, final String name) throws DBusException {
         super(dbus, iface);
 
+        this.name = name;
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
@@ -437,6 +440,11 @@ public abstract class Unit extends InterfaceAdapter {
 
     public Vector<String> getWants() {
         return properties.getVector("Wants");
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
 }

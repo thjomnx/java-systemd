@@ -23,16 +23,19 @@ public class Automount extends Unit {
 
     private final Properties properties;
 
-    private Automount(final DBusConnection dbus, final AutomountInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Automount(final DBusConnection dbus, final AutomountInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Automount create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Automount create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         AutomountInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, AutomountInterface.class);
 
-        return new Automount(dbus, iface);
+        return new Automount(dbus, iface, name);
     }
 
     @Override

@@ -23,16 +23,19 @@ public class Mount extends Unit {
 
     private final Properties properties;
 
-    private Mount(final DBusConnection dbus, final MountInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Mount(final DBusConnection dbus, final MountInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Mount create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Mount create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         MountInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, MountInterface.class);
 
-        return new Mount(dbus, iface);
+        return new Mount(dbus, iface, name);
     }
 
     @Override

@@ -23,16 +23,19 @@ public class Socket extends Unit {
 
     private final Properties properties;
 
-    private Socket(final DBusConnection dbus, final SocketInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Socket(final DBusConnection dbus, final SocketInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Socket create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Socket create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         SocketInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SocketInterface.class);
 
-        return new Socket(dbus, iface);
+        return new Socket(dbus, iface, name);
     }
 
     @Override

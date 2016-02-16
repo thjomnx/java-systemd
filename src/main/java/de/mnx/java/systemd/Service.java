@@ -21,6 +21,7 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.mnx.java.systemd.interfaces.ServiceInterface;
 import de.mnx.java.systemd.types.BlockIOBandwidth;
 import de.mnx.java.systemd.types.BlockIODeviceWeight;
+import de.mnx.java.systemd.types.EnvironmentFile;
 import de.mnx.java.systemd.types.ExecutionInfo;
 import de.mnx.java.systemd.types.SELinuxContext;
 
@@ -31,16 +32,19 @@ public class Service extends Unit {
 
     private final Properties properties;
 
-    private Service(final DBusConnection dbus, final ServiceInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Service(final DBusConnection dbus, final ServiceInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Service create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Service create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         ServiceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ServiceInterface.class);
 
-        return new Service(dbus, iface);
+        return new Service(dbus, iface, name);
     }
 
     @Override
@@ -126,6 +130,10 @@ public class Service extends Unit {
 
     public Vector<String> getEnvironment() {
         return properties.getVector("Environment");
+    }
+
+    public List<EnvironmentFile> getEnvironmentFiles() {
+        return EnvironmentFile.list(properties.getVector("EnvironmentFiles"));
     }
 
     public int getExecMainCode() {
@@ -615,7 +623,7 @@ public class Service extends Unit {
 .DeviceAllow                     property  a(ss)          0                                        -
   .DevicePolicy                    property  s              "auto"                                   -
   .Environment                     property  as             0                                        const
-.EnvironmentFiles                property  a(sb)          0                                        const
+  .EnvironmentFiles                property  a(sb)          0                                        const
   .ExecMainCode                    property  i              0                                        emits-change
   .ExecMainExitTimestamp           property  t              0                                        emits-change
   .ExecMainExitTimestampMonotonic  property  t              0                                        emits-change

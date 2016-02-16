@@ -23,16 +23,19 @@ public class Path extends Unit {
 
     private final Properties properties;
 
-    private Path(final DBusConnection dbus, final PathInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Path(final DBusConnection dbus, final PathInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Path create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Path create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         PathInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, PathInterface.class);
 
-        return new Path(dbus, iface);
+        return new Path(dbus, iface, name);
     }
 
     @Override

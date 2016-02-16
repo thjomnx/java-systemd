@@ -61,75 +61,55 @@ public class Manager extends InterfaceAdapter {
     }
 
     public Automount getAutomount(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Automount.UNIT_SUFFIX));
+        return Automount.create(dbus, name);
+    }
 
-        return Automount.create(dbus, objectPath);
+    public BusName getBusName(final String name) throws DBusException {
+        return BusName.create(dbus, name);
     }
 
     public Device getDevice(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Device.UNIT_SUFFIX));
-
-        return Device.create(dbus, objectPath);
+        return Device.create(dbus, name);
     }
 
     public Mount getMount(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Mount.UNIT_SUFFIX));
-
-        return Mount.create(dbus, objectPath);
+        return Mount.create(dbus, name);
     }
 
     public Path getPath(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Path.UNIT_SUFFIX));
-
-        return Path.create(dbus, objectPath);
+        return Path.create(dbus, name);
     }
 
     public Scope getScope(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Scope.UNIT_SUFFIX));
-
-        return Scope.create(dbus, objectPath);
+        return Scope.create(dbus, name);
     }
 
     public Service getService(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Service.UNIT_SUFFIX));
-
-        return Service.create(dbus, objectPath);
+        return Service.create(dbus, name);
     }
 
     public Slice getSlice(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Slice.UNIT_SUFFIX));
-
-        return Slice.create(dbus, objectPath);
+        return Slice.create(dbus, name);
     }
 
     public Snapshot getSnapshot(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Snapshot.UNIT_SUFFIX));
-
-        return Snapshot.create(dbus, objectPath);
+        return Snapshot.create(dbus, name);
     }
 
     public Socket getSocket(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Socket.UNIT_SUFFIX));
-
-        return Socket.create(dbus, objectPath);
+        return Socket.create(dbus, name);
     }
 
     public Swap getSwap(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Swap.UNIT_SUFFIX));
-
-        return Swap.create(dbus, objectPath);
+        return Swap.create(dbus, name);
     }
 
     public Target getTarget(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Target.UNIT_SUFFIX));
-
-        return Target.create(dbus, objectPath);
+        return Target.create(dbus, name);
     }
 
     public Timer getTimer(final String name) throws DBusException {
-        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(Unit.normalizeName(name, Timer.UNIT_SUFFIX));
-
-        return Timer.create(dbus, objectPath);
+        return Timer.create(dbus, name);
     }
 
     public Unit getUnit(final String fullName) throws DBusException {
@@ -139,6 +119,9 @@ public class Manager extends InterfaceAdapter {
         switch (suffix) {
             case Automount.UNIT_SUFFIX:
                 unit = getAutomount(fullName);
+                break;
+            case BusName.UNIT_SUFFIX:
+                unit = getBusName(fullName);
                 break;
             case Device.UNIT_SUFFIX:
                 unit = getDevice(fullName);
@@ -174,7 +157,7 @@ public class Manager extends InterfaceAdapter {
                 unit = getTimer(fullName);
                 break;
             default:
-                throw new IllegalArgumentException("Unable to determine unit type by name suffix");
+                throw new IllegalArgumentException(String.format("Unable to determine unit type by name suffix from '%s'", fullName));
         }
 
         return unit;

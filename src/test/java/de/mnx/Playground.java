@@ -390,7 +390,11 @@ public class Playground {
         System.out.println("'sda1' properties (device interface):");
         System.out.println("SysFSPath: " + sda1.getSysFSPath());
 
-//        System.out.println(manager.dump());
+        System.out.println();
+
+        Service autofs = manager.getService("autofs");
+        System.out.println("'autofs' properties (service interface):");
+        System.out.println("EnvironmentFiles: " + autofs.getEnvironmentFiles());
 
         System.out.println();
     }
@@ -402,8 +406,18 @@ public class Playground {
             systemd.connect();
 
 //            introspect(systemd.getManager());
-            properties(systemd.getManager());
+//            properties(systemd.getManager());
             methods(systemd.getManager());
+
+//            for (UnitType ut : systemd.getManager().listUnits()) {
+//                Unit unit = systemd.getManager().getUnit(ut.getUnitName());
+//
+//                if (unit instanceof Service) {
+//                    System.out.format("%s: %s\n", unit, ((Service) unit).getEnvironmentFiles());
+//                }
+//            }
+
+//            System.out.println(systemd.getManager().dump());
         }
         catch (final Exception e) {
             e.printStackTrace();

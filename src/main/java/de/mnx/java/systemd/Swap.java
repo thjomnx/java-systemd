@@ -23,16 +23,19 @@ public class Swap extends Unit {
 
     private final Properties properties;
 
-    private Swap(final DBusConnection dbus, final SwapInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Swap(final DBusConnection dbus, final SwapInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Swap create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Swap create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         SwapInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SwapInterface.class);
 
-        return new Swap(dbus, iface);
+        return new Swap(dbus, iface, name);
     }
 
     @Override

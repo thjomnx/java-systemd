@@ -24,16 +24,19 @@ public class Target extends Unit {
     @SuppressWarnings("unused")
     private final Properties properties;
 
-    private Target(final DBusConnection dbus, final TargetInterface iface) throws DBusException {
-        super(dbus, iface);
+    private Target(final DBusConnection dbus, final TargetInterface iface, final String name) throws DBusException {
+        super(dbus, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Target create(final DBusConnection dbus, final String objectPath) throws DBusException {
+    static Target create(final DBusConnection dbus, String name) throws DBusException {
+        name = Unit.normalizeName(name, UNIT_SUFFIX);
+
+        String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         TargetInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TargetInterface.class);
 
-        return new Target(dbus, iface);
+        return new Target(dbus, iface, name);
     }
 
     @Override
