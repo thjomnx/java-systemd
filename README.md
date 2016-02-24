@@ -50,6 +50,10 @@ finally {
 
 Lookout for class org.systemd.Playground and run its main method to test some simple stuff.
 
+## License
+
+LGPL v2 and AFL v2.1 - just like dbus-java.
+
 ## Disclaimer
 
 These are no "official" Java bindings for systemd via D-Bus. I only work on it if the following requisites are met:
