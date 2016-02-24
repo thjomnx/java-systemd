@@ -310,6 +310,7 @@ public class Playground {
         System.out.println("RemainAfterExit: " + cronie.isRemainAfterExit());
         System.out.println("Restart: " + cronie.getRestart());
         System.out.println("RestartUSec: " + cronie.getRestartUSec());
+        System.out.println("RestrictAddressFamilies: " + cronie.getRestrictAddressFamilies());
         System.out.println("Result: " + cronie.getResult());
         System.out.println("RootDirectory: " + cronie.getRootDirectory());
         System.out.println("RootDirectoryStartOnly: " + cronie.isRootDirectoryStartOnly());
@@ -402,6 +403,7 @@ public class Playground {
                 Unit unit = systemd.getManager().getUnit(ut.getUnitName());
 
                 if (unit instanceof Service) {
+                    System.out.format("%s: %s\n", unit, ((Service) unit).getRestrictAddressFamilies());
                     System.out.format("%s: %s\n", unit, ((Service) unit).getSystemCallFilter());
                 }
             }

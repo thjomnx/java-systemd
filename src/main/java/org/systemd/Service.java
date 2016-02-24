@@ -18,6 +18,7 @@ import java.util.Vector;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.ServiceInterface;
+import org.systemd.types.AddressFamilyRestriction;
 import org.systemd.types.BlockIOBandwidth;
 import org.systemd.types.BlockIODeviceWeight;
 import org.systemd.types.EnvironmentFile;
@@ -396,6 +397,12 @@ public class Service extends Unit {
         return properties.getLong("RestartUSec");
     }
 
+    public AddressFamilyRestriction getRestrictAddressFamilies() {
+        Object[] array = (Object[]) properties.getVariant("RestrictAddressFamilies").getValue();
+
+        return new AddressFamilyRestriction(array);
+    }
+
     public String getResult() {
         return properties.getString("Result");
     }
@@ -695,7 +702,7 @@ public class Service extends Unit {
   .RemainAfterExit                 property  b              false                                    const
   .Restart                         property  s              "always"                                 const
   .RestartUSec                     property  t              100000                                   const
-.RestrictAddressFamilies         property  (bas)          false 0                                  const
+  .RestrictAddressFamilies         property  (bas)          false 0                                  const
   .Result                          property  s              "success"                                emits-change
   .RootDirectory                   property  s              ""                                       const
   .RootDirectoryStartOnly          property  b              false                                    const

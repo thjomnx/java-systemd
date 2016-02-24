@@ -13,28 +13,28 @@ package org.systemd.types;
 
 import java.util.Vector;
 
-public class SystemCallFilter {
+public class AddressFamilyRestriction {
 
     private final boolean blacklist;
-    private final Vector<String> sysCalls;
+    private final Vector<String> addressFamilies;
 
     @SuppressWarnings("unchecked")
-    public SystemCallFilter(final Object[] array) {
+    public AddressFamilyRestriction(final Object[] array) {
         this.blacklist = (boolean) array[0];
-        this.sysCalls = (Vector<String>) array[1];
+        this.addressFamilies = (Vector<String>) array[1];
     }
 
     public boolean isBlacklist() {
         return blacklist;
     }
 
-    public Vector<String> getSysCalls() {
-        return sysCalls;
+    public Vector<String> getAddressFamilies() {
+        return addressFamilies;
     }
 
     @Override
     public String toString() {
-        return String.format("SystemCallFilter [blacklist=%s, sysCalls=%s]", blacklist, sysCalls);
+        return String.format("AddressFamilyRestriction [blacklist=%s, addressFamilies=%s]", blacklist, addressFamilies);
     }
 
 }
