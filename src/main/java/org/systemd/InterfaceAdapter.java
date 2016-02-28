@@ -11,12 +11,14 @@
 
 package org.systemd;
 
+import java.util.Observable;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class InterfaceAdapter implements DBusInterface {
+public abstract class InterfaceAdapter extends Observable implements DBusInterface {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -25,6 +27,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
     private final DBusInterface iface;
 
     protected InterfaceAdapter(final DBusConnection dbus, final DBusInterface iface) {
+        super();
+
         this.dbus = dbus;
         this.iface = iface;
     }

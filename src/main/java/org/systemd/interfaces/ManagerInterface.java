@@ -16,6 +16,8 @@ import java.util.List;
 import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.DBusMemberName;
+import org.freedesktop.dbus.DBusSignal;
+import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.types.UnitFileType;
 import org.systemd.types.UnitType;
 
@@ -33,5 +35,22 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "Dump")
     String dump();
+
+    public class Reloading extends DBusSignal {
+
+        // TODO Find meaning of boolean field
+        public Reloading(final String objectPath, final boolean field1) throws DBusException {
+            super(objectPath, field1);
+        }
+
+    }
+
+    public class UnitFilesChanged extends DBusSignal {
+
+        public UnitFilesChanged(final String objectPath) throws DBusException {
+            super(objectPath);
+        }
+
+    }
 
 }
