@@ -44,7 +44,7 @@ public class Properties extends InterfaceAdapter {
     }
 
     public Variant<?> getVariant(final String propertyName) {
-        return getInterface().getProperty(this.serviceName, propertyName);
+        return getInterface().getProperty(serviceName, propertyName);
     }
 
     public boolean getBoolean(final String propertyName) {
