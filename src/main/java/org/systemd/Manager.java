@@ -49,6 +49,7 @@ public class Manager extends InterfaceAdapter {
         return new Manager(dbus, iface);
     }
 
+    @Override
     protected void finalize() throws Throwable {
         dbus.removeSigHandler(ManagerInterface.Reloading.class, reloadingHandler);
         dbus.removeSigHandler(ManagerInterface.UnitFilesChanged.class, unitFilesChangedHandler);
@@ -486,19 +487,21 @@ public class Manager extends InterfaceAdapter {
 
     public class ReloadingHandler implements DBusSigHandler<ManagerInterface.Reloading> {
 
-		@Override
-		public void handle(final Reloading signal) {
-			System.out.println(signal);
-		}
+        @Override
+        public void handle(final Reloading signal) {
+            setChanged();
+            notifyObservers(signal);
+        }
 
     }
 
     public class UnitFilesChangedHandler implements DBusSigHandler<ManagerInterface.UnitFilesChanged> {
 
-		@Override
-		public void handle(final UnitFilesChanged signal) {
-			System.out.println(signal);
-		}
+        @Override
+        public void handle(final UnitFilesChanged signal) {
+            setChanged();
+            notifyObservers(signal);
+        }
 
     }
 

@@ -12,13 +12,20 @@
 package org.systemd;
 
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
-public class Playground {
+public class Playground implements Observer {
 
     private Playground() {
         // Do nothing (static class)
+    }
+
+    @Override
+    public void update(final Observable o, final Object arg) {
+        System.out.println("Signal received: " + o + "::" + arg);
     }
 
     public static void introspect(final Manager manager) throws DBusException {
