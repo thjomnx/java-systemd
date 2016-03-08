@@ -11,8 +11,9 @@
 
 package org.systemd;
 
+import java.util.Arrays;
+
 import org.freedesktop.dbus.exceptions.DBusException;
-import org.systemd.types.UnitType;
 
 public class Playground {
 
@@ -224,6 +225,7 @@ public class Playground {
         System.out.println();
 
         System.out.println("'cronie' properties (service interface):");
+        System.out.println("AppArmorProfile: " + cronie.getAppArmorProfile());
         System.out.println("BlockIOAccounting: " + cronie.getBlockIOAccounting());
         System.out.println("BlockIODeviceWeight: " + cronie.getBlockIODeviceWeight());
         System.out.println("BlockIOReadBandwidth: " + cronie.getBlockIOReadBandwidth());
@@ -231,6 +233,7 @@ public class Playground {
         System.out.println("BlockIOWriteBandwidth: " + cronie.getBlockIOWriteBandwidth());
         System.out.println("BusName: " + cronie.getBusName());
         System.out.println("CPUAccounting: " + cronie.getCPUAccounting());
+        System.out.println("CPUAffinity: " + Arrays.toString(cronie.getCPUAffinity()));
         System.out.println("CPUQuotaPerSecUSec: " + cronie.getCPUQuotaPerSecUSec());
         System.out.println("CPUSchedulingPolicy: " + cronie.getCPUSchedulingPolicy());
         System.out.println("CPUSchedulingPriority: " + cronie.getCPUSchedulingPriority());
@@ -242,6 +245,7 @@ public class Playground {
         System.out.println("ControlGroup: " + cronie.getControlGroup());
         System.out.println("ControlPID: " + cronie.getControlPID());
         System.out.println("Delegate: " + cronie.doesDelegate());
+        System.out.println("DeviceAllow: " + cronie.getDeviceAllow());
         System.out.println("DevicePolicy: " + cronie.getDevicePolicy());
         System.out.println("Environment: " + cronie.getEnvironment());
         System.out.println("EnvironmentFiles: " + cronie.getEnvironmentFiles());
@@ -322,6 +326,7 @@ public class Playground {
         System.out.println("SendSIGHUP: " + cronie.isSendSIGHUP());
         System.out.println("SendSIGKILL: " + cronie.isSendSIGKILL());
         System.out.println("Slice: " + cronie.getSlice());
+        System.out.println("SmackProcessLabel: " + cronie.getSmackProcessLabel());
         System.out.println("StandardError: " + cronie.getStandardError());
         System.out.println("StandardInput: " + cronie.getStandardInput());
         System.out.println("StandardOutput: " + cronie.getStandardOutput());
@@ -399,14 +404,15 @@ public class Playground {
 //            properties(systemd.getManager());
             methods(systemd.getManager());
 
-            for (UnitType ut : systemd.getManager().listUnits()) {
-                Unit unit = systemd.getManager().getUnit(ut.getUnitName());
-
-                if (unit instanceof Service) {
-                    System.out.format("%s: %s\n", unit, ((Service) unit).getRestrictAddressFamilies());
-                    System.out.format("%s: %s\n", unit, ((Service) unit).getSystemCallFilter());
-                }
-            }
+//            for (UnitType ut : systemd.getManager().listUnits()) {
+//                Unit unit = systemd.getManager().getUnit(ut.getUnitName());
+//
+//                if (unit instanceof Service) {
+//                    System.out.format("%s: %s\n", unit, ((Service) unit).getRestrictAddressFamilies());
+//                    System.out.format("%s: %s\n", unit, ((Service) unit).getSystemCallFilter());
+//                    System.out.format("%s: %s\n", unit, ((Service) unit).getSmackProcessLabel());
+//                }
+//            }
 
 //            System.out.println(manager.dump());
 

@@ -45,6 +45,10 @@ public class EnvironmentFile {
         return prefixed;
     }
 
+    public String toConfigString() {
+        return String.format("%s%s", prefixed ? "-" : "", filePath);
+    }
+
     @Override
     public String toString() {
         return String.format("EnvironmentFile [filePath=%s, prefixed=%s]", filePath, prefixed);
