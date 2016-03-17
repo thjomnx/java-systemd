@@ -17,11 +17,8 @@ import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.ManagerInterface;
-import org.systemd.interfaces.ManagerInterface.Reloading;
-import org.systemd.interfaces.ManagerInterface.UnitFilesChanged;
 import org.systemd.types.UnitFileType;
 import org.systemd.types.UnitType;
 
@@ -29,30 +26,18 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Manager";
 
-    protected final ReloadingHandler reloadingHandler = new ReloadingHandler();
-    protected final UnitFilesChangedHandler unitFilesChangedHandler = new UnitFilesChangedHandler();
-
     private final Properties properties;
 
     private Manager(final DBusConnection dbus, final ManagerInterface iface) throws DBusException {
         super(dbus, iface);
 
         this.properties = Properties.create(dbus, Systemd.OBJECT_PATH, SERVICE_NAME);
-
-        dbus.addSigHandler(ManagerInterface.Reloading.class, reloadingHandler);
-        dbus.addSigHandler(ManagerInterface.UnitFilesChanged.class, unitFilesChangedHandler);
     }
 
     static Manager create(final DBusConnection dbus) throws DBusException {
         ManagerInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class);
 
         return new Manager(dbus, iface);
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        dbus.removeSigHandler(ManagerInterface.Reloading.class, reloadingHandler);
-        dbus.removeSigHandler(ManagerInterface.UnitFilesChanged.class, unitFilesChangedHandler);
     }
 
     @Override
@@ -483,26 +468,6 @@ public class Manager extends InterfaceAdapter {
 
     public String getVirtualization() {
         return properties.getString("Virtualization");
-    }
-
-    public class ReloadingHandler implements DBusSigHandler<ManagerInterface.Reloading> {
-
-        @Override
-        public void handle(final Reloading signal) {
-            setChanged();
-            notifyObservers(signal);
-        }
-
-    }
-
-    public class UnitFilesChangedHandler implements DBusSigHandler<ManagerInterface.UnitFilesChanged> {
-
-        @Override
-        public void handle(final UnitFilesChanged signal) {
-            setChanged();
-            notifyObservers(signal);
-        }
-
     }
 
 }
