@@ -168,10 +168,10 @@ public class Playground {
         System.out.println("Before: " + cronie.getBefore());
         System.out.println("BindsTo: " + cronie.getBindsTo());
         System.out.println("BoundBy: " + cronie.getBoundBy());
-        System.out.println("CanIsolate: " + cronie.canIsolate());
-        System.out.println("CanReload: " + cronie.canReload());
-        System.out.println("CanStart: " + cronie.canStart());
-        System.out.println("CanStop: " + cronie.canStop());
+        System.out.println("CanIsolate: " + cronie.isCanIsolate());
+        System.out.println("CanReload: " + cronie.isCanReload());
+        System.out.println("CanStart: " + cronie.isCanStart());
+        System.out.println("CanStop: " + cronie.isCanStop());
         System.out.println("ConditionResult: " + cronie.getConditionResult());
         System.out.println("ConditionTimestamp: " + cronie.getConditionTimestamp());
         System.out.println("ConditionTimestampMonotonic: " + cronie.getConditionTimestampMonotonic());
@@ -179,7 +179,7 @@ public class Playground {
         System.out.println("ConflictedBy: " + cronie.getConflictedBy());
         System.out.println("Conflicts: " + cronie.getConflicts());
         System.out.println("ConsistsOf: " + cronie.getConsistsOf());
-        System.out.println("DefaultDependencies: " + cronie.hasDefaultDependencies());
+        System.out.println("DefaultDependencies: " + cronie.isDefaultDependencies());
         System.out.println("Description: " + cronie.getDescription());
         System.out.println("Documentation: " + cronie.getDocumentation());
         System.out.println("DropInPaths: " + cronie.getDropInPaths());
@@ -226,13 +226,13 @@ public class Playground {
 
         System.out.println("'cronie' properties (service interface):");
         System.out.println("AppArmorProfile: " + cronie.getAppArmorProfile());
-        System.out.println("BlockIOAccounting: " + cronie.getBlockIOAccounting());
+        System.out.println("BlockIOAccounting: " + cronie.isBlockIOAccounting());
         System.out.println("BlockIODeviceWeight: " + cronie.getBlockIODeviceWeight());
         System.out.println("BlockIOReadBandwidth: " + cronie.getBlockIOReadBandwidth());
         System.out.println("BlockIOWeight: " + cronie.getBlockIOWeight());
         System.out.println("BlockIOWriteBandwidth: " + cronie.getBlockIOWriteBandwidth());
         System.out.println("BusName: " + cronie.getBusName());
-        System.out.println("CPUAccounting: " + cronie.getCPUAccounting());
+        System.out.println("CPUAccounting: " + cronie.isCPUAccounting());
         System.out.println("CPUAffinity: " + Arrays.toString(cronie.getCPUAffinity()));
         System.out.println("CPUQuotaPerSecUSec: " + cronie.getCPUQuotaPerSecUSec());
         System.out.println("CPUSchedulingPolicy: " + cronie.getCPUSchedulingPolicy());
@@ -244,7 +244,7 @@ public class Playground {
         System.out.println("CapabilityBoundingSet: " + cronie.getCapabilityBoundingSet());
         System.out.println("ControlGroup: " + cronie.getControlGroup());
         System.out.println("ControlPID: " + cronie.getControlPID());
-        System.out.println("Delegate: " + cronie.doesDelegate());
+        System.out.println("Delegate: " + cronie.isDelegate());
         System.out.println("DeviceAllow: " + cronie.getDeviceAllow());
         System.out.println("DevicePolicy: " + cronie.getDevicePolicy());
         System.out.println("Environment: " + cronie.getEnvironment());
@@ -288,13 +288,13 @@ public class Playground {
         System.out.println("LimitSIGPENDING: " + cronie.getLimitSIGPENDING());
         System.out.println("LimitSTACK: " + cronie.getLimitSTACK());
         System.out.println("MainPID: " + cronie.getMainPID());
-        System.out.println("MemoryAccounting: " + cronie.hasMemoryAccounting());
+        System.out.println("MemoryAccounting: " + cronie.isMemoryAccounting());
         System.out.println("MemoryCurrent: " + cronie.getMemoryCurrent());
         System.out.println("MemoryLimit: " + cronie.getMemoryLimit());
         System.out.println("MountFlags: " + cronie.getMountFlags());
         System.out.println("NFileDescriptorStore: " + cronie.getNFileDescriptorStore());
         System.out.println("Nice: " + cronie.getNice());
-        System.out.println("NoNewPrivileges: " + cronie.canNoNewPrivileges());
+        System.out.println("NoNewPrivileges: " + cronie.isNoNewPrivileges());
         System.out.println("NonBlocking: " + cronie.isNonBlocking());
         System.out.println("NotifyAccess: " + cronie.getNotifyAccess());
         System.out.println("OOMScoreAdjust: " + cronie.getOOMScoreAdjust());
@@ -303,9 +303,9 @@ public class Playground {
         System.out.println("PassEnvironment: " + cronie.getPassEnvironment());
         System.out.println("PermissionsStartOnly: " + cronie.isPermissionsStartOnly());
         System.out.println("Personality: " + cronie.getPersonality());
-        System.out.println("PrivateDevices: " + cronie.hasPrivateDevices());
-        System.out.println("PrivateNetwork: " + cronie.hasPrivateNetwork());
-        System.out.println("PrivateTmp: " + cronie.hasPrivateTmp());
+        System.out.println("PrivateDevices: " + cronie.isPrivateDevices());
+        System.out.println("PrivateNetwork: " + cronie.isPrivateNetwork());
+        System.out.println("PrivateTmp: " + cronie.isPrivateTmp());
         System.out.println("ProtectHome: " + cronie.getProtectHome());
         System.out.println("ProtectSystem: " + cronie.getProtectSystem());
         System.out.println("ReadOnlyDirectories: " + cronie.getReadOnlyDirectories());
@@ -341,7 +341,7 @@ public class Playground {
         System.out.println("SyslogFacility: " + cronie.getSyslogFacility());
         System.out.println("SyslogIdentifier: " + cronie.getSyslogIdentifier());
         System.out.println("SyslogLevel: " + cronie.getSyslogLevel());
-        System.out.println("SyslogLevelPrefix: " + cronie.hasSyslogLevelPrefix());
+        System.out.println("SyslogLevelPrefix: " + cronie.isSyslogLevelPrefix());
         System.out.println("SyslogPriority: " + cronie.getSyslogPriority());
         System.out.println("SystemCallArchitectures: " + cronie.getSystemCallArchitectures());
         System.out.println("SystemCallErrorNumber: " + cronie.getSystemCallErrorNumber());
@@ -349,7 +349,7 @@ public class Playground {
         System.out.println("TTYReset: " + cronie.isTTYReset());
         System.out.println("TTYVHangup: " + cronie.isTTYVHangup());
         System.out.println("TTYVTDisallocate: " + cronie.isTTYVTDisallocate());
-        System.out.println("TasksAccounting: " + cronie.hasTasksAccounting());
+        System.out.println("TasksAccounting: " + cronie.isTasksAccounting());
         System.out.println("TasksCurrent: " + cronie.getTasksCurrent());
         System.out.println("TasksMax: " + cronie.getTasksMax());
         System.out.println("TimeoutStartUSec: " + cronie.getTimeoutStartUSec());

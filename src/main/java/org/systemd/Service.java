@@ -62,7 +62,7 @@ public class Service extends Unit {
         return new AppArmorProfile(array);
     }
 
-    public boolean getBlockIOAccounting() {
+    public boolean isBlockIOAccounting() {
         return properties.getBoolean("BlockIOAccounting");
     }
 
@@ -86,7 +86,7 @@ public class Service extends Unit {
         return properties.getString("BusName");
     }
 
-    public boolean getCPUAccounting() {
+    public boolean isCPUAccounting() {
         return properties.getBoolean("CPUAccounting");
     }
 
@@ -134,7 +134,7 @@ public class Service extends Unit {
         return properties.getLong("ControlPID");
     }
 
-    public boolean doesDelegate() {
+    public boolean isDelegate() {
         return properties.getBoolean("Delegate");
     }
 
@@ -310,7 +310,7 @@ public class Service extends Unit {
         return properties.getInteger("MainPID");
     }
 
-    public boolean hasMemoryAccounting() {
+    public boolean isMemoryAccounting() {
         return properties.getBoolean("MemoryAccounting");
     }
 
@@ -334,7 +334,7 @@ public class Service extends Unit {
         return properties.getInteger("Nice");
     }
 
-    public boolean canNoNewPrivileges() {
+    public boolean isNoNewPrivileges() {
         return properties.getBoolean("NoNewPrivileges");
     }
 
@@ -370,15 +370,15 @@ public class Service extends Unit {
         return properties.getString("Personality");
     }
 
-    public boolean hasPrivateDevices() {
+    public boolean isPrivateDevices() {
         return properties.getBoolean("PrivateDevices");
     }
 
-    public boolean hasPrivateNetwork() {
+    public boolean isPrivateNetwork() {
         return properties.getBoolean("PrivateNetwork");
     }
 
-    public boolean hasPrivateTmp() {
+    public boolean isPrivateTmp() {
         return properties.getBoolean("PrivateTmp");
     }
 
@@ -528,7 +528,7 @@ public class Service extends Unit {
         return properties.getInteger("SyslogLevel");
     }
 
-    public boolean hasSyslogLevelPrefix() {
+    public boolean isSyslogLevelPrefix() {
         return properties.getBoolean("SyslogLevelPrefix");
     }
 
@@ -566,7 +566,7 @@ public class Service extends Unit {
         return properties.getBoolean("TTYVTDisallocate");
     }
 
-    public boolean hasTasksAccounting() {
+    public boolean isTasksAccounting() {
         return properties.getBoolean("TasksAccounting");
     }
 
