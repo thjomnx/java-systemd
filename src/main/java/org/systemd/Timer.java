@@ -11,9 +11,13 @@
 
 package org.systemd;
 
+import java.util.List;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.TimerInterface;
+import org.systemd.types.TimersCalendar;
+import org.systemd.types.TimersMonotonic;
 
 public class Timer extends Unit {
 
@@ -46,10 +50,13 @@ public class Timer extends Unit {
         return properties.getString("Unit");
     }
 
-    /*
-    readonly a(stt) TimersMonotonic = [('OnUnitActiveUSec', 86400000000, 173700033104), ('OnBootUSec', 900000000, 900000000)];
-    readonly a(sst) TimersCalendar = [];
-     */
+    public List<TimersMonotonic> getTimersMonotonic() {
+        return TimersMonotonic.list(properties.getVector("TimersMonotonic"));
+    }
+
+    public List<TimersCalendar> getTimersCalendar() {
+        return TimersCalendar.list(properties.getVector("TimersCalendar"));
+    }
 
     public long getNextElapseUSecRealtime() {
         return properties.getLong("NextElapseUSecRealtime");

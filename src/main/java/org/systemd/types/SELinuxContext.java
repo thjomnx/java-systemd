@@ -11,8 +11,6 @@
 
 package org.systemd.types;
 
-// TODO Rename 'prefixed' variable to match its real purpose
-// http://systemd-devel.freedesktop.narkive.com/6xnzKsRp/patch-export-selinuxcontext-on-the-bus-as-a-structure
 public class SELinuxContext {
 
     private final boolean prefixed;
@@ -29,6 +27,10 @@ public class SELinuxContext {
 
     public String getUserData() {
         return userData;
+    }
+
+    public String toConfigString() {
+        return String.format("%s%s", prefixed ? "-" : "", userData);
     }
 
     @Override
