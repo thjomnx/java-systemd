@@ -51,4 +51,9 @@ public class TimersCalendar {
         return nextElapsePoint;
     }
 
+    @Override
+    public String toString() {
+        return String.format("TimersCalendar [timerBase=%s, calendar=%s, nextElapsePoint=%s]", timerBase, calendar, nextElapsePoint);
+    }
+
 }

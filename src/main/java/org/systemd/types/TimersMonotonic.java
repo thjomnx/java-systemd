@@ -51,4 +51,9 @@ public class TimersMonotonic {
         return nextElapsePoint;
     }
 
+    @Override
+    public String toString() {
+        return String.format("TimersMonotonic [timerBase=%s, offsetUSec=%s, nextElapsePoint=%s]", timerBase, offsetUSec, nextElapsePoint);
+    }
+
 }
