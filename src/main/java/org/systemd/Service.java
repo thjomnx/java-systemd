@@ -570,12 +570,12 @@ public class Service extends Unit {
         return properties.getBoolean("TasksAccounting");
     }
 
-    public long getTasksCurrent() {
-        return properties.getLong("TasksCurrent");
+    public BigInteger getTasksCurrent() {
+        return properties.getBigInteger("TasksCurrent");
     }
 
-    public long getTasksMax() {
-        return properties.getLong("TasksMax");
+    public BigInteger getTasksMax() {
+        return properties.getBigInteger("TasksMax");
     }
 
     public long getTimeoutStartUSec() {
