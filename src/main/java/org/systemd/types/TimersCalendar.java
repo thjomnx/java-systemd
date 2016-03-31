@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.freedesktop.dbus.UInt64;
+
 public class TimersCalendar {
 
     private final String timerBase;
@@ -24,7 +26,7 @@ public class TimersCalendar {
     public TimersCalendar(final Object[] array) {
         this.timerBase = String.valueOf(array[0]);
         this.calendar = String.valueOf(array[1]);
-        this.nextElapsePoint = ((Number) array[2]).longValue();
+        this.nextElapsePoint = ((UInt64) array[2]).longValue();
     }
 
     public static List<TimersCalendar> list(final Vector<Object[]> vector) {

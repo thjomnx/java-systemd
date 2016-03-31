@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.freedesktop.dbus.UInt64;
+
 public class TimersMonotonic {
 
     private final String timerBase;
@@ -23,8 +25,8 @@ public class TimersMonotonic {
 
     public TimersMonotonic(final Object[] array) {
         this.timerBase = String.valueOf(array[0]);
-        this.offsetUSec = ((Number) array[1]).longValue();
-        this.nextElapsePoint = ((Number) array[2]).longValue();
+        this.offsetUSec = ((UInt64) array[1]).longValue();
+        this.nextElapsePoint = ((UInt64) array[2]).longValue();
     }
 
     public static List<TimersMonotonic> list(final Vector<Object[]> vector) {
