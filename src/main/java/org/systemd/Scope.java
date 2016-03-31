@@ -11,9 +11,15 @@
 
 package org.systemd;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.ScopeInterface;
+import org.systemd.types.BlockIOBandwidth;
+import org.systemd.types.BlockIODeviceWeight;
+import org.systemd.types.DeviceAllowControl;
 
 public class Scope extends Unit {
 
@@ -42,31 +48,84 @@ public class Scope extends Unit {
         return (ScopeInterface) super.getInterface();
     }
 
+    public boolean isBlockIOAccounting() {
+        return properties.getBoolean("BlockIOAccounting");
+    }
+
+    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
+        return BlockIODeviceWeight.list(properties.getVector("BlockIODeviceWeight"));
+    }
+
+    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
+        return BlockIOBandwidth.list(properties.getVector("BlockIOReadBandwidth"));
+    }
+
+    public BigInteger getBlockIOWeight() {
+        return properties.getBigInteger("BlockIOWeight");
+    }
+
+    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
+        return BlockIOBandwidth.list(properties.getVector("BlockIOWriteBandwidth"));
+    }
+
+    public boolean isCPUAccounting() {
+        return properties.getBoolean("CPUAccounting");
+    }
+
+    public BigInteger getCPUShares() {
+        return properties.getBigInteger("CPUShares");
+    }
+
+    public String getControlGroup() {
+        return properties.getString("ControlGroup");
+    }
+
+    public String getController() {
+        return properties.getString("Controller");
+    }
+
+    public List<DeviceAllowControl> getDeviceAllow() {
+        return DeviceAllowControl.list(properties.getVector("DeviceAllow"));
+    }
+
+    public String getDevicePolicy() {
+        return properties.getString("DevicePolicy");
+    }
+
+    public String getKillMode() {
+        return properties.getString("KillMode");
+    }
+
+    public int getKillSignal() {
+        return properties.getInteger("KillSignal");
+    }
+
+    public boolean isMemoryAccounting() {
+        return properties.getBoolean("MemoryAccounting");
+    }
+
+    public BigInteger getMemoryLimit() {
+        return properties.getBigInteger("MemoryLimit");
+    }
+
+    public String getResult() {
+        return properties.getString("Result");
+    }
+
+    public boolean isSendSIGHUP() {
+        return properties.getBoolean("SendSIGHUP");
+    }
+
+    public boolean isSendSIGKILL() {
+        return properties.getBoolean("SendSIGKILL");
+    }
+
     public String getSlice() {
         return properties.getString("Slice");
     }
 
-/*
-  readonly s Slice = 'user-1000.slice';
-readonly s ControlGroup = '/user.slice/user-1000.slice/session-1.scope';
-readonly t TimeoutStopUSec = 500000;
-readonly s KillMode = 'none';
-readonly i KillSignal = 15;
-readonly b SendSIGKILL = true;
-readonly b SendSIGHUP = true;
-readonly b CPUAccounting = false;
-readonly t CPUShares = 1024;
-readonly b BlockIOAccounting = false;
-readonly t BlockIOWeight = 1000;
-readonly a(st) BlockIODeviceWeight = [];
-readonly a(st) BlockIOReadBandwidth=;
-readonly a(st) BlockIOWriteBandwidth=;
-readonly b MemoryAccounting = false;
-readonly t MemoryLimit = 18446744073709551615;
-readonly s DevicePolicy = 'auto';
-readonly a(ss) DeviceAllow = [];
-readonly s Result = 'success';
-readonly s Controller = '';
- */
+    public long getTimeoutStopUSec() {
+        return properties.getLong("TimeoutStopUSec");
+    }
 
 }
