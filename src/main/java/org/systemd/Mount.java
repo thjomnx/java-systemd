@@ -11,9 +11,23 @@
 
 package org.systemd;
 
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Vector;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.MountInterface;
+import org.systemd.types.AddressFamilyRestriction;
+import org.systemd.types.AppArmorProfile;
+import org.systemd.types.BlockIOBandwidth;
+import org.systemd.types.BlockIODeviceWeight;
+import org.systemd.types.DeviceAllowControl;
+import org.systemd.types.EnvironmentFile;
+import org.systemd.types.ExecutionInfo;
+import org.systemd.types.SELinuxContext;
+import org.systemd.types.SmackProcessLabel;
+import org.systemd.types.SystemCallFilter;
 
 public class Mount extends Unit {
 
@@ -42,136 +56,530 @@ public class Mount extends Unit {
         return (MountInterface) super.getInterface();
     }
 
-/*
-.AmbientCapabilities           property  t              0                                        const
-.AppArmorProfile               property  (bs)           false ""                                 const
-.BlockIOAccounting             property  b              false                                    -
-.BlockIODeviceWeight           property  a(st)          0                                        -
-.BlockIOReadBandwidth          property  a(st)          0                                        -
-.BlockIOWeight                 property  t              18446744073709551615                     -
-.BlockIOWriteBandwidth         property  a(st)          0                                        -
-.CPUAccounting                 property  b              false                                    -
-.CPUAffinity                   property  ay             0                                        const
-.CPUQuotaPerSecUSec            property  t              18446744073709551615                     -
-.CPUSchedulingPolicy           property  i              0                                        const
-.CPUSchedulingPriority         property  i              0                                        const
-.CPUSchedulingResetOnFork      property  b              false                                    const
-.CPUShares                     property  t              18446744073709551615                     -
-.CPUUsageNSec                  property  t              18446744073709551615                     -
-.Capabilities                  property  s              ""                                       const
-.CapabilityBoundingSet         property  t              18446744073709551615                     const
-.ControlGroup                  property  s              "/system.slice/tmp.mount"                -
-.ControlPID                    property  u              0                                        emits-change
-.Delegate                      property  b              false                                    -
-.DeviceAllow                   property  a(ss)          0                                        -
-.DevicePolicy                  property  s              "auto"                                   -
-.DirectoryMode                 property  u              493                                      const
-.Environment                   property  as             0                                        const
-.EnvironmentFiles              property  a(sb)          0                                        const
-.ExecMount                     property  a(sasbttttuii) 1 "/usr/bin/mount" 7 "/usr/bin/mount"... emits-invalidation
-.ExecRemount                   property  a(sasbttttuii) 0                                        emits-invalidation
-.ExecUnmount                   property  a(sasbttttuii) 0                                        emits-invalidation
-.Group                         property  s              ""                                       const
-.IOScheduling                  property  i              0                                        const
-.IgnoreSIGPIPE                 property  b              true                                     const
-.InaccessibleDirectories       property  as             0                                        const
-.KillMode                      property  s              "control-group"                          const
-.KillSignal                    property  i              15                                       const
-.LimitAS                       property  t              18446744073709551615                     const
-.LimitASSoft                   property  t              18446744073709551615                     const
-.LimitCORE                     property  t              18446744073709551615                     const
-.LimitCORESoft                 property  t              18446744073709551615                     const
-.LimitCPU                      property  t              18446744073709551615                     const
-.LimitCPUSoft                  property  t              18446744073709551615                     const
-.LimitDATA                     property  t              18446744073709551615                     const
-.LimitDATASoft                 property  t              18446744073709551615                     const
-.LimitFSIZE                    property  t              18446744073709551615                     const
-.LimitFSIZESoft                property  t              18446744073709551615                     const
-.LimitLOCKS                    property  t              18446744073709551615                     const
-.LimitLOCKSSoft                property  t              18446744073709551615                     const
-.LimitMEMLOCK                  property  t              65536                                    const
-.LimitMEMLOCKSoft              property  t              65536                                    const
-.LimitMSGQUEUE                 property  t              819200                                   const
-.LimitMSGQUEUESoft             property  t              819200                                   const
-.LimitNICE                     property  t              0                                        const
-.LimitNICESoft                 property  t              0                                        const
-.LimitNOFILE                   property  t              4096                                     const
-.LimitNOFILESoft               property  t              1024                                     const
-.LimitNPROC                    property  t              64140                                    const
-.LimitNPROCSoft                property  t              64140                                    const
-.LimitRSS                      property  t              18446744073709551615                     const
-.LimitRSSSoft                  property  t              18446744073709551615                     const
-.LimitRTPRIO                   property  t              0                                        const
-.LimitRTPRIOSoft               property  t              0                                        const
-.LimitRTTIME                   property  t              18446744073709551615                     const
-.LimitRTTIMESoft               property  t              18446744073709551615                     const
-.LimitSIGPENDING               property  t              64140                                    const
-.LimitSIGPENDINGSoft           property  t              64140                                    const
-.LimitSTACK                    property  t              18446744073709551615                     const
-.LimitSTACKSoft                property  t              8388608                                  const
-.MemoryAccounting              property  b              false                                    -
-.MemoryCurrent                 property  t              18446744073709551615                     -
-.MemoryLimit                   property  t              18446744073709551615                     -
-.MountFlags                    property  t              0                                        const
-.Nice                          property  i              0                                        const
-.NoNewPrivileges               property  b              false                                    const
-.NonBlocking                   property  b              false                                    const
-.OOMScoreAdjust                property  i              0                                        const
-.Options                       property  s              "rw"                                     emits-change
-.PAMName                       property  s              ""                                       const
-.PassEnvironment               property  as             0                                        const
-.Personality                   property  s              ""                                       const
-.PrivateDevices                property  b              false                                    const
-.PrivateNetwork                property  b              false                                    const
-.PrivateTmp                    property  b              false                                    const
-.ProtectHome                   property  s              "no"                                     const
-.ProtectSystem                 property  s              "no"                                     const
-.ReadOnlyDirectories           property  as             0                                        const
-.ReadWriteDirectories          property  as             0                                        const
-.RestrictAddressFamilies       property  (bas)          false 0                                  const
-.Result                        property  s              "success"                                emits-change
-.RootDirectory                 property  s              ""                                       const
-.RuntimeDirectory              property  as             0                                        const
-.RuntimeDirectoryMode          property  u              493                                      const
-.SELinuxContext                property  (bs)           false ""                                 const
-.SameProcessGroup              property  b              true                                     const
-.SecureBits                    property  i              0                                        const
-.SendSIGHUP                    property  b              false                                    const
-.SendSIGKILL                   property  b              true                                     const
-.Slice                         property  s              "system.slice"                           -
-.SloppyOptions                 property  b              false                                    const
-.SmackProcessLabel             property  (bs)           false ""                                 const
-.StandardError                 property  s              "inherit"                                const
-.StandardInput                 property  s              "null"                                   const
-.StandardOutput                property  s              "journal"                                const
-.StartupBlockIOWeight          property  t              18446744073709551615                     -
-.StartupCPUShares              property  t              18446744073709551615                     -
-.SupplementaryGroups           property  as             0                                        const
-.SyslogFacility                property  i              3                                        const
-.SyslogIdentifier              property  s              ""                                       const
-.SyslogLevel                   property  i              6                                        const
-.SyslogLevelPrefix             property  b              true                                     const
-.SyslogPriority                property  i              30                                       const
-.SystemCallArchitectures       property  as             0                                        const
-.SystemCallErrorNumber         property  i              0                                        const
-.SystemCallFilter              property  (bas)          false 0                                  const
-.TTYPath                       property  s              ""                                       const
-.TTYReset                      property  b              false                                    const
-.TTYVHangup                    property  b              false                                    const
-.TTYVTDisallocate              property  b              false                                    const
-.TasksAccounting               property  b              true                                     -
-.TasksCurrent                  property  t              0                                        -
-.TasksMax                      property  t              512                                      -
-.TimeoutUSec                   property  t              90000000                                 const
-.TimerSlackNSec                property  t              50000                                    const
-.Type                          property  s              "tmpfs"                                  emits-change
-.UMask                         property  u              18                                       const
-.User                          property  s              ""                                       const
-.UtmpIdentifier                property  s              ""                                       const
-.UtmpMode                      property  s              "init"                                   const
-.What                          property  s              "tmpfs"                                  emits-change
-.Where                         property  s              "/tmp"                                   const
-.WorkingDirectory              property  s              ""                                       const
- */
+    public BigInteger getAmbientCapabilities() {
+        return properties.getBigInteger("AmbientCapabilities");
+    }
+
+    public AppArmorProfile getAppArmorProfile() {
+        Object[] array = (Object[]) properties.getVariant("AppArmorProfile").getValue();
+
+        return new AppArmorProfile(array);
+    }
+
+    public boolean isBlockIOAccounting() {
+        return properties.getBoolean("BlockIOAccounting");
+    }
+
+    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
+        return BlockIODeviceWeight.list(properties.getVector("BlockIODeviceWeight"));
+    }
+
+    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
+        return BlockIOBandwidth.list(properties.getVector("BlockIOReadBandwidth"));
+    }
+
+    public BigInteger getBlockIOWeight() {
+        return properties.getBigInteger("BlockIOWeight");
+    }
+
+    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
+        return BlockIOBandwidth.list(properties.getVector("BlockIOWriteBandwidth"));
+    }
+
+    public boolean isCPUAccounting() {
+        return properties.getBoolean("CPUAccounting");
+    }
+
+    public byte[] getCPUAffinity() {
+        return (byte[]) properties.getVariant("CPUAffinity").getValue();
+    }
+
+    public BigInteger getCPUQuotaPerSecUSec() {
+        return properties.getBigInteger("CPUQuotaPerSecUSec");
+    }
+
+    public int getCPUSchedulingPolicy() {
+        return properties.getInteger("CPUSchedulingPolicy");
+    }
+
+    public int getCPUSchedulingPriority() {
+        return properties.getInteger("CPUSchedulingPriority");
+    }
+
+    public boolean isCPUSchedulingResetOnFork() {
+        return properties.getBoolean("CPUSchedulingResetOnFork");
+    }
+
+    public BigInteger getCPUShares() {
+        return properties.getBigInteger("CPUShares");
+    }
+
+    public BigInteger getCPUUsageNSec() {
+        return properties.getBigInteger("CPUUsageNSec");
+    }
+
+    public String getCapabilities() {
+        return properties.getString("Capabilities");
+    }
+
+    public BigInteger getCapabilityBoundingSet() {
+        return properties.getBigInteger("CapabilityBoundingSet");
+    }
+
+    public String getControlGroup() {
+        return properties.getString("ControlGroup");
+    }
+
+    public long getControlPID() {
+        return properties.getLong("ControlPID");
+    }
+
+    public boolean isDelegate() {
+        return properties.getBoolean("Delegate");
+    }
+
+    public List<DeviceAllowControl> getDeviceAllow() {
+        return DeviceAllowControl.list(properties.getVector("DeviceAllow"));
+    }
+
+    public String getDevicePolicy() {
+        return properties.getString("DevicePolicy");
+    }
+
+    public long getDirectoryMode() {
+        return properties.getLong("DirectoryMode");
+    }
+
+    public Vector<String> getEnvironment() {
+        return properties.getVector("Environment");
+    }
+
+    public List<EnvironmentFile> getEnvironmentFiles() {
+        return EnvironmentFile.list(properties.getVector("EnvironmentFiles"));
+    }
+
+    public List<ExecutionInfo> getExecMount() {
+        return ExecutionInfo.list(properties.getVector("ExecMount"));
+    }
+
+    public List<ExecutionInfo> getExecRemount() {
+        return ExecutionInfo.list(properties.getVector("ExecRemount"));
+    }
+
+    public List<ExecutionInfo> getExecUnmount() {
+        return ExecutionInfo.list(properties.getVector("ExecUnmount"));
+    }
+
+    public String getGroup() {
+        return properties.getString("Group");
+    }
+
+    public int getIOScheduling() {
+        return properties.getInteger("IOScheduling");
+    }
+
+    public boolean isIgnoreSIGPIPE() {
+        return properties.getBoolean("IgnoreSIGPIPE");
+    }
+
+    public Vector<String> getInaccessibleDirectories() {
+        return properties.getVector("InaccessibleDirectories");
+    }
+
+    public String getKillMode() {
+        return properties.getString("KillMode");
+    }
+
+    public int getKillSignal() {
+        return properties.getInteger("KillSignal");
+    }
+
+    public BigInteger getLimitAS() {
+        return properties.getBigInteger("LimitAS");
+    }
+
+    public BigInteger getLimitASSoft() {
+        return properties.getBigInteger("LimitASSoft");
+    }
+
+    public BigInteger getLimitCORE() {
+        return properties.getBigInteger("LimitCORE");
+    }
+
+    public BigInteger getLimitCORESoft() {
+        return properties.getBigInteger("LimitCORESoft");
+    }
+
+    public BigInteger getLimitCPU() {
+        return properties.getBigInteger("LimitCPU");
+    }
+
+    public BigInteger getLimitCPUSoft() {
+        return properties.getBigInteger("LimitCPUSoft");
+    }
+
+    public BigInteger getLimitDATA() {
+        return properties.getBigInteger("LimitDATA");
+    }
+
+    public BigInteger getLimitDATASoft() {
+        return properties.getBigInteger("LimitDATASoft");
+    }
+
+    public BigInteger getLimitFSIZE() {
+        return properties.getBigInteger("LimitFSIZE");
+    }
+
+    public BigInteger getLimitFSIZESoft() {
+        return properties.getBigInteger("LimitFSIZESoft");
+    }
+
+    public BigInteger getLimitLOCKS() {
+        return properties.getBigInteger("LimitLOCKS");
+    }
+
+    public BigInteger getLimitLOCKSSoft() {
+        return properties.getBigInteger("LimitLOCKSSoft");
+    }
+
+    public BigInteger getLimitMEMLOCK() {
+        return properties.getBigInteger("LimitMEMLOCK");
+    }
+
+    public BigInteger getLimitMEMLOCKSoft() {
+        return properties.getBigInteger("LimitMEMLOCKSoft");
+    }
+
+    public BigInteger getLimitMSGQUEUE() {
+        return properties.getBigInteger("LimitMSGQUEUE");
+    }
+
+    public BigInteger getLimitMSGQUEUESoft() {
+        return properties.getBigInteger("LimitMSGQUEUESoft");
+    }
+
+    public BigInteger getLimitNICE() {
+        return properties.getBigInteger("LimitNICE");
+    }
+
+    public BigInteger getLimitNICESoft() {
+        return properties.getBigInteger("LimitNICESoft");
+    }
+
+    public BigInteger getLimitNOFILE() {
+        return properties.getBigInteger("LimitNOFILE");
+    }
+
+    public BigInteger getLimitNOFILESoft() {
+        return properties.getBigInteger("LimitNOFILESoft");
+    }
+
+    public BigInteger getLimitNPROC() {
+        return properties.getBigInteger("LimitNPROC");
+    }
+
+    public BigInteger getLimitNPROCSoft() {
+        return properties.getBigInteger("LimitNPROCSoft");
+    }
+
+    public BigInteger getLimitRSS() {
+        return properties.getBigInteger("LimitRSS");
+    }
+
+    public BigInteger getLimitRSSSoft() {
+        return properties.getBigInteger("LimitRSSSoft");
+    }
+
+    public BigInteger getLimitRTPRIO() {
+        return properties.getBigInteger("LimitRTPRIO");
+    }
+
+    public BigInteger getLimitRTPRIOSoft() {
+        return properties.getBigInteger("LimitRTPRIOSoft");
+    }
+
+    public BigInteger getLimitRTTIME() {
+        return properties.getBigInteger("LimitRTTIME");
+    }
+
+    public BigInteger getLimitRTTIMESoft() {
+        return properties.getBigInteger("LimitRTTIMESoft");
+    }
+
+    public BigInteger getLimitSIGPENDING() {
+        return properties.getBigInteger("LimitSIGPENDING");
+    }
+
+    public BigInteger getLimitSIGPENDINGSoft() {
+        return properties.getBigInteger("LimitSIGPENDINGSoft");
+    }
+
+    public BigInteger getLimitSTACK() {
+        return properties.getBigInteger("LimitSTACK");
+    }
+
+    public BigInteger getLimitSTACKSoft() {
+        return properties.getBigInteger("LimitSTACKSoft");
+    }
+
+    public boolean isMemoryAccounting() {
+        return properties.getBoolean("MemoryAccounting");
+    }
+
+    public BigInteger getMemoryCurrent() {
+        return properties.getBigInteger("MemoryCurrent");
+    }
+
+    public BigInteger getMemoryLimit() {
+        return properties.getBigInteger("MemoryLimit");
+    }
+
+    public BigInteger getMountFlags() {
+        return properties.getBigInteger("MountFlags");
+    }
+
+    public int getNice() {
+        return properties.getInteger("Nice");
+    }
+
+    public boolean isNoNewPrivileges() {
+        return properties.getBoolean("NoNewPrivileges");
+    }
+
+    public boolean isNonBlocking() {
+        return properties.getBoolean("NonBlocking");
+    }
+
+    public int getOOMScoreAdjust() {
+        return properties.getInteger("OOMScoreAdjust");
+    }
+
+    public String getOptions() {
+        return properties.getString("Options");
+    }
+
+    public String getPAMName() {
+        return properties.getString("PAMName");
+    }
+
+    public Vector<String> getPassEnvironment() {
+        return properties.getVector("PassEnvironment");
+    }
+
+    public String getPersonality() {
+        return properties.getString("Personality");
+    }
+
+    public boolean isPrivateDevices() {
+        return properties.getBoolean("PrivateDevices");
+    }
+
+    public boolean isPrivateNetwork() {
+        return properties.getBoolean("PrivateNetwork");
+    }
+
+    public boolean isPrivateTmp() {
+        return properties.getBoolean("PrivateTmp");
+    }
+
+    public String getProtectHome() {
+        return properties.getString("ProtectHome");
+    }
+
+    public String getProtectSystem() {
+        return properties.getString("ProtectSystem");
+    }
+
+    public Vector<String> getReadOnlyDirectories() {
+        return properties.getVector("ReadOnlyDirectories");
+    }
+
+    public Vector<String> getReadWriteDirectories() {
+        return properties.getVector("ReadWriteDirectories");
+    }
+
+    public AddressFamilyRestriction getRestrictAddressFamilies() {
+        Object[] array = (Object[]) properties.getVariant("RestrictAddressFamilies").getValue();
+
+        return new AddressFamilyRestriction(array);
+    }
+
+    public String getResult() {
+        return properties.getString("Result");
+    }
+
+    public String getRootDirectory() {
+        return properties.getString("RootDirectory");
+    }
+
+    public Vector<String> getRuntimeDirectory() {
+        return properties.getVector("RuntimeDirectory");
+    }
+
+    public long getRuntimeDirectoryMode() {
+        return properties.getLong("RuntimeDirectoryMode");
+    }
+
+    public SELinuxContext getSELinuxContext() {
+        Object[] array = (Object[]) properties.getVariant("SELinuxContext").getValue();
+
+        return new SELinuxContext(array);
+    }
+
+    public boolean isSameProcessGroup() {
+        return properties.getBoolean("SameProcessGroup");
+    }
+
+    public int getSecureBits() {
+        return properties.getInteger("SecureBits");
+    }
+
+    public boolean isSendSIGHUP() {
+        return properties.getBoolean("SendSIGHUP");
+    }
+
+    public boolean isSendSIGKILL() {
+        return properties.getBoolean("SendSIGKILL");
+    }
+
+    public String getSlice() {
+        return properties.getString("Slice");
+    }
+
+    public boolean isSloppyOptions() {
+        return properties.getBoolean("SloppyOptions");
+    }
+
+    public SmackProcessLabel getSmackProcessLabel() {
+        Object[] array = (Object[]) properties.getVariant("SmackProcessLabel").getValue();
+
+        return new SmackProcessLabel(array);
+    }
+
+    public String getStandardError() {
+        return properties.getString("StandardError");
+    }
+
+    public String getStandardInput() {
+        return properties.getString("StandardInput");
+    }
+
+    public String getStandardOutput() {
+        return properties.getString("StandardOutput");
+    }
+
+    public BigInteger getStartupBlockIOWeight() {
+        return properties.getBigInteger("StartupBlockIOWeight");
+    }
+
+    public BigInteger getStartupCPUShares() {
+        return properties.getBigInteger("StartupCPUShares");
+    }
+
+    public Vector<String> getSupplementaryGroups() {
+        return properties.getVector("SupplementaryGroups");
+    }
+
+    public int getSyslogFacility() {
+        return properties.getInteger("SyslogFacility");
+    }
+
+    public String getSyslogIdentifier() {
+        return properties.getString("SyslogIdentifier");
+    }
+
+    public int getSyslogLevel() {
+        return properties.getInteger("SyslogLevel");
+    }
+
+    public boolean isSyslogLevelPrefix() {
+        return properties.getBoolean("SyslogLevelPrefix");
+    }
+
+    public int getSyslogPriority() {
+        return properties.getInteger("SyslogPriority");
+    }
+
+    public Vector<String> getSystemCallArchitectures() {
+        return properties.getVector("SystemCallArchitectures");
+    }
+
+    public int getSystemCallErrorNumber() {
+        return properties.getInteger("SystemCallErrorNumber");
+    }
+
+    public SystemCallFilter getSystemCallFilter() {
+        Object[] array = (Object[]) properties.getVariant("SystemCallFilter").getValue();
+
+        return new SystemCallFilter(array);
+    }
+
+    public String getTTYPath() {
+        return properties.getString("TTYPath");
+    }
+
+    public boolean isTTYReset() {
+        return properties.getBoolean("TTYReset");
+    }
+
+    public boolean isTTYVHangup() {
+        return properties.getBoolean("TTYVHangup");
+    }
+
+    public boolean isTTYVTDisallocate() {
+        return properties.getBoolean("TTYVTDisallocate");
+    }
+
+    public boolean isTasksAccounting() {
+        return properties.getBoolean("TasksAccounting");
+    }
+
+    public BigInteger getTasksCurrent() {
+        return properties.getBigInteger("TasksCurrent");
+    }
+
+    public BigInteger getTasksMax() {
+        return properties.getBigInteger("TasksMax");
+    }
+
+    public long getTimeoutUSec() {
+        return properties.getLong("TimeoutUSec");
+    }
+
+    public long getTimerSlackNSec() {
+        return properties.getLong("TimerSlackNSec");
+    }
+
+    public String getType() {
+        return properties.getString("Type");
+    }
+
+    public long getUMask() {
+        return properties.getLong("UMask");
+    }
+
+    public String getUser() {
+        return properties.getString("User");
+    }
+
+    public String getUtmpIdentifier() {
+        return properties.getString("UtmpIdentifier");
+    }
+
+    public String getUtmpMode() {
+        return properties.getString("UtmpMode");
+    }
+
+    public String getWhat() {
+        return properties.getString("What");
+    }
+
+    public String getWhere() {
+        return properties.getString("Where");
+    }
+
+    public String getWorkingDirectory() {
+        return properties.getString("WorkingDirectory");
+    }
 
 }
