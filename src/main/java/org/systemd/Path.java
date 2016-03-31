@@ -42,24 +42,31 @@ public class Path extends Unit {
         return (PathInterface) super.getInterface();
     }
 
-    public String getUnit() {
-        return properties.getString("Unit");
+    public long getDirectoryMode() {
+        return properties.getLong("DirectoryMode");
     }
-
-/*
-readonly a(ss) Paths = [('PathExistsGlob', '/var/spool/cups/d*')];
- */
 
     public boolean isMakeDirectory() {
         return properties.getBoolean("MakeDirectory");
     }
 
-    public long getDirectoryMode() {
-        return properties.getLong("DirectoryMode");
-    }
+    /*
+     * TODO 'Paths', see https://www.freedesktop.org/wiki/Software/systemd/dbus/
+     *
+     * Paths contains an array of structs. Each struct contains the condition to watch, which can be
+     * one of PathExists, PathExistsGlob, PathChanged, PathModified, DirectoryNotEmpty which correspond
+     * directly to the matching settings in the path unit files; and the path to watch, possibly including
+     * glob expressions.
+     *
+     * readonly a(ss) Paths = [('PathExistsGlob', '/var/spool/cups/d*')];
+     */
 
     public String getResult() {
         return properties.getString("Result");
+    }
+
+    public String getUnit() {
+        return properties.getString("Unit");
     }
 
 }
