@@ -11,9 +11,15 @@
 
 package org.systemd;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.SliceInterface;
+import org.systemd.types.BlockIOBandwidth;
+import org.systemd.types.BlockIODeviceWeight;
+import org.systemd.types.DeviceAllowControl;
 
 public class Slice extends Unit {
 
@@ -42,24 +48,56 @@ public class Slice extends Unit {
         return (SliceInterface) super.getInterface();
     }
 
+    public boolean isBlockIOAccounting() {
+        return properties.getBoolean("BlockIOAccounting");
+    }
+
+    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
+        return BlockIODeviceWeight.list(properties.getVector("BlockIODeviceWeight"));
+    }
+
+    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
+        return BlockIOBandwidth.list(properties.getVector("BlockIOReadBandwidth"));
+    }
+
+    public BigInteger getBlockIOWeight() {
+        return properties.getBigInteger("BlockIOWeight");
+    }
+
+    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
+        return BlockIOBandwidth.list(properties.getVector("BlockIOWriteBandwidth"));
+    }
+
+    public boolean isCPUAccounting() {
+        return properties.getBoolean("CPUAccounting");
+    }
+
+    public BigInteger getCPUShares() {
+        return properties.getBigInteger("CPUShares");
+    }
+
+    public String getControlGroup() {
+        return properties.getString("ControlGroup");
+    }
+
+    public List<DeviceAllowControl> getDeviceAllow() {
+        return DeviceAllowControl.list(properties.getVector("DeviceAllow"));
+    }
+
+    public String getDevicePolicy() {
+        return properties.getString("DevicePolicy");
+    }
+
+    public boolean isMemoryAccounting() {
+        return properties.getBoolean("MemoryAccounting");
+    }
+
+    public BigInteger getMemoryLimit() {
+        return properties.getBigInteger("MemoryLimit");
+    }
+
     public String getSlice() {
         return properties.getString("Slice");
     }
-
-/*
-  readonly s Slice = '-.slice';
-readonly s ControlGroup = '/system.slice';
-readonly b CPUAccounting = false;
-readonly t CPUShares = 1024;
-readonly b BlockIOAccounting = false;
-readonly t BlockIOWeight = 1000;
-readonly a(st) BlockIODeviceWeight = [];
-readonly a(st) BlockIOReadBandwidth=;
-readonly a(st) BlockIOWriteBandwidth=;
-readonly b MemoryAccounting = false;
-readonly t MemoryLimit = 18446744073709551615;
-readonly s DevicePolicy = 'auto';
-readonly a(ss) DeviceAllow = [];
- */
 
 }
