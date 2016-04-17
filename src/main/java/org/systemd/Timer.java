@@ -24,6 +24,25 @@ public class Timer extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Timer";
     public static final String UNIT_SUFFIX = ".timer";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String UNIT = "Unit";
+        public static final String TIMERS_MONOTONIC = "TimersMonotonic";
+        public static final String TIMERS_CALENDAR = "TimersCalendar";
+        public static final String NEXT_ELAPSE_USEC_REALTIME = "NextElapseUSecRealtime";
+        public static final String NEXT_ELAPSE_USEC_MONOTONIC = "NextElapseUSecMonotonic";
+        public static final String RESULT = "Result";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Timer(final DBusConnection dbus, final TimerInterface iface, final String name) throws DBusException {
@@ -47,27 +66,27 @@ public class Timer extends Unit {
     }
 
     public String getUnit() {
-        return properties.getString("Unit");
+        return properties.getString(Property.UNIT);
     }
 
     public List<TimersMonotonic> getTimersMonotonic() {
-        return TimersMonotonic.list(properties.getVector("TimersMonotonic"));
+        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
     }
 
     public List<TimersCalendar> getTimersCalendar() {
-        return TimersCalendar.list(properties.getVector("TimersCalendar"));
+        return TimersCalendar.list(properties.getVector(Property.TIMERS_CALENDAR));
     }
 
     public long getNextElapseUSecRealtime() {
-        return properties.getLong("NextElapseUSecRealtime");
+        return properties.getLong(Property.NEXT_ELAPSE_USEC_REALTIME);
     }
 
     public long getNextElapseUSecMonotonic() {
-        return properties.getLong("NextElapseUSecMonotonic");
+        return properties.getLong(Property.NEXT_ELAPSE_USEC_MONOTONIC);
     }
 
     public String getResult() {
-        return properties.getString("Result");
+        return properties.getString(Property.RESULT);
     }
 
 }

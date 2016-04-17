@@ -75,6 +75,85 @@ public abstract class Unit extends InterfaceAdapter {
 
     }
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String ACTIVE_ENTER_TIMESTAMP = "ActiveEnterTimestamp";
+        public static final String ACTIVE_ENTER_TIMESTAMP_MONOTONIC = "ActiveEnterTimestampMonotonic";
+        public static final String ACTIVE_EXIT_TIMESTAMP = "ActiveExitTimestamp";
+        public static final String ACTIVE_EXIT_TIMESTAMP_MONOTONIC = "ActiveExitTimestampMonotonic";
+        public static final String ACTIVE_STATE = "ActiveState";
+        public static final String AFTER = "After";
+        public static final String ALLOW_ISOLATE = "AllowIsolate";
+        public static final String ASSERT_RESULT = "AssertResult";
+        public static final String ASSERT_TIMESTAMP = "AssertTimestamp";
+        public static final String ASSERT_TIMESTAMP_MONOTONIC = "AssertTimestampMonotonic";
+        public static final String ASSERTS = "Asserts";
+        public static final String BEFORE = "Before";
+        public static final String BINDS_TO = "BindsTo";
+        public static final String BOUND_BY = "BoundBy";
+        public static final String CAN_ISOLATE = "CanIsolate";
+        public static final String CAN_RELOAD = "CanReload";
+        public static final String CAN_START = "CanStart";
+        public static final String CAN_STOP = "CanStop";
+        public static final String CONDITION_RESULT = "ConditionResult";
+        public static final String CONDITION_TIMESTAMP = "ConditionTimestamp";
+        public static final String CONDITION_TIMESTAMP_MONOTONIC = "ConditionTimestampMonotonic";
+        public static final String CONDITIONS = "Conditions";
+        public static final String CONFLICTED_BY = "ConflictedBy";
+        public static final String CONFLICTS = "Conflicts";
+        public static final String CONSISTS_OF = "ConsistsOf";
+        public static final String DEFAULT_DEPENDENCIES = "DefaultDependencies";
+        public static final String DESCRIPTION = "Description";
+        public static final String DOCUMENTATION = "Documentation";
+        public static final String DROP_IN_PATHS = "DropInPaths";
+        public static final String FOLLOWING = "Following";
+        public static final String FRAGMENT_PATH = "FragmentPath";
+        public static final String ID = "Id";
+        public static final String IGNORE_ON_ISOLATE = "IgnoreOnIsolate";
+        public static final String INACTIVE_ENTER_TIMESTAMP = "InactiveEnterTimestamp";
+        public static final String INACTIVE_ENTER_TIMESTAMP_MONOTONIC = "InactiveEnterTimestampMonotonic";
+        public static final String INACTIVE_EXIT_TIMESTAMP = "InactiveExitTimestamp";
+        public static final String INACTIVE_EXIT_TIMESTAMP_MONOTONIC = "InactiveExitTimestampMonotonic";
+        public static final String JOB = "Job";
+        public static final String JOB_TIMEOUT_ACTION = "JobTimeoutAction";
+        public static final String JOB_TIMEOUT_REBOOT_ARGUMENT = "JobTimeoutRebootArgument";
+        public static final String JOB_TIMEOUT_USEC = "JobTimeoutUSec";
+        public static final String JOINS_NAMESPACE_OF = "JoinsNamespaceOf";
+        public static final String LOAD_ERROR = "LoadError";
+        public static final String LOAD_STATE = "LoadState";
+        public static final String NAMES = "Names";
+        public static final String NEED_DAEMON_RELOAD = "NeedDaemonReload";
+        public static final String ON_FAILURE = "OnFailure";
+        public static final String ON_FAILURE_JOB_MODE = "OnFailureJobMode";
+        public static final String PART_OF = "PartOf";
+        public static final String PROPAGATES_RELOAD_TO = "PropagatesReloadTo";
+        public static final String REFUSE_MANUAL_START = "RefuseManualStart";
+        public static final String REFUSE_MANUAL_STOP = "RefuseManualStop";
+        public static final String RELOAD_PROPAGATED_FROM = "ReloadPropagatedFrom";
+        public static final String REQUIRED_BY = "RequiredBy";
+        public static final String REQUIRES = "Requires";
+        public static final String REQUIRES_MOUNTS_FOR = "RequiresMountsFor";
+        public static final String REQUISITE = "Requisite";
+        public static final String REQUISITE_OF = "RequisiteOf";
+        public static final String SOURCE_PATH = "SourcePath";
+        public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
+        public static final String SUB_STATE = "SubState";
+        public static final String TRANSIENT = "Transient";
+        public static final String TRIGGERED_BY = "TriggeredBy";
+        public static final String TRIGGERS = "Triggers";
+        public static final String WANTED_BY = "WantedBy";
+        public static final String WANTS = "Wants";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     protected final String name;
 
     private final Properties properties;
@@ -170,271 +249,271 @@ public abstract class Unit extends InterfaceAdapter {
     }
 
     public long getActiveEnterTimestamp() {
-        return properties.getLong("ActiveEnterTimestamp");
+        return properties.getLong(Property.ACTIVE_ENTER_TIMESTAMP);
     }
 
     public long getActiveEnterTimestampMonotonic() {
-        return properties.getLong("ActiveEnterTimestampMonotonic");
+        return properties.getLong(Property.ACTIVE_ENTER_TIMESTAMP_MONOTONIC);
     }
 
     public long getActiveExitTimestamp() {
-        return properties.getLong("ActiveExitTimestamp");
+        return properties.getLong(Property.ACTIVE_EXIT_TIMESTAMP);
     }
 
     public long getActiveExitTimestampMonotonic() {
-        return properties.getLong("ActiveExitTimestampMonotonic");
+        return properties.getLong(Property.ACTIVE_EXIT_TIMESTAMP_MONOTONIC);
     }
 
     public String getActiveState() {
-        return properties.getString("ActiveState");
+        return properties.getString(Property.ACTIVE_STATE);
     }
 
     public Vector<String> getAfter() {
-        return properties.getVector("After");
+        return properties.getVector(Property.AFTER);
     }
 
     public boolean isAllowIsolate() {
-        return properties.getBoolean("AllowIsolate");
+        return properties.getBoolean(Property.ALLOW_ISOLATE);
     }
 
     public boolean isAssertResult() {
-        return properties.getBoolean("AssertResult");
+        return properties.getBoolean(Property.ASSERT_RESULT);
     }
 
     public long getAssertTimestamp() {
-        return properties.getLong("AssertTimestamp");
+        return properties.getLong(Property.ASSERT_TIMESTAMP);
     }
 
     public long getAssertTimestampMonotonic() {
-        return properties.getLong("AssertTimestampMonotonic");
+        return properties.getLong(Property.ASSERT_TIMESTAMP_MONOTONIC);
     }
 
     public List<Condition> getAsserts() {
-        return Condition.list(properties.getVector("Asserts"));
+        return Condition.list(properties.getVector(Property.ASSERTS));
     }
 
     public Vector<String> getBefore() {
-        return properties.getVector("Before");
+        return properties.getVector(Property.BEFORE);
     }
 
     public Vector<String> getBindsTo() {
-        return properties.getVector("BindsTo");
+        return properties.getVector(Property.BINDS_TO);
     }
 
     public Vector<String> getBoundBy() {
-        return properties.getVector("BoundBy");
+        return properties.getVector(Property.BOUND_BY);
     }
 
     public boolean isCanIsolate() {
-        return properties.getBoolean("CanIsolate");
+        return properties.getBoolean(Property.CAN_ISOLATE);
     }
 
     public boolean isCanReload() {
-        return properties.getBoolean("CanReload");
+        return properties.getBoolean(Property.CAN_RELOAD);
     }
 
     public boolean isCanStart() {
-        return properties.getBoolean("CanStart");
+        return properties.getBoolean(Property.CAN_START);
     }
 
     public boolean isCanStop() {
-        return properties.getBoolean("CanStop");
+        return properties.getBoolean(Property.CAN_STOP);
     }
 
     public boolean getConditionResult() {
-        return properties.getBoolean("ConditionResult");
+        return properties.getBoolean(Property.CONDITION_RESULT);
     }
 
     public long getConditionTimestamp() {
-        return properties.getLong("ConditionTimestamp");
+        return properties.getLong(Property.CONDITION_TIMESTAMP);
     }
 
     public long getConditionTimestampMonotonic() {
-        return properties.getLong("ConditionTimestampMonotonic");
+        return properties.getLong(Property.CONDITION_TIMESTAMP_MONOTONIC);
     }
 
     public List<Condition> getConditions() {
-        return Condition.list(properties.getVector("Conditions"));
+        return Condition.list(properties.getVector(Property.CONDITIONS));
     }
 
     public Vector<String> getConflictedBy() {
-        return properties.getVector("ConflictedBy");
+        return properties.getVector(Property.CONFLICTED_BY);
     }
 
     public Vector<String> getConflicts() {
-        return properties.getVector("Conflicts");
+        return properties.getVector(Property.CONFLICTS);
     }
 
     public Vector<String> getConsistsOf() {
-        return properties.getVector("ConsistsOf");
+        return properties.getVector(Property.CONSISTS_OF);
     }
 
     public boolean isDefaultDependencies() {
-        return properties.getBoolean("DefaultDependencies");
+        return properties.getBoolean(Property.DEFAULT_DEPENDENCIES);
     }
 
     public String getDescription() {
-        return properties.getString("Description");
+        return properties.getString(Property.DESCRIPTION);
     }
 
     public Vector<String> getDocumentation() {
-        return properties.getVector("Documentation");
+        return properties.getVector(Property.DOCUMENTATION);
     }
 
     public Vector<String> getDropInPaths() {
-        return properties.getVector("DropInPaths");
+        return properties.getVector(Property.DROP_IN_PATHS);
     }
 
     public String getFollowing() {
-        return properties.getString("Following");
+        return properties.getString(Property.FOLLOWING);
     }
 
     public String getFragmentPath() {
-        return properties.getString("FragmentPath");
+        return properties.getString(Property.FRAGMENT_PATH);
     }
 
     public String getId() {
-        return properties.getString("Id");
+        return properties.getString(Property.ID);
     }
 
     public boolean isIgnoreOnIsolate() {
-        return properties.getBoolean("IgnoreOnIsolate");
+        return properties.getBoolean(Property.IGNORE_ON_ISOLATE);
     }
 
     public long getInactiveEnterTimestamp() {
-        return properties.getLong("InactiveEnterTimestamp");
+        return properties.getLong(Property.INACTIVE_ENTER_TIMESTAMP);
     }
 
     public long getInactiveEnterTimestampMonotonic() {
-        return properties.getLong("InactiveEnterTimestampMonotonic");
+        return properties.getLong(Property.INACTIVE_ENTER_TIMESTAMP_MONOTONIC);
     }
 
     public long getInactiveExitTimestamp() {
-        return properties.getLong("InactiveExitTimestamp");
+        return properties.getLong(Property.INACTIVE_EXIT_TIMESTAMP);
     }
 
     public long getInactiveExitTimestampMonotonic() {
-        return properties.getLong("InactiveExitTimestampMonotonic");
+        return properties.getLong(Property.INACTIVE_EXIT_TIMESTAMP_MONOTONIC);
     }
 
     public Job getJob() {
-        Object[] array = (Object[]) properties.getVariant("Job").getValue();
+        Object[] array = (Object[]) properties.getVariant(Property.JOB).getValue();
 
         return new Job(array);
     }
 
     public String getJobTimeoutAction() {
-        return properties.getString("JobTimeoutAction");
+        return properties.getString(Property.JOB_TIMEOUT_ACTION);
     }
 
     public String getJobTimeoutRebootArgument() {
-        return properties.getString("JobTimeoutRebootArgument");
+        return properties.getString(Property.JOB_TIMEOUT_REBOOT_ARGUMENT);
     }
 
     public long getJobTimeoutUSec() {
-        return properties.getLong("JobTimeoutUSec");
+        return properties.getLong(Property.JOB_TIMEOUT_USEC);
     }
 
     public Vector<String> getJoinsNamespaceOf() {
-        return properties.getVector("JoinsNamespaceOf");
+        return properties.getVector(Property.JOINS_NAMESPACE_OF);
     }
 
     public LoadError getLoadError() {
-    	Object[] array = (Object[]) properties.getVariant("LoadError").getValue();
+    	Object[] array = (Object[]) properties.getVariant(Property.LOAD_ERROR).getValue();
 
     	return new LoadError(array);
     }
 
     public String getLoadState() {
-        return properties.getString("LoadState");
+        return properties.getString(Property.LOAD_STATE);
     }
 
     public Vector<String> getNames() {
-        return properties.getVector("Names");
+        return properties.getVector(Property.NAMES);
     }
 
     public boolean isNeedDaemonReload() {
-        return properties.getBoolean("NeedDaemonReload");
+        return properties.getBoolean(Property.NEED_DAEMON_RELOAD);
     }
 
     public Vector<String> getOnFailure() {
-        return properties.getVector("OnFailure");
+        return properties.getVector(Property.ON_FAILURE);
     }
 
     public String getOnFailureJobMode() {
-        return properties.getString("OnFailureJobMode");
+        return properties.getString(Property.ON_FAILURE_JOB_MODE);
     }
 
     public Vector<String> getPartOf() {
-        return properties.getVector("PartOf");
+        return properties.getVector(Property.PART_OF);
     }
 
     public Vector<String> getPropagatesReloadTo() {
-        return properties.getVector("PropagatesReloadTo");
+        return properties.getVector(Property.PROPAGATES_RELOAD_TO);
     }
 
     public boolean isRefuseManualStart() {
-        return properties.getBoolean("RefuseManualStart");
+        return properties.getBoolean(Property.REFUSE_MANUAL_START);
     }
 
     public boolean isRefuseManualStop() {
-        return properties.getBoolean("RefuseManualStop");
+        return properties.getBoolean(Property.REFUSE_MANUAL_STOP);
     }
 
     public Vector<String> getReloadPropagatedFrom() {
-        return properties.getVector("ReloadPropagatedFrom");
+        return properties.getVector(Property.RELOAD_PROPAGATED_FROM);
     }
 
     public Vector<String> getRequiredBy() {
-        return properties.getVector("RequiredBy");
+        return properties.getVector(Property.REQUIRED_BY);
     }
 
     public Vector<String> getRequires() {
-        return properties.getVector("Requires");
+        return properties.getVector(Property.REQUIRES);
     }
 
     public Vector<String> getRequiresMountsFor() {
-        return properties.getVector("RequiresMountsFor");
+        return properties.getVector(Property.REQUIRES_MOUNTS_FOR);
     }
 
     public Vector<String> getRequisite() {
-        return properties.getVector("Requisite");
+        return properties.getVector(Property.REQUISITE);
     }
 
     public Vector<String> getRequisiteOf() {
-        return properties.getVector("RequisiteOf");
+        return properties.getVector(Property.REQUISITE_OF);
     }
 
     public String getSourcePath() {
-        return properties.getString("SourcePath");
+        return properties.getString(Property.SOURCE_PATH);
     }
 
     public boolean isStopWhenUnneeded() {
-        return properties.getBoolean("StopWhenUnneeded");
+        return properties.getBoolean(Property.STOP_WHEN_UNNEEDED);
     }
 
     public String getSubState() {
-        return properties.getString("SubState");
+        return properties.getString(Property.SUB_STATE);
     }
 
     public boolean isTransient() {
-        return properties.getBoolean("Transient");
+        return properties.getBoolean(Property.TRANSIENT);
     }
 
     public Vector<String> getTriggeredBy() {
-        return properties.getVector("TriggeredBy");
+        return properties.getVector(Property.TRIGGERED_BY);
     }
 
     public Vector<String> getTriggers() {
-        return properties.getVector("Triggers");
+        return properties.getVector(Property.TRIGGERS);
     }
 
     public Vector<String> getWantedBy() {
-        return properties.getVector("WantedBy");
+        return properties.getVector(Property.WANTED_BY);
     }
 
     public Vector<String> getWants() {
-        return properties.getVector("Wants");
+        return properties.getVector(Property.WANTS);
     }
 
     @Override

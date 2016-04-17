@@ -20,6 +20,22 @@ public class Automount extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Automount";
     public static final String UNIT_SUFFIX = ".automount";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String WHERE = "Where";
+        public static final String DIRECTORY_MODE = "DirectoryMode";
+        public static final String RESULT = "Result";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Automount(final DBusConnection dbus, final AutomountInterface iface, final String name) throws DBusException {
@@ -43,15 +59,15 @@ public class Automount extends Unit {
     }
 
     public String getWhere() {
-        return properties.getString("Where");
+        return properties.getString(Property.WHERE);
     }
 
     public long getDirectoryMode() {
-        return properties.getLong("DirectoryMode");
+        return properties.getLong(Property.DIRECTORY_MODE);
     }
 
     public String getResult() {
-        return properties.getString("Result");
+        return properties.getString(Property.RESULT);
     }
 
 }

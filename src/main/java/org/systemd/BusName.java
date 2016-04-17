@@ -20,6 +20,25 @@ public class BusName extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".BusName";
     public static final String UNIT_SUFFIX = ".busname";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String ACCEPT_FILE_DESCRIPTORS = "AcceptFileDescriptors";
+        public static final String ACTIVATING = "Activating";
+        public static final String CONTROL_PID = "ControlPID";
+        public static final String NAME = "Name";
+        public static final String RESULT = "Result";
+        public static final String TIMEOUT_USEC = "TimeoutUSec";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private BusName(final DBusConnection dbus, final BusNameInterface iface, final String name) throws DBusException {
@@ -43,27 +62,27 @@ public class BusName extends Unit {
     }
 
     public boolean isAcceptFileDescriptors() {
-        return properties.getBoolean("AcceptFileDescriptors");
+        return properties.getBoolean(Property.ACCEPT_FILE_DESCRIPTORS);
     }
 
     public boolean isActivating() {
-        return properties.getBoolean("Activating");
+        return properties.getBoolean(Property.ACTIVATING);
     }
 
     public long getControlPID() {
-        return properties.getLong("ControlPID");
+        return properties.getLong(Property.CONTROL_PID);
     }
 
     public String getName() {
-        return properties.getString("Name");
+        return properties.getString(Property.NAME);
     }
 
     public String getResult() {
-        return properties.getString("Result");
+        return properties.getString(Property.RESULT);
     }
 
     public long getTimeoutUSec() {
-        return properties.getLong("TimeoutUSec");
+        return properties.getLong(Property.TIMEOUT_USEC);
     }
 
 }

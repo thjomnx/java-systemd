@@ -20,6 +20,20 @@ public class Device extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Device";
     public static final String UNIT_SUFFIX = ".device";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String SYS_FSPATH = "SysFSPath";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Device(final DBusConnection dbus, final DeviceInterface iface, final String name) throws DBusException {
@@ -43,7 +57,7 @@ public class Device extends Unit {
     }
 
     public String getSysFSPath() {
-        return properties.getString("SysFSPath");
+        return properties.getString(Property.SYS_FSPATH);
     }
 
 }

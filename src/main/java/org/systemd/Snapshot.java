@@ -20,6 +20,20 @@ public class Snapshot extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Snapshot";
     public static final String UNIT_SUFFIX = ".snapshot";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String CLEANUP = "Cleanup";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Snapshot(final DBusConnection dbus, final SnapshotInterface iface, final String name) throws DBusException {
@@ -43,7 +57,7 @@ public class Snapshot extends Unit {
     }
 
     public boolean isCleanup() {
-        return properties.getBoolean("Cleanup");
+        return properties.getBoolean(Property.CLEANUP);
     }
 
 }

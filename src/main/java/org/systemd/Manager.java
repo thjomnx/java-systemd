@@ -26,6 +26,95 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Manager";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String ARCHITECTURE = "Architecture";
+        public static final String CONFIRM_SPAWN = "ConfirmSpawn";
+        public static final String CONTROL_GROUP = "ControlGroup";
+        public static final String DEFAULT_BLOCK_IOACCOUNTING = "DefaultBlockIOAccounting";
+        public static final String DEFAULT_CPUACCOUNTING = "DefaultCPUAccounting";
+        public static final String DEFAULT_LIMIT_AS = "DefaultLimitAS";
+        public static final String DEFAULT_LIMIT_CORE = "DefaultLimitCORE";
+        public static final String DEFAULT_LIMIT_CPU = "DefaultLimitCPU";
+        public static final String DEFAULT_LIMIT_DATA = "DefaultLimitDATA";
+        public static final String DEFAULT_LIMIT_FSIZE = "DefaultLimitFSIZE";
+        public static final String DEFAULT_LIMIT_LOCKS = "DefaultLimitLOCKS";
+        public static final String DEFAULT_LIMIT_MEMLOCK = "DefaultLimitMEMLOCK";
+        public static final String DEFAULT_LIMIT_MSGQUEUE = "DefaultLimitMSGQUEUE";
+        public static final String DEFAULT_LIMIT_NICE = "DefaultLimitNICE";
+        public static final String DEFAULT_LIMIT_NOFILE = "DefaultLimitNOFILE";
+        public static final String DEFAULT_LIMIT_NPROC = "DefaultLimitNPROC";
+        public static final String DEFAULT_LIMIT_RSS = "DefaultLimitRSS";
+        public static final String DEFAULT_LIMIT_RTPRIO = "DefaultLimitRTPRIO";
+        public static final String DEFAULT_LIMIT_RTTIME = "DefaultLimitRTTIME";
+        public static final String DEFAULT_LIMIT_SIGPENDING = "DefaultLimitSIGPENDING";
+        public static final String DEFAULT_LIMIT_STACK = "DefaultLimitSTACK";
+        public static final String DEFAULT_MEMORY_ACCOUNTING = "DefaultMemoryAccounting";
+        public static final String DEFAULT_RESTART_USEC = "DefaultRestartUSec";
+        public static final String DEFAULT_STANDARD_ERROR = "DefaultStandardError";
+        public static final String DEFAULT_STANDARD_OUTPUT = "DefaultStandardOutput";
+        public static final String DEFAULT_START_LIMIT_BURST = "DefaultStartLimitBurst";
+        public static final String DEFAULT_START_LIMIT_INTERVAL = "DefaultStartLimitInterval";
+        public static final String DEFAULT_TASKS_ACCOUNTING = "DefaultTasksAccounting";
+        public static final String DEFAULT_TASKS_MAX = "DefaultTasksMax";
+        public static final String DEFAULT_TIMEOUT_START_USEC = "DefaultTimeoutStartUSec";
+        public static final String DEFAULT_TIMEOUT_STOP_USEC = "DefaultTimeoutStopUSec";
+        public static final String DEFAULT_TIMER_ACCURACY_USEC = "DefaultTimerAccuracyUSec";
+        public static final String ENVIRONMENT = "Environment";
+        public static final String EXIT_CODE = "ExitCode";
+        public static final String FEATURES = "Features";
+        public static final String FINISH_TIMESTAMP = "FinishTimestamp";
+        public static final String FINISH_TIMESTAMP_MONOTONIC = "FinishTimestampMonotonic";
+        public static final String FIRMWARE_TIMESTAMP = "FirmwareTimestamp";
+        public static final String FIRMWARE_TIMESTAMP_MONOTONIC = "FirmwareTimestampMonotonic";
+        public static final String GENERATORS_FINISH_TIMESTAMP = "GeneratorsFinishTimestamp";
+        public static final String GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "GeneratorsFinishTimestampMonotonic";
+        public static final String GENERATORS_START_TIMESTAMP = "GeneratorsStartTimestamp";
+        public static final String GENERATORS_START_TIMESTAMP_MONOTONIC = "GeneratorsStartTimestampMonotonic";
+        public static final String INIT_RDTIMESTAMP = "InitRDTimestamp";
+        public static final String INIT_RDTIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
+        public static final String KERNEL_TIMESTAMP = "KernelTimestamp";
+        public static final String KERNEL_TIMESTAMP_MONOTONIC = "KernelTimestampMonotonic";
+        public static final String LOADER_TIMESTAMP = "LoaderTimestamp";
+        public static final String LOADER_TIMESTAMP_MONOTONIC = "LoaderTimestampMonotonic";
+        public static final String LOG_LEVEL = "LogLevel";
+        public static final String LOG_TARGET = "LogTarget";
+        public static final String NFAILED_JOBS = "NFailedJobs";
+        public static final String NFAILED_UNITS = "NFailedUnits";
+        public static final String NINSTALLED_JOBS = "NInstalledJobs";
+        public static final String NJOBS = "NJobs";
+        public static final String NNAMES = "NNames";
+        public static final String PROGRESS = "Progress";
+        public static final String RUNTIME_WATCHDOG_USEC = "RuntimeWatchdogUSec";
+        public static final String SECURITY_FINISH_TIMESTAMP = "SecurityFinishTimestamp";
+        public static final String SECURITY_FINISH_TIMESTAMP_MONOTONIC = "SecurityFinishTimestampMonotonic";
+        public static final String SECURITY_START_TIMESTAMP = "SecurityStartTimestamp";
+        public static final String SECURITY_START_TIMESTAMP_MONOTONIC = "SecurityStartTimestampMonotonic";
+        public static final String SHOW_STATUS = "ShowStatus";
+        public static final String SHUTDOWN_WATCHDOG_USEC = "ShutdownWatchdogUSec";
+        public static final String SYSTEM_STATE = "SystemState";
+        public static final String TAINTED = "Tainted";
+        public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
+        public static final String UNIT_PATH = "UnitPath";
+        public static final String UNITS_LOAD_FINISH_TIMESTAMP = "UnitsLoadFinishTimestamp";
+        public static final String UNITS_LOAD_FINISH_TIMESTAMP_MONOTONIC = "UnitsLoadFinishTimestampMonotonic";
+        public static final String UNITS_LOAD_START_TIMESTAMP = "UnitsLoadStartTimestamp";
+        public static final String UNITS_LOAD_START_TIMESTAMP_MONOTONIC = "UnitsLoadStartTimestampMonotonic";
+        public static final String USERSPACE_TIMESTAMP = "UserspaceTimestamp";
+        public static final String USERSPACE_TIMESTAMP_MONOTONIC = "UserspaceTimestampMonotonic";
+        public static final String VERSION = "Version";
+        public static final String VIRTUALIZATION = "Virtualization";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Manager(final DBusConnection dbus, final ManagerInterface iface) throws DBusException {
@@ -167,307 +256,307 @@ public class Manager extends InterfaceAdapter {
     }
 
     public String getArchitecture() {
-        return properties.getString("Architecture");
+        return properties.getString(Property.ARCHITECTURE);
     }
 
     public boolean isConfirmSpawn() {
-        return properties.getBoolean("ConfirmSpawn");
+        return properties.getBoolean(Property.CONFIRM_SPAWN);
     }
 
     public String getControlGroup() {
-        return properties.getString("ControlGroup");
+        return properties.getString(Property.CONTROL_GROUP);
     }
 
     public boolean isDefaultBlockIOAccounting() {
-        return properties.getBoolean("DefaultBlockIOAccounting");
+        return properties.getBoolean(Property.DEFAULT_BLOCK_IOACCOUNTING);
     }
 
     public boolean isDefaultCPUAccounting() {
-        return properties.getBoolean("DefaultCPUAccounting");
+        return properties.getBoolean(Property.DEFAULT_CPUACCOUNTING);
     }
 
     public BigInteger getDefaultLimitAS() {
-        return properties.getBigInteger("DefaultLimitAS");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_AS);
     }
 
     public BigInteger getDefaultLimitCORE() {
-        return properties.getBigInteger("DefaultLimitCORE");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_CORE);
     }
 
     public BigInteger getDefaultLimitCPU() {
-        return properties.getBigInteger("DefaultLimitCPU");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_CPU);
     }
 
     public BigInteger getDefaultLimitDATA() {
-        return properties.getBigInteger("DefaultLimitDATA");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_DATA);
     }
 
     public BigInteger getDefaultLimitFSIZE() {
-        return properties.getBigInteger("DefaultLimitFSIZE");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_FSIZE);
     }
 
     public BigInteger getDefaultLimitLOCKS() {
-        return properties.getBigInteger("DefaultLimitLOCKS");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_LOCKS);
     }
 
     public BigInteger getDefaultLimitMEMLOCK() {
-        return properties.getBigInteger("DefaultLimitMEMLOCK");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_MEMLOCK);
     }
 
     public BigInteger getDefaultLimitMSGQUEUE() {
-        return properties.getBigInteger("DefaultLimitMSGQUEUE");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_MSGQUEUE);
     }
 
     public BigInteger getDefaultLimitNICE() {
-        return properties.getBigInteger("DefaultLimitNICE");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NICE);
     }
 
     public BigInteger getDefaultLimitNOFILE() {
-        return properties.getBigInteger("DefaultLimitNOFILE");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NOFILE);
     }
 
     public BigInteger getDefaultLimitNPROC() {
-        return properties.getBigInteger("DefaultLimitNPROC");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NPROC);
     }
 
     public BigInteger getDefaultLimitRSS() {
-        return properties.getBigInteger("DefaultLimitRSS");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RSS);
     }
 
     public BigInteger getDefaultLimitRTPRIO() {
-        return properties.getBigInteger("DefaultLimitRTPRIO");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RTPRIO);
     }
 
     public BigInteger getDefaultLimitRTTIME() {
-        return properties.getBigInteger("DefaultLimitRTTIME");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RTTIME);
     }
 
     public BigInteger getDefaultLimitSIGPENDING() {
-        return properties.getBigInteger("DefaultLimitSIGPENDING");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_SIGPENDING);
     }
 
     public BigInteger getDefaultLimitSTACK() {
-        return properties.getBigInteger("DefaultLimitSTACK");
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_STACK);
     }
 
     public boolean isDefaultMemoryAccounting() {
-        return properties.getBoolean("DefaultMemoryAccounting");
+        return properties.getBoolean(Property.DEFAULT_MEMORY_ACCOUNTING);
     }
 
     public long getDefaultRestartUSec() {
-        return properties.getLong("DefaultRestartUSec");
+        return properties.getLong(Property.DEFAULT_RESTART_USEC);
     }
 
     public String getDefaultStandardError() {
-        return properties.getString("DefaultStandardError");
+        return properties.getString(Property.DEFAULT_STANDARD_ERROR);
     }
 
     public String getDefaultStandardOutput() {
-        return properties.getString("DefaultStandardOutput");
+        return properties.getString(Property.DEFAULT_STANDARD_OUTPUT);
     }
 
     public long getDefaultStartLimitBurst() {
-        return properties.getLong("DefaultStartLimitBurst");
+        return properties.getLong(Property.DEFAULT_START_LIMIT_BURST);
     }
 
     public BigInteger getDefaultStartLimitInterval() {
-        return properties.getBigInteger("DefaultStartLimitInterval");
+        return properties.getBigInteger(Property.DEFAULT_START_LIMIT_INTERVAL);
     }
 
     public boolean isDefaultTasksAccounting() {
-        return properties.getBoolean("DefaultTasksAccounting");
+        return properties.getBoolean(Property.DEFAULT_TASKS_ACCOUNTING);
     }
 
     public BigInteger getDefaultTasksMax() {
-        return properties.getBigInteger("DefaultTasksMax");
+        return properties.getBigInteger(Property.DEFAULT_TASKS_MAX);
     }
 
     public long getDefaultTimeoutStartUSec() {
-        return properties.getLong("DefaultTimeoutStartUSec");
+        return properties.getLong(Property.DEFAULT_TIMEOUT_START_USEC);
     }
 
     public long getDefaultTimeoutStopUSec() {
-        return properties.getLong("DefaultTimeoutStopUSec");
+        return properties.getLong(Property.DEFAULT_TIMEOUT_STOP_USEC);
     }
 
     public long getDefaultTimerAccuracyUSec() {
-        return properties.getLong("DefaultTimerAccuracyUSec");
+        return properties.getLong(Property.DEFAULT_TIMER_ACCURACY_USEC);
     }
 
     public Vector<String> getEnvironment() {
-        return properties.getVector("Environment");
+        return properties.getVector(Property.ENVIRONMENT);
     }
 
     public byte getExitCode() {
-        return properties.getByte("ExitCode");
+        return properties.getByte(Property.EXIT_CODE);
     }
 
     public String getFeatures() {
-        return properties.getString("Features");
+        return properties.getString(Property.FEATURES);
     }
 
     public long getFinishTimestamp() {
-        return properties.getLong("FinishTimestamp");
+        return properties.getLong(Property.FINISH_TIMESTAMP);
     }
 
     public long getFinishTimestampMonotonic() {
-        return properties.getLong("FinishTimestampMonotonic");
+        return properties.getLong(Property.FINISH_TIMESTAMP_MONOTONIC);
     }
 
     public long getFirmwareTimestamp() {
-        return properties.getLong("FirmwareTimestamp");
+        return properties.getLong(Property.FIRMWARE_TIMESTAMP);
     }
 
     public long getFirmwareTimestampMonotonic() {
-        return properties.getLong("FirmwareTimestampMonotonic");
+        return properties.getLong(Property.FIRMWARE_TIMESTAMP_MONOTONIC);
     }
 
     public long getGeneratorsFinishTimestamp() {
-        return properties.getLong("GeneratorsFinishTimestamp");
+        return properties.getLong(Property.GENERATORS_FINISH_TIMESTAMP);
     }
 
     public long getGeneratorsFinishTimestampMonotonic() {
-        return properties.getLong("GeneratorsFinishTimestampMonotonic");
+        return properties.getLong(Property.GENERATORS_FINISH_TIMESTAMP_MONOTONIC);
     }
 
     public long getGeneratorsStartTimestamp() {
-        return properties.getLong("GeneratorsStartTimestamp");
+        return properties.getLong(Property.GENERATORS_START_TIMESTAMP);
     }
 
     public long getGeneratorsStartTimestampMonotonic() {
-        return properties.getLong("GeneratorsStartTimestampMonotonic");
+        return properties.getLong(Property.GENERATORS_START_TIMESTAMP_MONOTONIC);
     }
 
     public long getInitRDTimestamp() {
-        return properties.getLong("InitRDTimestamp");
+        return properties.getLong(Property.INIT_RDTIMESTAMP);
     }
 
     public long getInitRDTimestampMonotonic() {
-        return properties.getLong("InitRDTimestampMonotonic");
+        return properties.getLong(Property.INIT_RDTIMESTAMP_MONOTONIC);
     }
 
     public long getKernelTimestamp() {
-        return properties.getLong("KernelTimestamp");
+        return properties.getLong(Property.KERNEL_TIMESTAMP);
     }
 
     public long getKernelTimestampMonotonic() {
-        return properties.getLong("KernelTimestampMonotonic");
+        return properties.getLong(Property.KERNEL_TIMESTAMP_MONOTONIC);
     }
 
     public long getLoaderTimestamp() {
-        return properties.getLong("LoaderTimestamp");
+        return properties.getLong(Property.LOADER_TIMESTAMP);
     }
 
     public long getLoaderTimestampMonotonic() {
-        return properties.getLong("LoaderTimestampMonotonic");
+        return properties.getLong(Property.LOADER_TIMESTAMP_MONOTONIC);
     }
 
     public String getLogLevel() {
-        return properties.getString("LogLevel");
+        return properties.getString(Property.LOG_LEVEL);
     }
 
     public String getLogTarget() {
-        return properties.getString("LogTarget");
+        return properties.getString(Property.LOG_TARGET);
     }
 
     public long getNFailedJobs() {
-        return properties.getLong("NFailedJobs");
+        return properties.getLong(Property.NFAILED_JOBS);
     }
 
     public long getNFailedUnits() {
-        return properties.getLong("NFailedUnits");
+        return properties.getLong(Property.NFAILED_UNITS);
     }
 
     public long getNInstalledJobs() {
-        return properties.getLong("NInstalledJobs");
+        return properties.getLong(Property.NINSTALLED_JOBS);
     }
 
     public long getNJobs() {
-        return properties.getLong("NJobs");
+        return properties.getLong(Property.NJOBS);
     }
 
     public long getNNames() {
-        return properties.getLong("NNames");
+        return properties.getLong(Property.NNAMES);
     }
 
     public double getProgress() {
-        return properties.getDouble("Progress");
+        return properties.getDouble(Property.PROGRESS);
     }
 
     public long getRuntimeWatchdogUSec() {
-        return properties.getLong("RuntimeWatchdogUSec");
+        return properties.getLong(Property.RUNTIME_WATCHDOG_USEC);
     }
 
     public long getSecurityFinishTimestamp() {
-        return properties.getLong("SecurityFinishTimestamp");
+        return properties.getLong(Property.SECURITY_FINISH_TIMESTAMP);
     }
 
     public long getSecurityFinishTimestampMonotonic() {
-        return properties.getLong("SecurityFinishTimestampMonotonic");
+        return properties.getLong(Property.SECURITY_FINISH_TIMESTAMP_MONOTONIC);
     }
 
     public long getSecurityStartTimestamp() {
-        return properties.getLong("SecurityStartTimestamp");
+        return properties.getLong(Property.SECURITY_START_TIMESTAMP);
     }
 
     public long getSecurityStartTimestampMonotonic() {
-        return properties.getLong("SecurityStartTimestampMonotonic");
+        return properties.getLong(Property.SECURITY_START_TIMESTAMP_MONOTONIC);
     }
 
     public boolean isShowStatus() {
-        return properties.getBoolean("ShowStatus");
+        return properties.getBoolean(Property.SHOW_STATUS);
     }
 
     public long getShutdownWatchdogUSec() {
-        return properties.getLong("ShutdownWatchdogUSec");
+        return properties.getLong(Property.SHUTDOWN_WATCHDOG_USEC);
     }
 
     public String getSystemState() {
-        return properties.getString("SystemState");
+        return properties.getString(Property.SYSTEM_STATE);
     }
 
     public String getTainted() {
-        return properties.getString("Tainted");
+        return properties.getString(Property.TAINTED);
     }
 
     public long getTimerSlackNSec() {
-        return properties.getLong("TimerSlackNSec");
+        return properties.getLong(Property.TIMER_SLACK_NSEC);
     }
 
     public Vector<String> getUnitPath() {
-        return properties.getVector("UnitPath");
+        return properties.getVector(Property.UNIT_PATH);
     }
 
     public long getUnitsLoadFinishTimestamp() {
-        return properties.getLong("UnitsLoadFinishTimestamp");
+        return properties.getLong(Property.UNITS_LOAD_FINISH_TIMESTAMP);
     }
 
     public long getUnitsLoadFinishTimestampMonotonic() {
-        return properties.getLong("UnitsLoadFinishTimestampMonotonic");
+        return properties.getLong(Property.UNITS_LOAD_FINISH_TIMESTAMP_MONOTONIC);
     }
 
     public long getUnitsLoadStartTimestamp() {
-        return properties.getLong("UnitsLoadStartTimestamp");
+        return properties.getLong(Property.UNITS_LOAD_START_TIMESTAMP);
     }
 
     public long getUnitsLoadStartTimestampMonotonic() {
-        return properties.getLong("UnitsLoadStartTimestampMonotonic");
+        return properties.getLong(Property.UNITS_LOAD_START_TIMESTAMP_MONOTONIC);
     }
 
     public long getUserspaceTimestamp() {
-        return properties.getLong("UserspaceTimestamp");
+        return properties.getLong(Property.USERSPACE_TIMESTAMP);
     }
 
     public long getUserspaceTimestampMonotonic() {
-        return properties.getLong("UserspaceTimestampMonotonic");
+        return properties.getLong(Property.USERSPACE_TIMESTAMP_MONOTONIC);
     }
 
     public String getVersion() {
-        return properties.getString("Version");
+        return properties.getString(Property.VERSION);
     }
 
     public String getVirtualization() {
-        return properties.getString("Virtualization");
+        return properties.getString(Property.VIRTUALIZATION);
     }
 
 }

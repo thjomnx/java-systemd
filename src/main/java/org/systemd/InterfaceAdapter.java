@@ -11,6 +11,8 @@
 
 package org.systemd;
 
+import java.lang.reflect.Field;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusSigHandler;
@@ -54,6 +56,34 @@ public abstract class InterfaceAdapter implements DBusInterface {
 
     public <T extends DBusSignal> void unsubscribe(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         dbus.removeSigHandler(type, handler);
+    }
+
+    protected static class Property {
+
+        protected Property() {
+            // Do nothing (static implementation)
+        }
+
+        protected static final String[] getAllNames(final Class<?> type) {
+            Field[] fields = type.getDeclaredFields();
+            String[] names = new String[fields.length];
+
+            for (int i = 0; i < fields.length; i++) {
+                Object obj = "";
+
+                try {
+                    obj = fields[i].get(null);
+                }
+                catch (final IllegalAccessException | IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+
+                names[i] = obj.toString();
+            }
+
+            return names;
+        }
+
     }
 
 }

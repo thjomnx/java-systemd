@@ -20,6 +20,23 @@ public class Path extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Path";
     public static final String UNIT_SUFFIX = ".path";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        public static final String DIRECTORY_MODE = "DirectoryMode";
+        public static final String MAKE_DIRECTORY = "MakeDirectory";
+        public static final String RESULT = "Result";
+        public static final String UNIT = "Unit";
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Path(final DBusConnection dbus, final PathInterface iface, final String name) throws DBusException {
@@ -43,11 +60,11 @@ public class Path extends Unit {
     }
 
     public long getDirectoryMode() {
-        return properties.getLong("DirectoryMode");
+        return properties.getLong(Property.DIRECTORY_MODE);
     }
 
     public boolean isMakeDirectory() {
-        return properties.getBoolean("MakeDirectory");
+        return properties.getBoolean(Property.MAKE_DIRECTORY);
     }
 
     /*
@@ -62,11 +79,11 @@ public class Path extends Unit {
      */
 
     public String getResult() {
-        return properties.getString("Result");
+        return properties.getString(Property.RESULT);
     }
 
     public String getUnit() {
-        return properties.getString("Unit");
+        return properties.getString(Property.UNIT);
     }
 
 }
