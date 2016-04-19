@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.exceptions.NotConnected;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +30,17 @@ public final class Systemd {
 
     private static final Logger log = LoggerFactory.getLogger(Systemd.class);
 
+    private final int busType;
+
     private DBusConnection dbus;
     private Manager manager;
 
     public Systemd() {
-        // Do nothing (lazy implementation)
+        this(DBusConnection.SYSTEM);
+    }
+
+    public Systemd(final int busType) {
+        this.busType = busType;
     }
 
     public static final String escapePath(final CharSequence path) {
@@ -56,7 +63,7 @@ public final class Systemd {
 
     public void connect() throws DBusException {
         try {
-            dbus = DBusConnection.getConnection(DBusConnection.SYSTEM);
+            dbus = DBusConnection.getConnection(busType);
         }
         catch (final DBusException e) {
             log.error("Unable to connect to system bus", e);
@@ -71,12 +78,20 @@ public final class Systemd {
         }
     }
 
+    public boolean isConnected() {
+        return !(dbus == null || dbus.getError() instanceof NotConnected);
+    }
+
     DBusConnection getConnection() {
         return dbus;
     }
 
     public Manager getManager() throws DBusException {
         if (manager == null) {
+            if (!isConnected()) {
+                throw new DBusException("Unable to create manager without bus (please connect first)");
+            }
+
             manager = Manager.create(dbus);
         }
 
