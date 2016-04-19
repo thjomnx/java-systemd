@@ -4,6 +4,7 @@
 # Output directories
 build/
 target/
+test-output/
 
 # Eclipse / idea
 .idea
