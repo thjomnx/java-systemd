@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="auto">
+    <groups>
+        <run>
+            <exclude name="requireSystemd" />
+        </run>
+    </groups>
+
+    <test name="all">
+        <packages>
+            <package name="org.systemd" />
+        </packages>
+    </test>
+</suite>

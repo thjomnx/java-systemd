@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="auto-systemd">
+    <test name="all">
+        <packages>
+            <package name="org.systemd" />
+        </packages>
+    </test>
+</suite>
