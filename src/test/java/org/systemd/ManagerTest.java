@@ -32,10 +32,10 @@ public class ManagerTest {
     private DBusConnection dbus;
 
     @Mock
-    private PropertyInterface piface;
+    private ManagerInterface miface;
 
     @Mock
-    private ManagerInterface miface;
+    private PropertyInterface piface;
 
     @InjectMocks
     private Systemd systemd;
