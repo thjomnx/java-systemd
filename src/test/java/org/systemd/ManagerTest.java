@@ -11,61 +11,34 @@
 
 package org.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.systemd.interfaces.ManagerInterface;
-import org.systemd.interfaces.PropertyInterface;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class ManagerTest {
+public class ManagerTest extends AbstractTestCase {
 
-    @Mock
-    private DBusConnection dbus;
-
-    @Mock
-    private ManagerInterface miface;
-
-    @Mock
-    private PropertyInterface piface;
-
-    @InjectMocks
-    private Systemd systemd;
-
+    @Override
     @BeforeClass
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        super.setup();
 
-        try {
-            Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class)).thenReturn(miface);
-            Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, PropertyInterface.class)).thenReturn(piface);
+        Mockito.when(piface.getProperty(Manager.SERVICE_NAME, Manager.Property.VERSION)).then(new Answer<Variant<?>>() {
 
-            Mockito.when(piface.getProperty(Manager.SERVICE_NAME, Manager.Property.VERSION)).then(new Answer<Variant<?>>() {
+            @Override
+            public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                return new Variant<>("systemd 230");
+            }
 
-                @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
-                    Variant<?> var = new Variant<>("systemd 230");
-
-                    return var;
-                }
-
-            });
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        });
     }
 
-    @Test
-    public void testFoo() {
+    @Test(description="Tests basic manager accessibility.")
+    public void testManagerAccess() {
         Manager manager = null;
 
         try {
@@ -76,6 +49,19 @@ public class ManagerTest {
         }
 
         Assert.assertNotNull(manager);
+    }
+
+    @Test(description="Tests property access of manager interface.")
+    public void testManagerProperties() {
+        Manager manager = null;
+
+        try {
+            manager = systemd.getManager();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
         Assert.assertEquals(manager.getVersion(), "systemd 230");
     }
 
