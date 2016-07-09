@@ -46,6 +46,13 @@ finally {
 }
 ```
 
+## Testing
+
+Unit tests are based on TestNG and Mockito. Test methods which require a deployed systemd environment are grouped
+in TestNG group "requireSystemd". There are two TestNG suites available:
+- src/test/resources/suites/auto-systemd.xml (executes all tests)
+- src/test/resources/suites/auto.xml (excludes group "requireSystemd")
+
 ## Playground
 
 Lookout for class org.systemd.Playground and run its main method to test some simple stuff.
