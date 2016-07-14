@@ -38,6 +38,8 @@ public class Playground {
     }
 
     public static void properties(final Manager manager) throws DBusException  {
+        System.out.println("'Manager' properties:");
+
         System.out.println("Architecture: " + manager.getArchitecture());
         System.out.println("ConfirmSpawn: " + manager.isConfirmSpawn());
         System.out.println("ControlGroup: " + manager.getControlGroup());
@@ -113,6 +115,15 @@ public class Playground {
         System.out.println("UserspaceTimestampMonotonic: " + manager.getUserspaceTimestampMonotonic());
         System.out.println("Version: " + manager.getVersion());
         System.out.println("Virtualization: " + manager.getVirtualization());
+
+        System.out.println();
+        System.out.println("'Manager' properties (via 'Property' interface):");
+
+        for (String propertyName : Manager.Property.getAllNames()) {
+            Object value = manager.getProperties().getVariant(propertyName).getValue();
+
+            System.out.println("manager::" + propertyName + ": " + value);
+        }
     }
 
     public static void methods(final Manager manager) throws DBusException  {
@@ -401,7 +412,7 @@ public class Playground {
             systemd.connect();
 
 //            introspect(systemd.getManager());
-//            properties(systemd.getManager());
+            properties(systemd.getManager());
             methods(systemd.getManager());
 
 //            for (UnitType ut : systemd.getManager().listUnits()) {
