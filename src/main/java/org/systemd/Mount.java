@@ -198,6 +198,11 @@ public class Mount extends Unit {
         return (MountInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public BigInteger getAmbientCapabilities() {
         return properties.getBigInteger(Property.AMBIENT_CAPABILITIES);
     }

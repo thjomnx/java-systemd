@@ -50,6 +50,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
         return iface;
     }
 
+    public abstract Properties getProperties();
+
     public <T extends DBusSignal> void subscribe(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         dbus.addSigHandler(type, handler);
     }

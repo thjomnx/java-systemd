@@ -134,6 +134,11 @@ public class Manager extends InterfaceAdapter {
         return (ManagerInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public String introspect() throws DBusException {
         Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, Introspectable.class);
 

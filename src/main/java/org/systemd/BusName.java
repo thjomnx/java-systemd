@@ -61,6 +61,11 @@ public class BusName extends Unit {
         return (BusNameInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public boolean isAcceptFileDescriptors() {
         return properties.getBoolean(Property.ACCEPT_FILE_DESCRIPTORS);
     }

@@ -56,6 +56,11 @@ public class Device extends Unit {
         return (DeviceInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public String getSysFSPath() {
         return properties.getString(Property.SYS_FSPATH);
     }

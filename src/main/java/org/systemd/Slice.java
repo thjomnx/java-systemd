@@ -74,6 +74,11 @@ public class Slice extends Unit {
         return (SliceInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public boolean isBlockIOAccounting() {
         return properties.getBoolean(Property.BLOCK_IOACCOUNTING);
     }

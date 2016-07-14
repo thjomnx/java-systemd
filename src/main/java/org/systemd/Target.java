@@ -43,4 +43,9 @@ public class Target extends Unit {
         return (TargetInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
 }

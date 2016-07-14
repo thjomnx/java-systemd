@@ -58,6 +58,11 @@ public class Automount extends Unit {
         return (AutomountInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public String getWhere() {
         return properties.getString(Property.WHERE);
     }

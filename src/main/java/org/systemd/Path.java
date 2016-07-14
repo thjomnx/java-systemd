@@ -59,6 +59,11 @@ public class Path extends Unit {
         return (PathInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public long getDirectoryMode() {
         return properties.getLong(Property.DIRECTORY_MODE);
     }

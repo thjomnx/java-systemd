@@ -65,6 +65,11 @@ public class Timer extends Unit {
         return (TimerInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public String getUnit() {
         return properties.getString(Property.UNIT);
     }

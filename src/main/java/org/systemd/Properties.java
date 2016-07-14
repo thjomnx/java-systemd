@@ -43,6 +43,11 @@ public class Properties extends InterfaceAdapter {
         return (PropertyInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        throw new UnsupportedOperationException("No self implementation available");
+    }
+
     public Variant<?> getVariant(final String propertyName) {
         return getInterface().getProperty(serviceName, propertyName);
     }

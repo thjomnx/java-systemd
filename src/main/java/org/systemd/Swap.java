@@ -54,6 +54,11 @@ public class Swap extends Unit {
         return (SwapInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
 /*
 readonly s What = '/dev/sda3';
 readonly i Priority = -1;

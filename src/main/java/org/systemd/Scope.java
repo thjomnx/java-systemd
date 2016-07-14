@@ -81,6 +81,11 @@ public class Scope extends Unit {
         return (ScopeInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public boolean isBlockIOAccounting() {
         return properties.getBoolean(Property.BLOCK_IOACCOUNTING);
     }

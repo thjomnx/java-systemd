@@ -56,6 +56,11 @@ public class Snapshot extends Unit {
         return (SnapshotInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public boolean isCleanup() {
         return properties.getBoolean(Property.CLEANUP);
     }

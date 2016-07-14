@@ -211,6 +211,11 @@ public class Service extends Unit {
         return (ServiceInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public AppArmorProfile getAppArmorProfile() {
         Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
 

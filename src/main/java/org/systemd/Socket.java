@@ -234,6 +234,11 @@ public class Socket extends Unit {
         return (SocketInterface) super.getInterface();
     }
 
+    @Override
+    public Properties getProperties() {
+        return properties;
+    }
+
     public boolean isAccept() {
         return properties.getBoolean(Property.ACCEPT);
     }
