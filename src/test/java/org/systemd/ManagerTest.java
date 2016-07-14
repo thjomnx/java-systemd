@@ -11,11 +11,7 @@
 
 package org.systemd;
 
-import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -27,18 +23,11 @@ public class ManagerTest extends AbstractTestCase {
     public void setup() {
         super.setup();
 
-        Mockito.when(piface.getProperty(Manager.SERVICE_NAME, Manager.Property.VERSION)).then(new Answer<Variant<?>>() {
-
-            @Override
-            public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
-                return new Variant<>("systemd 230");
-            }
-
-        });
+        setupPropertyMocks(Manager.class, Manager.SERVICE_NAME, Manager.Property.getAllNames());
     }
 
     @Test(description="Tests basic manager accessibility.")
-    public void testManagerAccess() {
+    public void testAccess() {
         Manager manager = null;
 
         try {
@@ -52,7 +41,7 @@ public class ManagerTest extends AbstractTestCase {
     }
 
     @Test(description="Tests property access of manager interface.")
-    public void testManagerProperties() {
+    public void testProperties() {
         Manager manager = null;
 
         try {
@@ -62,7 +51,11 @@ public class ManagerTest extends AbstractTestCase {
             Assert.fail(e.getMessage(), e);
         }
 
-        Assert.assertEquals(manager.getVersion(), "systemd 230");
+        for (String propertyName : Manager.Property.getAllNames()) {
+            Object value = manager.getProperties().getVariant(propertyName).getValue();
+
+            Assert.assertNotNull(value);
+        }
     }
 
 }
