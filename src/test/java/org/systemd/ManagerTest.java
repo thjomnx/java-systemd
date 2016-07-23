@@ -18,6 +18,8 @@ import org.testng.annotations.Test;
 
 public class ManagerTest extends AbstractTestCase {
 
+    private Manager manager;
+
     @Override
     @BeforeClass
     public void setup() {
@@ -28,8 +30,6 @@ public class ManagerTest extends AbstractTestCase {
 
     @Test(description="Tests basic manager accessibility.")
     public void testAccess() {
-        Manager manager = null;
-
         try {
             manager = systemd.getManager();
         }
@@ -40,17 +40,8 @@ public class ManagerTest extends AbstractTestCase {
         Assert.assertNotNull(manager);
     }
 
-    @Test(description="Tests property access of manager interface.")
+    @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of manager interface.")
     public void testProperties() {
-        Manager manager = null;
-
-        try {
-            manager = systemd.getManager();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
-
         for (String propertyName : Manager.Property.getAllNames()) {
             Object value = manager.getProperties().getVariant(propertyName).getValue();
 

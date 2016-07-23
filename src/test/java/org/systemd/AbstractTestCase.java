@@ -50,7 +50,7 @@ public class AbstractTestCase {
 
         try {
             Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class)).thenReturn(miface);
-            Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, PropertyInterface.class)).thenReturn(piface);
+            Mockito.when(dbus.getRemoteObject(Mockito.eq(Systemd.SERVICE_NAME), Mockito.anyString(), Mockito.eq(PropertyInterface.class))).thenReturn(piface);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -85,29 +85,56 @@ public class AbstractTestCase {
                             if (returnType == boolean.class) {
                                 return new Variant<>(Boolean.TRUE);
                             }
+                            else if (returnType == boolean[].class) {
+                                return new Variant<>(new boolean[0]);
+                            }
                             else if (returnType == byte.class) {
                                 return new Variant<>(Byte.MAX_VALUE);
+                            }
+                            else if (returnType == byte[].class) {
+                                return new Variant<>(new byte[0]);
                             }
                             else if (returnType == short.class) {
                                 return new Variant<>(Short.MAX_VALUE);
                             }
+                            else if (returnType == short[].class) {
+                                return new Variant<>(new short[0]);
+                            }
                             else if (returnType == int.class) {
                                 return new Variant<>(Integer.MAX_VALUE);
+                            }
+                            else if (returnType == int[].class) {
+                                return new Variant<>(new int[0]);
                             }
                             else if (returnType == long.class) {
                                 return new Variant<>(Long.MAX_VALUE);
                             }
+                            else if (returnType == long[].class) {
+                                return new Variant<>(new long[0]);
+                            }
                             else if (returnType == BigInteger.class) {
                                 return new Variant<>(new UInt64(0));
+                            }
+                            else if (returnType == BigInteger[].class) {
+                                return new Variant<>(new UInt64[0]);
                             }
                             else if (returnType == float.class) {
                                 return new Variant<>(Float.MAX_VALUE);
                             }
+                            else if (returnType == float[].class) {
+                                return new Variant<>(new float[0]);
+                            }
                             else if (returnType == double.class) {
                                 return new Variant<>(Double.MAX_VALUE);
                             }
+                            else if (returnType == double[].class) {
+                                return new Variant<>(new double[0]);
+                            }
                             else if (returnType == String.class) {
                                 return new Variant<>(propertyName);
+                            }
+                            else if (returnType == String[].class) {
+                                return new Variant<>(new String[0]);
                             }
                             else if (returnType == Vector.class) {
                                 ParameterizedType paramType = (ParameterizedType) genericReturnType;
