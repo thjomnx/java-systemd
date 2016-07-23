@@ -11,16 +11,39 @@
 
 package org.systemd;
 
-import org.testng.annotations.BeforeClass;
+import java.util.Arrays;
+import java.util.List;
 
-public class UnitTest extends AbstractTestCase {
+import org.testng.Assert;
+
+public abstract class UnitTest extends AbstractTestCase {
+
+    private static final String[] NON_VARIANT_PROPERTIES = {
+
+            Unit.Property.ASSERTS,
+            Unit.Property.CONDITIONS,
+            Unit.Property.JOB,
+            Unit.Property.LOAD_ERROR
+
+    };
 
     @Override
-    @BeforeClass
     public void setup() {
         super.setup();
 
         setupPropertyMocks(Unit.class, Unit.SERVICE_NAME, Unit.Property.getAllNames());
+    }
+
+    public void testUnitProperties(Unit unit) {
+        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
+
+        for (String propertyName : Unit.Property.getAllNames()) {
+            if (!nonVariants.contains(propertyName)) {
+                Object value = unit.getUnitProperties().getVariant(propertyName).getValue();
+
+                Assert.assertNotNull(value);
+            }
+        }
     }
 
 }

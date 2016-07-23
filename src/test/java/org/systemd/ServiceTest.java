@@ -80,11 +80,12 @@ public class ServiceTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of service interface.")
     public void testProperties() {
+        testUnitProperties(service);
+
         List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
 
         for (String propertyName : Service.Property.getAllNames()) {
             if (!nonVariants.contains(propertyName)) {
-                System.out.println("ServiceTest.testProperties()" + " - TESTING " + propertyName);
                 Object value = service.getProperties().getVariant(propertyName).getValue();
 
                 Assert.assertNotNull(value);

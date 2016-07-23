@@ -174,6 +174,10 @@ public abstract class Unit extends InterfaceAdapter {
         return (UnitInterface) super.getInterface();
     }
 
+    public final Properties getUnitProperties() {
+        return properties;
+    }
+
     public String introspect() throws DBusException {
         Introspectable intro = dbus.getRemoteObject(Systemd.SERVICE_NAME, getInterface().getObjectPath(), Introspectable.class);
 
