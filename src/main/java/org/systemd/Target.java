@@ -20,7 +20,6 @@ public class Target extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Target";
     public static final String UNIT_SUFFIX = ".target";
 
-    @SuppressWarnings("unused")
     private final Properties properties;
 
     private Target(final DBusConnection dbus, final TargetInterface iface, final String name) throws DBusException {
