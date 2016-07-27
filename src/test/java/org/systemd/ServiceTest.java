@@ -62,7 +62,7 @@ public class ServiceTest extends UnitTest {
     @Test(description="Tests basic manager accessibility.")
     public void testAccess() {
         try {
-            service = systemd.getManager().getService("avahi-daemon");
+            service = systemd.getManager().getService("dbus");
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
