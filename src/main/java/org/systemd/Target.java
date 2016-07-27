@@ -20,6 +20,20 @@ public class Target extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Target";
     public static final String UNIT_SUFFIX = ".target";
 
+    public static class Property extends InterfaceAdapter.Property {
+
+        // No properties available so far
+
+        private Property() {
+            super();
+        }
+
+        public static final String[] getAllNames() {
+            return getAllNames(Property.class);
+        }
+
+    }
+
     private final Properties properties;
 
     private Target(final DBusConnection dbus, final TargetInterface iface, final String name) throws DBusException {

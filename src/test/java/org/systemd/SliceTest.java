@@ -11,9 +11,6 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,15 +20,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class SliceTest extends UnitTest {
-
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Slice.Property.BLOCK_IODEVICE_WEIGHT,
-            Slice.Property.BLOCK_IOREAD_BANDWIDTH,
-            Slice.Property.BLOCK_IOWRITE_BANDWIDTH,
-            Slice.Property.DEVICE_ALLOW
-
-    };
 
     @Mock
     private SliceInterface siface;
@@ -52,6 +40,11 @@ public class SliceTest extends UnitTest {
         }
 
         setupPropertyMocks(Slice.class, Slice.SERVICE_NAME, Slice.Property.getAllNames());
+
+        nonVariantProperties.add(Slice.Property.BLOCK_IODEVICE_WEIGHT);
+        nonVariantProperties.add(Slice.Property.BLOCK_IOREAD_BANDWIDTH);
+        nonVariantProperties.add(Slice.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Slice.Property.DEVICE_ALLOW);
     }
 
     @Test(description="Tests basic manager accessibility.")
@@ -68,17 +61,7 @@ public class SliceTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of slice interface.")
     public void testProperties() {
-        testUnitProperties(slice);
-
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
-        for (String propertyName : Slice.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
-                Object value = slice.getProperties().getVariant(propertyName).getValue();
-
-                Assert.assertNotNull(value);
-            }
-        }
+        testUnitProperties(slice, Slice.Property.getAllNames());
     }
 
 }

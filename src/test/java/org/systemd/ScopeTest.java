@@ -11,9 +11,6 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,15 +20,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class ScopeTest extends UnitTest {
-
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Scope.Property.BLOCK_IODEVICE_WEIGHT,
-            Scope.Property.BLOCK_IOREAD_BANDWIDTH,
-            Scope.Property.BLOCK_IOWRITE_BANDWIDTH,
-            Scope.Property.DEVICE_ALLOW
-
-    };
 
     @Mock
     private ScopeInterface siface;
@@ -52,6 +40,11 @@ public class ScopeTest extends UnitTest {
         }
 
         setupPropertyMocks(Scope.class, Scope.SERVICE_NAME, Scope.Property.getAllNames());
+
+        nonVariantProperties.add(Scope.Property.BLOCK_IODEVICE_WEIGHT);
+        nonVariantProperties.add(Scope.Property.BLOCK_IOREAD_BANDWIDTH);
+        nonVariantProperties.add(Scope.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Scope.Property.DEVICE_ALLOW);
     }
 
     @Test(description="Tests basic manager accessibility.")
@@ -68,17 +61,7 @@ public class ScopeTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of scope interface.")
     public void testProperties() {
-        testUnitProperties(scope);
-
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
-        for (String propertyName : Scope.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
-                Object value = scope.getProperties().getVariant(propertyName).getValue();
-
-                Assert.assertNotNull(value);
-            }
-        }
+        testUnitProperties(scope, Scope.Property.getAllNames());
     }
 
 }

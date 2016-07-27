@@ -11,9 +11,6 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,27 +20,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class ServiceTest extends UnitTest {
-
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Service.Property.APP_ARMOR_PROFILE,
-            Service.Property.BLOCK_IODEVICE_WEIGHT,
-            Service.Property.BLOCK_IOREAD_BANDWIDTH,
-            Service.Property.BLOCK_IOWRITE_BANDWIDTH,
-            Service.Property.DEVICE_ALLOW,
-            Service.Property.ENVIRONMENT_FILES,
-            Service.Property.EXEC_RELOAD,
-            Service.Property.EXEC_START,
-            Service.Property.EXEC_START_POST,
-            Service.Property.EXEC_START_PRE,
-            Service.Property.EXEC_STOP,
-            Service.Property.EXEC_STOP_POST,
-            Service.Property.RESTRICT_ADDRESS_FAMILIES,
-            Service.Property.SELINUX_CONTEXT,
-            Service.Property.SMACK_PROCESS_LABEL,
-            Service.Property.SYSTEM_CALL_FILTER
-
-    };
 
     @Mock
     private ServiceInterface siface;
@@ -64,6 +40,23 @@ public class ServiceTest extends UnitTest {
         }
 
         setupPropertyMocks(Service.class, Service.SERVICE_NAME, Service.Property.getAllNames());
+
+        nonVariantProperties.add(Service.Property.APP_ARMOR_PROFILE);
+        nonVariantProperties.add(Service.Property.BLOCK_IODEVICE_WEIGHT);
+        nonVariantProperties.add(Service.Property.BLOCK_IOREAD_BANDWIDTH);
+        nonVariantProperties.add(Service.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Service.Property.DEVICE_ALLOW);
+        nonVariantProperties.add(Service.Property.ENVIRONMENT_FILES);
+        nonVariantProperties.add(Service.Property.EXEC_RELOAD);
+        nonVariantProperties.add(Service.Property.EXEC_START);
+        nonVariantProperties.add(Service.Property.EXEC_START_POST);
+        nonVariantProperties.add(Service.Property.EXEC_START_PRE);
+        nonVariantProperties.add(Service.Property.EXEC_STOP);
+        nonVariantProperties.add(Service.Property.EXEC_STOP_POST);
+        nonVariantProperties.add(Service.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(Service.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(Service.Property.SMACK_PROCESS_LABEL);
+        nonVariantProperties.add(Service.Property.SYSTEM_CALL_FILTER);
     }
 
     @Test(description="Tests basic manager accessibility.")
@@ -80,17 +73,7 @@ public class ServiceTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of service interface.")
     public void testProperties() {
-        testUnitProperties(service);
-
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
-        for (String propertyName : Service.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
-                Object value = service.getProperties().getVariant(propertyName).getValue();
-
-                Assert.assertNotNull(value);
-            }
-        }
+        testUnitProperties(service, Service.Property.getAllNames());
     }
 
 }

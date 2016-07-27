@@ -56,13 +56,7 @@ public class SwapTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of swap interface.")
     public void testProperties() {
-        testUnitProperties(swap);
-
-        for (String propertyName : Swap.Property.getAllNames()) {
-            Object value = swap.getProperties().getVariant(propertyName).getValue();
-
-            Assert.assertNotNull(value);
-        }
+        testUnitProperties(swap, Swap.Property.getAllNames());
     }
 
 }

@@ -11,9 +11,6 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,13 +20,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class TimerTest extends UnitTest {
-
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Timer.Property.TIMERS_MONOTONIC,
-            Timer.Property.TIMERS_CALENDAR
-
-    };
 
     @Mock
     private TimerInterface tiface;
@@ -50,6 +40,9 @@ public class TimerTest extends UnitTest {
         }
 
         setupPropertyMocks(Timer.class, Timer.SERVICE_NAME, Timer.Property.getAllNames());
+
+        nonVariantProperties.add(Timer.Property.TIMERS_MONOTONIC);
+        nonVariantProperties.add(Timer.Property.TIMERS_CALENDAR);
     }
 
     @Test(description="Tests basic manager accessibility.")
@@ -66,17 +59,7 @@ public class TimerTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of timer interface.")
     public void testProperties() {
-        testUnitProperties(timer);
-
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
-        for (String propertyName : Timer.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
-                Object value = timer.getProperties().getVariant(propertyName).getValue();
-
-                Assert.assertNotNull(value);
-            }
-        }
+        testUnitProperties(timer, Timer.Property.getAllNames());
     }
 
 }

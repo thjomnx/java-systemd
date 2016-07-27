@@ -56,13 +56,7 @@ public class DeviceTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of device interface.")
     public void testProperties() {
-        testUnitProperties(device);
-
-        for (String propertyName : Device.Property.getAllNames()) {
-            Object value = device.getProperties().getVariant(propertyName).getValue();
-
-            Assert.assertNotNull(value);
-        }
+        testUnitProperties(device, Device.Property.getAllNames());
     }
 
 }

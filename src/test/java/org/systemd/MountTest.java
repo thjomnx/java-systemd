@@ -11,9 +11,6 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,24 +20,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class MountTest extends UnitTest {
-
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Mount.Property.APP_ARMOR_PROFILE,
-            Mount.Property.BLOCK_IODEVICE_WEIGHT,
-            Mount.Property.BLOCK_IOREAD_BANDWIDTH,
-            Mount.Property.BLOCK_IOWRITE_BANDWIDTH,
-            Mount.Property.DEVICE_ALLOW,
-            Mount.Property.ENVIRONMENT_FILES,
-            Mount.Property.EXEC_MOUNT,
-            Mount.Property.EXEC_REMOUNT,
-            Mount.Property.EXEC_UNMOUNT,
-            Mount.Property.RESTRICT_ADDRESS_FAMILIES,
-            Mount.Property.SELINUX_CONTEXT,
-            Mount.Property.SMACK_PROCESS_LABEL,
-            Mount.Property.SYSTEM_CALL_FILTER
-
-    };
 
     @Mock
     private MountInterface miface;
@@ -61,6 +40,20 @@ public class MountTest extends UnitTest {
         }
 
         setupPropertyMocks(Mount.class, Mount.SERVICE_NAME, Mount.Property.getAllNames());
+
+        nonVariantProperties.add(Mount.Property.APP_ARMOR_PROFILE);
+        nonVariantProperties.add(Mount.Property.BLOCK_IODEVICE_WEIGHT);
+        nonVariantProperties.add(Mount.Property.BLOCK_IOREAD_BANDWIDTH);
+        nonVariantProperties.add(Mount.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Mount.Property.DEVICE_ALLOW);
+        nonVariantProperties.add(Mount.Property.ENVIRONMENT_FILES);
+        nonVariantProperties.add(Mount.Property.EXEC_MOUNT);
+        nonVariantProperties.add(Mount.Property.EXEC_REMOUNT);
+        nonVariantProperties.add(Mount.Property.EXEC_UNMOUNT);
+        nonVariantProperties.add(Mount.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(Mount.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(Mount.Property.SMACK_PROCESS_LABEL);
+        nonVariantProperties.add(Mount.Property.SYSTEM_CALL_FILTER);
     }
 
     @Test(description="Tests basic manager accessibility.")
@@ -75,19 +68,9 @@ public class MountTest extends UnitTest {
         Assert.assertNotNull(mount);
     }
 
-    @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of service interface.")
+    @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of mount interface.")
     public void testProperties() {
-        testUnitProperties(mount);
-
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
-        for (String propertyName : Mount.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
-                Object value = mount.getProperties().getVariant(propertyName).getValue();
-
-                Assert.assertNotNull(value);
-            }
-        }
+        testUnitProperties(mount, Mount.Property.getAllNames());
     }
 
 }

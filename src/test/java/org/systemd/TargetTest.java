@@ -54,7 +54,7 @@ public class TargetTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of target interface.")
     public void testProperties() {
-        testUnitProperties(target);
+        testUnitProperties(target, Target.Property.getAllNames());
     }
 
 }

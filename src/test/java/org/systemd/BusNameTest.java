@@ -56,13 +56,7 @@ public class BusNameTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of busname interface.")
     public void testProperties() {
-        testUnitProperties(busName);
-
-        for (String propertyName : BusName.Property.getAllNames()) {
-            Object value = busName.getProperties().getVariant(propertyName).getValue();
-
-            Assert.assertNotNull(value);
-        }
+        testUnitProperties(busName, BusName.Property.getAllNames());
     }
 
 }

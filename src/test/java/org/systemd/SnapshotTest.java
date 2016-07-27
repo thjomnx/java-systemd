@@ -56,13 +56,7 @@ public class SnapshotTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of snapshot interface.")
     public void testProperties() {
-        testUnitProperties(snapshot);
-
-        for (String propertyName : Snapshot.Property.getAllNames()) {
-            Object value = snapshot.getProperties().getVariant(propertyName).getValue();
-
-            Assert.assertNotNull(value);
-        }
+        testUnitProperties(snapshot, Snapshot.Property.getAllNames());
     }
 
 }

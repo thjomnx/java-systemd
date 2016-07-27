@@ -11,35 +11,39 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.testng.Assert;
 
 public abstract class UnitTest extends AbstractTestCase {
 
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Unit.Property.ASSERTS,
-            Unit.Property.CONDITIONS,
-            Unit.Property.JOB,
-            Unit.Property.LOAD_ERROR
-
-    };
+    protected final Set<String> nonVariantProperties = new HashSet<>();
 
     @Override
     public void setup() {
         super.setup();
 
         setupPropertyMocks(Unit.class, Unit.SERVICE_NAME, Unit.Property.getAllNames());
+
+        nonVariantProperties.add(Unit.Property.ASSERTS);
+        nonVariantProperties.add(Unit.Property.CONDITIONS);
+        nonVariantProperties.add(Unit.Property.JOB);
+        nonVariantProperties.add(Unit.Property.LOAD_ERROR);
     }
 
-    public void testUnitProperties(Unit unit) {
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
+    public void testUnitProperties(Unit unit, String[] propertyNames) {
         for (String propertyName : Unit.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
+            if (!nonVariantProperties.contains(propertyName)) {
                 Object value = unit.getUnitProperties().getVariant(propertyName).getValue();
+
+                Assert.assertNotNull(value);
+            }
+        }
+
+        for (String propertyName : propertyNames) {
+            if (!nonVariantProperties.contains(propertyName)) {
+                Object value = unit.getProperties().getVariant(propertyName).getValue();
 
                 Assert.assertNotNull(value);
             }

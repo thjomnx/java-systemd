@@ -11,9 +11,6 @@
 
 package org.systemd;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,26 +20,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class SocketTest extends UnitTest {
-
-    private static final String[] NON_VARIANT_PROPERTIES = {
-
-            Socket.Property.APP_ARMOR_PROFILE,
-            Socket.Property.BLOCK_IODEVICE_WEIGHT,
-            Socket.Property.BLOCK_IOREAD_BANDWIDTH,
-            Socket.Property.BLOCK_IOWRITE_BANDWIDTH,
-            Socket.Property.DEVICE_ALLOW,
-            Socket.Property.ENVIRONMENT_FILES,
-            Socket.Property.EXEC_START_POST,
-            Socket.Property.EXEC_START_PRE,
-            Socket.Property.EXEC_STOP_POST,
-            Socket.Property.EXEC_STOP_PRE,
-            Socket.Property.LISTEN,
-            Socket.Property.RESTRICT_ADDRESS_FAMILIES,
-            Socket.Property.SELINUX_CONTEXT,
-            Socket.Property.SMACK_PROCESS_LABEL,
-            Socket.Property.SYSTEM_CALL_FILTER
-
-    };
 
     @Mock
     private SocketInterface siface;
@@ -63,6 +40,22 @@ public class SocketTest extends UnitTest {
         }
 
         setupPropertyMocks(Socket.class, Socket.SERVICE_NAME, Socket.Property.getAllNames());
+
+        nonVariantProperties.add(Socket.Property.APP_ARMOR_PROFILE);
+        nonVariantProperties.add(Socket.Property.BLOCK_IODEVICE_WEIGHT);
+        nonVariantProperties.add(Socket.Property.BLOCK_IOREAD_BANDWIDTH);
+        nonVariantProperties.add(Socket.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Socket.Property.DEVICE_ALLOW);
+        nonVariantProperties.add(Socket.Property.ENVIRONMENT_FILES);
+        nonVariantProperties.add(Socket.Property.EXEC_START_POST);
+        nonVariantProperties.add(Socket.Property.EXEC_START_PRE);
+        nonVariantProperties.add(Socket.Property.EXEC_STOP_POST);
+        nonVariantProperties.add(Socket.Property.EXEC_STOP_PRE);
+        nonVariantProperties.add(Socket.Property.LISTEN);
+        nonVariantProperties.add(Socket.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(Socket.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(Socket.Property.SMACK_PROCESS_LABEL);
+        nonVariantProperties.add(Socket.Property.SYSTEM_CALL_FILTER);
     }
 
     @Test(description="Tests basic manager accessibility.")
@@ -79,16 +72,6 @@ public class SocketTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of socket interface.")
     public void testProperties() {
-        testUnitProperties(socket);
-
-        List<String> nonVariants = Arrays.asList(NON_VARIANT_PROPERTIES);
-
-        for (String propertyName : Socket.Property.getAllNames()) {
-            if (!nonVariants.contains(propertyName)) {
-                Object value = socket.getProperties().getVariant(propertyName).getValue();
-
-                Assert.assertNotNull(value);
-            }
-        }
+        testUnitProperties(socket, Socket.Property.getAllNames());
     }
 }

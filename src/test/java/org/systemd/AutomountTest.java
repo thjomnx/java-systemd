@@ -56,13 +56,7 @@ public class AutomountTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of automount interface.")
     public void testProperties() {
-        testUnitProperties(automount);
-
-        for (String propertyName : Automount.Property.getAllNames()) {
-            Object value = automount.getProperties().getVariant(propertyName).getValue();
-
-            Assert.assertNotNull(value);
-        }
+        testUnitProperties(automount, Automount.Property.getAllNames());
     }
 
 }

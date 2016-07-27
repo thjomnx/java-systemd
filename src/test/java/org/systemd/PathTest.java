@@ -56,13 +56,7 @@ public class PathTest extends UnitTest {
 
     @Test(dependsOnMethods={ "testAccess" }, description="Tests property access of path interface.")
     public void testProperties() {
-        testUnitProperties(path);
-
-        for (String propertyName : Path.Property.getAllNames()) {
-            Object value = path.getProperties().getVariant(propertyName).getValue();
-
-            Assert.assertNotNull(value);
-        }
+        testUnitProperties(path, Path.Property.getAllNames());
     }
 
 }
