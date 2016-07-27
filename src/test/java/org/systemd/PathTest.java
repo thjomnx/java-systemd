@@ -40,6 +40,8 @@ public class PathTest extends UnitTest {
         }
 
         setupPropertyMocks(Path.class, Path.SERVICE_NAME, Path.Property.getAllNames());
+
+        nonVariantProperties.add(Path.Property.PATHS);
     }
 
     @Test(description="Tests basic manager accessibility.")

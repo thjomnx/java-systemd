@@ -11,9 +11,12 @@
 
 package org.systemd;
 
+import java.util.List;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.systemd.interfaces.PathInterface;
+import org.systemd.types.PathInfo;
 
 public class Path extends Unit {
 
@@ -24,6 +27,7 @@ public class Path extends Unit {
 
         public static final String DIRECTORY_MODE = "DirectoryMode";
         public static final String MAKE_DIRECTORY = "MakeDirectory";
+        public static final String PATHS = "Paths";
         public static final String RESULT = "Result";
         public static final String UNIT = "Unit";
 
@@ -82,6 +86,10 @@ public class Path extends Unit {
      *
      * readonly a(ss) Paths = [('PathExistsGlob', '/var/spool/cups/d*')];
      */
+
+    public List<PathInfo> getPaths() {
+        return PathInfo.list(properties.getVector(Property.PATHS));
+    }
 
     public String getResult() {
         return properties.getString(Property.RESULT);
