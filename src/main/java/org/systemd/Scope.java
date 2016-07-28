@@ -59,8 +59,6 @@ public class Scope extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Scope(final DBusConnection dbus, final ScopeInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -79,11 +77,6 @@ public class Scope extends Unit {
     @Override
     public ScopeInterface getInterface() {
         return (ScopeInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public boolean isBlockIOAccounting() {

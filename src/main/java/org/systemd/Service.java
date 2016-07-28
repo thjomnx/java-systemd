@@ -189,8 +189,6 @@ public class Service extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Service(final DBusConnection dbus, final ServiceInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -209,11 +207,6 @@ public class Service extends Unit {
     @Override
     public ServiceInterface getInterface() {
         return (ServiceInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public AppArmorProfile getAppArmorProfile() {

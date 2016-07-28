@@ -39,8 +39,6 @@ public class BusName extends Unit {
 
     }
 
-    private final Properties properties;
-
     private BusName(final DBusConnection dbus, final BusNameInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -59,11 +57,6 @@ public class BusName extends Unit {
     @Override
     public BusNameInterface getInterface() {
         return (BusNameInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public boolean isAcceptFileDescriptors() {

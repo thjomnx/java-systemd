@@ -43,8 +43,6 @@ public class Timer extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Timer(final DBusConnection dbus, final TimerInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -63,11 +61,6 @@ public class Timer extends Unit {
     @Override
     public TimerInterface getInterface() {
         return (TimerInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public String getUnit() {

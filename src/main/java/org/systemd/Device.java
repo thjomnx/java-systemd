@@ -34,8 +34,6 @@ public class Device extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Device(final DBusConnection dbus, final DeviceInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -54,11 +52,6 @@ public class Device extends Unit {
     @Override
     public DeviceInterface getInterface() {
         return (DeviceInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public String getSysFSPath() {

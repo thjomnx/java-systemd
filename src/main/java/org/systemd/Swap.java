@@ -32,8 +32,6 @@ public class Swap extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Swap(final DBusConnection dbus, final SwapInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -52,11 +50,6 @@ public class Swap extends Unit {
     @Override
     public SwapInterface getInterface() {
         return (SwapInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
 /*

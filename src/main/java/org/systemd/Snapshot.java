@@ -34,8 +34,6 @@ public class Snapshot extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Snapshot(final DBusConnection dbus, final SnapshotInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -54,11 +52,6 @@ public class Snapshot extends Unit {
     @Override
     public SnapshotInterface getInterface() {
         return (SnapshotInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public boolean isCleanup() {

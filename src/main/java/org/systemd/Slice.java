@@ -52,8 +52,6 @@ public class Slice extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Slice(final DBusConnection dbus, final SliceInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -72,11 +70,6 @@ public class Slice extends Unit {
     @Override
     public SliceInterface getInterface() {
         return (SliceInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public boolean isBlockIOAccounting() {

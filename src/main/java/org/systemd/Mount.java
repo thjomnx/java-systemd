@@ -176,8 +176,6 @@ public class Mount extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Mount(final DBusConnection dbus, final MountInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -196,11 +194,6 @@ public class Mount extends Unit {
     @Override
     public MountInterface getInterface() {
         return (MountInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public BigInteger getAmbientCapabilities() {

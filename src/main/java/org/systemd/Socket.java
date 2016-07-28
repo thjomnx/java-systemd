@@ -212,8 +212,6 @@ public class Socket extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Socket(final DBusConnection dbus, final SocketInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -232,11 +230,6 @@ public class Socket extends Unit {
     @Override
     public SocketInterface getInterface() {
         return (SocketInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public boolean isAccept() {

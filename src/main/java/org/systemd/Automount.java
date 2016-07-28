@@ -36,8 +36,6 @@ public class Automount extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Automount(final DBusConnection dbus, final AutomountInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -56,11 +54,6 @@ public class Automount extends Unit {
     @Override
     public AutomountInterface getInterface() {
         return (AutomountInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public String getWhere() {

@@ -28,6 +28,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
 
     protected final DBusConnection dbus;
 
+    protected Properties properties;
+
     private final DBusInterface iface;
 
     protected InterfaceAdapter(final DBusConnection dbus, final DBusInterface iface) {
@@ -56,7 +58,9 @@ public abstract class InterfaceAdapter implements DBusInterface {
      *
      * @return The property interface adapter.
      */
-    public abstract Properties getProperties();
+    public Properties getProperties() {
+        return properties;
+    }
 
     public <T extends DBusSignal> void subscribe(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         dbus.addSigHandler(type, handler);

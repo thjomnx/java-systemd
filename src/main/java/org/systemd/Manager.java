@@ -115,8 +115,6 @@ public class Manager extends InterfaceAdapter {
 
     }
 
-    private final Properties properties;
-
     private Manager(final DBusConnection dbus, final ManagerInterface iface) throws DBusException {
         super(dbus, iface);
 
@@ -132,11 +130,6 @@ public class Manager extends InterfaceAdapter {
     @Override
     public ManagerInterface getInterface() {
         return (ManagerInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public String introspect() throws DBusException {

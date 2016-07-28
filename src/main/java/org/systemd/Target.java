@@ -34,8 +34,6 @@ public class Target extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Target(final DBusConnection dbus, final TargetInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -54,11 +52,6 @@ public class Target extends Unit {
     @Override
     public TargetInterface getInterface() {
         return (TargetInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
 }

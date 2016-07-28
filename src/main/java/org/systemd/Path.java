@@ -41,8 +41,6 @@ public class Path extends Unit {
 
     }
 
-    private final Properties properties;
-
     private Path(final DBusConnection dbus, final PathInterface iface, final String name) throws DBusException {
         super(dbus, iface, name);
 
@@ -61,11 +59,6 @@ public class Path extends Unit {
     @Override
     public PathInterface getInterface() {
         return (PathInterface) super.getInterface();
-    }
-
-    @Override
-    public Properties getProperties() {
-        return properties;
     }
 
     public long getDirectoryMode() {

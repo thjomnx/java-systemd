@@ -157,13 +157,13 @@ public abstract class Unit extends InterfaceAdapter {
 
     protected final String name;
 
-    private final Properties properties;
+    private final Properties unitProperties;
 
     protected Unit(final DBusConnection dbus, final UnitInterface iface, final String name) throws DBusException {
         super(dbus, iface);
 
         this.name = name;
-        this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
+        this.unitProperties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
     public static String normalizeName(final String name, final String suffix) {
@@ -182,7 +182,7 @@ public abstract class Unit extends InterfaceAdapter {
      * @return The property interface adapter.
      */
     public final Properties getUnitProperties() {
-        return properties;
+        return unitProperties;
     }
 
     public String introspect() throws DBusException {
@@ -260,271 +260,271 @@ public abstract class Unit extends InterfaceAdapter {
     }
 
     public long getActiveEnterTimestamp() {
-        return properties.getLong(Property.ACTIVE_ENTER_TIMESTAMP);
+        return unitProperties.getLong(Property.ACTIVE_ENTER_TIMESTAMP);
     }
 
     public long getActiveEnterTimestampMonotonic() {
-        return properties.getLong(Property.ACTIVE_ENTER_TIMESTAMP_MONOTONIC);
+        return unitProperties.getLong(Property.ACTIVE_ENTER_TIMESTAMP_MONOTONIC);
     }
 
     public long getActiveExitTimestamp() {
-        return properties.getLong(Property.ACTIVE_EXIT_TIMESTAMP);
+        return unitProperties.getLong(Property.ACTIVE_EXIT_TIMESTAMP);
     }
 
     public long getActiveExitTimestampMonotonic() {
-        return properties.getLong(Property.ACTIVE_EXIT_TIMESTAMP_MONOTONIC);
+        return unitProperties.getLong(Property.ACTIVE_EXIT_TIMESTAMP_MONOTONIC);
     }
 
     public String getActiveState() {
-        return properties.getString(Property.ACTIVE_STATE);
+        return unitProperties.getString(Property.ACTIVE_STATE);
     }
 
     public Vector<String> getAfter() {
-        return properties.getVector(Property.AFTER);
+        return unitProperties.getVector(Property.AFTER);
     }
 
     public boolean isAllowIsolate() {
-        return properties.getBoolean(Property.ALLOW_ISOLATE);
+        return unitProperties.getBoolean(Property.ALLOW_ISOLATE);
     }
 
     public boolean isAssertResult() {
-        return properties.getBoolean(Property.ASSERT_RESULT);
+        return unitProperties.getBoolean(Property.ASSERT_RESULT);
     }
 
     public long getAssertTimestamp() {
-        return properties.getLong(Property.ASSERT_TIMESTAMP);
+        return unitProperties.getLong(Property.ASSERT_TIMESTAMP);
     }
 
     public long getAssertTimestampMonotonic() {
-        return properties.getLong(Property.ASSERT_TIMESTAMP_MONOTONIC);
+        return unitProperties.getLong(Property.ASSERT_TIMESTAMP_MONOTONIC);
     }
 
     public List<Condition> getAsserts() {
-        return Condition.list(properties.getVector(Property.ASSERTS));
+        return Condition.list(unitProperties.getVector(Property.ASSERTS));
     }
 
     public Vector<String> getBefore() {
-        return properties.getVector(Property.BEFORE);
+        return unitProperties.getVector(Property.BEFORE);
     }
 
     public Vector<String> getBindsTo() {
-        return properties.getVector(Property.BINDS_TO);
+        return unitProperties.getVector(Property.BINDS_TO);
     }
 
     public Vector<String> getBoundBy() {
-        return properties.getVector(Property.BOUND_BY);
+        return unitProperties.getVector(Property.BOUND_BY);
     }
 
     public boolean isCanIsolate() {
-        return properties.getBoolean(Property.CAN_ISOLATE);
+        return unitProperties.getBoolean(Property.CAN_ISOLATE);
     }
 
     public boolean isCanReload() {
-        return properties.getBoolean(Property.CAN_RELOAD);
+        return unitProperties.getBoolean(Property.CAN_RELOAD);
     }
 
     public boolean isCanStart() {
-        return properties.getBoolean(Property.CAN_START);
+        return unitProperties.getBoolean(Property.CAN_START);
     }
 
     public boolean isCanStop() {
-        return properties.getBoolean(Property.CAN_STOP);
+        return unitProperties.getBoolean(Property.CAN_STOP);
     }
 
     public boolean getConditionResult() {
-        return properties.getBoolean(Property.CONDITION_RESULT);
+        return unitProperties.getBoolean(Property.CONDITION_RESULT);
     }
 
     public long getConditionTimestamp() {
-        return properties.getLong(Property.CONDITION_TIMESTAMP);
+        return unitProperties.getLong(Property.CONDITION_TIMESTAMP);
     }
 
     public long getConditionTimestampMonotonic() {
-        return properties.getLong(Property.CONDITION_TIMESTAMP_MONOTONIC);
+        return unitProperties.getLong(Property.CONDITION_TIMESTAMP_MONOTONIC);
     }
 
     public List<Condition> getConditions() {
-        return Condition.list(properties.getVector(Property.CONDITIONS));
+        return Condition.list(unitProperties.getVector(Property.CONDITIONS));
     }
 
     public Vector<String> getConflictedBy() {
-        return properties.getVector(Property.CONFLICTED_BY);
+        return unitProperties.getVector(Property.CONFLICTED_BY);
     }
 
     public Vector<String> getConflicts() {
-        return properties.getVector(Property.CONFLICTS);
+        return unitProperties.getVector(Property.CONFLICTS);
     }
 
     public Vector<String> getConsistsOf() {
-        return properties.getVector(Property.CONSISTS_OF);
+        return unitProperties.getVector(Property.CONSISTS_OF);
     }
 
     public boolean isDefaultDependencies() {
-        return properties.getBoolean(Property.DEFAULT_DEPENDENCIES);
+        return unitProperties.getBoolean(Property.DEFAULT_DEPENDENCIES);
     }
 
     public String getDescription() {
-        return properties.getString(Property.DESCRIPTION);
+        return unitProperties.getString(Property.DESCRIPTION);
     }
 
     public Vector<String> getDocumentation() {
-        return properties.getVector(Property.DOCUMENTATION);
+        return unitProperties.getVector(Property.DOCUMENTATION);
     }
 
     public Vector<String> getDropInPaths() {
-        return properties.getVector(Property.DROP_IN_PATHS);
+        return unitProperties.getVector(Property.DROP_IN_PATHS);
     }
 
     public String getFollowing() {
-        return properties.getString(Property.FOLLOWING);
+        return unitProperties.getString(Property.FOLLOWING);
     }
 
     public String getFragmentPath() {
-        return properties.getString(Property.FRAGMENT_PATH);
+        return unitProperties.getString(Property.FRAGMENT_PATH);
     }
 
     public String getId() {
-        return properties.getString(Property.ID);
+        return unitProperties.getString(Property.ID);
     }
 
     public boolean isIgnoreOnIsolate() {
-        return properties.getBoolean(Property.IGNORE_ON_ISOLATE);
+        return unitProperties.getBoolean(Property.IGNORE_ON_ISOLATE);
     }
 
     public long getInactiveEnterTimestamp() {
-        return properties.getLong(Property.INACTIVE_ENTER_TIMESTAMP);
+        return unitProperties.getLong(Property.INACTIVE_ENTER_TIMESTAMP);
     }
 
     public long getInactiveEnterTimestampMonotonic() {
-        return properties.getLong(Property.INACTIVE_ENTER_TIMESTAMP_MONOTONIC);
+        return unitProperties.getLong(Property.INACTIVE_ENTER_TIMESTAMP_MONOTONIC);
     }
 
     public long getInactiveExitTimestamp() {
-        return properties.getLong(Property.INACTIVE_EXIT_TIMESTAMP);
+        return unitProperties.getLong(Property.INACTIVE_EXIT_TIMESTAMP);
     }
 
     public long getInactiveExitTimestampMonotonic() {
-        return properties.getLong(Property.INACTIVE_EXIT_TIMESTAMP_MONOTONIC);
+        return unitProperties.getLong(Property.INACTIVE_EXIT_TIMESTAMP_MONOTONIC);
     }
 
     public Job getJob() {
-        Object[] array = (Object[]) properties.getVariant(Property.JOB).getValue();
+        Object[] array = (Object[]) unitProperties.getVariant(Property.JOB).getValue();
 
         return new Job(array);
     }
 
     public String getJobTimeoutAction() {
-        return properties.getString(Property.JOB_TIMEOUT_ACTION);
+        return unitProperties.getString(Property.JOB_TIMEOUT_ACTION);
     }
 
     public String getJobTimeoutRebootArgument() {
-        return properties.getString(Property.JOB_TIMEOUT_REBOOT_ARGUMENT);
+        return unitProperties.getString(Property.JOB_TIMEOUT_REBOOT_ARGUMENT);
     }
 
     public long getJobTimeoutUSec() {
-        return properties.getLong(Property.JOB_TIMEOUT_USEC);
+        return unitProperties.getLong(Property.JOB_TIMEOUT_USEC);
     }
 
     public Vector<String> getJoinsNamespaceOf() {
-        return properties.getVector(Property.JOINS_NAMESPACE_OF);
+        return unitProperties.getVector(Property.JOINS_NAMESPACE_OF);
     }
 
     public LoadError getLoadError() {
-    	Object[] array = (Object[]) properties.getVariant(Property.LOAD_ERROR).getValue();
+    	Object[] array = (Object[]) unitProperties.getVariant(Property.LOAD_ERROR).getValue();
 
     	return new LoadError(array);
     }
 
     public String getLoadState() {
-        return properties.getString(Property.LOAD_STATE);
+        return unitProperties.getString(Property.LOAD_STATE);
     }
 
     public Vector<String> getNames() {
-        return properties.getVector(Property.NAMES);
+        return unitProperties.getVector(Property.NAMES);
     }
 
     public boolean isNeedDaemonReload() {
-        return properties.getBoolean(Property.NEED_DAEMON_RELOAD);
+        return unitProperties.getBoolean(Property.NEED_DAEMON_RELOAD);
     }
 
     public Vector<String> getOnFailure() {
-        return properties.getVector(Property.ON_FAILURE);
+        return unitProperties.getVector(Property.ON_FAILURE);
     }
 
     public String getOnFailureJobMode() {
-        return properties.getString(Property.ON_FAILURE_JOB_MODE);
+        return unitProperties.getString(Property.ON_FAILURE_JOB_MODE);
     }
 
     public Vector<String> getPartOf() {
-        return properties.getVector(Property.PART_OF);
+        return unitProperties.getVector(Property.PART_OF);
     }
 
     public Vector<String> getPropagatesReloadTo() {
-        return properties.getVector(Property.PROPAGATES_RELOAD_TO);
+        return unitProperties.getVector(Property.PROPAGATES_RELOAD_TO);
     }
 
     public boolean isRefuseManualStart() {
-        return properties.getBoolean(Property.REFUSE_MANUAL_START);
+        return unitProperties.getBoolean(Property.REFUSE_MANUAL_START);
     }
 
     public boolean isRefuseManualStop() {
-        return properties.getBoolean(Property.REFUSE_MANUAL_STOP);
+        return unitProperties.getBoolean(Property.REFUSE_MANUAL_STOP);
     }
 
     public Vector<String> getReloadPropagatedFrom() {
-        return properties.getVector(Property.RELOAD_PROPAGATED_FROM);
+        return unitProperties.getVector(Property.RELOAD_PROPAGATED_FROM);
     }
 
     public Vector<String> getRequiredBy() {
-        return properties.getVector(Property.REQUIRED_BY);
+        return unitProperties.getVector(Property.REQUIRED_BY);
     }
 
     public Vector<String> getRequires() {
-        return properties.getVector(Property.REQUIRES);
+        return unitProperties.getVector(Property.REQUIRES);
     }
 
     public Vector<String> getRequiresMountsFor() {
-        return properties.getVector(Property.REQUIRES_MOUNTS_FOR);
+        return unitProperties.getVector(Property.REQUIRES_MOUNTS_FOR);
     }
 
     public Vector<String> getRequisite() {
-        return properties.getVector(Property.REQUISITE);
+        return unitProperties.getVector(Property.REQUISITE);
     }
 
     public Vector<String> getRequisiteOf() {
-        return properties.getVector(Property.REQUISITE_OF);
+        return unitProperties.getVector(Property.REQUISITE_OF);
     }
 
     public String getSourcePath() {
-        return properties.getString(Property.SOURCE_PATH);
+        return unitProperties.getString(Property.SOURCE_PATH);
     }
 
     public boolean isStopWhenUnneeded() {
-        return properties.getBoolean(Property.STOP_WHEN_UNNEEDED);
+        return unitProperties.getBoolean(Property.STOP_WHEN_UNNEEDED);
     }
 
     public String getSubState() {
-        return properties.getString(Property.SUB_STATE);
+        return unitProperties.getString(Property.SUB_STATE);
     }
 
     public boolean isTransient() {
-        return properties.getBoolean(Property.TRANSIENT);
+        return unitProperties.getBoolean(Property.TRANSIENT);
     }
 
     public Vector<String> getTriggeredBy() {
-        return properties.getVector(Property.TRIGGERED_BY);
+        return unitProperties.getVector(Property.TRIGGERED_BY);
     }
 
     public Vector<String> getTriggers() {
-        return properties.getVector(Property.TRIGGERS);
+        return unitProperties.getVector(Property.TRIGGERS);
     }
 
     public Vector<String> getWantedBy() {
-        return properties.getVector(Property.WANTED_BY);
+        return unitProperties.getVector(Property.WANTED_BY);
     }
 
     public Vector<String> getWants() {
-        return properties.getVector(Property.WANTS);
+        return unitProperties.getVector(Property.WANTS);
     }
 
     @Override
