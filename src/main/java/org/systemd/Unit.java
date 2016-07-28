@@ -19,6 +19,7 @@ import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.systemd.interfaces.PropertyInterface;
 import org.systemd.interfaces.UnitInterface;
 import org.systemd.types.Condition;
 import org.systemd.types.Job;
@@ -174,6 +175,12 @@ public abstract class Unit extends InterfaceAdapter {
         return (UnitInterface) super.getInterface();
     }
 
+    /**
+     * Returns the {@link PropertyInterface} adapter of the {@link UnitInterface} of
+     * this interface adapter.<p>
+     *
+     * @return The property interface adapter.
+     */
     public final Properties getUnitProperties() {
         return properties;
     }

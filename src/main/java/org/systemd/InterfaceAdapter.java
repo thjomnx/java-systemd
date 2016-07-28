@@ -20,6 +20,7 @@ import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.systemd.interfaces.PropertyInterface;
 
 public abstract class InterfaceAdapter implements DBusInterface {
 
@@ -50,6 +51,11 @@ public abstract class InterfaceAdapter implements DBusInterface {
         return iface;
     }
 
+    /**
+     * Returns the {@link PropertyInterface} adapter of this interface adapter.<p>
+     *
+     * @return The property interface adapter.
+     */
     public abstract Properties getProperties();
 
     public <T extends DBusSignal> void subscribe(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {

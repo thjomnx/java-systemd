@@ -43,9 +43,13 @@ public class Properties extends InterfaceAdapter {
         return (PropertyInterface) super.getInterface();
     }
 
+    /**
+     * Returns this interface adapter (unlike the implementations in the other
+     * interface adapters).<p>
+     */
     @Override
     public Properties getProperties() {
-        throw new UnsupportedOperationException("No self implementation available");
+        return this;
     }
 
     public Variant<?> getVariant(final String propertyName) {
