@@ -70,17 +70,6 @@ public class Path extends Unit {
         return properties.getBoolean(Property.MAKE_DIRECTORY);
     }
 
-    /*
-     * TODO 'Paths', see https://www.freedesktop.org/wiki/Software/systemd/dbus/
-     *
-     * Paths contains an array of structs. Each struct contains the condition to watch, which can be
-     * one of PathExists, PathExistsGlob, PathChanged, PathModified, DirectoryNotEmpty which correspond
-     * directly to the matching settings in the path unit files; and the path to watch, possibly including
-     * glob expressions.
-     *
-     * readonly a(ss) Paths = [('PathExistsGlob', '/var/spool/cups/d*')];
-     */
-
     public List<PathInfo> getPaths() {
         return PathInfo.list(properties.getVector(Property.PATHS));
     }
