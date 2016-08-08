@@ -3,7 +3,7 @@
 <suite name="auto-systemd">
     <test name="all">
         <packages>
-            <package name="org.systemd" />
+            <package name="de.thjom.java.systemd" />
         </packages>
     </test>
 </suite>
