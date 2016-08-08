@@ -12,9 +12,9 @@ This library shall:
 ## Usage
 
 ```java
-import org.systemd.Manager;
-import org.systemd.Service;
-import org.systemd.Systemd;
+import de.thjom.java.systemd.Manager;
+import de.thjom.java.systemd.Service;
+import de.thjom.java.systemd.Systemd;
 
 Systemd systemd = new Systemd();
 
@@ -55,7 +55,7 @@ in TestNG group "requireSystemd". There are two TestNG suites available:
 
 ## Playground
 
-Lookout for class org.systemd.Playground and run its main method to test some simple stuff.
+Lookout for class de.thjom.java.systemd.Playground and run its main method to test some simple stuff.
 
 ## License
 
