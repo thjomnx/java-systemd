@@ -6,8 +6,8 @@
     <artifactId>java-systemd</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Java access to systemd via D-Bus</name>
-    <description>TODO</description>
-    <url>TODO</url>
+    <description>Java access to systemd via D-Bus</description>
+    <url>https://github.com/thjomnx/java-systemd</url>
     <inceptionYear>2016</inceptionYear>
 
     <developers>
