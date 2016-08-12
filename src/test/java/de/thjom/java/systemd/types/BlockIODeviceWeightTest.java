@@ -47,10 +47,17 @@ public class BlockIODeviceWeightTest {
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
         Vector<Object[]> vec = new Vector<>();
+
+        List<BlockIODeviceWeight> list = BlockIODeviceWeight.list(vec);
+
+        Assert.assertNotNull(list);
+        Assert.assertEquals(list.size(), 0);
+
+        // Next test
         vec.add(new Object[] { "foo", new UInt64("23") });
         vec.add(new Object[] { "bar", new UInt64("42") });
 
-        List<BlockIODeviceWeight> list = BlockIODeviceWeight.list(vec);
+        list = BlockIODeviceWeight.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
@@ -71,9 +78,24 @@ public class BlockIODeviceWeightTest {
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
         Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[] { "foo", (int) 1 });
+        vec.add(new Object[0]);
 
         Exception exc = null;
+
+        try {
+            BlockIODeviceWeight.list(vec);
+        }
+        catch (Exception e) {
+            exc = e;
+        }
+
+        Assert.assertEquals(exc.getClass(), ArrayIndexOutOfBoundsException.class);
+
+        // Next test
+        vec.clear();
+        vec.add(new Object[] { "foo", (int) 1 });
+
+        exc = null;
 
         try {
             BlockIODeviceWeight.list(vec);

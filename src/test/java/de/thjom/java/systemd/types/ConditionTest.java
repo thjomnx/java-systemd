@@ -11,23 +11,24 @@
 
 package de.thjom.java.systemd.types;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BlockIOBandwidthTest {
+public class ConditionTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
-        BlockIOBandwidth instance = new BlockIOBandwidth(new Object[] { "foo", new UInt64("23") });
+        Condition instance = new Condition(new Object[] { "foo", true, false, "bar", 23 });
 
         Assert.assertNotNull(instance);
-        Assert.assertEquals(instance.getFilePath(), "foo");
-        Assert.assertEquals(instance.getBandwidth(), new BigInteger("23"));
+        Assert.assertEquals(instance.getType(), "foo");
+        Assert.assertTrue(instance.isTrigger());
+        Assert.assertFalse(instance.isReversed());
+        Assert.assertEquals(instance.getValue(), "bar");
+        Assert.assertEquals(instance.getStatus(), 23);
     }
 
     @Test(description="Tests constructor failure cases due to malformed arguments.")
@@ -35,7 +36,7 @@ public class BlockIOBandwidthTest {
         Exception exc = null;
 
         try {
-            new BlockIOBandwidth(new Object[0]);
+            new Condition(new Object[0]);
         }
         catch (Exception e) {
             exc = e;
@@ -48,31 +49,37 @@ public class BlockIOBandwidthTest {
     public void testBulkProcessing() {
         Vector<Object[]> vec = new Vector<>();
 
-        List<BlockIOBandwidth> list = BlockIOBandwidth.list(vec);
+        List<Condition> list = Condition.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo", new UInt64("23") });
-        vec.add(new Object[] { "bar", new UInt64("42") });
+        vec.add(new Object[] { "foo1", true, false, "bar1", 23 });
+        vec.add(new Object[] { "foo2", false, true, "bar2", 42 });
 
-        list = BlockIOBandwidth.list(vec);
+        list = Condition.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
 
-        BlockIOBandwidth item = list.get(0);
+        Condition item = list.get(0);
 
         Assert.assertNotNull(item);
-        Assert.assertEquals(item.getFilePath(), "foo");
-        Assert.assertEquals(item.getBandwidth(), new BigInteger("23"));
+        Assert.assertEquals(item.getType(), "foo1");
+        Assert.assertTrue(item.isTrigger());
+        Assert.assertFalse(item.isReversed());
+        Assert.assertEquals(item.getValue(), "bar1");
+        Assert.assertEquals(item.getStatus(), 23);
 
         item = list.get(1);
 
         Assert.assertNotNull(item);
-        Assert.assertEquals(item.getFilePath(), "bar");
-        Assert.assertEquals(item.getBandwidth(), new BigInteger("42"));
+        Assert.assertEquals(item.getType(), "foo2");
+        Assert.assertFalse(item.isTrigger());
+        Assert.assertTrue(item.isReversed());
+        Assert.assertEquals(item.getValue(), "bar2");
+        Assert.assertEquals(item.getStatus(), 42);
     }
 
     @Test(description="Tests processing failure cases on multiple data rows.")
@@ -83,7 +90,7 @@ public class BlockIOBandwidthTest {
         Exception exc = null;
 
         try {
-            BlockIOBandwidth.list(vec);
+            Condition.list(vec);
         }
         catch (Exception e) {
             exc = e;
@@ -93,12 +100,12 @@ public class BlockIOBandwidthTest {
 
         // Next test
         vec.clear();
-        vec.add(new Object[] { "foo", (int) 1 });
+        vec.add(new Object[] { "foo", 1 });
 
         exc = null;
 
         try {
-            BlockIOBandwidth.list(vec);
+            Condition.list(vec);
         }
         catch (Exception e) {
             exc = e;
