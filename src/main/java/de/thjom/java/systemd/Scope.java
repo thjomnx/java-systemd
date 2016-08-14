@@ -14,7 +14,6 @@ package de.thjom.java.systemd;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ScopeInterface;
@@ -60,19 +59,19 @@ public class Scope extends Unit {
 
     }
 
-    private Scope(final DBusConnection dbus, final ScopeInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Scope(final Manager manager, final ScopeInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Scope create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Scope create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        ScopeInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ScopeInterface.class);
+        ScopeInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ScopeInterface.class);
 
-        return new Scope(dbus, iface, name, manager);
+        return new Scope(manager, iface, name);
     }
 
     @Override

@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.TargetInterface;
@@ -35,19 +34,19 @@ public class Target extends Unit {
 
     }
 
-    private Target(final DBusConnection dbus, final TargetInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Target(final Manager manager, final TargetInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Target create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Target create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        TargetInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TargetInterface.class);
+        TargetInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TargetInterface.class);
 
-        return new Target(dbus, iface, name, manager);
+        return new Target(manager, iface, name);
     }
 
     @Override

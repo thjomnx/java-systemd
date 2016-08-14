@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -161,8 +160,8 @@ public abstract class Unit extends InterfaceAdapter {
 
     private final Properties unitProperties;
 
-    protected Unit(final DBusConnection dbus, final UnitInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface);
+    protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
+        super(manager.dbus, iface);
 
         this.name = name;
         this.manager = manager;

@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.DeviceInterface;
@@ -35,19 +34,19 @@ public class Device extends Unit {
 
     }
 
-    private Device(final DBusConnection dbus, final DeviceInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Device(final Manager manager, final DeviceInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Device create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Device create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        DeviceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, DeviceInterface.class);
+        DeviceInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, DeviceInterface.class);
 
-        return new Device(dbus, iface, name, manager);
+        return new Device(manager, iface, name);
     }
 
     @Override

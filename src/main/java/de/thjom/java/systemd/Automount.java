@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.AutomountInterface;
@@ -37,19 +36,19 @@ public class Automount extends Unit {
 
     }
 
-    private Automount(final DBusConnection dbus, final AutomountInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Automount(final Manager manager, final AutomountInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Automount create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Automount create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        AutomountInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, AutomountInterface.class);
+        AutomountInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, AutomountInterface.class);
 
-        return new Automount(dbus, iface, name, manager);
+        return new Automount(manager, iface, name);
     }
 
     @Override

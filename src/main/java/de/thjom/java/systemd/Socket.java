@@ -15,7 +15,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.SocketInterface;
@@ -213,19 +212,19 @@ public class Socket extends Unit {
 
     }
 
-    private Socket(final DBusConnection dbus, final SocketInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Socket(final Manager manager, final SocketInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Socket create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Socket create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        SocketInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SocketInterface.class);
+        SocketInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SocketInterface.class);
 
-        return new Socket(dbus, iface, name, manager);
+        return new Socket(manager, iface, name);
     }
 
     @Override

@@ -14,7 +14,6 @@ package de.thjom.java.systemd;
 import java.math.BigInteger;
 import java.util.List;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.SliceInterface;
@@ -53,19 +52,19 @@ public class Slice extends Unit {
 
     }
 
-    private Slice(final DBusConnection dbus, final SliceInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Slice(final Manager manager, final SliceInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Slice create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Slice create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        SliceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SliceInterface.class);
+        SliceInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SliceInterface.class);
 
-        return new Slice(dbus, iface, name, manager);
+        return new Slice(manager, iface, name);
     }
 
     @Override

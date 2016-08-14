@@ -15,7 +15,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.MountInterface;
@@ -177,19 +176,19 @@ public class Mount extends Unit {
 
     }
 
-    private Mount(final DBusConnection dbus, final MountInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Mount(final Manager manager, final MountInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Mount create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Mount create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        MountInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, MountInterface.class);
+        MountInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, MountInterface.class);
 
-        return new Mount(dbus, iface, name, manager);
+        return new Mount(manager, iface, name);
     }
 
     @Override

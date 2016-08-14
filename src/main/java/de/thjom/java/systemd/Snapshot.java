@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.SnapshotInterface;
@@ -35,19 +34,19 @@ public class Snapshot extends Unit {
 
     }
 
-    private Snapshot(final DBusConnection dbus, final SnapshotInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Snapshot(final Manager manager, final SnapshotInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Snapshot create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Snapshot create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        SnapshotInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SnapshotInterface.class);
+        SnapshotInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SnapshotInterface.class);
 
-        return new Snapshot(dbus, iface, name, manager);
+        return new Snapshot(manager, iface, name);
     }
 
     @Override

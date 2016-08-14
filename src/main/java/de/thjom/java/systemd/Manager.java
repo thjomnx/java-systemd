@@ -218,55 +218,55 @@ public class Manager extends InterfaceAdapter {
     }
 
     public Automount getAutomount(final String name) throws DBusException {
-        return Automount.create(dbus, name, this);
+        return Automount.create(this, name);
     }
 
     public BusName getBusName(final String name) throws DBusException {
-        return BusName.create(dbus, name, this);
+        return BusName.create(this, name);
     }
 
     public Device getDevice(final String name) throws DBusException {
-        return Device.create(dbus, name, this);
+        return Device.create(this, name);
     }
 
     public Mount getMount(final String name) throws DBusException {
-        return Mount.create(dbus, name, this);
+        return Mount.create(this, name);
     }
 
     public Path getPath(final String name) throws DBusException {
-        return Path.create(dbus, name, this);
+        return Path.create(this, name);
     }
 
     public Scope getScope(final String name) throws DBusException {
-        return Scope.create(dbus, name, this);
+        return Scope.create(this, name);
     }
 
     public Service getService(final String name) throws DBusException {
-        return Service.create(dbus, name, this);
+        return Service.create(this, name);
     }
 
     public Slice getSlice(final String name) throws DBusException {
-        return Slice.create(dbus, name, this);
+        return Slice.create(this, name);
     }
 
     public Snapshot getSnapshot(final String name) throws DBusException {
-        return Snapshot.create(dbus, name, this);
+        return Snapshot.create(this, name);
     }
 
     public Socket getSocket(final String name) throws DBusException {
-        return Socket.create(dbus, name, this);
+        return Socket.create(this, name);
     }
 
     public Swap getSwap(final String name) throws DBusException {
-        return Swap.create(dbus, name, this);
+        return Swap.create(this, name);
     }
 
     public Target getTarget(final String name) throws DBusException {
-        return Target.create(dbus, name, this);
+        return Target.create(this, name);
     }
 
     public Timer getTimer(final String name) throws DBusException {
-        return Timer.create(dbus, name, this);
+        return Timer.create(this, name);
     }
 
     public Unit getUnit(final String fullName) throws DBusException {

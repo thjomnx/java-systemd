@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.SwapInterface;
@@ -33,19 +32,19 @@ public class Swap extends Unit {
 
     }
 
-    private Swap(final DBusConnection dbus, final SwapInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Swap(final Manager manager, final SwapInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Swap create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Swap create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        SwapInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SwapInterface.class);
+        SwapInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SwapInterface.class);
 
-        return new Swap(dbus, iface, name, manager);
+        return new Swap(manager, iface, name);
     }
 
     @Override

@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.BusNameInterface;
@@ -40,19 +39,19 @@ public class BusName extends Unit {
 
     }
 
-    private BusName(final DBusConnection dbus, final BusNameInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private BusName(final Manager manager, final BusNameInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static BusName create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static BusName create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        BusNameInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, BusNameInterface.class);
+        BusNameInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, BusNameInterface.class);
 
-        return new BusName(dbus, iface, name, manager);
+        return new BusName(manager, iface, name);
     }
 
     @Override

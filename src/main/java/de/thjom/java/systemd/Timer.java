@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.util.List;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.TimerInterface;
@@ -44,19 +43,19 @@ public class Timer extends Unit {
 
     }
 
-    private Timer(final DBusConnection dbus, final TimerInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Timer(final Manager manager, final TimerInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Timer create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Timer create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        TimerInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TimerInterface.class);
+        TimerInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TimerInterface.class);
 
-        return new Timer(dbus, iface, name, manager);
+        return new Timer(manager, iface, name);
     }
 
     @Override

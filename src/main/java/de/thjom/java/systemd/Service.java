@@ -15,7 +15,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ServiceInterface;
@@ -190,19 +189,19 @@ public class Service extends Unit {
 
     }
 
-    private Service(final DBusConnection dbus, final ServiceInterface iface, final String name, final Manager manager) throws DBusException {
-        super(dbus, iface, name, manager);
+    private Service(final Manager manager, final ServiceInterface iface, final String name) throws DBusException {
+        super(manager, iface, name);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Service create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
+    static Service create(final Manager manager, String name) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
-        ServiceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ServiceInterface.class);
+        ServiceInterface iface = manager.dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ServiceInterface.class);
 
-        return new Service(dbus, iface, name, manager);
+        return new Service(manager, iface, name);
     }
 
     @Override
