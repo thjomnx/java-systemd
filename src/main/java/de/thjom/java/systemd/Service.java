@@ -190,19 +190,19 @@ public class Service extends Unit {
 
     }
 
-    private Service(final DBusConnection dbus, final ServiceInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Service(final DBusConnection dbus, final ServiceInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Service create(final DBusConnection dbus, String name) throws DBusException {
+    static Service create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         ServiceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, ServiceInterface.class);
 
-        return new Service(dbus, iface, name);
+        return new Service(dbus, iface, name, manager);
     }
 
     @Override

@@ -32,8 +32,32 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ListUnits")
     List<UnitType> listUnits();
 
-    @DBusMemberName(value = "GetUnit")
-    DBusInterface getUnit(final String name);
+    @DBusMemberName(value = "StartUnit")
+    Path startUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "StopUnit")
+    Path stopUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "ReloadUnit")
+    Path reloadUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "RestartUnit")
+    Path restartUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "TryRestartUnit")
+    Path tryRestartUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "ReloadOrRestartUnit")
+    Path reloadOrRestartUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "ReloadOrTryRestartUnit")
+    Path reloadOrTryRestartUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "KillUnit")
+    void killUnit(final String name, final String who, final int signal);
+
+    @DBusMemberName(value = "ResetFailedUnit")
+    void resetFailedUnit(final String name);
 
     @DBusMemberName(value = "Dump")
     String dump();

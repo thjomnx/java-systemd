@@ -53,19 +53,19 @@ public class Slice extends Unit {
 
     }
 
-    private Slice(final DBusConnection dbus, final SliceInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Slice(final DBusConnection dbus, final SliceInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Slice create(final DBusConnection dbus, String name) throws DBusException {
+    static Slice create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         SliceInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SliceInterface.class);
 
-        return new Slice(dbus, iface, name);
+        return new Slice(dbus, iface, name, manager);
     }
 
     @Override

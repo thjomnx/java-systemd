@@ -213,19 +213,19 @@ public class Socket extends Unit {
 
     }
 
-    private Socket(final DBusConnection dbus, final SocketInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Socket(final DBusConnection dbus, final SocketInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Socket create(final DBusConnection dbus, String name) throws DBusException {
+    static Socket create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         SocketInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SocketInterface.class);
 
-        return new Socket(dbus, iface, name);
+        return new Socket(dbus, iface, name, manager);
     }
 
     @Override

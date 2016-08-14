@@ -19,11 +19,20 @@ import org.freedesktop.dbus.Path;
 @DBusInterfaceName(value = de.thjom.java.systemd.Unit.SERVICE_NAME)
 public interface UnitInterface extends DBusInterface {
 
-    @DBusMemberName(value = "Kill")
-    void kill(final String who, final int signal);
+    @DBusMemberName(value = "Start")
+    Path start(final String mode);
+
+    @DBusMemberName(value = "Stop")
+    Path stop(final String mode);
 
     @DBusMemberName(value = "Reload")
     Path reload(final String mode);
+
+    @DBusMemberName(value = "Restart")
+    Path restart(final String mode);
+
+    @DBusMemberName(value = "TryRestart")
+    Path tryRestart(final String mode);
 
     @DBusMemberName(value = "ReloadOrRestart")
     Path reloadOrRestart(final String mode);
@@ -31,19 +40,10 @@ public interface UnitInterface extends DBusInterface {
     @DBusMemberName(value = "ReloadOrTryRestart")
     Path reloadOrTryRestart(final String mode);
 
+    @DBusMemberName(value = "Kill")
+    void kill(final String who, final int signal);
+
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
-
-    @DBusMemberName(value = "Restart")
-    Path restart(final String mode);
-
-    @DBusMemberName(value = "Start")
-    Path start(final String mode);
-
-    @DBusMemberName(value = "Stop")
-    Path stop(final String mode);
-
-    @DBusMemberName(value = "TryRestart")
-    Path tryRestart(final String mode);
 
 }

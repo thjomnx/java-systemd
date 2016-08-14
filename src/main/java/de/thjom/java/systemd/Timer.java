@@ -44,19 +44,19 @@ public class Timer extends Unit {
 
     }
 
-    private Timer(final DBusConnection dbus, final TimerInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Timer(final DBusConnection dbus, final TimerInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Timer create(final DBusConnection dbus, String name) throws DBusException {
+    static Timer create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         TimerInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TimerInterface.class);
 
-        return new Timer(dbus, iface, name);
+        return new Timer(dbus, iface, name, manager);
     }
 
     @Override

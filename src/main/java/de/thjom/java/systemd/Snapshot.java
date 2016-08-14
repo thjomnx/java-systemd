@@ -35,19 +35,19 @@ public class Snapshot extends Unit {
 
     }
 
-    private Snapshot(final DBusConnection dbus, final SnapshotInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Snapshot(final DBusConnection dbus, final SnapshotInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Snapshot create(final DBusConnection dbus, String name) throws DBusException {
+    static Snapshot create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         SnapshotInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, SnapshotInterface.class);
 
-        return new Snapshot(dbus, iface, name);
+        return new Snapshot(dbus, iface, name, manager);
     }
 
     @Override

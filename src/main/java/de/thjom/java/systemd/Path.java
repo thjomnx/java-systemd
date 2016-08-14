@@ -42,19 +42,19 @@ public class Path extends Unit {
 
     }
 
-    private Path(final DBusConnection dbus, final PathInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Path(final DBusConnection dbus, final PathInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Path create(final DBusConnection dbus, String name) throws DBusException {
+    static Path create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         PathInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, PathInterface.class);
 
-        return new Path(dbus, iface, name);
+        return new Path(dbus, iface, name, manager);
     }
 
     @Override

@@ -157,13 +157,16 @@ public abstract class Unit extends InterfaceAdapter {
     }
 
     protected final String name;
+    protected final Manager manager;
 
     private final Properties unitProperties;
 
-    protected Unit(final DBusConnection dbus, final UnitInterface iface, final String name) throws DBusException {
+    protected Unit(final DBusConnection dbus, final UnitInterface iface, final String name, final Manager manager) throws DBusException {
         super(dbus, iface);
 
         this.name = name;
+        this.manager = manager;
+
         this.unitProperties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
@@ -192,56 +195,12 @@ public abstract class Unit extends InterfaceAdapter {
         return intro.Introspect();
     }
 
-    public void kill(final Who who, final int signal) {
-        getInterface().kill(who.getValue(), signal);
-    }
-
-    public Path reload(final Mode mode) {
-        return reload(mode.getValue());
-    }
-
-    public Path reload(final String mode) {
-        return getInterface().reload(mode);
-    }
-
-    public Path reloadOrRestart(final Mode mode) {
-        return reloadOrRestart(mode.getValue());
-    }
-
-    public Path reloadOrRestart(final String mode) {
-        return getInterface().reloadOrRestart(mode);
-    }
-
-    public Path reloadOrTryRestart(final Mode mode) {
-        return reloadOrTryRestart(mode.getValue());
-    }
-
-    public Path reloadOrTryRestart(final String mode) {
-        return getInterface().reloadOrTryRestart(mode);
-    }
-
-    public void resetFailed() {
-        getInterface().resetFailed();
-    }
-
-    public Path restart(final Mode mode) {
-        return restart(mode.getValue());
-    }
-
-    public Path restart(final String mode) {
-        return getInterface().restart(mode);
-    }
-
-    public void setProperties(final boolean runtime, final Map<String, Object> properties) {
-        throw new UnsupportedOperationException();
-    }
-
     public Path start(final Mode mode) {
         return start(mode.getValue());
     }
 
     public Path start(final String mode) {
-        return getInterface().start(mode);
+        return manager.startUnit(name, mode);
     }
 
     public Path stop(final Mode mode) {
@@ -249,7 +208,23 @@ public abstract class Unit extends InterfaceAdapter {
     }
 
     public Path stop(final String mode) {
-        return getInterface().stop(mode);
+        return manager.stopUnit(name, mode);
+    }
+
+    public Path reload(final Mode mode) {
+        return reload(mode.getValue());
+    }
+
+    public Path reload(final String mode) {
+        return manager.reloadUnit(name, mode);
+    }
+
+    public Path restart(final Mode mode) {
+        return restart(mode.getValue());
+    }
+
+    public Path restart(final String mode) {
+        return manager.restartUnit(name, mode);
     }
 
     public Path tryRestart(final Mode mode) {
@@ -257,7 +232,39 @@ public abstract class Unit extends InterfaceAdapter {
     }
 
     public Path tryRestart(final String mode) {
-        return getInterface().tryRestart(mode);
+        return manager.tryRestartUnit(name, mode);
+    }
+
+    public Path reloadOrRestart(final Mode mode) {
+        return reloadOrRestart(mode.getValue());
+    }
+
+    public Path reloadOrRestart(final String mode) {
+        return manager.reloadOrRestartUnit(name, mode);
+    }
+
+    public Path reloadOrTryRestart(final Mode mode) {
+        return reloadOrTryRestart(mode.getValue());
+    }
+
+    public Path reloadOrTryRestart(final String mode) {
+        return manager.reloadOrTryRestartUnit(name, mode);
+    }
+
+    public void kill(final Who who, final int signal) {
+        kill(who.getValue(), signal);
+    }
+
+    public void kill(final String who, final int signal) {
+        manager.killUnit(name, who, signal);
+    }
+
+    public void resetFailed() {
+        manager.resetFailedUnit(name);
+    }
+
+    public void setProperties(final boolean runtime, final Map<String, Object> properties) {
+        throw new UnsupportedOperationException();
     }
 
     public long getActiveEnterTimestamp() {

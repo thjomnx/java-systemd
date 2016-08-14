@@ -35,19 +35,19 @@ public class Target extends Unit {
 
     }
 
-    private Target(final DBusConnection dbus, final TargetInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private Target(final DBusConnection dbus, final TargetInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static Target create(final DBusConnection dbus, String name) throws DBusException {
+    static Target create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         TargetInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, TargetInterface.class);
 
-        return new Target(dbus, iface, name);
+        return new Target(dbus, iface, name, manager);
     }
 
     @Override

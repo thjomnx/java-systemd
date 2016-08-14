@@ -19,6 +19,8 @@ import org.freedesktop.DBus.Introspectable;
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.Unit.Mode;
+import de.thjom.java.systemd.Unit.Who;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.types.UnitFileType;
 import de.thjom.java.systemd.types.UnitType;
@@ -147,56 +149,124 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnits();
     }
 
+    public org.freedesktop.dbus.Path startUnit(final String name, final Mode mode) {
+        return startUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {
+        return getInterface().startUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path stopUnit(final String name, final Mode mode) {
+        return stopUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path stopUnit(final String name, final String mode) {
+        return getInterface().stopUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path reloadUnit(final String name, final Mode mode) {
+        return reloadUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path reloadUnit(final String name, final String mode) {
+        return getInterface().reloadUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path restartUnit(final String name, final Mode mode) {
+        return restartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path restartUnit(final String name, final String mode) {
+        return getInterface().restartUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
+        return tryRestartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final String mode) {
+        return getInterface().tryRestartUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path reloadOrRestartUnit(final String name, final Mode mode) {
+        return reloadOrRestartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path reloadOrRestartUnit(final String name, final String mode) {
+        return getInterface().reloadOrRestartUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path reloadOrTryRestartUnit(final String name, final Mode mode) {
+        return reloadOrTryRestartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path reloadOrTryRestartUnit(final String name, final String mode) {
+        return getInterface().reloadOrTryRestartUnit(name, mode);
+    }
+
+    public void killUnit(final String name, final Who who, final int signal) {
+        killUnit(name, who.getValue(), signal);
+    }
+
+    public void killUnit(final String name, final String who, final int signal) {
+        getInterface().killUnit(name, who, signal);
+    }
+
+    public void resetFailedUnit(final String name) {
+        getInterface().resetFailedUnit(name);
+    }
+
     public Automount getAutomount(final String name) throws DBusException {
-        return Automount.create(dbus, name);
+        return Automount.create(dbus, name, this);
     }
 
     public BusName getBusName(final String name) throws DBusException {
-        return BusName.create(dbus, name);
+        return BusName.create(dbus, name, this);
     }
 
     public Device getDevice(final String name) throws DBusException {
-        return Device.create(dbus, name);
+        return Device.create(dbus, name, this);
     }
 
     public Mount getMount(final String name) throws DBusException {
-        return Mount.create(dbus, name);
+        return Mount.create(dbus, name, this);
     }
 
     public Path getPath(final String name) throws DBusException {
-        return Path.create(dbus, name);
+        return Path.create(dbus, name, this);
     }
 
     public Scope getScope(final String name) throws DBusException {
-        return Scope.create(dbus, name);
+        return Scope.create(dbus, name, this);
     }
 
     public Service getService(final String name) throws DBusException {
-        return Service.create(dbus, name);
+        return Service.create(dbus, name, this);
     }
 
     public Slice getSlice(final String name) throws DBusException {
-        return Slice.create(dbus, name);
+        return Slice.create(dbus, name, this);
     }
 
     public Snapshot getSnapshot(final String name) throws DBusException {
-        return Snapshot.create(dbus, name);
+        return Snapshot.create(dbus, name, this);
     }
 
     public Socket getSocket(final String name) throws DBusException {
-        return Socket.create(dbus, name);
+        return Socket.create(dbus, name, this);
     }
 
     public Swap getSwap(final String name) throws DBusException {
-        return Swap.create(dbus, name);
+        return Swap.create(dbus, name, this);
     }
 
     public Target getTarget(final String name) throws DBusException {
-        return Target.create(dbus, name);
+        return Target.create(dbus, name, this);
     }
 
     public Timer getTimer(final String name) throws DBusException {
-        return Timer.create(dbus, name);
+        return Timer.create(dbus, name, this);
     }
 
     public Unit getUnit(final String fullName) throws DBusException {

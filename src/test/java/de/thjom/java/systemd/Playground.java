@@ -15,11 +15,7 @@ import java.util.Arrays;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.thjom.java.systemd.Device;
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Service;
-import de.thjom.java.systemd.Systemd;
-import de.thjom.java.systemd.Target;
+import de.thjom.java.systemd.Unit.Mode;
 
 public class Playground {
 
@@ -418,8 +414,8 @@ public class Playground {
             systemd.connect();
 
 //            introspect(systemd.getManager());
-            properties(systemd.getManager());
-            methods(systemd.getManager());
+//            properties(systemd.getManager());
+//            methods(systemd.getManager());
 
 //            for (UnitType ut : systemd.getManager().listUnits()) {
 //                Unit unit = systemd.getManager().getUnit(ut.getUnitName());
@@ -434,6 +430,15 @@ public class Playground {
 //            System.out.println(manager.dump());
 
 //            System.out.println(systemd.getManager().dump());
+
+            Manager manager = systemd.getManager();
+
+//            manager.stopUnit("postgresql.service", Mode.REPLACE.getValue());
+//            manager.startUnit("postgresql.service", Mode.REPLACE.getValue());
+
+            Service pgsql = manager.getService("postgresql");
+            pgsql.stop(Mode.REPLACE);
+            pgsql.start(Mode.REPLACE);
         }
         catch (final Exception e) {
             e.printStackTrace();

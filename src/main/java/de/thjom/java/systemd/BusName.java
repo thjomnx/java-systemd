@@ -40,19 +40,19 @@ public class BusName extends Unit {
 
     }
 
-    private BusName(final DBusConnection dbus, final BusNameInterface iface, final String name) throws DBusException {
-        super(dbus, iface, name);
+    private BusName(final DBusConnection dbus, final BusNameInterface iface, final String name, final Manager manager) throws DBusException {
+        super(dbus, iface, name, manager);
 
         this.properties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
 
-    static BusName create(final DBusConnection dbus, String name) throws DBusException {
+    static BusName create(final DBusConnection dbus, String name, final Manager manager) throws DBusException {
         name = Unit.normalizeName(name, UNIT_SUFFIX);
 
         String objectPath = Unit.OBJECT_PATH + Systemd.escapePath(name);
         BusNameInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, BusNameInterface.class);
 
-        return new BusName(dbus, iface, name);
+        return new BusName(dbus, iface, name, manager);
     }
 
     @Override
