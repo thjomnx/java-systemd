@@ -18,8 +18,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Swap;
-import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 
 public class SwapTest extends UnitTest {
@@ -43,6 +41,15 @@ public class SwapTest extends UnitTest {
         }
 
         setupPropertyMocks(Swap.class, Swap.SERVICE_NAME, Swap.Property.getAllNames());
+
+        nonVariantProperties.add(Swap.Property.BLOCK_IODEVICE_WEIGHT);
+        nonVariantProperties.add(Swap.Property.BLOCK_IOREAD_BANDWIDTH);
+        nonVariantProperties.add(Swap.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Swap.Property.DEVICE_ALLOW);
+        nonVariantProperties.add(Swap.Property.ENVIRONMENT_FILES);
+        nonVariantProperties.add(Swap.Property.EXEC_ACTIVATE);
+        nonVariantProperties.add(Swap.Property.EXEC_DEACTIVATE);
+        nonVariantProperties.add(Swap.Property.SYSTEM_CALL_FILTER);
     }
 
     @Test(description="Tests basic manager accessibility.")
