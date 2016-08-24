@@ -16,9 +16,7 @@ import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Service;
 import de.thjom.java.systemd.Systemd;
 
-Systemd systemd = new Systemd();
-
-try {
+try (Systemd systemd = new Systemd()) {
     systemd.connect();
 
     Manager manager = systemd.getManager();
@@ -38,11 +36,6 @@ try {
 }
 catch (final Exception e) {
     e.printStackTrace();
-}
-finally {
-    systemd.disconnect();
-
-    System.exit(0);
 }
 ```
 
