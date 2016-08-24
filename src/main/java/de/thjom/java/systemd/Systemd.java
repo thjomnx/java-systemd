@@ -21,7 +21,7 @@ import org.freedesktop.dbus.exceptions.NotConnected;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class Systemd {
+public final class Systemd implements AutoCloseable {
 
     public static final String SERVICE_NAME = "org.freedesktop.systemd1";
     public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
@@ -57,16 +57,36 @@ public final class Systemd {
         return escaped.toString();
     }
 
+    public static final String busTypeToString(final int busType) {
+        final String str;
+
+        switch (busType) {
+            case DBusConnection.SYSTEM:
+                str = "system";
+                break;
+            case DBusConnection.SESSION:
+                str = "session";
+                break;
+            default:
+                str = "unknown";
+                break;
+        }
+
+        return str;
+    }
+
     public static final Date timestampToDate(final long timestamp) {
         return new Date(timestamp / 1000);
     }
 
     public void connect() throws DBusException {
+        log.debug(String.format("Connecting to %s bus", busTypeToString(busType)));
+
         try {
             dbus = DBusConnection.getConnection(busType);
         }
         catch (final DBusException e) {
-            log.error("Unable to connect to system bus", e);
+            log.error(String.format("Unable to connect to %s bus", busTypeToString(busType)), e);
 
             throw e;
         }
@@ -74,6 +94,8 @@ public final class Systemd {
 
     public void disconnect() {
         if (dbus != null) {
+            log.debug(String.format("Disconnecting from %s bus", busTypeToString(busType)));
+
             dbus.disconnect();
         }
     }
@@ -92,10 +114,19 @@ public final class Systemd {
                 throw new DBusException("Unable to create manager without bus (please connect first)");
             }
 
+            log.debug(String.format("Creating new manager instance on %s bus", busTypeToString(busType)));
+
             manager = Manager.create(dbus);
         }
 
         return manager;
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (isConnected()) {
+            disconnect();
+        }
     }
 
 }
