@@ -406,9 +406,7 @@ public class Playground {
     }
 
     public static void main(String[] args) {
-        try (Systemd systemd = new Systemd()) {
-            systemd.connect();
-
+        try (Systemd systemd = Systemd.createAndConnect()) {
 //            introspect(systemd.getManager());
             properties(systemd.getManager());
             methods(systemd.getManager());

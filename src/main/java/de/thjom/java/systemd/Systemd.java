@@ -79,6 +79,17 @@ public final class Systemd implements AutoCloseable {
         return new Date(timestamp / 1000);
     }
 
+    public static Systemd createAndConnect() throws DBusException {
+        return createAndConnect(DBusConnection.SYSTEM);
+    }
+
+    public static Systemd createAndConnect(final int busType) throws DBusException {
+        Systemd systemd = new Systemd(busType);
+        systemd.connect();
+
+        return systemd;
+    }
+
     public void connect() throws DBusException {
         log.debug(String.format("Connecting to %s bus", busTypeToString(busType)));
 
