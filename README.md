@@ -16,9 +16,7 @@ import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Service;
 import de.thjom.java.systemd.Systemd;
 
-try (Systemd systemd = new Systemd()) {
-    systemd.connect();
-
+try (Systemd systemd = Systemd.createAndConnect()) {
     Manager manager = systemd.getManager();
 
     System.out.println("== Manager ==");
