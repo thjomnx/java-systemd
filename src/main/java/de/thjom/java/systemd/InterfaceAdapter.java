@@ -12,6 +12,7 @@
 package de.thjom.java.systemd;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.DBusInterface;
@@ -36,8 +37,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
     protected InterfaceAdapter(final DBusConnection dbus, final DBusInterface iface) {
         super();
 
-        this.dbus = dbus;
-        this.iface = iface;
+        this.dbus = Objects.requireNonNull(dbus);
+        this.iface = Objects.requireNonNull(iface);
     }
 
     @Override
