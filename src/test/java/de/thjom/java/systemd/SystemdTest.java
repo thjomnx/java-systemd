@@ -18,8 +18,6 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Systemd;
-
 public class SystemdTest {
 
     @Test(description="Tests object path escape function.")
@@ -54,7 +52,12 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        systemd.disconnect();
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -69,12 +72,18 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        systemd.disconnect();
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
 
         Assert.assertFalse(systemd.isConnected());
 
         // Test initialization of internal object
         Assert.assertNotNull(systemd.getConnection());
+        Assert.assertFalse(systemd.getConnection().isPresent());
     }
 
     @Test(groups="requireSystemd", description="Tests D-Bus connectivity to session (user) bus.")
@@ -94,7 +103,12 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        systemd.disconnect();
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -109,12 +123,65 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        systemd.disconnect();
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
 
         Assert.assertFalse(systemd.isConnected());
 
         // Test initialization of internal object
         Assert.assertNotNull(systemd.getConnection());
+        Assert.assertFalse(systemd.getConnection().isPresent());
+    }
+
+    @Test(groups="requireSystemd", description="Tests that 'close' method is idempotent (i.e. can be called multiple times without error).")
+    public void testCloseIdempotence() {
+        Systemd systemd = new Systemd();
+
+        Assert.assertFalse(systemd.isConnected());
+
+        // Connect to bus
+        try {
+            systemd.connect();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertTrue(systemd.isConnected());
+
+        // Disconnect from bus
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertFalse(systemd.isConnected());
+
+        // Disconnect once more #1
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertFalse(systemd.isConnected());
+
+        // Disconnect once more #2
+        try {
+            systemd.close();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertFalse(systemd.isConnected());
     }
 
     @Test(groups="requireSystemd", description="Tests manager creation while connected to system bus.")
@@ -130,7 +197,12 @@ public class SystemdTest {
             Assert.fail(e.getMessage(), e);
         }
         finally {
-            systemd.disconnect();
+            try {
+                systemd.close();
+            }
+            catch (DBusException e) {
+                Assert.fail(e.getMessage(), e);
+            }
         }
     }
 
@@ -147,15 +219,22 @@ public class SystemdTest {
             Assert.fail(e.getMessage(), e);
         }
         finally {
-            systemd.disconnect();
+            try {
+                systemd.close();
+            }
+            catch (DBusException e) {
+                Assert.fail(e.getMessage(), e);
+            }
         }
     }
 
+    @SuppressWarnings("resource")
     @Test(groups="requireSystemd", description="Tests manager creation on system bus in unconnected state.", expectedExceptions={ DBusException.class })
     public void testSystemManagerCreationUnconnected() throws DBusException {
         new Systemd().getManager();
     }
 
+    @SuppressWarnings("resource")
     @Test(groups="requireSystemd", description="Tests manager creation on session (user) bus in unconnected state.", expectedExceptions={ DBusException.class })
     public void testSessionManagerCreationUnconnected() throws DBusException {
         new Systemd(DBusConnection.SESSION).getManager();

@@ -12,6 +12,7 @@
 package de.thjom.java.systemd;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -103,20 +104,23 @@ public final class Systemd implements AutoCloseable {
         }
     }
 
-    public void disconnect() {
-        if (dbus != null) {
+    @Override
+    public void close() throws DBusException {
+        if (isConnected()) {
             log.debug(String.format("Disconnecting from %s bus", busTypeToString(busType)));
 
             dbus.disconnect();
         }
+
+        dbus = null;
     }
 
     public boolean isConnected() {
         return !(dbus == null || dbus.getError() instanceof NotConnected);
     }
 
-    DBusConnection getConnection() {
-        return dbus;
+    Optional<DBusConnection> getConnection() {
+        return Optional.ofNullable(dbus);
     }
 
     public Manager getManager() throws DBusException {
@@ -131,13 +135,6 @@ public final class Systemd implements AutoCloseable {
         }
 
         return manager;
-    }
-
-    @Override
-    public void close() throws DBusException {
-        if (isConnected()) {
-            disconnect();
-        }
     }
 
 }
