@@ -13,10 +13,9 @@ package de.thjom.java.systemd.types;
 
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.Position;
-import org.freedesktop.dbus.Struct;
 import org.freedesktop.dbus.UInt32;
 
-public class UnitType extends Struct implements Comparable<UnitType> {
+public class UnitType extends UnitBase implements Comparable<UnitType> {
 
     @Position(0)
     private final String unitName;
@@ -51,7 +50,7 @@ public class UnitType extends Struct implements Comparable<UnitType> {
     public UnitType(final String unitName, final String unitDescription, final String loadState,
             final String activeState, final String subState, final String followingUnit, final Path unitObjectPath,
             final UInt32 jobId, String jobType, final Path jobObjectPath) {
-        super();
+        super(unitName);
 
         this.unitName = unitName;
         this.unitDescription = unitDescription;

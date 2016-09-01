@@ -12,9 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import org.freedesktop.dbus.Position;
-import org.freedesktop.dbus.Struct;
 
-public class UnitFileType extends Struct implements Comparable<UnitFileType> {
+public class UnitFileType extends UnitBase implements Comparable<UnitFileType> {
 
     @Position(0)
     private final String path;
@@ -23,7 +22,7 @@ public class UnitFileType extends Struct implements Comparable<UnitFileType> {
     private final String status;
 
     public UnitFileType(final String path, final String status) {
-        super();
+        super(path);
 
         this.path = path;
         this.status = status;
