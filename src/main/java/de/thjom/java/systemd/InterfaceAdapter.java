@@ -64,11 +64,11 @@ public abstract class InterfaceAdapter implements DBusInterface {
         return properties;
     }
 
-    public <T extends DBusSignal> void subscribe(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+    public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         dbus.addSigHandler(type, handler);
     }
 
-    public <T extends DBusSignal> void unsubscribe(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+    public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         dbus.removeSigHandler(type, handler);
     }
 

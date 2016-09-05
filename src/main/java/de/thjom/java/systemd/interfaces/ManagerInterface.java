@@ -59,6 +59,12 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ResetFailedUnit")
     void resetFailedUnit(final String name);
 
+    @DBusMemberName(value = "Subscribe")
+    void subscribe();
+
+    @DBusMemberName(value = "Unsubscribe")
+    void unsubscribe();
+
     @DBusMemberName(value = "Dump")
     String dump();
 

@@ -217,6 +217,14 @@ public class Manager extends InterfaceAdapter {
         getInterface().resetFailedUnit(name);
     }
 
+    public void subscribe() {
+        getInterface().subscribe();
+    }
+
+    public void unsubscribe() {
+        getInterface().unsubscribe();
+    }
+
     public Automount getAutomount(final String name) throws DBusException {
         return Automount.create(this, name);
     }
