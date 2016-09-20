@@ -74,6 +74,8 @@ public abstract class InterfaceAdapter implements DBusInterface {
 
     protected static class Property {
 
+        private static final Logger log = LoggerFactory.getLogger(Property.class);
+
         protected Property() {
             // Do nothing (static implementation)
         }
@@ -89,7 +91,7 @@ public abstract class InterfaceAdapter implements DBusInterface {
                     obj = fields[i].get(null);
                 }
                 catch (final IllegalAccessException | IllegalArgumentException e) {
-                    e.printStackTrace();
+                    log.error("Unable to enumerate field names", e);
                 }
 
                 names[i] = obj.toString();
