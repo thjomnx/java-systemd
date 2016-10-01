@@ -16,7 +16,7 @@ import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Service;
 import de.thjom.java.systemd.Systemd;
 
-try (Systemd systemd = Systemd.createAndConnect()) {
+try (Systemd systemd = Systemd.get()) {
     Manager manager = systemd.getManager();
 
     System.out.println("== Manager ==");
@@ -41,8 +41,8 @@ catch (final Exception e) {
 
 Unit tests are based on [TestNG](http://testng.org/doc/index.html) and [Mockito](http://mockito.org/). Test methods which require a deployed systemd environment are grouped
 in TestNG group "requireSystemd". There are two TestNG suites available:
-- src/test/resources/suites/auto-systemd.xml (executes all tests)
-- src/test/resources/suites/auto.xml (excludes group "requireSystemd")
+- src/test/resources/suites/**auto-systemd.xml** (executes all tests)
+- src/test/resources/suites/**auto.xml** (excludes group "requireSystemd")
 
 ## Playground
 
