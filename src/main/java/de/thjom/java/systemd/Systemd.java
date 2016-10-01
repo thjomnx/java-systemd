@@ -80,11 +80,11 @@ public final class Systemd implements AutoCloseable {
         return new Date(timestamp / 1000);
     }
 
-    public static Systemd createAndConnect() throws DBusException {
-        return createAndConnect(DBusConnection.SYSTEM);
+    public static Systemd get() throws DBusException {
+        return get(DBusConnection.SYSTEM);
     }
 
-    public static Systemd createAndConnect(final int busType) throws DBusException {
+    public static Systemd get(final int busType) throws DBusException {
         Systemd systemd = new Systemd(busType);
         systemd.connect();
 
