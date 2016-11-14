@@ -118,6 +118,8 @@ public class Manager extends InterfaceAdapter {
 
     }
 
+    private boolean subscribed;
+
     private Manager(final DBusConnection dbus, final ManagerInterface iface) throws DBusException {
         super(dbus, iface);
 
@@ -217,12 +219,20 @@ public class Manager extends InterfaceAdapter {
         getInterface().resetFailedUnit(name);
     }
 
-    public void subscribe() {
-        getInterface().subscribe();
+    public synchronized void subscribe() {
+        if (!subscribed) {
+            getInterface().subscribe();
+
+            subscribed = true;
+        }
     }
 
-    public void unsubscribe() {
-        getInterface().unsubscribe();
+    public synchronized void unsubscribe() {
+        if (subscribed) {
+            getInterface().unsubscribe();
+
+            subscribed = false;
+        }
     }
 
     public Automount getAutomount(final String name) throws DBusException {
