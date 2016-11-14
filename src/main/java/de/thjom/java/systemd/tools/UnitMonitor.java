@@ -146,11 +146,8 @@ public class UnitMonitor {
         public void handle(final Reloading signal) {
             if (signal.isActive()) {
                 // TODO Log something (give hint that daemon-reload has begun)
-                System.out.println("systemctl daemon-reload (start)");
             }
             else {
-                System.out.println("systemctl daemon-reload (end -> remapping units)");
-
                 try {
                     mapUnits();
                 }
