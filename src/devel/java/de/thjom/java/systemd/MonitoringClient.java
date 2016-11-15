@@ -32,8 +32,7 @@ public class MonitoringClient implements Runnable {
     public void run() {
         if (running) {
             try {
-                Systemd systemd = Systemd.get();
-                Manager manager = systemd.getManager();
+                Manager manager = Systemd.get().getManager();
 
                 UnitMonitor unitMonitor = new UnitMonitor(manager, MonitoredType.SERVICE);
                 unitMonitor.attach();
@@ -80,6 +79,9 @@ public class MonitoringClient implements Runnable {
             }
             catch (final DBusException e) {
                 e.printStackTrace();
+            }
+            finally {
+                Systemd.disconnectAll();
             }
         }
     }
