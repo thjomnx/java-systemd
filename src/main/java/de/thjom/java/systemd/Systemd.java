@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -22,26 +23,54 @@ import org.freedesktop.dbus.exceptions.NotConnected;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class Systemd implements AutoCloseable {
+public final class Systemd {
 
     public static final String SERVICE_NAME = "org.freedesktop.systemd1";
     public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
 
     public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
 
+    public static enum InstanceType {
+
+        SYSTEM(DBusConnection.SYSTEM),
+        USER(DBusConnection.SESSION);
+
+        private final int index;
+
+        private InstanceType(final int index) {
+            this.index = index;
+        }
+
+        public static final int size() {
+            return values().length;
+        }
+
+        public final int getIndex() {
+            return index;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
+    }
+
     private static final Logger log = LoggerFactory.getLogger(Systemd.class);
 
-    private final int busType;
+    private static final Systemd[] instances = new Systemd[InstanceType.size()];
+
+    private final InstanceType instanceType;
 
     private DBusConnection dbus;
     private Manager manager;
 
-    public Systemd() {
-        this(DBusConnection.SYSTEM);
+    private Systemd() {
+        this(InstanceType.SYSTEM);
     }
 
-    public Systemd(final int busType) {
-        this.busType = busType;
+    private Systemd(final InstanceType instanceType) {
+        this.instanceType = instanceType;
     }
 
     public static final String escapePath(final CharSequence path) {
@@ -58,56 +87,85 @@ public final class Systemd implements AutoCloseable {
         return escaped.toString();
     }
 
-    public static final String busTypeToString(final int busType) {
-        final String str;
-
-        switch (busType) {
-            case DBusConnection.SYSTEM:
-                str = "system";
-                break;
-            case DBusConnection.SESSION:
-                str = "session";
-                break;
-            default:
-                str = "unknown";
-                break;
-        }
-
-        return str;
-    }
-
     public static final Date timestampToDate(final long timestamp) {
         return new Date(timestamp / 1000);
     }
 
     public static Systemd get() throws DBusException {
-        return get(DBusConnection.SYSTEM);
+        return get(InstanceType.SYSTEM);
     }
 
-    public static Systemd get(final int busType) throws DBusException {
-        Systemd systemd = new Systemd(busType);
-        systemd.connect();
+    public static Systemd get(final InstanceType instanceType) throws DBusException {
+        final int index = instanceType.getIndex();
 
-        return systemd;
+        Systemd instance;
+
+        synchronized (instances) {
+            if (instances[index] == null) {
+                instance = new Systemd(instanceType);
+                instance.open();
+
+                instances[index] = instance;
+            }
+            else {
+                instance = instances[index];
+            }
+        }
+
+        return instance;
     }
 
-    public void connect() throws DBusException {
-        log.debug(String.format("Connecting to %s bus", busTypeToString(busType)));
+    public static void disconnect() throws DBusException {
+        disconnect(InstanceType.SYSTEM);
+    }
+
+    public static void disconnect(final InstanceType instanceType) throws DBusException {
+        final int index = instanceType.getIndex();
+
+        synchronized (instances) {
+            Systemd instance = instances[index];
+
+            if (instance != null) {
+                instance.close();
+            }
+
+            instances[index] = null;
+        }
+    }
+
+    public static void disconnectAll() {
+        synchronized (instances) {
+            for (Systemd instance : instances) {
+                if (instance != null) {
+                    try {
+                        instance.close();
+                    }
+                    catch (final DBusException e) {
+                        log.error(e.getMessage());
+                    }
+                }
+            }
+
+            Arrays.fill(instances, null);
+        }
+    }
+
+    private void open() throws DBusException {
+        log.debug(String.format("Connecting to %s bus", instanceType));
 
         try {
-            dbus = DBusConnection.getConnection(busType);
+            dbus = DBusConnection.getConnection(instanceType.getIndex());
         }
         catch (final DBusException e) {
-            log.error(String.format("Unable to connect to %s bus", busTypeToString(busType)), e);
+            log.error(String.format("Unable to connect to %s bus", instanceType), e);
 
             throw e;
         }
     }
 
-    @Override
-    public void close() throws DBusException {
+    private void close() throws DBusException {
         if (isConnected()) {
-            log.debug(String.format("Disconnecting from %s bus", busTypeToString(busType)));
+            log.debug(String.format("Disconnecting from %s bus", instanceType));
 
             dbus.disconnect();
         }
@@ -129,7 +187,7 @@ public final class Systemd implements AutoCloseable {
                 throw new DBusException("Unable to create manager without bus (please connect first)");
             }
 
-            log.debug(String.format("Creating new manager instance on %s bus", busTypeToString(busType)));
+            log.debug(String.format("Creating new manager instance on %s bus", instanceType));
 
             manager = Manager.create(dbus);
         }

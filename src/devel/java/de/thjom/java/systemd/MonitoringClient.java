@@ -31,7 +31,8 @@ public class MonitoringClient implements Runnable {
     @Override
     public void run() {
         if (running) {
-            try (Systemd systemd = Systemd.get()) {
+            try {
+                Systemd systemd = Systemd.get();
                 Manager manager = systemd.getManager();
 
                 UnitMonitor unitMonitor = new UnitMonitor(manager, MonitoredType.SERVICE);

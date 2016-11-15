@@ -13,10 +13,11 @@ package de.thjom.java.systemd;
 
 import java.util.Date;
 
-import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import de.thjom.java.systemd.Systemd.InstanceType;
 
 public class SystemdTest {
 
@@ -37,13 +38,11 @@ public class SystemdTest {
 
     @Test(groups="requireSystemd", description="Tests D-Bus connectivity to system bus.")
     public void testSystemBusConnectivity() {
-        Systemd systemd = new Systemd();
+        // Connects automatically to bus
+        Systemd systemd = null;
 
-        Assert.assertFalse(systemd.isConnected());
-
-        // Connect to bus
         try {
-            systemd.connect();
+            systemd = Systemd.get();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -53,7 +52,7 @@ public class SystemdTest {
 
         // Disconnect from bus
         try {
-            systemd.close();
+            Systemd.disconnect();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -63,7 +62,7 @@ public class SystemdTest {
 
         // Reconnect to bus
         try {
-            systemd.connect();
+            systemd = Systemd.get();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -73,7 +72,7 @@ public class SystemdTest {
 
         // Disconnect from bus
         try {
-            systemd.close();
+            Systemd.disconnect();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -88,13 +87,11 @@ public class SystemdTest {
 
     @Test(groups="requireSystemd", description="Tests D-Bus connectivity to session (user) bus.")
     public void testSessionBusConnectivity() {
-        Systemd systemd = new Systemd(DBusConnection.SESSION);
+        // Connects automatically to bus
+        Systemd systemd = null;
 
-        Assert.assertFalse(systemd.isConnected());
-
-        // Connect to bus
         try {
-            systemd.connect();
+            systemd = Systemd.get(InstanceType.USER);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -104,7 +101,7 @@ public class SystemdTest {
 
         // Disconnect from bus
         try {
-            systemd.close();
+            Systemd.disconnect(InstanceType.USER);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -114,7 +111,7 @@ public class SystemdTest {
 
         // Reconnect to bus
         try {
-            systemd.connect();
+            systemd = Systemd.get(InstanceType.USER);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -124,7 +121,7 @@ public class SystemdTest {
 
         // Disconnect from bus
         try {
-            systemd.close();
+            Systemd.disconnect(InstanceType.USER);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -137,15 +134,13 @@ public class SystemdTest {
         Assert.assertFalse(systemd.getConnection().isPresent());
     }
 
-    @Test(groups="requireSystemd", description="Tests that 'close' method is idempotent (i.e. can be called multiple times without error).")
-    public void testCloseIdempotence() {
-        Systemd systemd = new Systemd();
+    @Test(groups="requireSystemd", description="Tests that 'disconnect' method is idempotent (i.e. can be called multiple times without error).")
+    public void testDisconnectIdempotence() {
+        // Connects automatically to bus
+        Systemd systemd = null;
 
-        Assert.assertFalse(systemd.isConnected());
-
-        // Connect to bus
         try {
-            systemd.connect();
+            systemd = Systemd.get();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -155,7 +150,7 @@ public class SystemdTest {
 
         // Disconnect from bus
         try {
-            systemd.close();
+            Systemd.disconnect();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -165,7 +160,7 @@ public class SystemdTest {
 
         // Disconnect once more #1
         try {
-            systemd.close();
+            Systemd.disconnect();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -175,7 +170,7 @@ public class SystemdTest {
 
         // Disconnect once more #2
         try {
-            systemd.close();
+            Systemd.disconnect();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -184,13 +179,40 @@ public class SystemdTest {
         Assert.assertFalse(systemd.isConnected());
     }
 
-    @Test(groups="requireSystemd", description="Tests manager creation while connected to system bus.")
-    public void testSystemManagerCreation() {
-        Systemd systemd = new Systemd();
+    @Test(groups="requireSystemd", description="Tests 'disconnectAll' method.")
+    public void testGlobalDisconnection() {
+        Systemd system = null;
+        Systemd user = null;
 
         try {
-            systemd.connect();
+            system = Systemd.get(InstanceType.SYSTEM);
+            user = Systemd.get(InstanceType.USER);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
 
+        Assert.assertTrue(system.isConnected());
+        Assert.assertTrue(user.isConnected());
+
+        Systemd.disconnectAll();
+
+        Assert.assertFalse(system.isConnected());
+        Assert.assertFalse(user.isConnected());
+    }
+
+    @Test(groups="requireSystemd", description="Tests manager creation while connected to system bus.")
+    public void testSystemManagerCreation() {
+        Systemd systemd = null;
+
+        try {
+            systemd = Systemd.get();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        try {
             Assert.assertNotNull(systemd.getManager());
         }
         catch (DBusException e) {
@@ -198,7 +220,7 @@ public class SystemdTest {
         }
         finally {
             try {
-                systemd.close();
+                Systemd.disconnect();
             }
             catch (DBusException e) {
                 Assert.fail(e.getMessage(), e);
@@ -208,11 +230,16 @@ public class SystemdTest {
 
     @Test(groups="requireSystemd", description="Tests manager creation while connected to session (user) bus.")
     public void testSessionManagerCreation() {
-        Systemd systemd = new Systemd(DBusConnection.SESSION);
+        Systemd systemd = null;
 
         try {
-            systemd.connect();
+            systemd = Systemd.get(InstanceType.USER);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
 
+        try {
             Assert.assertNotNull(systemd.getManager());
         }
         catch (DBusException e) {
@@ -220,7 +247,7 @@ public class SystemdTest {
         }
         finally {
             try {
-                systemd.close();
+                Systemd.disconnect(InstanceType.USER);
             }
             catch (DBusException e) {
                 Assert.fail(e.getMessage(), e);
@@ -228,16 +255,20 @@ public class SystemdTest {
         }
     }
 
-    @SuppressWarnings("resource")
     @Test(groups="requireSystemd", description="Tests manager creation on system bus in unconnected state.", expectedExceptions={ DBusException.class })
     public void testSystemManagerCreationUnconnected() throws DBusException {
-        new Systemd().getManager();
+        Systemd instance = Systemd.get();
+        Systemd.disconnect();
+
+        instance.getManager();
     }
 
-    @SuppressWarnings("resource")
     @Test(groups="requireSystemd", description="Tests manager creation on session (user) bus in unconnected state.", expectedExceptions={ DBusException.class })
     public void testSessionManagerCreationUnconnected() throws DBusException {
-        new Systemd(DBusConnection.SESSION).getManager();
+        Systemd instance = Systemd.get(InstanceType.USER);
+        Systemd.disconnect(InstanceType.USER);
+
+        instance.getManager();
     }
 
 }

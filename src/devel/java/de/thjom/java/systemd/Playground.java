@@ -406,7 +406,9 @@ public class Playground {
     }
 
     public static void main(String[] args) {
-        try (Systemd systemd = Systemd.get()) {
+        try {
+            Systemd systemd = Systemd.get();
+
 //            introspect(systemd.getManager());
             properties(systemd.getManager());
             methods(systemd.getManager());
@@ -436,6 +438,9 @@ public class Playground {
         }
         catch (final Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            Systemd.disconnectAll();
         }
     }
 
