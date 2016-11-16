@@ -41,24 +41,26 @@ public class MonitoringClient implements Runnable {
                     Collection<Unit> units = unitMonitor.getMonitoredUnits().values();
                     Iterator<Unit> it = units.iterator();
 
-                    String[][] matrix = new String[5][units.size()];
+                    String[][] colsRows = new String[5][units.size()];
 
-                    for (int r = 0; r < units.size(); r++) {
+                    for (int row = 0; row < units.size(); row++) {
                         Unit unit = it.next();
                         Service service = (Service) unit;
 
-                        matrix[0][r] = unit.toString();
-                        matrix[1][r] = service.getLoadState();
-                        matrix[2][r] = service.getActiveState();
-                        matrix[3][r] = service.getSubState();
-                        matrix[4][r] = service.getDescription();
+                        int col = 0;
+
+                        colsRows[col++][row] = unit.toString();
+                        colsRows[col++][row] = service.getLoadState();
+                        colsRows[col++][row] = service.getActiveState();
+                        colsRows[col++][row] = service.getSubState();
+                        colsRows[col++][row] = service.getDescription();
                     }
 
-                    int[] maxCharsPerColumn = calcMaxColumnChars(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4]);
+                    int[] maxCharsPerColumn = calcMaxColumnChars(colsRows[0], colsRows[1], colsRows[2], colsRows[3], colsRows[4]);
 
-                    for (int r = 0; r < units.size(); r++) {
-                        for (int c = 0; c < matrix.length; c++) {
-                            System.out.format("%-" + maxCharsPerColumn[c] + "s ", matrix[c][r]);
+                    for (int row = 0; row < units.size(); row++) {
+                        for (int col = 0; col < colsRows.length; col++) {
+                            System.out.format("%-" + maxCharsPerColumn[col] + "s ", colsRows[col][row]);
                         }
 
                         System.out.println();
@@ -75,7 +77,6 @@ public class MonitoringClient implements Runnable {
                 }
 
                 unitMonitor.detach();
-                manager.unsubscribe();
             }
             catch (final DBusException e) {
                 e.printStackTrace();
