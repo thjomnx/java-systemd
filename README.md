@@ -11,31 +11,7 @@ This library shall:
 
 ## Usage
 
-```java
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Service;
-import de.thjom.java.systemd.Systemd;
-
-try (Systemd systemd = Systemd.get()) {
-    Manager manager = systemd.getManager();
-
-    System.out.println("== Manager ==");
-    System.out.println("Architecture: " + manager.getArchitecture());
-    System.out.println("Environment: " + manager.getEnvironment());
-    System.out.println("System state: " + manager.getSystemState());
-
-    System.out.println();
-
-    Service avahi = manager.getService("avahi-daemon");
-
-    System.out.println("== Service 'avahi-daemon' ==");
-    System.out.println("Names: " + avahi.getNames());
-    System.out.println("PID: " + avahi.getMainPID());
-}
-catch (final Exception e) {
-    e.printStackTrace();
-}
-```
+Documentation and instructions how to use this library can be found in the [Wiki](https://github.com/thjomnx/java-systemd/wiki).
 
 ## Testing
 
@@ -43,10 +19,6 @@ Unit tests are based on [TestNG](http://testng.org/doc/index.html) and [Mockito]
 in TestNG group "requireSystemd". There are two TestNG suites available:
 - src/test/resources/suites/**auto-systemd.xml** (executes all tests)
 - src/test/resources/suites/**auto.xml** (excludes group "requireSystemd")
-
-## Playground
-
-Lookout for class de.thjom.java.systemd.Playground and run its main method to test some simple stuff.
 
 ## License
 
