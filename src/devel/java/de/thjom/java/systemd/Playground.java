@@ -15,6 +15,8 @@ import java.util.Arrays;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.Systemd.InstanceType;
+
 public class Playground {
 
     private Playground() {
@@ -407,7 +409,7 @@ public class Playground {
 
     public static void main(String[] args) {
         try {
-            Systemd systemd = Systemd.get();
+            Systemd systemd = Systemd.get(InstanceType.USER);
 
 //            introspect(systemd.getManager());
             properties(systemd.getManager());
@@ -440,7 +442,12 @@ public class Playground {
             e.printStackTrace();
         }
         finally {
-            Systemd.disconnectAll();
+            try {
+                Systemd.disconnect();
+            }
+            catch (DBusException e) {
+                e.printStackTrace();
+            }
         }
     }
 
