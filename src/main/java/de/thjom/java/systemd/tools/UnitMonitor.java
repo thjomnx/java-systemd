@@ -19,6 +19,8 @@ import java.util.Map;
 
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Unit;
@@ -45,6 +47,8 @@ public class UnitMonitor {
         TARGET,
         TIMER
     }
+
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final Manager manager;
     protected final EnumSet<MonitoredType> monitoredTypes;
@@ -145,14 +149,20 @@ public class UnitMonitor {
         @Override
         public void handle(final Reloading signal) {
             if (signal.isActive()) {
-                // TODO Log something (give hint that daemon-reload has begun)
+                if (log.isDebugEnabled()) {
+                    log.debug(String.format("Signal received ('daemon-reload' started: %s)", signal));
+                }
             }
             else {
+                if (log.isDebugEnabled()) {
+                    log.debug(String.format("Signal received ('daemon-reload' finished: %s)", signal));
+                }
+
                 try {
                     mapUnits();
                 }
                 catch (final DBusException e) {
-                    // TODO Log something, then ignore
+                    log.error("Unable to map units", e);
                 }
             }
         }
@@ -163,11 +173,15 @@ public class UnitMonitor {
 
         @Override
         public void handle(final UnitFilesChanged signal) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Signal received (unit files changed: %s)", signal));
+            }
+
             try {
                 mapUnits();
             }
             catch (final DBusException e) {
-                // TODO Log something, then ignore
+                log.error("Unable to map units", e);
             }
         }
 
@@ -177,11 +191,15 @@ public class UnitMonitor {
 
         @Override
         public void handle(final UnitNew signal) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Signal received (unit new: %s)", signal));
+            }
+
             try {
                 mapUnits();
             }
             catch (final DBusException e) {
-                // TODO Log something, then ignore
+                log.error("Unable to map units", e);
             }
         }
 
@@ -191,11 +209,15 @@ public class UnitMonitor {
 
         @Override
         public void handle(final UnitRemoved signal) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Signal received (unit removed: %s)", signal));
+            }
+
             try {
                 mapUnits();
             }
             catch (final DBusException e) {
-                // TODO Log something, then ignore
+                log.error("Unable to map units", e);
             }
         }
 
