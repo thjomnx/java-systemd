@@ -36,8 +36,8 @@ public class SystemdTest {
         Assert.assertEquals(Systemd.timestampToDate(tstamp * 1000), now);
     }
 
-    @Test(groups="requireSystemd", description="Tests D-Bus connectivity to system bus.")
-    public void testSystemBusConnectivity() {
+    @Test(groups="requireSystemd", description="Tests D-Bus connectivity to system instance.")
+    public void testSystemInstanceConnectivity() {
         // Connects automatically to bus
         Systemd systemd = null;
 
@@ -85,8 +85,8 @@ public class SystemdTest {
         Assert.assertFalse(systemd.getConnection().isPresent());
     }
 
-    @Test(groups="requireSystemd", description="Tests D-Bus connectivity to session (user) bus.")
-    public void testSessionBusConnectivity() {
+    @Test(groups="requireSystemd", description="Tests D-Bus connectivity to user instance.")
+    public void testUserInstanceConnectivity() {
         // Connects automatically to bus
         Systemd systemd = null;
 
@@ -201,7 +201,7 @@ public class SystemdTest {
         Assert.assertFalse(user.isConnected());
     }
 
-    @Test(groups="requireSystemd", description="Tests manager creation while connected to system bus.")
+    @Test(groups="requireSystemd", description="Tests manager creation while connected to system instance.")
     public void testSystemManagerCreation() {
         Systemd systemd = null;
 
@@ -228,7 +228,7 @@ public class SystemdTest {
         }
     }
 
-    @Test(groups="requireSystemd", description="Tests manager creation while connected to session (user) bus.")
+    @Test(groups="requireSystemd", description="Tests manager creation while connected to user instance.")
     public void testSessionManagerCreation() {
         Systemd systemd = null;
 
@@ -255,7 +255,7 @@ public class SystemdTest {
         }
     }
 
-    @Test(groups="requireSystemd", description="Tests manager creation on system bus in unconnected state.", expectedExceptions={ DBusException.class })
+    @Test(groups="requireSystemd", description="Tests manager creation on system instance in unconnected state.", expectedExceptions={ DBusException.class })
     public void testSystemManagerCreationUnconnected() throws DBusException {
         Systemd instance = Systemd.get();
         Systemd.disconnect();
@@ -263,7 +263,7 @@ public class SystemdTest {
         instance.getManager();
     }
 
-    @Test(groups="requireSystemd", description="Tests manager creation on session (user) bus in unconnected state.", expectedExceptions={ DBusException.class })
+    @Test(groups="requireSystemd", description="Tests manager creation on user instance in unconnected state.", expectedExceptions={ DBusException.class })
     public void testSessionManagerCreationUnconnected() throws DBusException {
         Systemd instance = Systemd.get(InstanceType.USER);
         Systemd.disconnect(InstanceType.USER);
