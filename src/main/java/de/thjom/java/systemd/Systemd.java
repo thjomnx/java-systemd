@@ -41,10 +41,6 @@ public final class Systemd {
             this.index = index;
         }
 
-        public static final int size() {
-            return values().length;
-        }
-
         public final int getIndex() {
             return index;
         }
@@ -58,7 +54,7 @@ public final class Systemd {
 
     private static final Logger log = LoggerFactory.getLogger(Systemd.class);
 
-    private static final Systemd[] instances = new Systemd[InstanceType.size()];
+    private static final Systemd[] instances = new Systemd[InstanceType.values().length];
 
     private final InstanceType instanceType;
 
