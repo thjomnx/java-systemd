@@ -18,7 +18,8 @@ import java.util.Iterator;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.tools.UnitMonitor;
-import de.thjom.java.systemd.tools.UnitMonitor.MonitoredType;
+import de.thjom.java.systemd.tools.UnitTypeMonitor;
+import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
 
 public class MonitoringClient implements Runnable {
 
@@ -34,7 +35,7 @@ public class MonitoringClient implements Runnable {
             try {
                 Manager manager = Systemd.get().getManager();
 
-                UnitMonitor unitMonitor = new UnitMonitor(manager, MonitoredType.SERVICE);
+                UnitMonitor unitMonitor = new UnitTypeMonitor(manager, MonitoredType.SERVICE);
                 unitMonitor.attach();
 
                 while (running) {
