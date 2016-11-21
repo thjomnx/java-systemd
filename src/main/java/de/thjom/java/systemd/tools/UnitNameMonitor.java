@@ -11,16 +11,22 @@
 
 package de.thjom.java.systemd.tools;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.Manager;
+import de.thjom.java.systemd.Unit;
 import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitNew;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitRemoved;
 
 public class UnitNameMonitor extends UnitMonitor {
+
+    protected final Set<String> monitoredNames = new HashSet<>();
 
     private final ReloadingHandler reloadingHandler = new ReloadingHandler();
     private final UnitFilesChangedHandler unitFilesChangedHandler = new UnitFilesChangedHandler();
@@ -48,15 +54,31 @@ public class UnitNameMonitor extends UnitMonitor {
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
     }
 
-    public void addUnits(final String... unitNames) throws DBusException {
-        for (String unitName : unitNames) {
+    public synchronized void addUnits(final String... fullUnitNames) throws DBusException {
+        for (String unitName : fullUnitNames) {
+            monitoredNames.add(unitName);
             monitoredUnits.put(unitName, manager.getUnit(unitName));
         }
     }
 
-    public void removeUnits(final String... unitNames) {
-        for (String unitName : unitNames) {
+    public synchronized void addUnits(final Unit... units) throws DBusException {
+        for (Unit unit : units) {
+            monitoredNames.add(unit.getId());
+            monitoredUnits.put(unit.getId(), unit);
+        }
+    }
+
+    public synchronized void removeUnits(final String... fullUnitNames) {
+        for (String unitName : fullUnitNames) {
+            monitoredNames.remove(unitName);
             monitoredUnits.remove(unitName);
+        }
+    }
+
+    public synchronized void removeUnits(final Unit... units) {
+        for (Unit unit : units) {
+            monitoredNames.remove(unit.getId());
+            monitoredUnits.remove(unit.getId());
         }
     }
 
@@ -96,6 +118,19 @@ public class UnitNameMonitor extends UnitMonitor {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Signal received (unit new: %s)", signal));
             }
+
+            String id = signal.getId();
+
+            synchronized (UnitNameMonitor.this) {
+                if (monitoredNames.contains(id)) {
+                    try {
+                        monitoredUnits.put(id, manager.getUnit(id));
+                    }
+                    catch (final DBusException e) {
+                        log.error(String.format("Unable to add monitored unit '%s'", id), e);
+                    }
+                }
+            }
         }
 
     }
@@ -106,6 +141,12 @@ public class UnitNameMonitor extends UnitMonitor {
         public void handle(final UnitRemoved signal) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Signal received (unit removed: %s)", signal));
+            }
+
+            String id = signal.getId();
+
+            synchronized (UnitNameMonitor.this) {
+                monitoredUnits.remove(id);
             }
         }
 

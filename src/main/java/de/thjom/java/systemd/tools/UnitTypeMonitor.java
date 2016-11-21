@@ -91,6 +91,8 @@ public class UnitTypeMonitor extends UnitMonitor {
     }
 
     protected final synchronized void mapUnits() throws DBusException {
+        monitoredUnits.clear();
+
         for (UnitType unit : manager.listUnits()) {
             String name = unit.getUnitName();
 

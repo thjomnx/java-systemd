@@ -12,12 +12,13 @@
 package de.thjom.java.systemd;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.thjom.java.systemd.tools.UnitMonitor;
+import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
 
@@ -35,11 +36,18 @@ public class MonitoringClient implements Runnable {
             try {
                 Manager manager = Systemd.get().getManager();
 
-                UnitMonitor unitMonitor = new UnitTypeMonitor(manager, MonitoredType.SERVICE);
-                unitMonitor.attach();
+                UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager, MonitoredType.SERVICE);
+                serviceMonitor.attach();
+
+                UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
+                miscMonitor.addUnits("cronie.service");
+                miscMonitor.addUnits(manager.getService("dbus"));
 
                 while (running) {
-                    Collection<Unit> units = unitMonitor.getMonitoredUnits().values();
+                    List<Unit> units = new ArrayList<>();
+                    units.addAll(serviceMonitor.getMonitoredUnits());
+                    units.addAll(miscMonitor.getMonitoredUnits());
+
                     Iterator<Unit> it = units.iterator();
 
                     String[][] colsRows = new String[5][units.size()];
@@ -77,7 +85,7 @@ public class MonitoringClient implements Runnable {
                     }
                 }
 
-                unitMonitor.detach();
+                serviceMonitor.detach();
             }
             catch (final DBusException e) {
                 e.printStackTrace();

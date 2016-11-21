@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd.tools;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +39,8 @@ public abstract class UnitMonitor {
 
     public abstract void detach() throws DBusException;
 
-    public Map<String, Unit> getMonitoredUnits() {
-        return Collections.unmodifiableMap(monitoredUnits);
+    public Collection<Unit> getMonitoredUnits() {
+        return Collections.synchronizedCollection(monitoredUnits.values());
     }
 
 }
