@@ -61,7 +61,7 @@ public class UnitNameMonitor extends UnitMonitor {
         }
     }
 
-    public synchronized void addUnits(final Unit... units) throws DBusException {
+    public synchronized void addUnits(final Unit... units) {
         for (Unit unit : units) {
             monitoredNames.add(unit.getId());
             monitoredUnits.put(unit.getId(), unit);

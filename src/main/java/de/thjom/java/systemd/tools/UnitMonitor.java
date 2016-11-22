@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Unit;
 
-public abstract class UnitMonitor {
+abstract class UnitMonitor {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
