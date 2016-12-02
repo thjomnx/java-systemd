@@ -96,55 +96,43 @@ public class UnitTypeMonitor extends UnitMonitor {
         for (UnitType unit : manager.listUnits()) {
             String name = unit.getUnitName();
 
-            if (monitoredTypes.contains(MonitoredType.AUTOMOUNT) && unit.isAutomount()) {
+            if (unit.isAutomount() && monitoredTypes.contains(MonitoredType.AUTOMOUNT)) {
                 monitoredUnits.put(name, manager.getAutomount(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.BUSNAME) && unit.isBusName()) {
+            else if (unit.isBusName() && monitoredTypes.contains(MonitoredType.BUSNAME)) {
                 monitoredUnits.put(name, manager.getBusName(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.DEVICE) && unit.isDevice()) {
+            else if (unit.isDevice() && monitoredTypes.contains(MonitoredType.DEVICE)) {
                 monitoredUnits.put(name, manager.getDevice(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.MOUNT) && unit.isMount()) {
+            else if (unit.isMount() && monitoredTypes.contains(MonitoredType.MOUNT)) {
                 monitoredUnits.put(name, manager.getMount(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.PATH) && unit.isPath()) {
+            else if (unit.isPath() && monitoredTypes.contains(MonitoredType.PATH)) {
                 monitoredUnits.put(name, manager.getPath(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.SCOPE) && unit.isScope()) {
+            else if (unit.isScope() && monitoredTypes.contains(MonitoredType.SCOPE)) {
                 monitoredUnits.put(name, manager.getScope(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.SERVICE) && unit.isService()) {
+            else if (unit.isService() && monitoredTypes.contains(MonitoredType.SERVICE)) {
                 monitoredUnits.put(name, manager.getService(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.SLICE) && unit.isSlice()) {
+            else if (unit.isSlice() && monitoredTypes.contains(MonitoredType.SLICE)) {
                 monitoredUnits.put(name, manager.getSlice(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.SNAPSHOT) && unit.isSnapshot()) {
+            else if (unit.isSnapshot() && monitoredTypes.contains(MonitoredType.SNAPSHOT)) {
                 monitoredUnits.put(name, manager.getSnapshot(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.SOCKET) && unit.isSocket()) {
+            else if (unit.isSocket() && monitoredTypes.contains(MonitoredType.SOCKET)) {
                 monitoredUnits.put(name, manager.getSocket(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.SWAP) && unit.isSwap()) {
+            else if (unit.isSwap() && monitoredTypes.contains(MonitoredType.SWAP)) {
                 monitoredUnits.put(name, manager.getSwap(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.TARGET) && unit.isTarget()) {
+            else if (unit.isTarget() && monitoredTypes.contains(MonitoredType.TARGET)) {
                 monitoredUnits.put(name, manager.getTarget(name));
             }
-
-            if (monitoredTypes.contains(MonitoredType.TIMER) && unit.isTimer()) {
+            else if (unit.isTimer() && monitoredTypes.contains(MonitoredType.TIMER)) {
                 monitoredUnits.put(name, manager.getTimer(name));
             }
         }
