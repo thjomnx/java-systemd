@@ -10,6 +10,7 @@
     <test name="all">
         <packages>
             <package name="de.thjom.java.systemd" />
+            <package name="de.thjom.java.systemd.tools" />
         </packages>
     </test>
 </suite>
