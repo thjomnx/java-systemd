@@ -13,6 +13,8 @@ package de.thjom.java.systemd.tools;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -30,6 +32,8 @@ abstract class UnitMonitor {
     protected final Manager manager;
     protected final ConcurrentMap<String, Unit> monitoredUnits = new ConcurrentHashMap<>();
 
+    private Timer pollingTimer;
+
     protected UnitMonitor(final Manager manager) {
         this.manager = Objects.requireNonNull(manager);
     }
@@ -39,6 +43,39 @@ abstract class UnitMonitor {
     public abstract void detach() throws DBusException;
 
     public abstract void refresh() throws DBusException;
+
+    public synchronized void startPolling(final long delay, final long period) {
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+                try {
+                    refresh();
+                }
+                catch (final DBusException e) {
+                    log.error("Error while refreshing internal monitor state", e);
+                }
+            }
+
+        };
+
+        if (pollingTimer != null) {
+            pollingTimer.cancel();
+        }
+
+        pollingTimer = createTimer();
+        pollingTimer.schedule(task, delay, period);
+    }
+
+    public synchronized void stopPolling() {
+        if (pollingTimer != null) {
+            pollingTimer.cancel();
+        }
+    }
+
+    protected Timer createTimer() {
+        return new Timer(getClass().getSimpleName() + "-pollingTimer", true);
+    }
 
     public Collection<Unit> getMonitoredUnits() {
         return monitoredUnits.values();
