@@ -1,6 +1,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="auto-systemd">
+    <groups>
+        <run>
+            <exclude name="manual" />
+        </run>
+    </groups>
+
     <test name="all">
         <packages>
             <package name="de.thjom.java.systemd" />

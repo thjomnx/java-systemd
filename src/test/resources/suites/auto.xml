@@ -4,6 +4,7 @@
     <groups>
         <run>
             <exclude name="requireSystemd" />
+            <exclude name="manual" />
         </run>
     </groups>
 

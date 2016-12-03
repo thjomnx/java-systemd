@@ -12,10 +12,9 @@
 package de.thjom.java.systemd.tools;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ abstract class UnitMonitor {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final Manager manager;
-    protected final Map<String, Unit> monitoredUnits = new HashMap<>();
+    protected final ConcurrentMap<String, Unit> monitoredUnits = new ConcurrentHashMap<>();
 
     protected UnitMonitor(final Manager manager) {
         this.manager = Objects.requireNonNull(manager);
@@ -40,7 +39,7 @@ abstract class UnitMonitor {
     public abstract void detach() throws DBusException;
 
     public Collection<Unit> getMonitoredUnits() {
-        return Collections.synchronizedCollection(monitoredUnits.values());
+        return monitoredUnits.values();
     }
 
 }

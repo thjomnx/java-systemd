@@ -23,6 +23,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import de.thjom.java.systemd.AbstractTestCase;
+import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.Unit;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
@@ -39,7 +40,7 @@ public class UnitNameMonitorTest extends AbstractTestCase {
     private ServiceInterface siface0, siface1, siface2;
 
     @Mock
-    protected PropertyInterface piface0, piface1, piface2;
+    private PropertyInterface piface0, piface1, piface2;
 
     @Override
     @BeforeClass
@@ -129,6 +130,71 @@ public class UnitNameMonitorTest extends AbstractTestCase {
         monitor.addUnits(monitor.getMonitoredUnits().toArray(new Unit[0]));
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+    }
+
+    @Test(groups="manual", description="Tests concurrent access on monitored collection.")
+    public void testConcurrentAccess() {
+        Manager manager = null;
+
+        try {
+            manager = systemd.getManager();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        final UnitNameMonitor monitor = new UnitNameMonitor(manager);
+
+        try {
+            monitor.addUnits("cronie.service");
+            monitor.addUnits("polkit.service");
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                for (Unit unit : monitor.getMonitoredUnits()) {
+                    System.out.println(Thread.currentThread().getId() + ": " + unit.getId());
+
+                    try {
+                        Thread.sleep(1000L);
+                    }
+                    catch (InterruptedException e) {
+                        // Do nothing
+                    }
+
+                    try {
+                        monitor.addUnits("avahi-daemon.service");
+                    }
+                    catch (DBusException e) {
+                        Assert.fail(e.getMessage(), e);
+                    }
+                }
+            }
+        });
+
+        thread.start();
+
+        for (Unit unit : monitor.getMonitoredUnits()) {
+            System.out.println(Thread.currentThread().getId() + ": " + unit.getId());
+
+            try {
+                Thread.sleep(1000L);
+            }
+            catch (InterruptedException e) {
+                // Do nothing
+            }
+        }
+
+        System.out.println();
+
+        for (Unit unit : monitor.getMonitoredUnits()) {
+            System.out.println(Thread.currentThread().getId() + ": " + unit.getId());
+        }
     }
 
 }

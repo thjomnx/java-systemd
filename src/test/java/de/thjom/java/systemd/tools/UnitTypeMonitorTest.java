@@ -27,6 +27,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import de.thjom.java.systemd.AbstractTestCase;
+import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.Unit;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
@@ -58,7 +59,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
     private SocketInterface soiface5;
 
     @Mock
-    protected PropertyInterface piface0, piface1, piface2, piface3, piface4, piface5;
+    private PropertyInterface piface0, piface1, piface2, piface3, piface4, piface5;
 
     @Override
     @BeforeClass
@@ -211,6 +212,70 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         }
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+    }
+
+    @Test(groups="manual", description="Tests concurrent access on monitored collection.")
+    public void testConcurrentAccess() {
+        Manager manager = null;
+
+        try {
+            manager = systemd.getManager();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        final UnitTypeMonitor monitor = new UnitTypeMonitor(manager, MonitoredType.MOUNT, MonitoredType.SOCKET);
+
+        try {
+            monitor.attach();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                for (Unit unit : monitor.getMonitoredUnits()) {
+                    System.out.println(Thread.currentThread().getId() + ": " + unit.getId());
+
+                    try {
+                        Thread.sleep(1000L);
+                    }
+                    catch (InterruptedException e) {
+                        // Do nothing
+                    }
+
+                    try {
+                        monitor.addMonitoredTypes(MonitoredType.SERVICE);
+                    }
+                    catch (DBusException e) {
+                        Assert.fail(e.getMessage(), e);
+                    }
+                }
+            }
+        });
+
+        thread.start();
+
+        for (Unit unit : monitor.getMonitoredUnits()) {
+            System.out.println(Thread.currentThread().getId() + ": " + unit.getId());
+
+            try {
+                Thread.sleep(1000L);
+            }
+            catch (InterruptedException e) {
+                // Do nothing
+            }
+        }
+
+        System.out.println();
+
+        for (Unit unit : monitor.getMonitoredUnits()) {
+            System.out.println(Thread.currentThread().getId() + ": " + unit.getId());
+        }
     }
 
 }
