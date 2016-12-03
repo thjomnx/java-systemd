@@ -11,7 +11,6 @@
 
 package de.thjom.java.systemd.tools;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 
 import org.freedesktop.dbus.DBusSigHandler;
@@ -42,17 +41,15 @@ public class UnitTypeMonitor extends UnitMonitor {
         TIMER
     }
 
-    protected final EnumSet<MonitoredType> monitoredTypes;
+    protected final EnumSet<MonitoredType> monitoredTypes = EnumSet.noneOf(MonitoredType.class);
 
     private final ReloadingHandler reloadingHandler = new ReloadingHandler();
     private final UnitFilesChangedHandler unitFilesChangedHandler = new UnitFilesChangedHandler();
     private final UnitNewHandler unitNewHandler = new UnitNewHandler();
     private final UnitRemovedHandler unitRemovedHandler = new UnitRemovedHandler();
 
-    public UnitTypeMonitor(final Manager manager, final MonitoredType... monitoredTypes) {
+    public UnitTypeMonitor(final Manager manager) {
         super(manager);
-
-        this.monitoredTypes = EnumSet.copyOf(Arrays.asList(monitoredTypes));
     }
 
     @Override
@@ -62,8 +59,6 @@ public class UnitTypeMonitor extends UnitMonitor {
         manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
         manager.addHandler(UnitNew.class, unitNewHandler);
         manager.addHandler(UnitRemoved.class, unitRemovedHandler);
-
-        mapUnits();
     }
 
     @Override

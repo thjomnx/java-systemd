@@ -178,7 +178,8 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         UnitTypeMonitor monitor = null;
 
         try {
-            monitor = new UnitTypeMonitor(systemd.getManager(), MonitoredType.MOUNT, MonitoredType.SOCKET);
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -225,9 +226,10 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Assert.fail(e.getMessage(), e);
         }
 
-        final UnitTypeMonitor monitor = new UnitTypeMonitor(manager, MonitoredType.MOUNT, MonitoredType.SOCKET);
+        final UnitTypeMonitor monitor = new UnitTypeMonitor(manager);
 
         try {
+            monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
             monitor.attach();
         }
         catch (DBusException e) {

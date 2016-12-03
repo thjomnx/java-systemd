@@ -36,7 +36,8 @@ public class MonitoringClient implements Runnable {
             try {
                 Manager manager = Systemd.get().getManager();
 
-                UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager, MonitoredType.SERVICE);
+                UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager);
+                serviceMonitor.addMonitoredTypes(MonitoredType.SERVICE);
                 serviceMonitor.attach();
 
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
