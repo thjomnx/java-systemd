@@ -54,6 +54,15 @@ public class UnitNameMonitor extends UnitMonitor {
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
     }
 
+    @Override
+    public synchronized void refresh() throws DBusException {
+        monitoredUnits.clear();
+
+        for (String unitName : monitoredNames) {
+            monitoredUnits.put(unitName, manager.getUnit(unitName));
+        }
+    }
+
     public synchronized void addUnits(final String... fullUnitNames) throws DBusException {
         for (String unitName : fullUnitNames) {
             monitoredNames.add(unitName);

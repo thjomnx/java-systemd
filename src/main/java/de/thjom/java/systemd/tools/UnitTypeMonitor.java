@@ -74,6 +74,11 @@ public class UnitTypeMonitor extends UnitMonitor {
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
     }
 
+    @Override
+    public void refresh() throws DBusException {
+        mapUnits();
+    }
+
     public final void addMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
         for (MonitoredType monitoredType : monitoredTypes) {
             this.monitoredTypes.add(monitoredType);

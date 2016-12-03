@@ -38,6 +38,8 @@ abstract class UnitMonitor {
 
     public abstract void detach() throws DBusException;
 
+    public abstract void refresh() throws DBusException;
+
     public Collection<Unit> getMonitoredUnits() {
         return monitoredUnits.values();
     }
