@@ -14,6 +14,7 @@ package de.thjom.java.systemd.tools;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -32,6 +33,7 @@ public class UnitNameMonitor extends UnitMonitor {
     private final UnitFilesChangedHandler unitFilesChangedHandler = new UnitFilesChangedHandler();
     private final UnitNewHandler unitNewHandler = new UnitNewHandler();
     private final UnitRemovedHandler unitRemovedHandler = new UnitRemovedHandler();
+    private final PropertiesChangedHandler propertiesChangedHandler = new PropertiesChangedHandler();
 
     public UnitNameMonitor(final Manager manager) {
         super(manager);
@@ -44,6 +46,7 @@ public class UnitNameMonitor extends UnitMonitor {
         manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
         manager.addHandler(UnitNew.class, unitNewHandler);
         manager.addHandler(UnitRemoved.class, unitRemovedHandler);
+        manager.addHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
     @Override
@@ -52,6 +55,7 @@ public class UnitNameMonitor extends UnitMonitor {
         manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
         manager.removeHandler(UnitNew.class, unitNewHandler);
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
+        manager.removeHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
     @Override
@@ -157,6 +161,15 @@ public class UnitNameMonitor extends UnitMonitor {
             synchronized (UnitNameMonitor.this) {
                 monitoredUnits.remove(id);
             }
+        }
+
+    }
+
+    public class PropertiesChangedHandler implements DBusSigHandler<PropertiesChanged> {
+
+        @Override
+        public void handle(final PropertiesChanged signal) {
+            System.out.println("UnitNameMonitor.PropertiesChangedHandler.handle(): " + signal);
         }
 
     }

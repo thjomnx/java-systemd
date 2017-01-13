@@ -43,6 +43,7 @@ public class MonitoringClient implements Runnable {
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
                 miscMonitor.addUnits("cronie.service");
                 miscMonitor.addUnits(manager.getService("dbus"));
+                miscMonitor.attach();
 
                 while (running) {
                     List<Unit> units = new ArrayList<>();
@@ -79,7 +80,7 @@ public class MonitoringClient implements Runnable {
                     System.out.println("Press key to stop polling");
 
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(60000);
                     }
                     catch (final InterruptedException e) {
                         // Ignore (occurs on key press)
@@ -87,6 +88,7 @@ public class MonitoringClient implements Runnable {
                 }
 
                 serviceMonitor.detach();
+                miscMonitor.detach();
             }
             catch (final DBusException e) {
                 e.printStackTrace();
