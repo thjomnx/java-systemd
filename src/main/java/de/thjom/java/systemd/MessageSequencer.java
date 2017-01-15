@@ -27,6 +27,7 @@ public class MessageSequencer<E extends Message> {
     private final BlockingQueue<E> buffer;
     private final Queue<E> sequencer;
 
+    private long transferDelay = 50L;
     private int chunkSize;
 
     public MessageSequencer(final int capacity) {
@@ -36,6 +37,10 @@ public class MessageSequencer<E extends Message> {
     public MessageSequencer(final int capacity, final int chunkSize) {
         this.buffer = new ArrayBlockingQueue<>(capacity);
         this.sequencer = new PriorityQueue<>(capacity, new MessageComparator<>());
+
+        if (chunkSize < 0) {
+            throw new IllegalArgumentException();
+        }
 
         this.chunkSize = chunkSize;
     }
@@ -49,24 +54,26 @@ public class MessageSequencer<E extends Message> {
     }
 
     public final E poll(final long timeout, final TimeUnit unit) throws InterruptedException {
-        E item = sequencer.poll();
+        E head = sequencer.poll();
 
-        if (item == null) {
+        if (head == null) {
             E pending = transfer(timeout, unit, chunkSize);
 
             if (pending != null) {
-                item = sequencer.poll();
+                head = sequencer.poll();
                 sequencer.offer(pending);
             }
             else {
-                item = sequencer.poll();
+                head = sequencer.poll();
             }
         }
 
-        return item;
+        return head;
     }
 
     private E transfer(final long timeout, final TimeUnit unit, int chunkSize) throws InterruptedException {
+        boolean once = false;
+
         do {
             E head;
 
@@ -81,6 +88,12 @@ public class MessageSequencer<E extends Message> {
                 if (!sequencer.offer(head)) {
                     return head;
                 }
+
+                if (!once) {
+                    Thread.sleep(transferDelay);
+
+                    once = true;
+                }
             }
             else {
                 break;
@@ -89,6 +102,30 @@ public class MessageSequencer<E extends Message> {
         while (!buffer.isEmpty() && chunkSize-- > 0);
 
         return null;
+    }
+
+    public long getTransferDelay() {
+        return transferDelay;
+    }
+
+    public void setTransferDelay(final long transferDelay) {
+        if (transferDelay < 0L) {
+            throw new IllegalArgumentException();
+        }
+
+        this.transferDelay = transferDelay;
+    }
+
+    public int getChunkSize() {
+        return chunkSize;
+    }
+
+    public void setChunkSize(final int chunkSize) {
+        if (chunkSize < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.chunkSize = chunkSize;
     }
 
     static final class MessageComparator<E extends Message> implements Comparator<E> {

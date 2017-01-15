@@ -12,6 +12,8 @@
 package de.thjom.java.systemd;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -77,41 +79,71 @@ public class MessageSequencerTest {
     @Test(description="Tests concurrent sequencer access.")
     public void testSequencerAccess() throws DBusException {
         MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(10000);
+        int numMessages = 30;
 
-        MessageProducer reader = new MessageProducer(sequencer);
+        MessageProducer reader = new MessageProducer(sequencer, numMessages);
         reader.start();
 
+        try {
+            Thread.sleep(50L);
+        }
+        catch (final InterruptedException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        List<TestMessage> drainedData = new ArrayList<>();
         TestMessage tm = null;
 
         try {
             do {
                 tm = sequencer.poll(1000L, TimeUnit.MILLISECONDS);
+
+                if (tm != null) {
+                    drainedData.add(tm);
+                }
             }
             while (tm != null);
+
+            reader.join();
         }
         catch (final InterruptedException e) {
             Assert.fail(e.getMessage(), e);
         }
+
+        List<TestMessage> testData = reader.getTestData();
+
+        Assert.assertFalse(Arrays.equals(drainedData.toArray(), testData.toArray()));
+
+        Collections.sort(testData, new MessageSequencer.MessageComparator<>());
+
+        Assert.assertTrue(Arrays.equals(drainedData.toArray(), testData.toArray()));
     }
 
-    static class MessageProducer extends Thread {
+    private static class MessageProducer extends Thread {
 
-        MessageSequencer<TestMessage> sequencer;
-        Random random = new Random();
+        private final Random random = new Random();
+        private final List<TestMessage> testData = new ArrayList<>();
 
-        MessageProducer(final MessageSequencer<TestMessage> sequencer) {
+        private MessageSequencer<TestMessage> sequencer;
+        private int numMessages;
+
+        public MessageProducer(final MessageSequencer<TestMessage> sequencer, final int numMessages) {
             this.sequencer = sequencer;
+            this.numMessages = numMessages;
         }
 
         @Override
         public void run() {
-            long seqNum = 0L;
+            int counter = 0;
 
-            while (seqNum < 3000L) {
-                seqNum = seqNum++ + Math.abs(random.nextLong() % 10);
+            while (counter < numMessages) {
+                long seqNum = counter++ + Math.abs(random.nextLong() % 10);
 
                 try {
-                    sequencer.add(new TestMessage(seqNum));
+                    TestMessage tm = new TestMessage(seqNum);
+
+                    sequencer.add(tm);
+                    testData.add(tm);
                 }
                 catch (final DBusException e) {
                     // Do nothing
@@ -119,11 +151,15 @@ public class MessageSequencerTest {
             }
         }
 
+        public List<TestMessage> getTestData() {
+            return testData;
+        }
+
     }
 
-    static class TestMessage extends Message {
+    private static class TestMessage extends Message {
 
-        TestMessage(long serial) throws DBusException {
+        public TestMessage(long serial) throws DBusException {
             super((byte) 0x00, (byte) 0x00, (byte) 0x17);
 
             this.serial = serial;
