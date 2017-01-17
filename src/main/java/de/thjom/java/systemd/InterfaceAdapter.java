@@ -69,7 +69,9 @@ public abstract class InterfaceAdapter implements DBusInterface {
     }
 
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        dbus.removeSigHandler(type, handler);
+        if (handler != null) {
+            dbus.removeSigHandler(type, handler);
+        }
     }
 
     protected static class Property {

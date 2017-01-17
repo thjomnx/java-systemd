@@ -11,7 +11,10 @@
 
 package de.thjom.java.systemd;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -69,6 +72,32 @@ public class MessageSequencer<E extends Message> {
         }
 
         return head;
+    }
+
+    public final Collection<? super E> drainTo(final Collection<? super E> col) {
+        List<E> buffered = new ArrayList<>();
+        buffer.drainTo(buffered);
+
+        sequencer.addAll(buffered);
+
+        List<E> drained = new ArrayList<>(sequencer.size());
+        E head;
+
+        do {
+            head = sequencer.poll();
+
+            if (head != null) {
+                drained.add(head);
+            }
+        }
+        while (head != null);
+
+        return drained;
+    }
+
+    public final void clear() {
+        buffer.clear();
+        sequencer.clear();
     }
 
     private E transfer(final long timeout, final TimeUnit unit, int chunkSize) throws InterruptedException {

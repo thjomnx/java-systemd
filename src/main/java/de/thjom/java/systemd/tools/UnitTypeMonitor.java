@@ -43,10 +43,10 @@ public class UnitTypeMonitor extends UnitMonitor {
 
     protected final EnumSet<MonitoredType> monitoredTypes = EnumSet.noneOf(MonitoredType.class);
 
-    private final ReloadingHandler reloadingHandler = new ReloadingHandler();
-    private final UnitFilesChangedHandler unitFilesChangedHandler = new UnitFilesChangedHandler();
-    private final UnitNewHandler unitNewHandler = new UnitNewHandler();
-    private final UnitRemovedHandler unitRemovedHandler = new UnitRemovedHandler();
+    private ReloadingHandler reloadingHandler;
+    private UnitFilesChangedHandler unitFilesChangedHandler;
+    private UnitNewHandler unitNewHandler;
+    private UnitRemovedHandler unitRemovedHandler;
 
     public UnitTypeMonitor(final Manager manager) {
         super(manager);
@@ -54,10 +54,18 @@ public class UnitTypeMonitor extends UnitMonitor {
 
     @Override
     public final void attach() throws DBusException {
-        manager.subscribe();
+        super.attach();
+
+        reloadingHandler = new ReloadingHandler();
         manager.addHandler(Reloading.class, reloadingHandler);
+
+        unitFilesChangedHandler = new UnitFilesChangedHandler();
         manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
+
+        unitNewHandler = new UnitNewHandler();
         manager.addHandler(UnitNew.class, unitNewHandler);
+
+        unitRemovedHandler = new UnitRemovedHandler();
         manager.addHandler(UnitRemoved.class, unitRemovedHandler);
     }
 
@@ -67,6 +75,8 @@ public class UnitTypeMonitor extends UnitMonitor {
         manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
         manager.removeHandler(UnitNew.class, unitNewHandler);
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
+
+        super.detach();
     }
 
     @Override

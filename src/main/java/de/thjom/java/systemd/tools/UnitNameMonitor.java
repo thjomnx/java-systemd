@@ -14,7 +14,6 @@ package de.thjom.java.systemd.tools;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -29,11 +28,10 @@ public class UnitNameMonitor extends UnitMonitor {
 
     protected final Set<String> monitoredNames = new HashSet<>();
 
-    private final ReloadingHandler reloadingHandler = new ReloadingHandler();
-    private final UnitFilesChangedHandler unitFilesChangedHandler = new UnitFilesChangedHandler();
-    private final UnitNewHandler unitNewHandler = new UnitNewHandler();
-    private final UnitRemovedHandler unitRemovedHandler = new UnitRemovedHandler();
-    private final PropertiesChangedHandler propertiesChangedHandler = new PropertiesChangedHandler();
+    private ReloadingHandler reloadingHandler;
+    private UnitFilesChangedHandler unitFilesChangedHandler;
+    private UnitNewHandler unitNewHandler;
+    private UnitRemovedHandler unitRemovedHandler;
 
     public UnitNameMonitor(final Manager manager) {
         super(manager);
@@ -41,12 +39,19 @@ public class UnitNameMonitor extends UnitMonitor {
 
     @Override
     public void attach() throws DBusException {
-        manager.subscribe();
+        super.attach();
+
+        reloadingHandler = new ReloadingHandler();
         manager.addHandler(Reloading.class, reloadingHandler);
+
+        unitFilesChangedHandler = new UnitFilesChangedHandler();
         manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
+
+        unitNewHandler = new UnitNewHandler();
         manager.addHandler(UnitNew.class, unitNewHandler);
+
+        unitRemovedHandler = new UnitRemovedHandler();
         manager.addHandler(UnitRemoved.class, unitRemovedHandler);
-        manager.addHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
     @Override
@@ -55,7 +60,8 @@ public class UnitNameMonitor extends UnitMonitor {
         manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
         manager.removeHandler(UnitNew.class, unitNewHandler);
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
-        manager.removeHandler(PropertiesChanged.class, propertiesChangedHandler);
+
+        super.detach();
     }
 
     @Override
@@ -161,15 +167,6 @@ public class UnitNameMonitor extends UnitMonitor {
             synchronized (UnitNameMonitor.this) {
                 monitoredUnits.remove(id);
             }
-        }
-
-    }
-
-    public class PropertiesChangedHandler implements DBusSigHandler<PropertiesChanged> {
-
-        @Override
-        public void handle(final PropertiesChanged signal) {
-            System.out.println("UnitNameMonitor.PropertiesChangedHandler.handle(): " + signal);
         }
 
     }
