@@ -23,11 +23,11 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class MessageSequencerTest {
+public class SequencerTest {
 
     @Test(description="Tests sequencer ordering.")
     public void testSequencerLogic() throws DBusException {
-        MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(1000);
+        Sequencer<TestMessage> sequencer = new Sequencer<>(1000);
 
         TestMessage probe1 = null;
         TestMessage probe2 = null;
@@ -43,7 +43,12 @@ public class MessageSequencerTest {
                 probe2 = tm;
             }
 
-            sequencer.add(tm);
+            try {
+                sequencer.put(tm);
+            }
+            catch (InterruptedException e) {
+                Assert.fail(e.getMessage(), e);
+            }
         }
 
         for (long seqNum = -20L; seqNum < 0L; seqNum++) {
@@ -53,7 +58,12 @@ public class MessageSequencerTest {
                 probe1 = tm;
             }
 
-            sequencer.add(tm);
+            try {
+                sequencer.put(tm);
+            }
+            catch (InterruptedException e) {
+                Assert.fail(e.getMessage(), e);
+            }
         }
 
         List<TestMessage> list = new ArrayList<>();
@@ -67,7 +77,7 @@ public class MessageSequencerTest {
                 tm = sequencer.poll(3000L, TimeUnit.MILLISECONDS);
             }
         }
-        catch (final InterruptedException e) {
+        catch (InterruptedException e) {
             Assert.fail(e.getMessage(), e);
         }
 
@@ -78,7 +88,7 @@ public class MessageSequencerTest {
 
     @Test(description="Tests concurrent sequencer access.")
     public void testSequencerAccess() throws DBusException {
-        MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(10000);
+        Sequencer<TestMessage> sequencer = new Sequencer<>(10000);
         int numMessages = 30;
 
         MessageProducer reader = new MessageProducer(sequencer, numMessages);
@@ -87,7 +97,7 @@ public class MessageSequencerTest {
         try {
             Thread.sleep(50L);
         }
-        catch (final InterruptedException e) {
+        catch (InterruptedException e) {
             Assert.fail(e.getMessage(), e);
         }
 
@@ -106,7 +116,7 @@ public class MessageSequencerTest {
 
             reader.join();
         }
-        catch (final InterruptedException e) {
+        catch (InterruptedException e) {
             Assert.fail(e.getMessage(), e);
         }
 
@@ -114,7 +124,7 @@ public class MessageSequencerTest {
 
         Assert.assertFalse(Arrays.equals(drainedData.toArray(), testData.toArray()));
 
-        Collections.sort(testData, new MessageSequencer.MessageComparator<>());
+        Collections.sort(testData, new Sequencer.MessageComparator<>());
 
         Assert.assertTrue(Arrays.equals(drainedData.toArray(), testData.toArray()));
     }
@@ -124,10 +134,10 @@ public class MessageSequencerTest {
         private final Random random = new Random();
         private final List<TestMessage> testData = new ArrayList<>();
 
-        private MessageSequencer<TestMessage> sequencer;
+        private Sequencer<TestMessage> sequencer;
         private int numMessages;
 
-        public MessageProducer(final MessageSequencer<TestMessage> sequencer, final int numMessages) {
+        public MessageProducer(final Sequencer<TestMessage> sequencer, final int numMessages) {
             this.sequencer = sequencer;
             this.numMessages = numMessages;
         }
@@ -142,10 +152,10 @@ public class MessageSequencerTest {
                 try {
                     TestMessage tm = new TestMessage(seqNum);
 
-                    sequencer.add(tm);
+                    sequencer.put(tm);
                     testData.add(tm);
                 }
-                catch (final DBusException e) {
+                catch (InterruptedException | DBusException e) {
                     // Do nothing
                 }
             }
@@ -159,10 +169,20 @@ public class MessageSequencerTest {
 
     private static class TestMessage extends Message {
 
-        public TestMessage(long serial) throws DBusException {
+        public TestMessage(final long serial) throws DBusException {
             super((byte) 0x00, (byte) 0x00, (byte) 0x17);
 
             this.serial = serial;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            return getSerial() == ((TestMessage) obj).getSerial();
+        }
+
+        @Override
+        public int hashCode() {
+            return Long.hashCode(getSerial());
         }
 
     }

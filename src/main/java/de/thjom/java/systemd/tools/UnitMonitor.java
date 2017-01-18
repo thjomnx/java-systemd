@@ -13,6 +13,7 @@ package de.thjom.java.systemd.tools;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.MessageSequencer;
+import de.thjom.java.systemd.Sequencer;
 import de.thjom.java.systemd.Unit;
 
 abstract class UnitMonitor {
@@ -39,7 +40,7 @@ abstract class UnitMonitor {
     protected int signalQueueLength = 1000;
 
     private PropertiesChangedHandler propertiesChangedHandler;
-    private MessageSequencer<PropertiesChanged> propertiesChangedSequencer;
+    private Sequencer<PropertiesChanged> propertiesChangedSequencer;
     private PropertiesChangedProcessor propertiesChangedProcessor;
 
     private Timer pollingTimer;
@@ -51,7 +52,7 @@ abstract class UnitMonitor {
     public void attach() throws DBusException {
         manager.subscribe();
 
-        propertiesChangedSequencer = new MessageSequencer<>(signalQueueLength);
+        propertiesChangedSequencer = new Sequencer<>(signalQueueLength);
 
         propertiesChangedProcessor = new PropertiesChangedProcessor(propertiesChangedSequencer);
         propertiesChangedProcessor.setName(PropertiesChangedProcessor.class.getSimpleName());
@@ -123,11 +124,11 @@ abstract class UnitMonitor {
 
     private static class PropertiesChangedProcessor extends Thread {
 
-        private final MessageSequencer<PropertiesChanged> sequencer;
+        private final Sequencer<PropertiesChanged> sequencer;
 
         private volatile boolean running = true;
 
-        public PropertiesChangedProcessor(final MessageSequencer<PropertiesChanged> sequencer) {
+        public PropertiesChangedProcessor(final Sequencer<PropertiesChanged> sequencer) {
             this.sequencer = sequencer;
         }
 
@@ -144,7 +145,7 @@ abstract class UnitMonitor {
                 }
             }
 
-            Collection<PropertiesChanged> signals = new ArrayList<>();
+            List<PropertiesChanged> signals = new ArrayList<>(sequencer.size());
             sequencer.drainTo(signals);
 
             for (PropertiesChanged signal : signals) {
@@ -164,7 +165,12 @@ abstract class UnitMonitor {
         public void handle(final PropertiesChanged signal) {
             System.out.println("UnitMonitor.PropertiesChangedHandler.handle(): " + signal);
 
-            propertiesChangedSequencer.add(signal);
+            try {
+                propertiesChangedSequencer.put(signal);
+            }
+            catch (final InterruptedException e) {
+                // Do nothing
+            }
         }
 
     }

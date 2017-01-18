@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.freedesktop.dbus.Message;
 
-public class MessageSequencer<E extends Message> {
+public class Sequencer<E extends Message> {
 
     public static final long TIMEOUT_INFINITE = -1L;
 
@@ -33,11 +33,11 @@ public class MessageSequencer<E extends Message> {
     private long transferDelay = 50L;
     private int chunkSize;
 
-    public MessageSequencer(final int capacity) {
+    public Sequencer(final int capacity) {
         this(capacity, 100);
     }
 
-    public MessageSequencer(final int capacity, final int chunkSize) {
+    public Sequencer(final int capacity, final int chunkSize) {
         this.buffer = new ArrayBlockingQueue<>(capacity);
         this.sequencer = new PriorityQueue<>(capacity, new MessageComparator<>());
 
@@ -48,8 +48,8 @@ public class MessageSequencer<E extends Message> {
         this.chunkSize = chunkSize;
     }
 
-    public final boolean add(final E item) {
-        return buffer.add(item);
+    public final void put(final E item) throws InterruptedException {
+        buffer.put(item);
     }
 
     public final E take() throws InterruptedException {
@@ -74,30 +74,35 @@ public class MessageSequencer<E extends Message> {
         return head;
     }
 
-    public final Collection<? super E> drainTo(final Collection<? super E> col) {
-        List<E> buffered = new ArrayList<>();
+    public final int drainTo(final Collection<? super E> drain) {
+        List<E> buffered = new ArrayList<>(buffer.size());
         buffer.drainTo(buffered);
 
         sequencer.addAll(buffered);
 
-        List<E> drained = new ArrayList<>(sequencer.size());
+        int count = 0;
         E head;
 
         do {
             head = sequencer.poll();
 
             if (head != null) {
-                drained.add(head);
+                drain.add(head);
+                count++;
             }
         }
         while (head != null);
 
-        return drained;
+        return count;
     }
 
     public final void clear() {
         buffer.clear();
         sequencer.clear();
+    }
+
+    public final int size() {
+        return buffer.size() + sequencer.size();
     }
 
     private E transfer(final long timeout, final TimeUnit unit, int chunkSize) throws InterruptedException {
