@@ -11,9 +11,7 @@
 
 package de.thjom.java.systemd.tools;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,14 +19,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Sequencer;
 import de.thjom.java.systemd.Unit;
+import de.thjom.java.systemd.utils.MessageSequencer;
+import de.thjom.java.systemd.utils.PropertiesChangedHandler;
+import de.thjom.java.systemd.utils.PropertiesChangedProcessor;
 
 abstract class UnitMonitor {
 
@@ -40,7 +39,7 @@ abstract class UnitMonitor {
     protected int signalQueueLength = 1000;
 
     private PropertiesChangedHandler propertiesChangedHandler;
-    private Sequencer<PropertiesChanged> propertiesChangedSequencer;
+    private MessageSequencer<PropertiesChanged> propertiesChangedSequencer;
     private PropertiesChangedProcessor propertiesChangedProcessor;
 
     private Timer pollingTimer;
@@ -52,13 +51,13 @@ abstract class UnitMonitor {
     public void attach() throws DBusException {
         manager.subscribe();
 
-        propertiesChangedSequencer = new Sequencer<>(signalQueueLength);
+        propertiesChangedSequencer = new MessageSequencer<>(signalQueueLength);
 
         propertiesChangedProcessor = new PropertiesChangedProcessor(propertiesChangedSequencer);
         propertiesChangedProcessor.setName(PropertiesChangedProcessor.class.getSimpleName());
         propertiesChangedProcessor.start();
 
-        propertiesChangedHandler = new PropertiesChangedHandler();
+        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedSequencer);
         manager.addHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
@@ -120,59 +119,6 @@ abstract class UnitMonitor {
 
     public void setSignalQueueLength(final int signalQueueLength) {
         this.signalQueueLength = signalQueueLength;
-    }
-
-    private static class PropertiesChangedProcessor extends Thread {
-
-        private final Sequencer<PropertiesChanged> sequencer;
-
-        private volatile boolean running = true;
-
-        public PropertiesChangedProcessor(final Sequencer<PropertiesChanged> sequencer) {
-            this.sequencer = sequencer;
-        }
-
-        @Override
-        public void run() {
-            while (running) {
-                try {
-                    PropertiesChanged signal = sequencer.take();
-
-                    System.out.println("UnitMonitor.PropertiesChangedProcessor.run(): " + signal);
-                }
-                catch (final InterruptedException e1) {
-                    // Do nothing
-                }
-            }
-
-            List<PropertiesChanged> signals = new ArrayList<>(sequencer.size());
-            sequencer.drainTo(signals);
-
-            for (PropertiesChanged signal : signals) {
-                System.out.println("UnitMonitor.PropertiesChangedProcessor.run(): " + signal);
-            }
-        }
-
-        public void setRunning(final boolean running) {
-            this.running = running;
-        }
-
-    }
-
-    public class PropertiesChangedHandler implements DBusSigHandler<PropertiesChanged> {
-
-        @Override
-        public void handle(final PropertiesChanged signal) {
-            System.out.println("UnitMonitor.PropertiesChangedHandler.handle(): " + signal);
-
-            try {
-                propertiesChangedSequencer.put(signal);
-            }
-            catch (final InterruptedException e) {
-                // Do nothing
-            }
-        }
-
     }
 
 }

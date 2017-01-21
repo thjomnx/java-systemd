@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd;
+package de.thjom.java.systemd.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.freedesktop.dbus.Message;
 
-public class Sequencer<E extends Message> {
+public class MessageSequencer<E extends Message> {
 
     public static final long TIMEOUT_INFINITE = -1L;
 
@@ -33,11 +33,11 @@ public class Sequencer<E extends Message> {
     private long transferDelay = 50L;
     private int chunkSize;
 
-    public Sequencer(final int capacity) {
+    public MessageSequencer(final int capacity) {
         this(capacity, 100);
     }
 
-    public Sequencer(final int capacity, final int chunkSize) {
+    public MessageSequencer(final int capacity, final int chunkSize) {
         this.buffer = new ArrayBlockingQueue<>(capacity);
         this.sequencer = new PriorityQueue<>(capacity, new MessageComparator<>());
 

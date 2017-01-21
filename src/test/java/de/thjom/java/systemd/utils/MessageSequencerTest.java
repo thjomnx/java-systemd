@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd;
+package de.thjom.java.systemd.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,11 +23,13 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class SequencerTest {
+import de.thjom.java.systemd.utils.MessageSequencer;
+
+public class MessageSequencerTest {
 
     @Test(description="Tests sequencer ordering.")
     public void testSequencerLogic() throws DBusException {
-        Sequencer<TestMessage> sequencer = new Sequencer<>(1000);
+        MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(1000);
 
         TestMessage probe1 = null;
         TestMessage probe2 = null;
@@ -88,7 +90,7 @@ public class SequencerTest {
 
     @Test(description="Tests concurrent sequencer access.")
     public void testSequencerAccess() throws DBusException {
-        Sequencer<TestMessage> sequencer = new Sequencer<>(10000);
+        MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(10000);
         int numMessages = 30;
 
         MessageProducer reader = new MessageProducer(sequencer, numMessages);
@@ -124,7 +126,7 @@ public class SequencerTest {
 
         Assert.assertFalse(Arrays.equals(drainedData.toArray(), testData.toArray()));
 
-        Collections.sort(testData, new Sequencer.MessageComparator<>());
+        Collections.sort(testData, new MessageSequencer.MessageComparator<>());
 
         Assert.assertTrue(Arrays.equals(drainedData.toArray(), testData.toArray()));
     }
@@ -134,10 +136,10 @@ public class SequencerTest {
         private final Random random = new Random();
         private final List<TestMessage> testData = new ArrayList<>();
 
-        private Sequencer<TestMessage> sequencer;
+        private MessageSequencer<TestMessage> sequencer;
         private int numMessages;
 
-        public MessageProducer(final Sequencer<TestMessage> sequencer, final int numMessages) {
+        public MessageProducer(final MessageSequencer<TestMessage> sequencer, final int numMessages) {
             this.sequencer = sequencer;
             this.numMessages = numMessages;
         }

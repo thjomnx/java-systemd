@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.freedesktop.DBus.Properties.PropertiesChanged;
+import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.tools.UnitNameMonitor;
@@ -40,9 +42,19 @@ public class MonitoringClient implements Runnable {
                 serviceMonitor.addMonitoredTypes(MonitoredType.SERVICE);
                 serviceMonitor.attach();
 
+                Unit cronie = manager.getService("cronie");
+                cronie.addHandler(PropertiesChanged.class, new DBusSigHandler<PropertiesChanged>() {
+
+                    @Override
+                    public void handle(final PropertiesChanged s) {
+                        System.out.println("MonitoringClient.run().new DBusSigHandler() {...}.handle(): " + s);
+                    }
+
+                });
+
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
-                miscMonitor.addUnits("cronie.service");
-                miscMonitor.addUnits(manager.getService("dbus"));
+                miscMonitor.addUnits(cronie);
+                miscMonitor.addUnits("dbus.service");
                 miscMonitor.attach();
 
                 while (running) {
@@ -119,7 +131,7 @@ public class MonitoringClient implements Runnable {
         return maxColChars;
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         MonitoringClient client = new MonitoringClient();
 
         Thread t = new Thread(client);
