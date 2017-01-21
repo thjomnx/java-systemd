@@ -17,6 +17,7 @@ import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.Manager;
+import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitNew;
@@ -107,43 +108,43 @@ public class UnitTypeMonitor extends UnitMonitor {
             String name = unit.getUnitName();
 
             if (unit.isAutomount() && monitoredTypes.contains(MonitoredType.AUTOMOUNT)) {
-                monitoredUnits.put(name, manager.getAutomount(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getAutomount(name));
             }
             else if (unit.isBusName() && monitoredTypes.contains(MonitoredType.BUSNAME)) {
-                monitoredUnits.put(name, manager.getBusName(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getBusName(name));
             }
             else if (unit.isDevice() && monitoredTypes.contains(MonitoredType.DEVICE)) {
-                monitoredUnits.put(name, manager.getDevice(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getDevice(name));
             }
             else if (unit.isMount() && monitoredTypes.contains(MonitoredType.MOUNT)) {
-                monitoredUnits.put(name, manager.getMount(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getMount(name));
             }
             else if (unit.isPath() && monitoredTypes.contains(MonitoredType.PATH)) {
-                monitoredUnits.put(name, manager.getPath(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getPath(name));
             }
             else if (unit.isScope() && monitoredTypes.contains(MonitoredType.SCOPE)) {
-                monitoredUnits.put(name, manager.getScope(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getScope(name));
             }
             else if (unit.isService() && monitoredTypes.contains(MonitoredType.SERVICE)) {
-                monitoredUnits.put(name, manager.getService(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getService(name));
             }
             else if (unit.isSlice() && monitoredTypes.contains(MonitoredType.SLICE)) {
-                monitoredUnits.put(name, manager.getSlice(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getSlice(name));
             }
             else if (unit.isSnapshot() && monitoredTypes.contains(MonitoredType.SNAPSHOT)) {
-                monitoredUnits.put(name, manager.getSnapshot(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getSnapshot(name));
             }
             else if (unit.isSocket() && monitoredTypes.contains(MonitoredType.SOCKET)) {
-                monitoredUnits.put(name, manager.getSocket(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getSocket(name));
             }
             else if (unit.isSwap() && monitoredTypes.contains(MonitoredType.SWAP)) {
-                monitoredUnits.put(name, manager.getSwap(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getSwap(name));
             }
             else if (unit.isTarget() && monitoredTypes.contains(MonitoredType.TARGET)) {
-                monitoredUnits.put(name, manager.getTarget(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getTarget(name));
             }
             else if (unit.isTimer() && monitoredTypes.contains(MonitoredType.TIMER)) {
-                monitoredUnits.put(name, manager.getTimer(name));
+                monitoredUnits.put(Systemd.escapePath(name), manager.getTimer(name));
             }
         }
     }

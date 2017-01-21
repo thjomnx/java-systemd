@@ -31,7 +31,10 @@ public class MessageSequencer<E extends Message> {
     private final Queue<E> sequencer;
 
     private long transferDelay = 50L;
-    private int chunkSize;
+    private int transferChunkSize;
+    private int dequeueChunkSize;
+
+    private int dequeued = 0;
 
     public MessageSequencer(final int capacity) {
         this(capacity, 100);
@@ -41,11 +44,12 @@ public class MessageSequencer<E extends Message> {
         this.buffer = new ArrayBlockingQueue<>(capacity);
         this.sequencer = new PriorityQueue<>(capacity, new MessageComparator<>());
 
-        if (chunkSize < 0) {
+        if (chunkSize < 1) {
             throw new IllegalArgumentException();
         }
 
-        this.chunkSize = chunkSize;
+        this.transferChunkSize = chunkSize;
+        this.dequeueChunkSize = chunkSize > 1 ? chunkSize / 2 : 1;
     }
 
     public final void put(final E item) throws InterruptedException {
@@ -57,10 +61,17 @@ public class MessageSequencer<E extends Message> {
     }
 
     public final E poll(final long timeout, final TimeUnit unit) throws InterruptedException {
-        E head = sequencer.poll();
+        E head = null;
+
+        if (dequeued < dequeueChunkSize) {
+            head = sequencer.poll();
+        }
+        else {
+            dequeued = 0;
+        }
 
         if (head == null) {
-            E pending = transfer(timeout, unit, chunkSize);
+            E pending = transfer(timeout, unit, transferChunkSize);
 
             if (pending != null) {
                 head = sequencer.poll();
@@ -69,6 +80,9 @@ public class MessageSequencer<E extends Message> {
             else {
                 head = sequencer.poll();
             }
+        }
+        else {
+            dequeued++;
         }
 
         return head;
@@ -151,7 +165,7 @@ public class MessageSequencer<E extends Message> {
     }
 
     public int getChunkSize() {
-        return chunkSize;
+        return transferChunkSize;
     }
 
     public void setChunkSize(final int chunkSize) {
@@ -159,7 +173,7 @@ public class MessageSequencer<E extends Message> {
             throw new IllegalArgumentException();
         }
 
-        this.chunkSize = chunkSize;
+        this.transferChunkSize = chunkSize;
     }
 
     static final class MessageComparator<E extends Message> implements Comparator<E> {

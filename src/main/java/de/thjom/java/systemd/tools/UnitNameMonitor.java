@@ -18,6 +18,7 @@ import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.Manager;
+import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.Unit;
 import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
@@ -69,35 +70,35 @@ public class UnitNameMonitor extends UnitMonitor {
         monitoredUnits.clear();
 
         for (String unitName : monitoredNames) {
-            monitoredUnits.put(unitName, manager.getUnit(unitName));
+            monitoredUnits.put(Systemd.escapePath(unitName), manager.getUnit(unitName));
         }
     }
 
     public synchronized void addUnits(final String... fullUnitNames) throws DBusException {
         for (String unitName : fullUnitNames) {
             monitoredNames.add(unitName);
-            monitoredUnits.put(unitName, manager.getUnit(unitName));
+            monitoredUnits.put(Systemd.escapePath(unitName), manager.getUnit(unitName));
         }
     }
 
     public synchronized void addUnits(final Unit... units) {
         for (Unit unit : units) {
             monitoredNames.add(unit.getId());
-            monitoredUnits.put(unit.getId(), unit);
+            monitoredUnits.put(Systemd.escapePath(unit.getId()), unit);
         }
     }
 
     public synchronized void removeUnits(final String... fullUnitNames) {
         for (String unitName : fullUnitNames) {
             monitoredNames.remove(unitName);
-            monitoredUnits.remove(unitName);
+            monitoredUnits.remove(Systemd.escapePath(unitName));
         }
     }
 
     public synchronized void removeUnits(final Unit... units) {
         for (Unit unit : units) {
             monitoredNames.remove(unit.getId());
-            monitoredUnits.remove(unit.getId());
+            monitoredUnits.remove(Systemd.escapePath(unit.getId()));
         }
     }
 
@@ -143,7 +144,7 @@ public class UnitNameMonitor extends UnitMonitor {
             synchronized (UnitNameMonitor.this) {
                 if (monitoredNames.contains(id)) {
                     try {
-                        monitoredUnits.put(id, manager.getUnit(id));
+                        monitoredUnits.put(Systemd.escapePath(id), manager.getUnit(id));
                     }
                     catch (final DBusException e) {
                         log.error(String.format("Unable to add monitored unit '%s'", id), e);
@@ -165,7 +166,7 @@ public class UnitNameMonitor extends UnitMonitor {
             String id = signal.getId();
 
             synchronized (UnitNameMonitor.this) {
-                monitoredUnits.remove(id);
+                monitoredUnits.remove(Systemd.escapePath(id));
             }
         }
 

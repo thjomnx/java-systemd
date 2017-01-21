@@ -18,7 +18,7 @@ import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PropertiesChangedProcessor extends Thread {
+public abstract class PropertiesChangedProcessor extends Thread {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -26,8 +26,8 @@ public class PropertiesChangedProcessor extends Thread {
 
     private volatile boolean running = true;
 
-    public PropertiesChangedProcessor(final MessageSequencer<PropertiesChanged> sequencer) {
-        this.sequencer = sequencer;
+    public PropertiesChangedProcessor(final int queueLength) {
+        this.sequencer = new MessageSequencer<>(queueLength);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class PropertiesChangedProcessor extends Thread {
             try {
                 PropertiesChanged signal = sequencer.take();
 
-                log.debug("Processing signal: " + signal);
+                propertiesChanged(signal);
             }
             catch (final InterruptedException e1) {
                 // Do nothing
@@ -49,8 +49,16 @@ public class PropertiesChangedProcessor extends Thread {
         sequencer.drainTo(signals);
 
         for (PropertiesChanged signal : signals) {
-            log.debug("Processing signal: " + signal);
+            propertiesChanged(signal);
         }
+
+        sequencer.clear();
+    }
+
+    public abstract void propertiesChanged(final PropertiesChanged signal);
+
+    MessageSequencer<PropertiesChanged> getSequencer() {
+        return sequencer;
     }
 
     public void setRunning(final boolean running) {

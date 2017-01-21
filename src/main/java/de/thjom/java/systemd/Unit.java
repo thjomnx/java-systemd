@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
+import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -24,6 +25,8 @@ import de.thjom.java.systemd.interfaces.UnitInterface;
 import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
+import de.thjom.java.systemd.utils.PropertiesChangedHandler;
+import de.thjom.java.systemd.utils.PropertiesChangedProcessor;
 
 public abstract class Unit extends InterfaceAdapter {
 
@@ -160,6 +163,9 @@ public abstract class Unit extends InterfaceAdapter {
 
     private final Properties unitProperties;
 
+    private PropertiesChangedProcessor propertiesChangedProcessor;
+    private PropertiesChangedHandler propertiesChangedHandler;
+
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
         super(manager.dbus, iface);
 
@@ -171,6 +177,10 @@ public abstract class Unit extends InterfaceAdapter {
 
     public static String normalizeName(final String name, final String suffix) {
         return name.endsWith(suffix) ? name : name + suffix;
+    }
+
+    public static String extractName(final String objectPath) {
+        return objectPath.substring(Unit.OBJECT_PATH.length());
     }
 
     @Override
@@ -186,6 +196,41 @@ public abstract class Unit extends InterfaceAdapter {
      */
     public final Properties getUnitProperties() {
         return unitProperties;
+    }
+
+    public void attach() throws DBusException {
+        manager.subscribe();
+
+        propertiesChangedProcessor = new PropertiesChangedProcessor(100) {
+
+            @Override
+            public void propertiesChanged(final PropertiesChanged signal) {
+                log.debug("Processing dequeued signal: " + signal);
+
+                if (Unit.extractName(signal.getPath()).equals(Systemd.escapePath(name))) {
+                    System.out.println("Unit.attach().new PropertiesChangedProcessor() {...}.propertiesChanged(): " + signal);
+                }
+            }
+
+        };
+
+        propertiesChangedProcessor.setName(PropertiesChangedProcessor.class.getSimpleName());
+        propertiesChangedProcessor.setDaemon(true);
+        propertiesChangedProcessor.start();
+
+        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedProcessor);
+        addHandler(PropertiesChanged.class, propertiesChangedHandler);
+    }
+
+    public void detach() throws DBusException {
+        if (propertiesChangedHandler != null) {
+            removeHandler(PropertiesChanged.class, propertiesChangedHandler);
+        }
+
+        if (propertiesChangedProcessor != null) {
+            propertiesChangedProcessor.setRunning(false);
+            propertiesChangedProcessor.interrupt();
+        }
     }
 
     public String introspect() throws DBusException {

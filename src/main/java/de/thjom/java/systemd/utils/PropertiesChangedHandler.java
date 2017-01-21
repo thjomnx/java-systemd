@@ -22,8 +22,8 @@ public class PropertiesChangedHandler implements DBusSigHandler<PropertiesChange
 
     private final MessageSequencer<PropertiesChanged> sequencer;
 
-    public PropertiesChangedHandler(final MessageSequencer<PropertiesChanged> sequencer) {
-        this.sequencer = sequencer;
+    public PropertiesChangedHandler(final PropertiesChangedProcessor processor) {
+        this.sequencer = processor.getSequencer();
     }
 
     @Override
