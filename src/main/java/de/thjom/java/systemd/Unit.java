@@ -25,8 +25,8 @@ import de.thjom.java.systemd.interfaces.UnitInterface;
 import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
+import de.thjom.java.systemd.utils.MessageConsumer;
 import de.thjom.java.systemd.utils.PropertiesChangedHandler;
-import de.thjom.java.systemd.utils.PropertiesChangedProcessor;
 
 public abstract class Unit extends InterfaceAdapter {
 
@@ -163,7 +163,7 @@ public abstract class Unit extends InterfaceAdapter {
 
     private final Properties unitProperties;
 
-    private PropertiesChangedProcessor propertiesChangedProcessor;
+    private MessageConsumer<PropertiesChanged> propertiesChangedListener;
     private PropertiesChangedHandler propertiesChangedHandler;
 
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
@@ -201,24 +201,24 @@ public abstract class Unit extends InterfaceAdapter {
     public void attach() throws DBusException {
         manager.subscribe();
 
-        propertiesChangedProcessor = new PropertiesChangedProcessor(100) {
+        propertiesChangedListener = new MessageConsumer<PropertiesChanged>(100) {
 
             @Override
             public void propertiesChanged(final PropertiesChanged signal) {
                 log.debug("Processing dequeued signal: " + signal);
 
                 if (Unit.extractName(signal.getPath()).equals(Systemd.escapePath(name))) {
-                    System.out.println("Unit.attach().new PropertiesChangedProcessor() {...}.propertiesChanged(): " + signal);
+                    System.out.println("Unit.attach().new MessageConsumer() {...}.propertiesChanged(): " + signal);
                 }
             }
 
         };
 
-        propertiesChangedProcessor.setName(PropertiesChangedProcessor.class.getSimpleName());
-        propertiesChangedProcessor.setDaemon(true);
-        propertiesChangedProcessor.start();
+        propertiesChangedListener.setName(MessageConsumer.class.getSimpleName());
+        propertiesChangedListener.setDaemon(true);
+        propertiesChangedListener.start();
 
-        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedProcessor);
+        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedListener);
         addHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
@@ -227,9 +227,9 @@ public abstract class Unit extends InterfaceAdapter {
             removeHandler(PropertiesChanged.class, propertiesChangedHandler);
         }
 
-        if (propertiesChangedProcessor != null) {
-            propertiesChangedProcessor.setRunning(false);
-            propertiesChangedProcessor.interrupt();
+        if (propertiesChangedListener != null) {
+            propertiesChangedListener.setRunning(false);
+            propertiesChangedListener.interrupt();
         }
     }
 

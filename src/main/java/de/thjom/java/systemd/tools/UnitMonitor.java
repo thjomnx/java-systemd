@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Unit;
+import de.thjom.java.systemd.utils.MessageConsumer;
 import de.thjom.java.systemd.utils.PropertiesChangedHandler;
-import de.thjom.java.systemd.utils.PropertiesChangedProcessor;
 
 abstract class UnitMonitor {
 
@@ -37,7 +37,7 @@ abstract class UnitMonitor {
 
     protected int signalQueueLength = 1000;
 
-    private PropertiesChangedProcessor propertiesChangedProcessor;
+    private MessageConsumer<PropertiesChanged> propertiesChangedListener;
     private PropertiesChangedHandler propertiesChangedHandler;
 
     private Timer pollingTimer;
@@ -49,7 +49,7 @@ abstract class UnitMonitor {
     public void attach() throws DBusException {
         manager.subscribe();
 
-        propertiesChangedProcessor = new PropertiesChangedProcessor(signalQueueLength) {
+        propertiesChangedListener = new MessageConsumer<PropertiesChanged>(signalQueueLength) {
 
             @Override
             public void propertiesChanged(final PropertiesChanged signal) {
@@ -58,17 +58,17 @@ abstract class UnitMonitor {
                 String unitName = Unit.extractName(signal.getPath());
 
                 if (monitoredUnits.containsKey(unitName)) {
-                    System.out.println("UnitMonitor.attach().new PropertiesChangedProcessor() {...}.propertiesChanged(): " + signal);
+                    System.out.println("UnitMonitor.attach().new MessageConsumer() {...}.propertiesChanged(): " + signal);
                 }
             }
 
         };
 
-        propertiesChangedProcessor.setName(PropertiesChangedProcessor.class.getSimpleName());
-        propertiesChangedProcessor.setDaemon(true);
-        propertiesChangedProcessor.start();
+        propertiesChangedListener.setName(MessageConsumer.class.getSimpleName());
+        propertiesChangedListener.setDaemon(true);
+        propertiesChangedListener.start();
 
-        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedProcessor);
+        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedListener);
         manager.addHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
@@ -77,9 +77,9 @@ abstract class UnitMonitor {
             manager.removeHandler(PropertiesChanged.class, propertiesChangedHandler);
         }
 
-        if (propertiesChangedProcessor != null) {
-            propertiesChangedProcessor.setRunning(false);
-            propertiesChangedProcessor.interrupt();
+        if (propertiesChangedListener != null) {
+            propertiesChangedListener.setRunning(false);
+            propertiesChangedListener.interrupt();
         }
     }
 

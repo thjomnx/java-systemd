@@ -14,19 +14,19 @@ package de.thjom.java.systemd.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.freedesktop.DBus.Properties.PropertiesChanged;
+import org.freedesktop.dbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class PropertiesChangedProcessor extends Thread {
+public abstract class MessageConsumer<E extends Message> extends Thread {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final MessageSequencer<PropertiesChanged> sequencer;
+    private final MessageSequencer<E> sequencer;
 
     private volatile boolean running = true;
 
-    public PropertiesChangedProcessor(final int queueLength) {
+    public MessageConsumer(final int queueLength) {
         this.sequencer = new MessageSequencer<>(queueLength);
     }
 
@@ -34,7 +34,7 @@ public abstract class PropertiesChangedProcessor extends Thread {
     public void run() {
         while (running) {
             try {
-                PropertiesChanged signal = sequencer.take();
+                E signal = sequencer.take();
 
                 propertiesChanged(signal);
             }
@@ -45,19 +45,19 @@ public abstract class PropertiesChangedProcessor extends Thread {
 
         log.debug("Draining sequencer queue");
 
-        List<PropertiesChanged> signals = new ArrayList<>(sequencer.size());
+        List<E> signals = new ArrayList<>(sequencer.size());
         sequencer.drainTo(signals);
 
-        for (PropertiesChanged signal : signals) {
+        for (E signal : signals) {
             propertiesChanged(signal);
         }
 
         sequencer.clear();
     }
 
-    public abstract void propertiesChanged(final PropertiesChanged signal);
+    public abstract void propertiesChanged(final E signal);
 
-    MessageSequencer<PropertiesChanged> getSequencer() {
+    MessageSequencer<E> getSequencer() {
         return sequencer;
     }
 

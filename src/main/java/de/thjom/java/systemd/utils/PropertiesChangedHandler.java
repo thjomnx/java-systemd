@@ -22,7 +22,7 @@ public class PropertiesChangedHandler implements DBusSigHandler<PropertiesChange
 
     private final MessageSequencer<PropertiesChanged> sequencer;
 
-    public PropertiesChangedHandler(final PropertiesChangedProcessor processor) {
+    public PropertiesChangedHandler(final MessageConsumer<PropertiesChanged> processor) {
         this.sequencer = processor.getSequencer();
     }
 
