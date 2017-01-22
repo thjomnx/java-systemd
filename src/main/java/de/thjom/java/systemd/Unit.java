@@ -218,7 +218,17 @@ public abstract class Unit extends InterfaceAdapter {
         propertiesChangedListener.setDaemon(true);
         propertiesChangedListener.start();
 
-        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedListener);
+        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedListener) {
+
+            @Override
+            public void handle(final PropertiesChanged signal) {
+                log.debug("Signal received: " + signal);
+
+                super.handle(signal);
+            }
+
+        };
+
         addHandler(PropertiesChanged.class, propertiesChangedHandler);
     }
 
