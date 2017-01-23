@@ -120,7 +120,7 @@ public class MessageSequencer<E extends Message> {
     }
 
     private E transfer(final long timeout, final TimeUnit unit, int chunkSize) throws InterruptedException {
-        boolean once = false;
+        boolean delayed = false;
 
         do {
             E head;
@@ -137,10 +137,10 @@ public class MessageSequencer<E extends Message> {
                     return head;
                 }
 
-                if (!once) {
+                if (!delayed) {
                     Thread.sleep(transferDelay);
 
-                    once = true;
+                    delayed = true;
                 }
             }
             else {
