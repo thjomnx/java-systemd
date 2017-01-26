@@ -73,7 +73,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(miface.listUnits()).then(new Answer<List<UnitType>>() {
 
                 @Override
-                public List<UnitType> answer(InvocationOnMock invocation) throws Throwable {
+                public List<UnitType> answer(final InvocationOnMock invocation) throws Throwable {
                     List<UnitType> list = new ArrayList<>();
                     list.add(new UnitType("boot.mount", null, null, null, null, null, null, new UInt32(0L), null, null));
                     list.add(new UnitType("run-user-1000.mount", null, null, null, null, null, null, new UInt32(0L), null, null));
@@ -117,7 +117,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(piface0.getProperty(Mockito.eq(Unit.SERVICE_NAME), Mockito.eq(Unit.Property.ID))).then(new Answer<Variant<?>>() {
 
                 @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                     return new Variant<>("boot.mount");
                 }
 
@@ -126,7 +126,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(piface1.getProperty(Mockito.eq(Unit.SERVICE_NAME), Mockito.eq(Unit.Property.ID))).then(new Answer<Variant<?>>() {
 
                 @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                     return new Variant<>("run-user-1000.mount");
                 }
 
@@ -135,7 +135,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(piface2.getProperty(Mockito.eq(Unit.SERVICE_NAME), Mockito.eq(Unit.Property.ID))).then(new Answer<Variant<?>>() {
 
                 @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                     return new Variant<>("tmp.mount");
                 }
 
@@ -144,7 +144,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(piface3.getProperty(Mockito.eq(Unit.SERVICE_NAME), Mockito.eq(Unit.Property.ID))).then(new Answer<Variant<?>>() {
 
                 @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                     return new Variant<>("avahi-daemon.service");
                 }
 
@@ -153,7 +153,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(piface4.getProperty(Mockito.eq(Unit.SERVICE_NAME), Mockito.eq(Unit.Property.ID))).then(new Answer<Variant<?>>() {
 
                 @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                     return new Variant<>("cronie.service");
                 }
 
@@ -162,7 +162,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
             Mockito.when(piface5.getProperty(Mockito.eq(Unit.SERVICE_NAME), Mockito.eq(Unit.Property.ID))).then(new Answer<Variant<?>>() {
 
                 @Override
-                public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                     return new Variant<>("systemd-initctl.socket");
                 }
 

@@ -25,8 +25,7 @@ import de.thjom.java.systemd.interfaces.UnitInterface;
 import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
-import de.thjom.java.systemd.utils.MessageConsumer;
-import de.thjom.java.systemd.utils.PropertiesChangedHandler;
+import de.thjom.java.systemd.utils.SignalHandler;
 
 public abstract class Unit extends InterfaceAdapter {
 
@@ -163,9 +162,6 @@ public abstract class Unit extends InterfaceAdapter {
 
     private final Properties unitProperties;
 
-    private MessageConsumer<PropertiesChanged> propertiesChangedListener;
-    private PropertiesChangedHandler propertiesChangedHandler;
-
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
         super(manager.dbus, iface);
 
@@ -198,49 +194,18 @@ public abstract class Unit extends InterfaceAdapter {
         return unitProperties;
     }
 
-    public void attach() throws DBusException {
-        manager.subscribe();
-
-        propertiesChangedListener = new MessageConsumer<PropertiesChanged>(100) {
-
-            @Override
-            public void propertiesChanged(final PropertiesChanged signal) {
-                log.debug("Processing dequeued signal: " + signal);
-
-                if (Unit.extractName(signal.getPath()).equals(Systemd.escapePath(name))) {
-                    System.out.println("Unit.attach().new MessageConsumer() {...}.propertiesChanged(): " + signal);
-                }
-            }
-
-        };
-
-        propertiesChangedListener.setName(MessageConsumer.class.getSimpleName());
-        propertiesChangedListener.setDaemon(true);
-        propertiesChangedListener.start();
-
-        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedListener) {
-
-            @Override
-            public void handle(final PropertiesChanged signal) {
-                log.debug("Signal received: " + signal);
-
-                super.handle(signal);
-            }
-
-        };
-
-        addHandler(PropertiesChanged.class, propertiesChangedHandler);
+    public boolean isAssignableFrom(final String objectPath) {
+        return extractName(objectPath).equals(Systemd.escapePath(name));
     }
 
-    public void detach() throws DBusException {
-        if (propertiesChangedHandler != null) {
-            removeHandler(PropertiesChanged.class, propertiesChangedHandler);
-        }
+    public void addHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
+        manager.subscribe();
 
-        if (propertiesChangedListener != null) {
-            propertiesChangedListener.setRunning(false);
-            propertiesChangedListener.interrupt();
-        }
+        addHandler(PropertiesChanged.class, handler);
+    }
+
+    public void removeHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
+        removeHandler(PropertiesChanged.class, handler);
     }
 
     public String introspect() throws DBusException {

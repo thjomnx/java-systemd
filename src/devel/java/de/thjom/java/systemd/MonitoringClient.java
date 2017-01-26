@@ -16,11 +16,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
+import de.thjom.java.systemd.utils.MessageConsumer;
+import de.thjom.java.systemd.utils.SignalHandler;
 
 public class MonitoringClient implements Runnable {
 
@@ -36,17 +39,42 @@ public class MonitoringClient implements Runnable {
             try {
                 Manager manager = Systemd.get().getManager();
 
-                UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager);
-                serviceMonitor.addMonitoredTypes(MonitoredType.SERVICE);
-                serviceMonitor.attach();
-
                 Unit cronie = manager.getService("cronie");
-                cronie.attach();
+
+                SignalHandler<PropertiesChanged> handler = new SignalHandler<PropertiesChanged>() {
+
+                    @Override
+                    public void handle(final PropertiesChanged signal) {
+                        super.handle(signal);
+
+                        if (cronie.isAssignableFrom(signal.getPath())) {
+                            System.out.println("MonitoringClient.run().new PropertiesChangedHandler() {...}.handle() : " + signal);
+                        }
+                    }
+
+                };
+
+                handler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+
+                    @Override
+                    public void propertiesChanged(final PropertiesChanged signal) {
+                        if (cronie.isAssignableFrom(signal.getPath())) {
+                            System.out.println("MonitoringClient.run().new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                        }
+                    }
+
+                });
+
+                cronie.addHandler(handler);
 
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
                 miscMonitor.addUnits(cronie);
                 miscMonitor.addUnits("dbus.service");
                 miscMonitor.attach();
+
+                UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager);
+                serviceMonitor.addMonitoredTypes(MonitoredType.SERVICE);
+                serviceMonitor.attach();
 
                 while (running) {
                     List<Unit> units = new ArrayList<>();
@@ -90,10 +118,10 @@ public class MonitoringClient implements Runnable {
                     }
                 }
 
-                cronie.detach();
+                cronie.removeHandler(handler);
 
-                serviceMonitor.detach();
                 miscMonitor.detach();
+                serviceMonitor.detach();
             }
             catch (final DBusException e) {
                 e.printStackTrace();

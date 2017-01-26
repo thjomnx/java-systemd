@@ -25,8 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Unit;
-import de.thjom.java.systemd.utils.MessageConsumer;
-import de.thjom.java.systemd.utils.PropertiesChangedHandler;
+import de.thjom.java.systemd.utils.SignalHandler;
 
 abstract class UnitMonitor {
 
@@ -35,63 +34,29 @@ abstract class UnitMonitor {
     protected final Manager manager;
     protected final ConcurrentMap<String, Unit> monitoredUnits = new ConcurrentHashMap<>();
 
-    protected int signalQueueLength = 1000;
-
-    private MessageConsumer<PropertiesChanged> propertiesChangedListener;
-    private PropertiesChangedHandler propertiesChangedHandler;
-
     private Timer pollingTimer;
 
     protected UnitMonitor(final Manager manager) {
         this.manager = Objects.requireNonNull(manager);
     }
 
-    public void attach() throws DBusException {
+    public boolean containsUnit(final String objectPath) {
+        return monitoredUnits.containsKey(Unit.extractName(objectPath));
+    }
+
+    public void addHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
         manager.subscribe();
 
-        propertiesChangedListener = new MessageConsumer<PropertiesChanged>(signalQueueLength) {
-
-            @Override
-            public void propertiesChanged(final PropertiesChanged signal) {
-                log.debug("Processing dequeued signal: " + signal);
-
-                String unitName = Unit.extractName(signal.getPath());
-
-                if (monitoredUnits.containsKey(unitName)) {
-                    System.out.println("UnitMonitor.attach().new MessageConsumer() {...}.propertiesChanged(): " + signal);
-                }
-            }
-
-        };
-
-        propertiesChangedListener.setName(MessageConsumer.class.getSimpleName());
-        propertiesChangedListener.setDaemon(true);
-        propertiesChangedListener.start();
-
-        propertiesChangedHandler = new PropertiesChangedHandler(propertiesChangedListener) {
-
-            @Override
-            public void handle(final PropertiesChanged signal) {
-                log.debug("Signal received: " + signal);
-
-                super.handle(signal);
-            }
-
-        };
-
-        manager.addHandler(PropertiesChanged.class, propertiesChangedHandler);
+        manager.addHandler(PropertiesChanged.class, handler);
     }
 
-    public void detach() throws DBusException {
-        if (propertiesChangedHandler != null) {
-            manager.removeHandler(PropertiesChanged.class, propertiesChangedHandler);
-        }
-
-        if (propertiesChangedListener != null) {
-            propertiesChangedListener.setRunning(false);
-            propertiesChangedListener.interrupt();
-        }
+    public void removeHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
+        manager.removeHandler(PropertiesChanged.class, handler);
     }
+
+    public abstract void attach() throws DBusException;
+
+    public abstract void detach() throws DBusException;
 
     public abstract void refresh() throws DBusException;
 
@@ -130,14 +95,6 @@ abstract class UnitMonitor {
 
     public Collection<Unit> getMonitoredUnits() {
         return monitoredUnits.values();
-    }
-
-    public int getSignalQueueLength() {
-        return signalQueueLength;
-    }
-
-    public void setSignalQueueLength(final int signalQueueLength) {
-        this.signalQueueLength = signalQueueLength;
     }
 
 }

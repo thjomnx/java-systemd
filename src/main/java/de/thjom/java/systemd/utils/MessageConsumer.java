@@ -18,7 +18,7 @@ import org.freedesktop.dbus.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class MessageConsumer<E extends Message> extends Thread {
+public abstract class MessageConsumer<E extends Message> implements Runnable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
