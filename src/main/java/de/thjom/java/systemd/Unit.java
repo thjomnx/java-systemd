@@ -16,7 +16,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
-import org.freedesktop.DBus.Properties.PropertiesChanged;
+import org.freedesktop.dbus.DBusSigHandler;
+import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.Path;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -25,7 +26,7 @@ import de.thjom.java.systemd.interfaces.UnitInterface;
 import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
-import de.thjom.java.systemd.utils.SignalHandler;
+import de.thjom.java.systemd.utils.ForwardingHandler;
 
 public abstract class Unit extends InterfaceAdapter {
 
@@ -198,14 +199,20 @@ public abstract class Unit extends InterfaceAdapter {
         return extractName(objectPath).equals(Systemd.escapePath(name));
     }
 
-    public void addHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
+    @Override
+    public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         manager.subscribe();
 
-        addHandler(PropertiesChanged.class, handler);
+        super.addHandler(type, handler);
     }
 
-    public void removeHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
-        removeHandler(PropertiesChanged.class, handler);
+    @Override
+    public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        if (handler instanceof ForwardingHandler) {
+            ((ForwardingHandler<?>) handler).forwardTo(null);
+        }
+
+        super.removeHandler(type, handler);
     }
 
     public String introspect() throws DBusException {

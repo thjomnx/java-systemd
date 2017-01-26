@@ -16,18 +16,18 @@ import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SignalHandler<T extends DBusSignal> implements DBusSigHandler<T> {
+public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T> {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private MessageConsumer<T> consumer;
     private Thread consumerThread;
 
-    public SignalHandler() {
+    public ForwardingHandler() {
         // Do nothing
     }
 
-    public SignalHandler(final MessageConsumer<T> consumer) {
+    public ForwardingHandler(final MessageConsumer<T> consumer) {
         setConsumer(consumer);
     }
 

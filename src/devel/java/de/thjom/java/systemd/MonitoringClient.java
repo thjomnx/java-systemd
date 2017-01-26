@@ -23,7 +23,7 @@ import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
 import de.thjom.java.systemd.utils.MessageConsumer;
-import de.thjom.java.systemd.utils.SignalHandler;
+import de.thjom.java.systemd.utils.ForwardingHandler;
 
 public class MonitoringClient implements Runnable {
 
@@ -41,7 +41,7 @@ public class MonitoringClient implements Runnable {
 
                 Unit cronie = manager.getService("cronie");
 
-                SignalHandler<PropertiesChanged> handler = new SignalHandler<PropertiesChanged>() {
+                ForwardingHandler<PropertiesChanged> handler = new ForwardingHandler<PropertiesChanged>() {
 
                     @Override
                     public void handle(final PropertiesChanged signal) {
@@ -65,7 +65,7 @@ public class MonitoringClient implements Runnable {
 
                 });
 
-                cronie.addHandler(handler);
+                cronie.addHandler(PropertiesChanged.class, handler);
 
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
                 miscMonitor.addUnits(cronie);
@@ -118,7 +118,7 @@ public class MonitoringClient implements Runnable {
                     }
                 }
 
-                cronie.removeHandler(handler);
+                cronie.removeHandler(PropertiesChanged.class, handler);
 
                 miscMonitor.detach();
                 serviceMonitor.detach();

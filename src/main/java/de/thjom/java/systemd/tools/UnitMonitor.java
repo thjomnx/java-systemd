@@ -19,13 +19,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.freedesktop.DBus.Properties.PropertiesChanged;
+import org.freedesktop.dbus.DBusSigHandler;
+import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Unit;
-import de.thjom.java.systemd.utils.SignalHandler;
+import de.thjom.java.systemd.utils.ForwardingHandler;
 
 abstract class UnitMonitor {
 
@@ -44,13 +46,26 @@ abstract class UnitMonitor {
         return monitoredUnits.containsKey(Unit.extractName(objectPath));
     }
 
-    public void addHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
+    public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        manager.subscribe();
+        manager.addHandler(type, handler);
+    }
+
+    public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        if (handler instanceof ForwardingHandler) {
+            ((ForwardingHandler<?>) handler).forwardTo(null);
+        }
+
+        manager.removeHandler(type, handler);
+    }
+
+    public void addHandler(final ForwardingHandler<PropertiesChanged> handler) throws DBusException {
         manager.subscribe();
 
         manager.addHandler(PropertiesChanged.class, handler);
     }
 
-    public void removeHandler(final SignalHandler<PropertiesChanged> handler) throws DBusException {
+    public void removeHandler(final ForwardingHandler<PropertiesChanged> handler) throws DBusException {
         manager.removeHandler(PropertiesChanged.class, handler);
     }
 
