@@ -36,9 +36,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
 
         this.consumer = consumer;
 
-        if (consumer != null) {
-            startConsumer();
-        }
+        startConsumer();
     }
 
     private void startConsumer() {
@@ -53,7 +51,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
     }
 
     private void stopConsumer() {
-        if (consumer != null && consumerThread != null && consumerThread.isAlive()) {
+        if (consumer != null && consumerThread != null) {
             log.info("Stopping message consumer thread");
 
             consumer.setRunning(false);
