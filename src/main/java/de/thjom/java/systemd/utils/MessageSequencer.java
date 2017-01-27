@@ -164,16 +164,16 @@ public class MessageSequencer<E extends Message> {
         this.transferDelay = transferDelay;
     }
 
-    public int getChunkSize() {
+    public int getTransferChunkSize() {
         return transferChunkSize;
     }
 
-    public void setChunkSize(final int chunkSize) {
-        if (chunkSize < 0) {
+    public void setTransferChunkSize(final int transferChunkSize) {
+        if (transferChunkSize < 0) {
             throw new IllegalArgumentException();
         }
 
-        this.transferChunkSize = chunkSize;
+        this.transferChunkSize = transferChunkSize;
     }
 
     static final class MessageComparator<E extends Message> implements Comparator<E> {
