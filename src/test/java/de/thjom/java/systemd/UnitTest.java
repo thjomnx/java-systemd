@@ -15,10 +15,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Unit;
-
-public abstract class UnitTest extends AbstractTestCase {
+public class UnitTest extends AbstractTestCase {
 
     protected final Set<String> nonVariantProperties = new HashSet<>();
 
@@ -34,7 +33,26 @@ public abstract class UnitTest extends AbstractTestCase {
         nonVariantProperties.add(Unit.Property.LOAD_ERROR);
     }
 
-    public void testUnitProperties(Unit unit, String[] propertyNames) {
+    @Test(description="Tests unit name normalizer method.")
+    public void testNormalizeName() {
+        Assert.assertEquals(Unit.normalizeName("dbus", ".service"), "dbus.service");
+        Assert.assertEquals(Unit.normalizeName("dbus.service", ".service"), "dbus.service");
+
+        Assert.assertEquals(Unit.normalizeName(null, ".service"), "");
+        Assert.assertEquals(Unit.normalizeName("dbus.service", null), "dbus.service");
+        Assert.assertEquals(Unit.normalizeName(null, null), "");
+    }
+
+    @Test(description="Tests unit name extractor method.")
+    public void testExtractName() {
+        Assert.assertEquals(Unit.extractName("/org/freedesktop/systemd1/unit/dbus_2eservice"), "dbus_2eservice");
+        Assert.assertEquals(Unit.extractName("/org/freedesktop/systemd1"), "");
+        Assert.assertEquals(Unit.extractName(""), "");
+        Assert.assertEquals(Unit.extractName(null), "");
+    }
+
+    // This method is called from derived test classes hence no need for annotation
+    public void testUnitProperties(final Unit unit, final String[] propertyNames) {
         for (String propertyName : Unit.Property.getAllNames()) {
             if (!nonVariantProperties.contains(propertyName)) {
                 Object value = unit.getUnitProperties().getVariant(propertyName).getValue();

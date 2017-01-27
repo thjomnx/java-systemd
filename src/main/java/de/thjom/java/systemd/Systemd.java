@@ -70,17 +70,21 @@ public final class Systemd {
     }
 
     public static final String escapePath(final CharSequence path) {
-        StringBuffer escaped = new StringBuffer(path.length());
-        Matcher matcher = PATH_ESCAPE_PATTERN.matcher(path);
+        if (path != null) {
+            StringBuffer escaped = new StringBuffer(path.length());
+            Matcher matcher = PATH_ESCAPE_PATTERN.matcher(path);
 
-        while (matcher.find()) {
-            String replacement = '_' + Integer.toHexString((int) matcher.group().charAt(0));
-            matcher.appendReplacement(escaped, replacement);
+            while (matcher.find()) {
+                String replacement = '_' + Integer.toHexString((int) matcher.group().charAt(0));
+                matcher.appendReplacement(escaped, replacement);
+            }
+
+            matcher.appendTail(escaped);
+
+            return escaped.toString();
         }
 
-        matcher.appendTail(escaped);
-
-        return escaped.toString();
+        return "";
     }
 
     public static final Date timestampToDate(final long timestamp) {

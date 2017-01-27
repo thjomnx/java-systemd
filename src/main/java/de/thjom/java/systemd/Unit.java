@@ -173,11 +173,34 @@ public abstract class Unit extends InterfaceAdapter {
     }
 
     public static String normalizeName(final String name, final String suffix) {
-        return name.endsWith(suffix) ? name : name + suffix;
+        String normalized;
+
+        if (name != null) {
+            if (suffix != null) {
+                normalized = name.endsWith(suffix) ? name : name + suffix;
+            }
+            else {
+                normalized = name;
+            }
+        }
+        else {
+            normalized = "";
+        }
+
+        return normalized;
     }
 
     public static String extractName(final String objectPath) {
-        return objectPath.substring(Unit.OBJECT_PATH.length());
+        String name;
+
+        if (objectPath != null && objectPath.startsWith(Unit.OBJECT_PATH)) {
+            name = objectPath.substring(Unit.OBJECT_PATH.length());
+        }
+        else {
+            name = "";
+        }
+
+        return name;
     }
 
     @Override

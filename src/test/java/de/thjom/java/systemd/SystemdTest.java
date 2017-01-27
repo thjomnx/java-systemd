@@ -26,6 +26,7 @@ public class SystemdTest {
         Assert.assertEquals(Systemd.escapePath("cronie.service"), "cronie_2eservice");
         Assert.assertEquals(Systemd.escapePath(new StringBuffer("systemd-logind.service")), "systemd_2dlogind_2eservice");
         Assert.assertEquals(Systemd.escapePath(new StringBuilder("user@1000.service")), "user_401000_2eservice");
+        Assert.assertEquals(Systemd.escapePath(null), "");
     }
 
     @Test(description="Tests micro-timestamp conversion to java.util.Date object.")
