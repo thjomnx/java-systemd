@@ -31,7 +31,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
         setConsumer(consumer);
     }
 
-    private void setConsumer(final MessageConsumer<T> consumer) {
+    private synchronized void setConsumer(final MessageConsumer<T> consumer) {
         stopConsumer();
 
         this.consumer = consumer;
@@ -67,7 +67,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
     }
 
     @Override
-    public void handle(final T signal) {
+    public synchronized void handle(final T signal) {
         if (consumer != null) {
             MessageSequencer<T> sequencer = consumer.getSequencer();
 
