@@ -22,8 +22,8 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
-import de.thjom.java.systemd.utils.MessageConsumer;
 import de.thjom.java.systemd.utils.ForwardingHandler;
+import de.thjom.java.systemd.utils.MessageConsumer;
 
 public class MonitoringClient implements Runnable {
 
