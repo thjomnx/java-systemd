@@ -72,7 +72,9 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
             MessageSequencer<T> sequencer = consumer.getSequencer();
 
             if (sequencer != null) {
-                log.debug("Adding signal to sequencer queue: " + signal);
+                if (log.isDebugEnabled()) {
+                    log.debug("Adding signal to sequencer queue: " + signal);
+                }
 
                 try {
                     sequencer.put(signal);

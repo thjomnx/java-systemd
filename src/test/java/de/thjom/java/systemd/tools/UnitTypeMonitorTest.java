@@ -188,7 +188,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         Assert.assertNotNull(monitor);
 
         try {
-            monitor.attach();
+            monitor.addDefaultHandlers();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -230,7 +230,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
 
         try {
             monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
-            monitor.attach();
+            monitor.addDefaultHandlers();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);

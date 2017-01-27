@@ -39,42 +39,97 @@ public class MonitoringClient implements Runnable {
             try {
                 Manager manager = Systemd.get().getManager();
 
+                // 'cronie' monitoring
                 Unit cronie = manager.getService("cronie");
 
-                ForwardingHandler<PropertiesChanged> handler = new ForwardingHandler<PropertiesChanged>() {
+                ForwardingHandler<PropertiesChanged> cronieHandler = new ForwardingHandler<PropertiesChanged>() {
 
                     @Override
                     public void handle(final PropertiesChanged signal) {
                         super.handle(signal);
 
                         if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().new PropertiesChangedHandler() {...}.handle() : " + signal);
+                            System.out.println("MonitoringClient.run().cronieHandler.new PropertiesChangedHandler() {...}.handle() : " + signal);
                         }
                     }
 
                 };
 
-                handler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+                cronieHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
 
                     @Override
                     public void propertiesChanged(final PropertiesChanged signal) {
                         if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().cronieHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
                         }
                     }
 
                 });
 
-                cronie.addHandler(PropertiesChanged.class, handler);
+                cronie.addHandler(PropertiesChanged.class, cronieHandler);
 
+                // Unit monitoring based on names
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
                 miscMonitor.addUnits(cronie);
                 miscMonitor.addUnits("dbus.service");
-                miscMonitor.attach();
+                miscMonitor.addDefaultHandlers();
 
+                ForwardingHandler<PropertiesChanged> miscMonitorHandler = new ForwardingHandler<PropertiesChanged>() {
+
+                    @Override
+                    public void handle(final PropertiesChanged signal) {
+                        super.handle(signal);
+
+                        if (miscMonitor.containsUnit(signal.getPath())) {
+                            System.out.println("MonitoringClient.run().miscMonitorHandler.new ForwardingHandler() {...}.handle(): " + signal);
+                        }
+                    }
+
+                };
+
+                miscMonitorHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+
+                    @Override
+                    public void propertiesChanged(final PropertiesChanged signal) {
+                        if (miscMonitor.containsUnit(signal.getPath())) {
+                            System.out.println("MonitoringClient.run().miscMonitorHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                        }
+                    }
+
+                });
+
+                miscMonitor.addHandler(PropertiesChanged.class, miscMonitorHandler);
+
+                // Unit monitoring based on types
                 UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager);
                 serviceMonitor.addMonitoredTypes(MonitoredType.SERVICE);
-                serviceMonitor.attach();
+                serviceMonitor.addDefaultHandlers();
+
+                ForwardingHandler<PropertiesChanged> serviceMonitorHandler = new ForwardingHandler<PropertiesChanged>() {
+
+                    @Override
+                    public void handle(final PropertiesChanged signal) {
+                        super.handle(signal);
+
+                        if (serviceMonitor.containsUnit(signal.getPath())) {
+                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new ForwardingHandler() {...}.handle(): " + signal);
+                        }
+                    }
+
+                };
+
+                serviceMonitorHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+
+                    @Override
+                    public void propertiesChanged(final PropertiesChanged signal) {
+                        if (serviceMonitor.containsUnit(signal.getPath())) {
+                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                        }
+                    }
+
+                });
+
+                serviceMonitor.addHandler(PropertiesChanged.class, serviceMonitorHandler);
 
                 while (running) {
                     List<Unit> units = new ArrayList<>();
@@ -118,10 +173,14 @@ public class MonitoringClient implements Runnable {
                     }
                 }
 
-                cronie.removeHandler(PropertiesChanged.class, handler);
+                // Cleanup
+                cronie.removeHandler(PropertiesChanged.class, cronieHandler);
 
-                miscMonitor.detach();
-                serviceMonitor.detach();
+                miscMonitor.removeHandler(PropertiesChanged.class, miscMonitorHandler);
+                miscMonitor.removeDefaultHandlers();
+
+                serviceMonitor.removeHandler(PropertiesChanged.class, serviceMonitorHandler);
+                serviceMonitor.removeDefaultHandlers();
             }
             catch (final DBusException e) {
                 e.printStackTrace();

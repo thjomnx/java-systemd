@@ -18,7 +18,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -59,19 +58,9 @@ abstract class UnitMonitor {
         manager.removeHandler(type, handler);
     }
 
-    public void addHandler(final ForwardingHandler<PropertiesChanged> handler) throws DBusException {
-        manager.subscribe();
+    public abstract void addDefaultHandlers() throws DBusException;
 
-        manager.addHandler(PropertiesChanged.class, handler);
-    }
-
-    public void removeHandler(final ForwardingHandler<PropertiesChanged> handler) throws DBusException {
-        manager.removeHandler(PropertiesChanged.class, handler);
-    }
-
-    public abstract void attach() throws DBusException;
-
-    public abstract void detach() throws DBusException;
+    public abstract void removeDefaultHandlers() throws DBusException;
 
     public abstract void refresh() throws DBusException;
 
