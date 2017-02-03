@@ -183,6 +183,22 @@ public interface ManagerInterface extends DBusInterface {
 
     public class UnitRemoved extends Signal {
 
+        public class UnitNew extends Signal {
+        
+            public UnitNew(final String objectPath, final String id, final Path unit) throws DBusException {
+                super(objectPath, id, unit);
+            }
+        
+            public String getId() {
+                return getParameter(0, "");
+            }
+        
+            public Path getUnit() {
+                return getParameter(1, null);
+            }
+        
+        }
+
         public UnitRemoved(final String objectPath, final String id, final Path unit) throws DBusException {
             super(objectPath, id, unit);
         }

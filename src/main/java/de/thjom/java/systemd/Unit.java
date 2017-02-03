@@ -11,14 +11,21 @@
 
 package de.thjom.java.systemd;
 
+import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
+import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
+import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
+import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.Path;
+import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
@@ -27,8 +34,9 @@ import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
 import de.thjom.java.systemd.utils.ForwardingHandler;
+import de.thjom.java.systemd.utils.MessageConsumer;
 
-public abstract class Unit extends InterfaceAdapter {
+public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Unit";
     public static final String OBJECT_PATH = Systemd.OBJECT_PATH + "/unit/";
@@ -163,6 +171,9 @@ public abstract class Unit extends InterfaceAdapter {
 
     private final Properties unitProperties;
 
+    private final List<UnitStateListener> unitStateListeners = new ArrayList<>();
+    private ForwardingHandler<PropertiesChanged> defaultHandler;
+
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
         super(manager.dbus, iface);
 
@@ -236,6 +247,54 @@ public abstract class Unit extends InterfaceAdapter {
         }
 
         super.removeHandler(type, handler);
+    }
+
+    public void addDefaultHandlers() throws DBusException {
+        if (defaultHandler == null) {
+            defaultHandler = new ForwardingHandler<>();
+            defaultHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+
+                @Override
+                public void propertiesChanged(final PropertiesChanged signal) {
+                    if (isAssignableFrom(signal.getPath())) {
+                        Map<String, Variant<?>> properties = signal.getChangedProperties();
+
+                        if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
+                            synchronized (unitStateListeners) {
+                                for (UnitStateListener listener : unitStateListeners) {
+                                    listener.stateChanged(Unit.this, properties);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });
+
+            addHandler(PropertiesChanged.class, defaultHandler);
+        }
+    }
+
+    public void removeDefaultHandlers() throws DBusException {
+        if (defaultHandler != null) {
+            removeHandler(PropertiesChanged.class, defaultHandler);
+        }
+
+        defaultHandler = null;
+    }
+
+    @Override
+    public void addListener(final UnitStateListener listener) {
+        synchronized (unitStateListeners) {
+            unitStateListeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeListener(final UnitStateListener listener) {
+        synchronized (unitStateListeners) {
+            unitStateListeners.remove(listener);
+        }
     }
 
     public String introspect() throws DBusException {

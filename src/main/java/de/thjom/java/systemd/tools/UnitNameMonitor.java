@@ -40,7 +40,7 @@ public class UnitNameMonitor extends UnitMonitor {
 
     @Override
     public void addDefaultHandlers() throws DBusException {
-        manager.subscribe();
+        super.addDefaultHandlers();
 
         reloadingHandler = new ReloadingHandler();
         manager.addHandler(Reloading.class, reloadingHandler);
@@ -61,6 +61,8 @@ public class UnitNameMonitor extends UnitMonitor {
         manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
         manager.removeHandler(UnitNew.class, unitNewHandler);
         manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
+
+        super.removeDefaultHandlers();
     }
 
     @Override

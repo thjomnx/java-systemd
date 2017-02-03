@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.freedesktop.DBus.Properties.PropertiesChanged;
+import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.tools.UnitNameMonitor;
@@ -68,6 +70,20 @@ public class MonitoringClient implements Runnable {
 
                 cronie.addHandler(PropertiesChanged.class, cronieHandler);
 
+                cronie.addDefaultHandlers();
+                cronie.addListener(new UnitStateListener() {
+
+                    @Override
+                    public void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties) {
+                        String loadState = changedProperties.getOrDefault(Unit.Property.LOAD_STATE, new Variant<>("-")).toString();
+                        String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
+                        String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
+
+                        System.out.format("State(s) changed to %s - %s (%s)\n", loadState, activeState, subState);
+                    }
+
+                });
+
                 // Unit monitoring based on names
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
                 miscMonitor.addUnits(cronie);
@@ -80,7 +96,7 @@ public class MonitoringClient implements Runnable {
                     public void handle(final PropertiesChanged signal) {
                         super.handle(signal);
 
-                        if (miscMonitor.containsUnit(signal.getPath())) {
+                        if (miscMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
                             System.out.println("MonitoringClient.run().miscMonitorHandler.new ForwardingHandler() {...}.handle(): " + signal);
                         }
                     }
@@ -91,7 +107,7 @@ public class MonitoringClient implements Runnable {
 
                     @Override
                     public void propertiesChanged(final PropertiesChanged signal) {
-                        if (miscMonitor.containsUnit(signal.getPath())) {
+                        if (miscMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
                             System.out.println("MonitoringClient.run().miscMonitorHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
                         }
                     }
@@ -111,7 +127,7 @@ public class MonitoringClient implements Runnable {
                     public void handle(final PropertiesChanged signal) {
                         super.handle(signal);
 
-                        if (serviceMonitor.containsUnit(signal.getPath())) {
+                        if (serviceMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
                             System.out.println("MonitoringClient.run().serviceMonitorHandler.new ForwardingHandler() {...}.handle(): " + signal);
                         }
                     }
@@ -122,7 +138,7 @@ public class MonitoringClient implements Runnable {
 
                     @Override
                     public void propertiesChanged(final PropertiesChanged signal) {
-                        if (serviceMonitor.containsUnit(signal.getPath())) {
+                        if (serviceMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
                             System.out.println("MonitoringClient.run().serviceMonitorHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
                         }
                     }
