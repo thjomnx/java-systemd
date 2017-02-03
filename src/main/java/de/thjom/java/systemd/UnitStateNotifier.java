@@ -11,10 +11,12 @@
 
 package de.thjom.java.systemd;
 
+import org.freedesktop.dbus.exceptions.DBusException;
+
 public interface UnitStateNotifier {
 
-    void addListener(final UnitStateListener listener);
+    void addListener(final UnitStateListener listener) throws DBusException;
 
-    void removeListener(final UnitStateListener listener);
+    void removeListener(final UnitStateListener listener) throws DBusException;
 
 }

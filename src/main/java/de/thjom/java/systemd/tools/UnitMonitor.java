@@ -70,7 +70,12 @@ abstract class UnitMonitor implements UnitStateNotifier {
         manager.removeHandler(type, handler);
     }
 
-    public void addDefaultHandlers() throws DBusException {
+    public abstract void addDefaultHandlers() throws DBusException;
+
+    public abstract void removeDefaultHandlers() throws DBusException;
+
+    @Override
+    public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
             defaultHandler = new ForwardingHandler<>();
             defaultHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
@@ -96,27 +101,18 @@ abstract class UnitMonitor implements UnitStateNotifier {
 
             addHandler(PropertiesChanged.class, defaultHandler);
         }
+
+        unitStateListeners.add(listener);
     }
 
-    public void removeDefaultHandlers() throws DBusException {
-        if (defaultHandler != null) {
+    @Override
+    public synchronized void removeListener(final UnitStateListener listener) throws DBusException {
+        unitStateListeners.remove(listener);
+
+        if (unitStateListeners.isEmpty() && defaultHandler != null) {
             removeHandler(PropertiesChanged.class, defaultHandler);
-        }
 
-        defaultHandler = null;
-    }
-
-    @Override
-    public void addListener(final UnitStateListener listener) {
-        synchronized (unitStateListeners) {
-            unitStateListeners.add(listener);
-        }
-    }
-
-    @Override
-    public void removeListener(final UnitStateListener listener) {
-        synchronized (unitStateListeners) {
-            unitStateListeners.remove(listener);
+            defaultHandler = null;
         }
     }
 

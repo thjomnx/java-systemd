@@ -69,8 +69,6 @@ public class MonitoringClient implements Runnable {
                 });
 
                 cronie.addHandler(PropertiesChanged.class, cronieHandler);
-
-                cronie.addDefaultHandlers();
                 cronie.addListener(new UnitStateListener() {
 
                     @Override
@@ -79,7 +77,7 @@ public class MonitoringClient implements Runnable {
                         String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
                         String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
 
-                        System.out.format("State(s) changed to %s - %s (%s)\n", loadState, activeState, subState);
+                        System.out.format("MonitoringClient.run().new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
                     }
 
                 });
@@ -115,6 +113,18 @@ public class MonitoringClient implements Runnable {
                 });
 
                 miscMonitor.addHandler(PropertiesChanged.class, miscMonitorHandler);
+                miscMonitor.addListener(new UnitStateListener() {
+
+                    @Override
+                    public void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties) {
+                        String loadState = changedProperties.getOrDefault(Unit.Property.LOAD_STATE, new Variant<>("-")).toString();
+                        String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
+                        String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
+
+                        System.out.format("MonitoringClient.run().new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
+                    }
+
+                });
 
                 // Unit monitoring based on types
                 UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager);
@@ -146,6 +156,18 @@ public class MonitoringClient implements Runnable {
                 });
 
                 serviceMonitor.addHandler(PropertiesChanged.class, serviceMonitorHandler);
+                serviceMonitor.addListener(new UnitStateListener() {
+
+                    @Override
+                    public void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties) {
+                        String loadState = changedProperties.getOrDefault(Unit.Property.LOAD_STATE, new Variant<>("-")).toString();
+                        String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
+                        String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
+
+                        System.out.format("MonitoringClient.run().new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
+                    }
+
+                });
 
                 while (running) {
                     List<Unit> units = new ArrayList<>();
