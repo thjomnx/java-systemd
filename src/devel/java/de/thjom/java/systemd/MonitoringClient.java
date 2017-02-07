@@ -77,7 +77,7 @@ public class MonitoringClient implements Runnable {
                         String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
                         String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
 
-                        System.out.format("MonitoringClient.run().new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
+                        System.out.format("MonitoringClient.run().cronie.new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
                     }
 
                 });
@@ -121,7 +121,7 @@ public class MonitoringClient implements Runnable {
                         String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
                         String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
 
-                        System.out.format("MonitoringClient.run().new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
+                        System.out.format("MonitoringClient.run().miscMonitor.new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
                     }
 
                 });
@@ -164,7 +164,7 @@ public class MonitoringClient implements Runnable {
                         String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
                         String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
 
-                        System.out.format("MonitoringClient.run().new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
+                        System.out.format("MonitoringClient.run().serviceMonitor.new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
                     }
 
                 });

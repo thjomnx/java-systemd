@@ -11,11 +11,12 @@
 
 package de.thjom.java.systemd.utils;
 
+import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ForwardingHandler<T extends DBusSignal> implements DBusSigForwarder<T> {
+public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T> {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -85,7 +86,6 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigForwarder
         }
     }
 
-    @Override
     public void forwardTo(final SignalConsumer<T> consumer) {
         setConsumer(consumer);
     }
