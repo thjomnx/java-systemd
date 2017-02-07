@@ -18,8 +18,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Socket;
-import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.interfaces.SocketInterface;
 
 public class SocketTest extends UnitTest {

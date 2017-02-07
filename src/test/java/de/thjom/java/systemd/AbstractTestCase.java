@@ -29,7 +29,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 
-import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
@@ -59,7 +58,7 @@ public class AbstractTestCase {
         }
     }
 
-    protected void setupPropertyMocks(Class<?> iface, String serviceName, String[] propertyNames) {
+    protected void setupPropertyMocks(final Class<?> iface, final String serviceName, final String[] propertyNames) {
         try {
             for (String propertyName : propertyNames) {
                 Method method = null;
@@ -83,7 +82,7 @@ public class AbstractTestCase {
                     Mockito.when(piface.getProperty(serviceName, propertyName)).then(new Answer<Variant<?>>() {
 
                         @Override
-                        public Variant<?> answer(InvocationOnMock invocation) throws Throwable {
+                        public Variant<?> answer(final InvocationOnMock invocation) throws Throwable {
                             if (returnType == boolean.class) {
                                 return new Variant<>(Boolean.TRUE);
                             }

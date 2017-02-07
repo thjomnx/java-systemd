@@ -18,8 +18,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Service;
-import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
 
 public class ServiceTest extends UnitTest {

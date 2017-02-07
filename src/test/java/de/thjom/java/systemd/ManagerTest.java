@@ -16,8 +16,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Manager;
-
 public class ManagerTest extends AbstractTestCase {
 
     private Manager manager;
