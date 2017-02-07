@@ -51,7 +51,7 @@ public class MonitoringClient implements Runnable {
                         super.handle(signal);
 
                         if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().cronieHandler.new PropertiesChangedHandler() {...}.handle() : " + signal);
+                            System.out.println("MonitoringClient.run().cronieHandler.new ForwardingHandler() {...}.handle(): " + signal);
                         }
                     }
 
