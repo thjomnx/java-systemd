@@ -39,7 +39,7 @@ import de.thjom.java.systemd.Unit;
 import de.thjom.java.systemd.UnitStateListener;
 import de.thjom.java.systemd.UnitStateNotifier;
 import de.thjom.java.systemd.utils.ForwardingHandler;
-import de.thjom.java.systemd.utils.MessageConsumer;
+import de.thjom.java.systemd.utils.SignalConsumer;
 
 abstract class UnitMonitor implements UnitStateNotifier {
 
@@ -78,7 +78,7 @@ abstract class UnitMonitor implements UnitStateNotifier {
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
             defaultHandler = new ForwardingHandler<>();
-            defaultHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+            defaultHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                 @Override
                 public void propertiesChanged(final PropertiesChanged signal) {

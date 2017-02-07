@@ -34,7 +34,7 @@ import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
 import de.thjom.java.systemd.utils.ForwardingHandler;
-import de.thjom.java.systemd.utils.MessageConsumer;
+import de.thjom.java.systemd.utils.SignalConsumer;
 
 public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier {
 
@@ -253,7 +253,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
             defaultHandler = new ForwardingHandler<>();
-            defaultHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+            defaultHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                 @Override
                 public void propertiesChanged(final PropertiesChanged signal) {

@@ -25,7 +25,7 @@ import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
 import de.thjom.java.systemd.utils.ForwardingHandler;
-import de.thjom.java.systemd.utils.MessageConsumer;
+import de.thjom.java.systemd.utils.SignalConsumer;
 
 public class MonitoringClient implements Runnable {
 
@@ -57,12 +57,12 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                cronieHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+                cronieHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                     @Override
                     public void propertiesChanged(final PropertiesChanged signal) {
                         if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().cronieHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.propertiesChanged(): " + signal);
                         }
                     }
 
@@ -101,12 +101,12 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                miscMonitorHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+                miscMonitorHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                     @Override
                     public void propertiesChanged(final PropertiesChanged signal) {
                         if (miscMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().miscMonitorHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().miscMonitorHandler.new SignalConsumer() {...}.propertiesChanged(): " + signal);
                         }
                     }
 
@@ -144,12 +144,12 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                serviceMonitorHandler.forwardTo(new MessageConsumer<PropertiesChanged>(100) {
+                serviceMonitorHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                     @Override
                     public void propertiesChanged(final PropertiesChanged signal) {
                         if (serviceMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new MessageConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new SignalConsumer() {...}.propertiesChanged(): " + signal);
                         }
                     }
 

@@ -14,27 +14,27 @@ package de.thjom.java.systemd.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.freedesktop.dbus.Message;
+import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class MessageConsumer<E extends Message> implements Runnable {
+public abstract class SignalConsumer<T extends DBusSignal> implements Runnable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private final MessageSequencer<E> sequencer;
+    private final SignalSequencer<T> sequencer;
 
     private volatile boolean running = true;
 
-    public MessageConsumer(final int queueLength) {
-        this.sequencer = new MessageSequencer<>(queueLength);
+    public SignalConsumer(final int queueLength) {
+        this.sequencer = new SignalSequencer<>(queueLength);
     }
 
     @Override
     public void run() {
         while (running) {
             try {
-                E signal = sequencer.take();
+                T signal = sequencer.take();
 
                 propertiesChanged(signal);
             }
@@ -45,19 +45,19 @@ public abstract class MessageConsumer<E extends Message> implements Runnable {
 
         log.debug("Draining sequencer queue");
 
-        List<E> signals = new ArrayList<>(sequencer.size());
+        List<T> signals = new ArrayList<>(sequencer.size());
         sequencer.drainTo(signals);
 
-        for (E signal : signals) {
+        for (T signal : signals) {
             propertiesChanged(signal);
         }
 
         sequencer.clear();
     }
 
-    public abstract void propertiesChanged(final E signal);
+    public abstract void propertiesChanged(final T signal);
 
-    MessageSequencer<E> getSequencer() {
+    SignalSequencer<T> getSequencer() {
         return sequencer;
     }
 

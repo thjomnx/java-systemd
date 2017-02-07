@@ -18,25 +18,23 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import org.freedesktop.dbus.Message;
+import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.utils.MessageSequencer;
-
-public class MessageSequencerTest {
+public class SignalSequencerTest {
 
     @Test(description="Tests sequencer ordering.")
     public void testSequencerLogic() throws DBusException {
-        MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(1000);
+        SignalSequencer<TestSignal> sequencer = new SignalSequencer<>(1000);
 
-        TestMessage probe1 = null;
-        TestMessage probe2 = null;
-        TestMessage probe3 = null;
+        TestSignal probe1 = null;
+        TestSignal probe2 = null;
+        TestSignal probe3 = null;
 
         for (long seqNum = 20L; seqNum >= 0L; seqNum--) {
-            TestMessage tm = new TestMessage(seqNum);
+            TestSignal tm = new TestSignal(seqNum);
 
             if (seqNum == 20L) {
                 probe3 = tm;
@@ -54,7 +52,7 @@ public class MessageSequencerTest {
         }
 
         for (long seqNum = -20L; seqNum < 0L; seqNum++) {
-            TestMessage tm = new TestMessage(seqNum);
+            TestSignal tm = new TestSignal(seqNum);
 
             if (seqNum == -20L) {
                 probe1 = tm;
@@ -68,10 +66,10 @@ public class MessageSequencerTest {
             }
         }
 
-        List<TestMessage> list = new ArrayList<>();
+        List<TestSignal> list = new ArrayList<>();
 
         try {
-            TestMessage tm = sequencer.take();
+            TestSignal tm = sequencer.take();
 
             while (tm != null) {
                 list.add(tm);
@@ -90,10 +88,10 @@ public class MessageSequencerTest {
 
     @Test(description="Tests concurrent sequencer access.")
     public void testSequencerAccess() throws DBusException {
-        MessageSequencer<TestMessage> sequencer = new MessageSequencer<>(10000);
-        int numMessages = 30;
+        SignalSequencer<TestSignal> sequencer = new SignalSequencer<>(10000);
+        int numSignals = 30;
 
-        MessageProducer reader = new MessageProducer(sequencer, numMessages);
+        SignalProducer reader = new SignalProducer(sequencer, numSignals);
         reader.start();
 
         try {
@@ -103,8 +101,8 @@ public class MessageSequencerTest {
             Assert.fail(e.getMessage(), e);
         }
 
-        List<TestMessage> drainedData = new ArrayList<>();
-        TestMessage tm = null;
+        List<TestSignal> drainedData = new ArrayList<>();
+        TestSignal tm = null;
 
         try {
             do {
@@ -122,37 +120,37 @@ public class MessageSequencerTest {
             Assert.fail(e.getMessage(), e);
         }
 
-        List<TestMessage> testData = reader.getTestData();
+        List<TestSignal> testData = reader.getTestData();
 
         Assert.assertFalse(Arrays.equals(drainedData.toArray(), testData.toArray()));
 
-        Collections.sort(testData, new MessageSequencer.MessageComparator<>());
+        Collections.sort(testData, new SignalSequencer.SignalComparator<>());
 
         Assert.assertTrue(Arrays.equals(drainedData.toArray(), testData.toArray()));
     }
 
-    private static class MessageProducer extends Thread {
+    private static class SignalProducer extends Thread {
 
         private final Random random = new Random();
-        private final List<TestMessage> testData = new ArrayList<>();
+        private final List<TestSignal> testData = new ArrayList<>();
 
-        private MessageSequencer<TestMessage> sequencer;
-        private int numMessages;
+        private SignalSequencer<TestSignal> sequencer;
+        private int numSignals;
 
-        public MessageProducer(final MessageSequencer<TestMessage> sequencer, final int numMessages) {
+        public SignalProducer(final SignalSequencer<TestSignal> sequencer, final int numSignals) {
             this.sequencer = sequencer;
-            this.numMessages = numMessages;
+            this.numSignals = numSignals;
         }
 
         @Override
         public void run() {
             int counter = 0;
 
-            while (counter < numMessages) {
+            while (counter < numSignals) {
                 long seqNum = counter++ + Math.abs(random.nextLong() % 10);
 
                 try {
-                    TestMessage tm = new TestMessage(seqNum);
+                    TestSignal tm = new TestSignal(seqNum);
 
                     sequencer.put(tm);
                     testData.add(tm);
@@ -163,23 +161,23 @@ public class MessageSequencerTest {
             }
         }
 
-        public List<TestMessage> getTestData() {
+        public List<TestSignal> getTestData() {
             return testData;
         }
 
     }
 
-    private static class TestMessage extends Message {
+    private static class TestSignal extends DBusSignal {
 
-        public TestMessage(final long serial) throws DBusException {
-            super((byte) 0x00, (byte) 0x00, (byte) 0x17);
+        public TestSignal(final long serial) throws DBusException {
+            super("");
 
             this.serial = serial;
         }
 
         @Override
         public boolean equals(final Object obj) {
-            return getSerial() == ((TestMessage) obj).getSerial();
+            return getSerial() == ((TestSignal) obj).getSerial();
         }
 
         @Override

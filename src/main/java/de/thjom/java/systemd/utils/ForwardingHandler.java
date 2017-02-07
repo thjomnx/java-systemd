@@ -20,18 +20,18 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private MessageConsumer<T> consumer;
+    private SignalConsumer<T> consumer;
     private Thread consumerThread;
 
     public ForwardingHandler() {
         // Do nothing
     }
 
-    public ForwardingHandler(final MessageConsumer<T> consumer) {
+    public ForwardingHandler(final SignalConsumer<T> consumer) {
         setConsumer(consumer);
     }
 
-    private synchronized void setConsumer(final MessageConsumer<T> consumer) {
+    private synchronized void setConsumer(final SignalConsumer<T> consumer) {
         stopConsumer();
 
         this.consumer = consumer;
@@ -41,10 +41,10 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
 
     private void startConsumer() {
         if (consumer != null) {
-            log.info("Starting message consumer thread");
+            log.info("Starting signal consumer thread");
 
             consumerThread = new Thread(consumer);
-            consumerThread.setName(MessageConsumer.class.getSimpleName());
+            consumerThread.setName(SignalConsumer.class.getSimpleName());
             consumerThread.setDaemon(true);
             consumerThread.start();
         }
@@ -52,7 +52,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
 
     private void stopConsumer() {
         if (consumer != null && consumerThread != null) {
-            log.info("Stopping message consumer thread");
+            log.info("Stopping signal consumer thread");
 
             consumer.setRunning(false);
 
@@ -69,7 +69,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
     @Override
     public synchronized void handle(final T signal) {
         if (consumer != null) {
-            MessageSequencer<T> sequencer = consumer.getSequencer();
+            SignalSequencer<T> sequencer = consumer.getSequencer();
 
             if (sequencer != null) {
                 if (log.isDebugEnabled()) {
@@ -86,7 +86,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
         }
     }
 
-    public void forwardTo(final MessageConsumer<T> consumer) {
+    public void forwardTo(final SignalConsumer<T> consumer) {
         setConsumer(consumer);
     }
 

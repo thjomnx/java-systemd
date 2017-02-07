@@ -21,14 +21,14 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.freedesktop.dbus.Message;
+import org.freedesktop.dbus.DBusSignal;
 
-public class MessageSequencer<E extends Message> {
+public class SignalSequencer<T extends DBusSignal> {
 
     public static final long TIMEOUT_INFINITE = -1L;
 
-    private final BlockingQueue<E> buffer;
-    private final Queue<E> sequencer;
+    private final BlockingQueue<T> buffer;
+    private final Queue<T> sequencer;
 
     private long transferDelay = 50L;
     private int transferChunkSize;
@@ -36,13 +36,13 @@ public class MessageSequencer<E extends Message> {
 
     private int dequeued = 0;
 
-    public MessageSequencer(final int capacity) {
+    public SignalSequencer(final int capacity) {
         this(capacity, 100);
     }
 
-    public MessageSequencer(final int capacity, final int chunkSize) {
+    public SignalSequencer(final int capacity, final int chunkSize) {
         this.buffer = new ArrayBlockingQueue<>(capacity);
-        this.sequencer = new PriorityQueue<>(capacity, new MessageComparator<>());
+        this.sequencer = new PriorityQueue<>(capacity, new SignalComparator<>());
 
         if (chunkSize < 1) {
             throw new IllegalArgumentException();
@@ -52,16 +52,16 @@ public class MessageSequencer<E extends Message> {
         this.dequeueChunkSize = chunkSize > 1 ? chunkSize / 2 : 1;
     }
 
-    public final void put(final E item) throws InterruptedException {
+    public final void put(final T item) throws InterruptedException {
         buffer.put(item);
     }
 
-    public final E take() throws InterruptedException {
+    public final T take() throws InterruptedException {
         return poll(TIMEOUT_INFINITE, null);
     }
 
-    public final E poll(final long timeout, final TimeUnit unit) throws InterruptedException {
-        E head = null;
+    public final T poll(final long timeout, final TimeUnit unit) throws InterruptedException {
+        T head = null;
 
         if (dequeued < dequeueChunkSize) {
             head = sequencer.poll();
@@ -71,7 +71,7 @@ public class MessageSequencer<E extends Message> {
         }
 
         if (head == null) {
-            E pending = transfer(timeout, unit, transferChunkSize);
+            T pending = transfer(timeout, unit, transferChunkSize);
 
             if (pending != null) {
                 head = sequencer.poll();
@@ -88,14 +88,14 @@ public class MessageSequencer<E extends Message> {
         return head;
     }
 
-    public final int drainTo(final Collection<? super E> drain) {
-        List<E> buffered = new ArrayList<>(buffer.size());
+    public final int drainTo(final Collection<? super T> drain) {
+        List<T> buffered = new ArrayList<>(buffer.size());
         buffer.drainTo(buffered);
 
         sequencer.addAll(buffered);
 
         int count = 0;
-        E head;
+        T head;
 
         do {
             head = sequencer.poll();
@@ -119,11 +119,11 @@ public class MessageSequencer<E extends Message> {
         return buffer.size() + sequencer.size();
     }
 
-    private E transfer(final long timeout, final TimeUnit unit, int chunkSize) throws InterruptedException {
+    private T transfer(final long timeout, final TimeUnit unit, int chunkSize) throws InterruptedException {
         boolean delayed = false;
 
         do {
-            E head;
+            T head;
 
             if (timeout < 0) {
                 head = buffer.take();
@@ -176,18 +176,18 @@ public class MessageSequencer<E extends Message> {
         this.transferChunkSize = transferChunkSize;
     }
 
-    static final class MessageComparator<E extends Message> implements Comparator<E> {
+    static final class SignalComparator<T extends DBusSignal> implements Comparator<T> {
 
         @Override
-        public int compare(final E m1, final E m2) {
-            if (m1 == null) {
+        public int compare(final T s1, final T s2) {
+            if (s1 == null) {
                 return Integer.MAX_VALUE;
             }
-            else if (m2 == null) {
+            else if (s2 == null) {
                 return Integer.MIN_VALUE;
             }
             else {
-                return Long.compare(m1.getSerial(), m2.getSerial());
+                return Long.compare(s1.getSerial(), s2.getSerial());
             }
         }
 
