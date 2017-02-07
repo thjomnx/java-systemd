@@ -77,8 +77,7 @@ abstract class UnitMonitor implements UnitStateNotifier {
     @Override
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
-            defaultHandler = new ForwardingHandler<>();
-            defaultHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
+            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
 
                 @Override
                 public void handle(final PropertiesChanged signal) {
@@ -98,6 +97,9 @@ abstract class UnitMonitor implements UnitStateNotifier {
                 }
 
             });
+
+            defaultHandler = new ForwardingHandler<>();
+            defaultHandler.forwardTo(consumer);
 
             addHandler(PropertiesChanged.class, defaultHandler);
         }

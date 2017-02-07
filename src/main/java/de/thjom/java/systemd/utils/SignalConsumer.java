@@ -13,22 +13,29 @@ package de.thjom.java.systemd.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class SignalConsumer<T extends DBusSignal> implements DBusSigHandler<T>, Runnable {
+public class SignalConsumer<T extends DBusSignal> implements Runnable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private final SignalSequencer<T> sequencer;
+    private final DBusSigHandler<T> handler;
 
     private volatile boolean running = true;
 
-    public SignalConsumer(final int queueLength) {
+    public SignalConsumer(final DBusSigHandler<T> handler) {
+        this(100, handler);
+    }
+
+    public SignalConsumer(final int queueLength, final DBusSigHandler<T> handler) {
         this.sequencer = new SignalSequencer<>(queueLength);
+        this.handler = Objects.requireNonNull(handler);
     }
 
     @Override
@@ -37,7 +44,7 @@ public abstract class SignalConsumer<T extends DBusSignal> implements DBusSigHan
             try {
                 T signal = sequencer.take();
 
-                handle(signal);
+                handler.handle(signal);
             }
             catch (final InterruptedException e1) {
                 // Do nothing
@@ -50,7 +57,7 @@ public abstract class SignalConsumer<T extends DBusSignal> implements DBusSigHan
         sequencer.drainTo(signals);
 
         for (T signal : signals) {
-            handle(signal);
+            handler.handle(signal);
         }
 
         sequencer.clear();

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.freedesktop.DBus.Properties.PropertiesChanged;
+import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -57,7 +58,7 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                cronieHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
+                SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
 
                     @Override
                     public void handle(final PropertiesChanged signal) {
@@ -67,6 +68,8 @@ public class MonitoringClient implements Runnable {
                     }
 
                 });
+
+                cronieHandler.forwardTo(consumer);
 
                 cronie.addHandler(PropertiesChanged.class, cronieHandler);
                 cronie.addListener(new UnitStateListener() {
@@ -101,7 +104,7 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                miscMonitorHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
+                consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
 
                     @Override
                     public void handle(final PropertiesChanged signal) {
@@ -111,6 +114,8 @@ public class MonitoringClient implements Runnable {
                     }
 
                 });
+
+                miscMonitorHandler.forwardTo(consumer);
 
                 miscMonitor.addHandler(PropertiesChanged.class, miscMonitorHandler);
                 miscMonitor.addListener(new UnitStateListener() {
@@ -144,7 +149,7 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                serviceMonitorHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
+                consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
 
                     @Override
                     public void handle(final PropertiesChanged signal) {
@@ -154,6 +159,8 @@ public class MonitoringClient implements Runnable {
                     }
 
                 });
+
+                serviceMonitorHandler.forwardTo(consumer);
 
                 serviceMonitor.addHandler(PropertiesChanged.class, serviceMonitorHandler);
                 serviceMonitor.addListener(new UnitStateListener() {
