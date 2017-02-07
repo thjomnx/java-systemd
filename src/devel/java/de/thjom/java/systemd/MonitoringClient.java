@@ -60,9 +60,9 @@ public class MonitoringClient implements Runnable {
                 cronieHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                     @Override
-                    public void propertiesChanged(final PropertiesChanged signal) {
+                    public void handle(final PropertiesChanged signal) {
                         if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.handle(): " + signal);
                         }
                     }
 
@@ -104,9 +104,9 @@ public class MonitoringClient implements Runnable {
                 miscMonitorHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                     @Override
-                    public void propertiesChanged(final PropertiesChanged signal) {
+                    public void handle(final PropertiesChanged signal) {
                         if (miscMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().miscMonitorHandler.new SignalConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().miscMonitorHandler.new SignalConsumer() {...}.handle(): " + signal);
                         }
                     }
 
@@ -147,9 +147,9 @@ public class MonitoringClient implements Runnable {
                 serviceMonitorHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                     @Override
-                    public void propertiesChanged(final PropertiesChanged signal) {
+                    public void handle(final PropertiesChanged signal) {
                         if (serviceMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new SignalConsumer() {...}.propertiesChanged(): " + signal);
+                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new SignalConsumer() {...}.handle(): " + signal);
                         }
                     }
 

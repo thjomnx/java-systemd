@@ -14,11 +14,12 @@ package de.thjom.java.systemd.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class SignalConsumer<T extends DBusSignal> implements Runnable {
+public abstract class SignalConsumer<T extends DBusSignal> implements DBusSigHandler<T>, Runnable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -36,7 +37,7 @@ public abstract class SignalConsumer<T extends DBusSignal> implements Runnable {
             try {
                 T signal = sequencer.take();
 
-                propertiesChanged(signal);
+                handle(signal);
             }
             catch (final InterruptedException e1) {
                 // Do nothing
@@ -49,13 +50,11 @@ public abstract class SignalConsumer<T extends DBusSignal> implements Runnable {
         sequencer.drainTo(signals);
 
         for (T signal : signals) {
-            propertiesChanged(signal);
+            handle(signal);
         }
 
         sequencer.clear();
     }
-
-    public abstract void propertiesChanged(final T signal);
 
     SignalSequencer<T> getSequencer() {
         return sequencer;

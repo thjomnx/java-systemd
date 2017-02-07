@@ -256,7 +256,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
             defaultHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                 @Override
-                public void propertiesChanged(final PropertiesChanged signal) {
+                public void handle(final PropertiesChanged signal) {
                     if (isAssignableFrom(signal.getPath())) {
                         Map<String, Variant<?>> properties = signal.getChangedProperties();
 

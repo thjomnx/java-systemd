@@ -81,7 +81,7 @@ abstract class UnitMonitor implements UnitStateNotifier {
             defaultHandler.forwardTo(new SignalConsumer<PropertiesChanged>(100) {
 
                 @Override
-                public void propertiesChanged(final PropertiesChanged signal) {
+                public void handle(final PropertiesChanged signal) {
                     Optional<Unit> unit = getMonitoredUnit(Unit.extractName(signal.getPath()));
 
                     if (unit.isPresent()) {
