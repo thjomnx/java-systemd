@@ -15,13 +15,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.Unit.StateTuple;
 import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
@@ -72,18 +71,7 @@ public class MonitoringClient implements Runnable {
                 cronieHandler.forwardTo(consumer);
 
                 cronie.addHandler(PropertiesChanged.class, cronieHandler);
-                cronie.addListener(new UnitStateListener() {
-
-                    @Override
-                    public void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties) {
-                        String loadState = changedProperties.getOrDefault(Unit.Property.LOAD_STATE, new Variant<>("-")).toString();
-                        String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
-                        String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
-
-                        System.out.format("MonitoringClient.run().cronie.new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
-                    }
-
-                });
+                cronie.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
 
                 // Unit monitoring based on names
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
@@ -118,18 +106,7 @@ public class MonitoringClient implements Runnable {
                 miscMonitorHandler.forwardTo(consumer);
 
                 miscMonitor.addHandler(PropertiesChanged.class, miscMonitorHandler);
-                miscMonitor.addListener(new UnitStateListener() {
-
-                    @Override
-                    public void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties) {
-                        String loadState = changedProperties.getOrDefault(Unit.Property.LOAD_STATE, new Variant<>("-")).toString();
-                        String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
-                        String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
-
-                        System.out.format("MonitoringClient.run().miscMonitor.new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
-                    }
-
-                });
+                miscMonitor.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
 
                 // Unit monitoring based on types
                 UnitTypeMonitor serviceMonitor = new UnitTypeMonitor(manager);
@@ -163,18 +140,7 @@ public class MonitoringClient implements Runnable {
                 serviceMonitorHandler.forwardTo(consumer);
 
                 serviceMonitor.addHandler(PropertiesChanged.class, serviceMonitorHandler);
-                serviceMonitor.addListener(new UnitStateListener() {
-
-                    @Override
-                    public void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties) {
-                        String loadState = changedProperties.getOrDefault(Unit.Property.LOAD_STATE, new Variant<>("-")).toString();
-                        String activeState = changedProperties.getOrDefault(Unit.Property.ACTIVE_STATE, new Variant<>("-")).toString();
-                        String subState = changedProperties.getOrDefault(Unit.Property.SUB_STATE, new Variant<>("-")).toString();
-
-                        System.out.format("MonitoringClient.run().serviceMonitor.new UnitStateListener() {...}.stateChanged() to %s - %s (%s)\n", loadState, activeState, subState);
-                    }
-
-                });
+                serviceMonitor.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
 
                 while (running) {
                     List<Unit> units = new ArrayList<>();

@@ -642,4 +642,45 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return name;
     }
 
+    public static final class StateTuple {
+
+        private final String loadState;
+        private final String activeState;
+        private final String subState;
+
+        public StateTuple(final Map<String, Variant<?>> properties) {
+            this.loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>("-")).getValue());
+            this.activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>("-")).getValue());
+            this.subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>("-")).getValue());
+        }
+
+        public StateTuple(final Unit unit, final Map<String, Variant<?>> properties) {
+            this.loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>(unit.getLoadState())).getValue());
+            this.activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>(unit.getActiveState())).getValue());
+            this.subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>(unit.getSubState())).getValue());
+        }
+
+        public static StateTuple from(final Unit unit, final Map<String, Variant<?>> properties) {
+            return new StateTuple(unit, properties);
+        }
+
+        public String getLoadState() {
+            return loadState;
+        }
+
+        public String getActiveState() {
+            return activeState;
+        }
+
+        public String getSubState() {
+            return subState;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s - %s (%s)", loadState, activeState, subState);
+        }
+
+    }
+
 }
