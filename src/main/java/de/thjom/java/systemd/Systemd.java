@@ -171,6 +171,7 @@ public final class Systemd {
         }
 
         dbus = null;
+        manager = null;
     }
 
     public boolean isConnected() {
