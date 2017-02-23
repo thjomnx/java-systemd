@@ -48,6 +48,8 @@ abstract class UnitMonitor implements UnitStateNotifier {
     protected final Manager manager;
     protected final ConcurrentMap<String, Unit> monitoredUnits = new ConcurrentHashMap<>();
 
+    private final List<ForwardingHandler<? extends DBusSignal>> forwarders = new ArrayList<>();
+
     private final List<UnitStateListener> unitStateListeners = new ArrayList<>();
     private ForwardingHandler<PropertiesChanged> defaultHandler;
 
@@ -73,6 +75,51 @@ abstract class UnitMonitor implements UnitStateNotifier {
     public abstract void addDefaultHandlers() throws DBusException;
 
     public abstract void removeDefaultHandlers() throws DBusException;
+
+    public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        SignalConsumer<T> consumer = new SignalConsumer<>(new DBusSigHandler<T>() {
+
+            @Override
+            public void handle(final T signal) {
+                handler.handle(signal);
+            }
+
+        });
+
+        ForwardingHandler<T> forwarder = new ForwardingHandler<>();
+        forwarder.forwardTo(consumer);
+
+        synchronized (forwarders) {
+            forwarders.add(forwarder);
+        }
+
+        addHandler(type, forwarder);
+    }
+
+    public <T extends DBusSignal> void removeConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        ForwardingHandler<? extends DBusSignal> match = null;
+
+        synchronized (forwarders) {
+            for (ForwardingHandler<? extends DBusSignal> forwarder : forwarders) {
+                if (Objects.equals(forwarder.getConsumer(), handler)) {
+                    match = forwarder;
+
+                    break;
+                }
+            }
+
+            if (match != null) {
+                forwarders.remove(match);
+            }
+        }
+
+        if (match != null) {
+            @SuppressWarnings("unchecked")
+            ForwardingHandler<T> forwarder = (ForwardingHandler<T>) match;
+
+            removeHandler(type, forwarder);
+        }
+    }
 
     @Override
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {

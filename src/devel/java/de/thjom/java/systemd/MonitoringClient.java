@@ -23,8 +23,6 @@ import de.thjom.java.systemd.Unit.StateTuple;
 import de.thjom.java.systemd.tools.UnitNameMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor;
 import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
-import de.thjom.java.systemd.utils.ForwardingHandler;
-import de.thjom.java.systemd.utils.SignalConsumer;
 
 public class MonitoringClient implements Runnable {
 
@@ -43,26 +41,18 @@ public class MonitoringClient implements Runnable {
                 // 'cronie' monitoring
                 Unit cronie = manager.getService("cronie");
 
-                ForwardingHandler<PropertiesChanged> cronieHandler = new ForwardingHandler<PropertiesChanged>() {
-
-                    @Override
-                    public void handle(final PropertiesChanged signal) {
-                        super.handle(signal);
-
-                        if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().cronieHandler.new ForwardingHandler() {...}.handle(): " + signal);
-                        }
-                    }
-
-                };
-
-                cronieHandler.forwardTo(new SignalConsumer<>(s -> {
+                cronie.addHandler(PropertiesChanged.class, s -> {
                     if (cronie.isAssignableFrom(s.getPath())) {
-                        System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.handle(): " + s);
+                        System.out.println("MonitoringClient.run().cronie.addHandler().handle(): " + s);
                     }
-                }));
+                });
 
-                cronie.addHandler(PropertiesChanged.class, cronieHandler);
+                cronie.addConsumer(PropertiesChanged.class, s -> {
+                    if (cronie.isAssignableFrom(s.getPath())) {
+                        System.out.println("MonitoringClient.run().cronie.addConsumer().handler(): " + s);
+                    }
+                });
+
                 cronie.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
 
                 // Unit monitoring based on names
@@ -71,26 +61,18 @@ public class MonitoringClient implements Runnable {
                 miscMonitor.addUnits("dbus.service");
                 miscMonitor.addDefaultHandlers();
 
-                ForwardingHandler<PropertiesChanged> miscMonitorHandler = new ForwardingHandler<PropertiesChanged>() {
-
-                    @Override
-                    public void handle(final PropertiesChanged signal) {
-                        super.handle(signal);
-
-                        if (miscMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().miscMonitorHandler.new ForwardingHandler() {...}.handle(): " + signal);
-                        }
-                    }
-
-                };
-
-                miscMonitorHandler.forwardTo(new SignalConsumer<>(s -> {
+                miscMonitor.addHandler(PropertiesChanged.class, s -> {
                     if (miscMonitor.monitorsUnit(Unit.extractName(s.getPath()))) {
-                        System.out.println("MonitoringClient.run().miscMonitorHandler.new SignalConsumer() {...}.handle(): " + s);
+                        System.out.println("MonitoringClient.run().miscMonitor.addHandler().handle(): " + s);
                     }
-                }));
+                });
 
-                miscMonitor.addHandler(PropertiesChanged.class, miscMonitorHandler);
+                miscMonitor.addConsumer(PropertiesChanged.class, s -> {
+                    if (miscMonitor.monitorsUnit(Unit.extractName(s.getPath()))) {
+                        System.out.println("MonitoringClient.run().miscMonitor.addConsumer().handle(): " + s);
+                    }
+                });
+
                 miscMonitor.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
 
                 // Unit monitoring based on types
@@ -98,26 +80,18 @@ public class MonitoringClient implements Runnable {
                 serviceMonitor.addMonitoredTypes(MonitoredType.SERVICE);
                 serviceMonitor.addDefaultHandlers();
 
-                ForwardingHandler<PropertiesChanged> serviceMonitorHandler = new ForwardingHandler<PropertiesChanged>() {
-
-                    @Override
-                    public void handle(final PropertiesChanged signal) {
-                        super.handle(signal);
-
-                        if (serviceMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new ForwardingHandler() {...}.handle(): " + signal);
-                        }
-                    }
-
-                };
-
-                serviceMonitorHandler.forwardTo(new SignalConsumer<>(s -> {
+                serviceMonitor.addHandler(PropertiesChanged.class, s -> {
                     if (serviceMonitor.monitorsUnit(Unit.extractName(s.getPath()))) {
-                        System.out.println("MonitoringClient.run().serviceMonitorHandler.new SignalConsumer() {...}.handle(): " + s);
+                        System.out.println("MonitoringClient.run().serviceMonitor.addHandler().handle(): " + s);
                     }
-                }));
+                });
 
-                serviceMonitor.addHandler(PropertiesChanged.class, serviceMonitorHandler);
+                serviceMonitor.addConsumer(PropertiesChanged.class, s -> {
+                    if (serviceMonitor.monitorsUnit(Unit.extractName(s.getPath()))) {
+                        System.out.println("MonitoringClient.run().serviceMonitor.addConsumer().handle(): " + s);
+                    }
+                });
+
                 serviceMonitor.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
 
                 while (running) {
@@ -163,12 +137,7 @@ public class MonitoringClient implements Runnable {
                 }
 
                 // Cleanup
-                cronie.removeHandler(PropertiesChanged.class, cronieHandler);
-
-                miscMonitor.removeHandler(PropertiesChanged.class, miscMonitorHandler);
                 miscMonitor.removeDefaultHandlers();
-
-                serviceMonitor.removeHandler(PropertiesChanged.class, serviceMonitorHandler);
                 serviceMonitor.removeDefaultHandlers();
             }
             catch (final DBusException e) {

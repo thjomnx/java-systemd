@@ -18,6 +18,7 @@ import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
@@ -171,6 +172,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     private final Properties unitProperties;
 
+    private final List<ForwardingHandler<? extends DBusSignal>> forwarders = new ArrayList<>();
+
     private final List<UnitStateListener> unitStateListeners = new ArrayList<>();
     private ForwardingHandler<PropertiesChanged> defaultHandler;
 
@@ -247,6 +250,51 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         }
 
         super.removeHandler(type, handler);
+    }
+
+    public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        SignalConsumer<T> consumer = new SignalConsumer<>(new DBusSigHandler<T>() {
+
+            @Override
+            public void handle(final T signal) {
+                handler.handle(signal);
+            }
+
+        });
+
+        ForwardingHandler<T> forwarder = new ForwardingHandler<>();
+        forwarder.forwardTo(consumer);
+
+        synchronized (forwarders) {
+            forwarders.add(forwarder);
+        }
+
+        addHandler(type, forwarder);
+    }
+
+    public <T extends DBusSignal> void removeConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
+        ForwardingHandler<? extends DBusSignal> match = null;
+
+        synchronized (forwarders) {
+            for (ForwardingHandler<? extends DBusSignal> forwarder : forwarders) {
+                if (Objects.equals(forwarder.getConsumer(), handler)) {
+                    match = forwarder;
+
+                    break;
+                }
+            }
+
+            if (match != null) {
+                forwarders.remove(match);
+            }
+        }
+
+        if (match != null) {
+            @SuppressWarnings("unchecked")
+            ForwardingHandler<T> forwarder = (ForwardingHandler<T>) match;
+
+            removeHandler(type, forwarder);
+        }
     }
 
     @Override

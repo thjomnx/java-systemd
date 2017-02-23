@@ -90,4 +90,8 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
         setConsumer(consumer);
     }
 
+    public final SignalConsumer<T> getConsumer() {
+        return consumer;
+    }
+
 }
