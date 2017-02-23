@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.Unit.StateTuple;
@@ -57,18 +56,11 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
-
-                    @Override
-                    public void handle(final PropertiesChanged signal) {
-                        if (cronie.isAssignableFrom(signal.getPath())) {
-                            System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.handle(): " + signal);
+                cronieHandler.forwardTo(new SignalConsumer<>(s -> {
+                    if (cronie.isAssignableFrom(s.getPath())) {
+                        System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.handle(): " + s);
                         }
-                    }
-
-                });
-
-                cronieHandler.forwardTo(consumer);
+                }));
 
                 cronie.addHandler(PropertiesChanged.class, cronieHandler);
                 cronie.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
@@ -92,18 +84,11 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
-
-                    @Override
-                    public void handle(final PropertiesChanged signal) {
-                        if (miscMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().miscMonitorHandler.new SignalConsumer() {...}.handle(): " + signal);
-                        }
+                miscMonitorHandler.forwardTo(new SignalConsumer<>(s -> {
+                    if (miscMonitor.monitorsUnit(Unit.extractName(s.getPath()))) {
+                        System.out.println("MonitoringClient.run().miscMonitorHandler.new SignalConsumer() {...}.handle(): " + s);
                     }
-
-                });
-
-                miscMonitorHandler.forwardTo(consumer);
+                }));
 
                 miscMonitor.addHandler(PropertiesChanged.class, miscMonitorHandler);
                 miscMonitor.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
@@ -126,18 +111,11 @@ public class MonitoringClient implements Runnable {
 
                 };
 
-                consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
-
-                    @Override
-                    public void handle(final PropertiesChanged signal) {
-                        if (serviceMonitor.monitorsUnit(Unit.extractName(signal.getPath()))) {
-                            System.out.println("MonitoringClient.run().serviceMonitorHandler.new SignalConsumer() {...}.handle(): " + signal);
-                        }
+                serviceMonitorHandler.forwardTo(new SignalConsumer<>(s -> {
+                    if (serviceMonitor.monitorsUnit(Unit.extractName(s.getPath()))) {
+                        System.out.println("MonitoringClient.run().serviceMonitorHandler.new SignalConsumer() {...}.handle(): " + s);
                     }
-
-                });
-
-                serviceMonitorHandler.forwardTo(consumer);
+                }));
 
                 serviceMonitor.addHandler(PropertiesChanged.class, serviceMonitorHandler);
                 serviceMonitor.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
