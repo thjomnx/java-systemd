@@ -253,17 +253,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        SignalConsumer<T> consumer = new SignalConsumer<>(new DBusSigHandler<T>() {
-
-            @Override
-            public void handle(final T signal) {
-                handler.handle(signal);
-            }
-
-        });
-
-        ForwardingHandler<T> forwarder = new ForwardingHandler<>();
-        forwarder.forwardTo(consumer);
+        SignalConsumer<T> consumer = new SignalConsumer<>(s -> handler.handle(s));
+        ForwardingHandler<T> forwarder = new ForwardingHandler<>(consumer);
 
         synchronized (forwarders) {
             forwarders.add(forwarder);
