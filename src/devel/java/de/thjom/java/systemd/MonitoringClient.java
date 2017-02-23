@@ -59,7 +59,7 @@ public class MonitoringClient implements Runnable {
                 cronieHandler.forwardTo(new SignalConsumer<>(s -> {
                     if (cronie.isAssignableFrom(s.getPath())) {
                         System.out.println("MonitoringClient.run().cronieHandler.new SignalConsumer() {...}.handle(): " + s);
-                        }
+                    }
                 }));
 
                 cronie.addHandler(PropertiesChanged.class, cronieHandler);
