@@ -84,7 +84,7 @@ abstract class UnitMonitor implements UnitStateNotifier {
                     Optional<Unit> unit = getMonitoredUnit(Unit.extractName(signal.getPath()));
 
                     if (unit.isPresent()) {
-                        Map<String, Variant<?>> properties = signal.getChangedProperties();
+                        Map<String, Variant<?>> properties = signal.changed_properties;
 
                         if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                             synchronized (unitStateListeners) {

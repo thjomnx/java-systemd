@@ -257,7 +257,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
                 @Override
                 public void handle(final PropertiesChanged signal) {
                     if (isAssignableFrom(signal.getPath())) {
-                        Map<String, Variant<?>> properties = signal.getChangedProperties();
+                        Map<String, Variant<?>> properties = signal.changed_properties;
 
                         if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                             synchronized (unitStateListeners) {
