@@ -18,12 +18,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import org.freedesktop.dbus.DBusInterface;
 import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class SignalSequencerTest {
+import de.thjom.java.systemd.Systemd;
+
+public class SignalSequencerTest implements DBusInterface {
 
     @Test(description="Tests sequencer ordering.")
     public void testSequencerLogic() throws DBusException {
@@ -170,7 +173,7 @@ public class SignalSequencerTest {
     private static class TestSignal extends DBusSignal {
 
         public TestSignal(final long serial) throws DBusException {
-            super("");
+            super(Systemd.OBJECT_PATH);
 
             this.serial = serial;
         }
@@ -185,6 +188,16 @@ public class SignalSequencerTest {
             return Long.hashCode(getSerial());
         }
 
+    }
+
+    @Override
+    public boolean isRemote() {
+        return false;
+    }
+
+    @Override
+    public String getObjectPath() {
+        return Systemd.OBJECT_PATH;
     }
 
 }
