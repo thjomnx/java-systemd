@@ -115,25 +115,18 @@ abstract class UnitMonitor implements UnitStateNotifier {
     @Override
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
-            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
+            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(s -> {
+                Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
 
-                @Override
-                public void handle(final PropertiesChanged signal) {
-                    Optional<Unit> unit = getMonitoredUnit(Unit.extractName(signal.getPath()));
+                if (unit.isPresent()) {
+                    Map<String, Variant<?>> properties = s.changed_properties;
 
-                    if (unit.isPresent()) {
-                        Map<String, Variant<?>> properties = signal.changed_properties;
-
-                        if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
-                            synchronized (unitStateListeners) {
-                                for (UnitStateListener listener : unitStateListeners) {
-                                    listener.stateChanged(unit.get(), properties);
-                                }
-                            }
+                    if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
+                        synchronized (unitStateListeners) {
+                            unitStateListeners.forEach(l -> l.stateChanged(unit.get(), properties));
                         }
                     }
                 }
-
             });
 
             defaultHandler = new ForwardingHandler<>();

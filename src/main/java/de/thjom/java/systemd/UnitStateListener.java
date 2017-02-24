@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.freedesktop.dbus.Variant;
 
+@FunctionalInterface
 public interface UnitStateListener {
 
     void stateChanged(final Unit unit, final Map<String, Variant<?>> changedProperties);

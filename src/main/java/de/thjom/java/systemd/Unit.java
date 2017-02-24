@@ -291,23 +291,16 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     @Override
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
-            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(new DBusSigHandler<PropertiesChanged>() {
+            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(s -> {
+                if (isAssignableFrom(s.getPath())) {
+                    Map<String, Variant<?>> properties = s.changed_properties;
 
-                @Override
-                public void handle(final PropertiesChanged signal) {
-                    if (isAssignableFrom(signal.getPath())) {
-                        Map<String, Variant<?>> properties = signal.changed_properties;
-
-                        if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
-                            synchronized (unitStateListeners) {
-                                for (UnitStateListener listener : unitStateListeners) {
-                                    listener.stateChanged(Unit.this, properties);
-                                }
-                            }
+                    if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
+                        synchronized (unitStateListeners) {
+                            unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
                         }
                     }
                 }
-
             });
 
             defaultHandler = new ForwardingHandler<>();
