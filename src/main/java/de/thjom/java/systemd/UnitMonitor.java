@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd.tools;
+package de.thjom.java.systemd;
 
 import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
 import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
@@ -33,13 +33,6 @@ import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Unit;
-import de.thjom.java.systemd.UnitStateListener;
-import de.thjom.java.systemd.UnitStateNotifier;
-import de.thjom.java.systemd.utils.ForwardingHandler;
-import de.thjom.java.systemd.utils.SignalConsumer;
 
 abstract class UnitMonitor implements UnitStateNotifier {
 
@@ -65,10 +58,6 @@ abstract class UnitMonitor implements UnitStateNotifier {
     }
 
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        if (handler instanceof ForwardingHandler) {
-            ((ForwardingHandler<?>) handler).forwardTo(null);
-        }
-
         manager.removeHandler(type, handler);
     }
 
@@ -83,6 +72,8 @@ abstract class UnitMonitor implements UnitStateNotifier {
         synchronized (forwarders) {
             forwarders.add(forwarder);
         }
+
+        forwarder.startConsumer();
 
         addHandler(type, forwarder);
     }
@@ -109,6 +100,8 @@ abstract class UnitMonitor implements UnitStateNotifier {
             ForwardingHandler<T> forwarder = (ForwardingHandler<T>) match;
 
             removeHandler(type, forwarder);
+
+            forwarder.stopConsumer();
         }
     }
 
@@ -129,8 +122,8 @@ abstract class UnitMonitor implements UnitStateNotifier {
                 }
             });
 
-            defaultHandler = new ForwardingHandler<>();
-            defaultHandler.forwardTo(consumer);
+            defaultHandler = new ForwardingHandler<>(consumer);
+            defaultHandler.startConsumer();
 
             addHandler(PropertiesChanged.class, defaultHandler);
         }
@@ -145,6 +138,7 @@ abstract class UnitMonitor implements UnitStateNotifier {
         if (unitStateListeners.isEmpty() && defaultHandler != null) {
             removeHandler(PropertiesChanged.class, defaultHandler);
 
+            defaultHandler.stopConsumer();
             defaultHandler = null;
         }
     }

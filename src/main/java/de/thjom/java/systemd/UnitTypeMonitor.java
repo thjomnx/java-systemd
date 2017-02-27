@@ -9,15 +9,13 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd.tools;
+package de.thjom.java.systemd;
 
 import java.util.EnumSet;
 
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
 import de.thjom.java.systemd.interfaces.ManagerInterface.UnitNew;

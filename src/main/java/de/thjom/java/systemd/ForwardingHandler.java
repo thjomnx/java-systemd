@@ -9,37 +9,27 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd.utils;
+package de.thjom.java.systemd;
+
+import java.util.Objects;
 
 import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T> {
+class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T> {
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(ForwardingHandler.class);
 
     private SignalConsumer<T> consumer;
     private Thread consumerThread;
 
-    public ForwardingHandler() {
-        // Do nothing
+    ForwardingHandler(final SignalConsumer<T> consumer) {
+        this.consumer = Objects.requireNonNull(consumer);
     }
 
-    public ForwardingHandler(final SignalConsumer<T> consumer) {
-        setConsumer(consumer);
-    }
-
-    private synchronized void setConsumer(final SignalConsumer<T> consumer) {
-        stopConsumer();
-
-        this.consumer = consumer;
-
-        startConsumer();
-    }
-
-    private void startConsumer() {
+    public void startConsumer() {
         if (consumer != null) {
             log.info("Starting signal consumer thread");
 
@@ -50,7 +40,7 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
         }
     }
 
-    private void stopConsumer() {
+    public void stopConsumer() {
         if (consumer != null && consumerThread != null) {
             log.info("Stopping signal consumer thread");
 
@@ -84,10 +74,6 @@ public class ForwardingHandler<T extends DBusSignal> implements DBusSigHandler<T
                 }
             }
         }
-    }
-
-    public void forwardTo(final SignalConsumer<T> consumer) {
-        setConsumer(consumer);
     }
 
     public final SignalConsumer<T> getConsumer() {

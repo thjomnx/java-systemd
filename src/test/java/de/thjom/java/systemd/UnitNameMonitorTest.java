@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd.tools;
+package de.thjom.java.systemd;
 
 import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -22,10 +22,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.AbstractTestCase;
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.Unit;
+import de.thjom.java.systemd.UnitNameMonitor;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.ServiceInterface;

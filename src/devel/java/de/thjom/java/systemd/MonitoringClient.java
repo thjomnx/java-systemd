@@ -20,9 +20,7 @@ import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.Unit.StateTuple;
-import de.thjom.java.systemd.tools.UnitNameMonitor;
-import de.thjom.java.systemd.tools.UnitTypeMonitor;
-import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
+import de.thjom.java.systemd.UnitTypeMonitor.MonitoredType;
 
 public class MonitoringClient implements Runnable {
 
@@ -42,15 +40,11 @@ public class MonitoringClient implements Runnable {
                 Unit cronie = manager.getService("cronie");
 
                 cronie.addHandler(PropertiesChanged.class, s -> {
-                    if (cronie.isAssignableFrom(s.getPath())) {
-                        System.out.println("MonitoringClient.run().cronie.addHandler().handle(): " + s);
-                    }
+                    System.out.println("MonitoringClient.run().cronie.addHandler().handle(): " + s);
                 });
 
                 cronie.addConsumer(PropertiesChanged.class, s -> {
-                    if (cronie.isAssignableFrom(s.getPath())) {
-                        System.out.println("MonitoringClient.run().cronie.addConsumer().handler(): " + s);
-                    }
+                    System.out.println("MonitoringClient.run().cronie.addConsumer().handler(): " + s);
                 });
 
                 cronie.addListener((u, p) -> System.out.format("%s changed state to %s\n", u, StateTuple.from(u, p)));
@@ -58,7 +52,7 @@ public class MonitoringClient implements Runnable {
                 // Unit monitoring based on names
                 UnitNameMonitor miscMonitor = new UnitNameMonitor(manager);
                 miscMonitor.addUnits(cronie);
-                miscMonitor.addUnits("dbus.service");
+                miscMonitor.addUnits("avahi-daemon.service");
                 miscMonitor.addDefaultHandlers();
 
                 miscMonitor.addHandler(PropertiesChanged.class, s -> {

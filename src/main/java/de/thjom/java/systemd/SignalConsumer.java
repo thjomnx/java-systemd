@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd.utils;
+package de.thjom.java.systemd;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -9,7 +9,7 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd.tools;
+package de.thjom.java.systemd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +26,16 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.AbstractTestCase;
 import de.thjom.java.systemd.Manager;
 import de.thjom.java.systemd.Systemd;
 import de.thjom.java.systemd.Unit;
+import de.thjom.java.systemd.UnitTypeMonitor;
+import de.thjom.java.systemd.UnitTypeMonitor.MonitoredType;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.MountInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
 import de.thjom.java.systemd.interfaces.SocketInterface;
-import de.thjom.java.systemd.tools.UnitTypeMonitor.MonitoredType;
 import de.thjom.java.systemd.types.UnitType;
 
 public class UnitTypeMonitorTest extends AbstractTestCase {

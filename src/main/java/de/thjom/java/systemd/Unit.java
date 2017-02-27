@@ -34,8 +34,6 @@ import de.thjom.java.systemd.interfaces.UnitInterface;
 import de.thjom.java.systemd.types.Condition;
 import de.thjom.java.systemd.types.Job;
 import de.thjom.java.systemd.types.LoadError;
-import de.thjom.java.systemd.utils.ForwardingHandler;
-import de.thjom.java.systemd.utils.SignalConsumer;
 
 public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier {
 
@@ -239,17 +237,14 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     @Override
     public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         manager.subscribe();
-
-        super.addHandler(type, handler);
+        dbus.addSigHandler(type, this.getInterface(), handler);
     }
 
     @Override
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        if (handler instanceof ForwardingHandler) {
-            ((ForwardingHandler<?>) handler).forwardTo(null);
+        if (handler != null) {
+            dbus.removeSigHandler(type, this.getInterface(), handler);
         }
-
-        super.removeHandler(type, handler);
     }
 
     public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
@@ -285,6 +280,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
             ForwardingHandler<T> forwarder = (ForwardingHandler<T>) match;
 
             removeHandler(type, forwarder);
+
+            forwarder.stopConsumer();
         }
     }
 
@@ -292,19 +289,16 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     public synchronized void addListener(final UnitStateListener listener) throws DBusException {
         if (defaultHandler == null) {
             SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(s -> {
-                if (isAssignableFrom(s.getPath())) {
-                    Map<String, Variant<?>> properties = s.changed_properties;
+                Map<String, Variant<?>> properties = s.changed_properties;
 
-                    if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
-                        synchronized (unitStateListeners) {
-                            unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
-                        }
+                if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
+                    synchronized (unitStateListeners) {
+                        unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
                     }
                 }
             });
 
-            defaultHandler = new ForwardingHandler<>();
-            defaultHandler.forwardTo(consumer);
+            defaultHandler = new ForwardingHandler<>(consumer);
 
             addHandler(PropertiesChanged.class, defaultHandler);
         }
@@ -319,6 +313,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         if (unitStateListeners.isEmpty() && defaultHandler != null) {
             removeHandler(PropertiesChanged.class, defaultHandler);
 
+            defaultHandler.stopConsumer();
             defaultHandler = null;
         }
     }
