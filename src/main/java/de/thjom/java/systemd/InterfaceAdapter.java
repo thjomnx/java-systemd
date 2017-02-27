@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
-public abstract class InterfaceAdapter implements DBusInterface {
+public abstract class InterfaceAdapter extends AbstractAdapter implements DBusInterface {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -64,10 +64,12 @@ public abstract class InterfaceAdapter implements DBusInterface {
         return properties;
     }
 
+    @Override
     public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         dbus.addSigHandler(type, handler);
     }
 
+    @Override
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         if (handler != null) {
             dbus.removeSigHandler(type, handler);

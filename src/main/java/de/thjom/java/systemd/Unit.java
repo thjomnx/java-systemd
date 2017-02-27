@@ -15,10 +15,8 @@ import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
 import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
 import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Vector;
 
 import org.freedesktop.DBus.Introspectable;
@@ -170,11 +168,6 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     private final Properties unitProperties;
 
-    private final List<ForwardingHandler<? extends DBusSignal>> forwarders = new ArrayList<>();
-
-    private final List<UnitStateListener> unitStateListeners = new ArrayList<>();
-    private ForwardingHandler<PropertiesChanged> defaultHandler;
-
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
         super(manager.dbus, iface);
 
@@ -247,75 +240,17 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         }
     }
 
-    public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        SignalConsumer<T> consumer = new SignalConsumer<>(s -> handler.handle(s));
-        ForwardingHandler<T> forwarder = new ForwardingHandler<>(consumer);
+    @Override
+    protected SignalConsumer<PropertiesChanged> createStateConsumer() {
+        return new SignalConsumer<>(s -> {
+            Map<String, Variant<?>> properties = s.changed_properties;
 
-        synchronized (forwarders) {
-            forwarders.add(forwarder);
-        }
-
-        addHandler(type, forwarder);
-    }
-
-    public <T extends DBusSignal> void removeConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        ForwardingHandler<? extends DBusSignal> match = null;
-
-        synchronized (forwarders) {
-            for (ForwardingHandler<? extends DBusSignal> forwarder : forwarders) {
-                if (Objects.equals(forwarder.getConsumer(), handler)) {
-                    match = forwarder;
-
-                    break;
+            if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
+                synchronized (unitStateListeners) {
+                    unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
                 }
             }
-
-            if (match != null) {
-                forwarders.remove(match);
-            }
-        }
-
-        if (match != null) {
-            @SuppressWarnings("unchecked")
-            ForwardingHandler<T> forwarder = (ForwardingHandler<T>) match;
-
-            removeHandler(type, forwarder);
-
-            forwarder.stopConsumer();
-        }
-    }
-
-    @Override
-    public synchronized void addListener(final UnitStateListener listener) throws DBusException {
-        if (defaultHandler == null) {
-            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(s -> {
-                Map<String, Variant<?>> properties = s.changed_properties;
-
-                if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
-                    synchronized (unitStateListeners) {
-                        unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
-                    }
-                }
-            });
-
-            defaultHandler = new ForwardingHandler<>(consumer);
-
-            addHandler(PropertiesChanged.class, defaultHandler);
-        }
-
-        unitStateListeners.add(listener);
-    }
-
-    @Override
-    public synchronized void removeListener(final UnitStateListener listener) throws DBusException {
-        unitStateListeners.remove(listener);
-
-        if (unitStateListeners.isEmpty() && defaultHandler != null) {
-            removeHandler(PropertiesChanged.class, defaultHandler);
-
-            defaultHandler.stopConsumer();
-            defaultHandler = null;
-        }
+        });
     }
 
     public String introspect() throws DBusException {

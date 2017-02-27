@@ -15,9 +15,7 @@ import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
 import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
 import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,17 +32,12 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-abstract class UnitMonitor implements UnitStateNotifier {
+abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final Manager manager;
     protected final ConcurrentMap<String, Unit> monitoredUnits = new ConcurrentHashMap<>();
-
-    private final List<ForwardingHandler<? extends DBusSignal>> forwarders = new ArrayList<>();
-
-    private final List<UnitStateListener> unitStateListeners = new ArrayList<>();
-    private ForwardingHandler<PropertiesChanged> defaultHandler;
 
     private Timer pollingTimer;
 
@@ -52,11 +45,13 @@ abstract class UnitMonitor implements UnitStateNotifier {
         this.manager = Objects.requireNonNull(manager);
     }
 
+    @Override
     public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         manager.subscribe();
         manager.addHandler(type, handler);
     }
 
+    @Override
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         manager.removeHandler(type, handler);
     }
@@ -65,82 +60,21 @@ abstract class UnitMonitor implements UnitStateNotifier {
 
     public abstract void removeDefaultHandlers() throws DBusException;
 
-    public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        SignalConsumer<T> consumer = new SignalConsumer<>(s -> handler.handle(s));
-        ForwardingHandler<T> forwarder = new ForwardingHandler<>(consumer);
-
-        synchronized (forwarders) {
-            forwarders.add(forwarder);
-        }
-
-        forwarder.startConsumer();
-
-        addHandler(type, forwarder);
-    }
-
-    public <T extends DBusSignal> void removeConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        ForwardingHandler<? extends DBusSignal> match = null;
-
-        synchronized (forwarders) {
-            for (ForwardingHandler<? extends DBusSignal> forwarder : forwarders) {
-                if (Objects.equals(forwarder.getConsumer(), handler)) {
-                    match = forwarder;
-
-                    break;
-                }
-            }
-
-            if (match != null) {
-                forwarders.remove(match);
-            }
-        }
-
-        if (match != null) {
-            @SuppressWarnings("unchecked")
-            ForwardingHandler<T> forwarder = (ForwardingHandler<T>) match;
-
-            removeHandler(type, forwarder);
-
-            forwarder.stopConsumer();
-        }
-    }
-
     @Override
-    public synchronized void addListener(final UnitStateListener listener) throws DBusException {
-        if (defaultHandler == null) {
-            SignalConsumer<PropertiesChanged> consumer = new SignalConsumer<>(s -> {
-                Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
+    protected SignalConsumer<PropertiesChanged> createStateConsumer() {
+        return new SignalConsumer<>(s -> {
+            Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
 
-                if (unit.isPresent()) {
-                    Map<String, Variant<?>> properties = s.changed_properties;
+            if (unit.isPresent()) {
+                Map<String, Variant<?>> properties = s.changed_properties;
 
-                    if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
-                        synchronized (unitStateListeners) {
-                            unitStateListeners.forEach(l -> l.stateChanged(unit.get(), properties));
-                        }
+                if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
+                    synchronized (unitStateListeners) {
+                        unitStateListeners.forEach(l -> l.stateChanged(unit.get(), properties));
                     }
                 }
-            });
-
-            defaultHandler = new ForwardingHandler<>(consumer);
-            defaultHandler.startConsumer();
-
-            addHandler(PropertiesChanged.class, defaultHandler);
-        }
-
-        unitStateListeners.add(listener);
-    }
-
-    @Override
-    public synchronized void removeListener(final UnitStateListener listener) throws DBusException {
-        unitStateListeners.remove(listener);
-
-        if (unitStateListeners.isEmpty() && defaultHandler != null) {
-            removeHandler(PropertiesChanged.class, defaultHandler);
-
-            defaultHandler.stopConsumer();
-            defaultHandler = null;
-        }
+            }
+        });
     }
 
     public abstract void refresh() throws DBusException;
