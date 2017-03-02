@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.freedesktop.dbus.DBusSignal;
 
-public class SignalSequencer<T extends DBusSignal> {
+final class SignalSequencer<T extends DBusSignal> {
 
     public static final long TIMEOUT_INFINITE = -1L;
 
@@ -52,15 +52,15 @@ public class SignalSequencer<T extends DBusSignal> {
         this.dequeueChunkSize = chunkSize > 1 ? chunkSize / 2 : 1;
     }
 
-    public final void put(final T item) throws InterruptedException {
+    public void put(final T item) throws InterruptedException {
         buffer.put(item);
     }
 
-    public final T take() throws InterruptedException {
+    public T take() throws InterruptedException {
         return poll(TIMEOUT_INFINITE, null);
     }
 
-    public final T poll(final long timeout, final TimeUnit unit) throws InterruptedException {
+    public T poll(final long timeout, final TimeUnit unit) throws InterruptedException {
         T head = null;
 
         if (dequeued < dequeueChunkSize) {
@@ -88,7 +88,7 @@ public class SignalSequencer<T extends DBusSignal> {
         return head;
     }
 
-    public final int drainTo(final Collection<? super T> drain) {
+    public int drainTo(final Collection<? super T> drain) {
         List<T> buffered = new ArrayList<>(buffer.size());
         buffer.drainTo(buffered);
 
@@ -110,12 +110,12 @@ public class SignalSequencer<T extends DBusSignal> {
         return count;
     }
 
-    public final void clear() {
+    public void clear() {
         buffer.clear();
         sequencer.clear();
     }
 
-    public final int size() {
+    public int size() {
         return buffer.size() + sequencer.size();
     }
 

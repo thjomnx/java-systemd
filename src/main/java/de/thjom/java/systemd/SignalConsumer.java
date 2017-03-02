@@ -20,7 +20,7 @@ import org.freedesktop.dbus.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SignalConsumer<T extends DBusSignal> implements Runnable {
+final class SignalConsumer<T extends DBusSignal> implements Runnable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -63,7 +63,7 @@ public class SignalConsumer<T extends DBusSignal> implements Runnable {
         sequencer.clear();
     }
 
-    SignalSequencer<T> getSequencer() {
+    public SignalSequencer<T> getSequencer() {
         return sequencer;
     }
 
