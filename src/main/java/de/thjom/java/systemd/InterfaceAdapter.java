@@ -76,6 +76,23 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
         }
     }
 
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        else if (obj != null) {
+            return obj.hashCode() == hashCode();
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dbus.getUniqueName(), getObjectPath());
+    }
+
     protected static class Property {
 
         private static final Logger log = LoggerFactory.getLogger(Property.class);
