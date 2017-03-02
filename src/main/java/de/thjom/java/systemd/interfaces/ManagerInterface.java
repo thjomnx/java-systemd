@@ -68,7 +68,7 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "Dump")
     String dump();
 
-    public class JobNew extends Signal {
+    public final class JobNew extends Signal {
 
         public JobNew(final String objectPath, final long id, final Path job, final String unit) throws DBusException {
             super(objectPath, id, job, unit);
@@ -88,7 +88,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class JobRemoved extends Signal {
+    public final class JobRemoved extends Signal {
 
         public JobRemoved(final String objectPath, final long id, final Path job, final String unit, final String result) throws DBusException {
             super(objectPath, id, job, unit, result);
@@ -112,7 +112,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class Reloading extends Signal {
+    public final class Reloading extends Signal {
 
         public Reloading(final String objectPath, final boolean active) throws DBusException {
             super(objectPath, active);
@@ -124,7 +124,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class StartupFinished extends Signal {
+    public final class StartupFinished extends Signal {
 
         public StartupFinished(final String objectPath, final long firmware, final long loader, final long kernel, final long initrd,
                 final long userspace, final long total) throws DBusException {
@@ -157,7 +157,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class UnitFilesChanged extends Signal {
+    public final class UnitFilesChanged extends Signal {
 
         public UnitFilesChanged(final String objectPath) throws DBusException {
             super(objectPath);
@@ -165,7 +165,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class UnitNew extends Signal {
+    public final class UnitNew extends Signal {
 
         public UnitNew(final String objectPath, final String id, final Path unit) throws DBusException {
             super(objectPath, id, unit);
@@ -181,23 +181,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class UnitRemoved extends Signal {
-
-        public class UnitNew extends Signal {
-        
-            public UnitNew(final String objectPath, final String id, final Path unit) throws DBusException {
-                super(objectPath, id, unit);
-            }
-        
-            public String getId() {
-                return getParameter(0, "");
-            }
-        
-            public Path getUnit() {
-                return getParameter(1, null);
-            }
-        
-        }
+    public final class UnitRemoved extends Signal {
 
         public UnitRemoved(final String objectPath, final String id, final Path unit) throws DBusException {
             super(objectPath, id, unit);
