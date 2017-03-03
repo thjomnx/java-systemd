@@ -16,9 +16,9 @@
  * known units and unit types. Some additional types present pre-built tools
  * which provide basic monitoring features and listener/notifier patterns.
  *
- * @see https://github.com/thjomnx/java-systemd
- * @see https://www.freedesktop.org/wiki/Software/systemd
- * @see https://www.freedesktop.org/wiki/Software/dbus
+ * @see <a href="https://github.com/thjomnx/java-systemd">GitHub project</a>
+ * @see <a href="https://www.freedesktop.org/wiki/Software/systemd">systemd</a>
+ * @see <a href="https://www.freedesktop.org/wiki/Software/dbus">D-Bus</a>
  */
 
 package de.thjom.java.systemd;

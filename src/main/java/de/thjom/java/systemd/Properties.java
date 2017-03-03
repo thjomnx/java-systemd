@@ -46,7 +46,7 @@ public class Properties extends InterfaceAdapter {
 
     /**
      * Returns this interface adapter (unlike the implementations in the other
-     * interface adapters).<p>
+     * interface adapters).
      */
     @Override
     public Properties getProperties() {
