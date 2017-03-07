@@ -1,1 +1,7 @@
 language: java
+
+before_install:
+    - wget https://github.com/thjomnx/dbus-java-jni/archive/master.zip -O /tmp/master.zip
+    - unzip /tmp/master.zip -d /tmp
+    - cd /tmp/dbus-java-jni-master
+    - mvn install -B
