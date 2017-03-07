@@ -243,7 +243,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     @Override
     protected SignalConsumer<PropertiesChanged> createStateConsumer() {
         return new SignalConsumer<>(s -> {
-            Map<String, Variant<?>> properties = s.changed_properties;
+            Map<String, Variant<?>> properties = s.changedProperties;
 
             if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                 synchronized (unitStateListeners) {

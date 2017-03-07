@@ -66,7 +66,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
             Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
 
             if (unit.isPresent()) {
-                Map<String, Variant<?>> properties = s.changed_properties;
+                Map<String, Variant<?>> properties = s.changedProperties;
 
                 if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                     synchronized (unitStateListeners) {
