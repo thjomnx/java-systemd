@@ -24,9 +24,6 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.SignalSequencer;
-import de.thjom.java.systemd.Systemd;
-
 public class SignalSequencerTest implements DBusInterface {
 
     @Test(description="Tests sequencer ordering.")
@@ -110,7 +107,7 @@ public class SignalSequencerTest implements DBusInterface {
 
         try {
             do {
-                tm = sequencer.poll(1000L, TimeUnit.MILLISECONDS);
+                tm = sequencer.poll(3000L, TimeUnit.MILLISECONDS);
 
                 if (tm != null) {
                     drainedData.add(tm);
