@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/thjomnx/java-systemd.svg?branch=master)](https://travis-ci.org/thjomnx/java-systemd)
+
 # java-systemd
 
 Java access to systemd via D-Bus. Java D-Bus bindings (dbus-java) are required.
