@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/thjomnx/java-systemd.svg?branch=master)](https://travis-ci.org/thjomnx/java-systemd)
+[![Sonarqube quality gate](https://sonarqube.com/api/badges/gate?key=de.thjom.java.systemd:java-systemd)](https://sonarqube.com/dashboard/index?id=de.thjom.java.systemd:java-systemd)
 
 # java-systemd
 
