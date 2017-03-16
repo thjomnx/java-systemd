@@ -75,7 +75,7 @@ public class SignalSequencerTest implements DBusInterface {
             while (tm != null) {
                 list.add(tm);
 
-                tm = sequencer.poll(3000L, TimeUnit.MILLISECONDS);
+                tm = sequencer.poll(250L, TimeUnit.MILLISECONDS);
             }
         }
         catch (InterruptedException e) {
@@ -92,8 +92,8 @@ public class SignalSequencerTest implements DBusInterface {
         SignalSequencer<TestSignal> sequencer = new SignalSequencer<>(10000);
         int numSignals = 30;
 
-        SignalProducer reader = new SignalProducer(sequencer, numSignals);
-        reader.start();
+        SignalProducer producer = new SignalProducer(sequencer, numSignals);
+        producer.start();
 
         try {
             Thread.sleep(50L);
@@ -107,7 +107,12 @@ public class SignalSequencerTest implements DBusInterface {
 
         try {
             do {
-                tm = sequencer.poll(3000L, TimeUnit.MILLISECONDS);
+                if (producer.isAlive()) {
+                    tm = sequencer.poll(10000L, TimeUnit.MILLISECONDS);
+                }
+                else {
+                    tm = sequencer.poll(250L, TimeUnit.MILLISECONDS);
+                }
 
                 if (tm != null) {
                     drainedData.add(tm);
@@ -115,13 +120,13 @@ public class SignalSequencerTest implements DBusInterface {
             }
             while (tm != null);
 
-            reader.join();
+            producer.join();
         }
         catch (InterruptedException e) {
             Assert.fail(e.getMessage(), e);
         }
 
-        List<TestSignal> testData = reader.getTestData();
+        List<TestSignal> testData = producer.getTestData();
 
         Assert.assertFalse(Arrays.equals(drainedData.toArray(), testData.toArray()));
 
