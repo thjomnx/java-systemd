@@ -25,7 +25,7 @@ in TestNG group "requireSystemd". There are two TestNG suites available:
 
 ## License
 
-LGPL v2 and AFL v2.1 - just like dbus-java.
+LGPL 2.1 and AFL 3.0.
 
 ## Disclaimer
 

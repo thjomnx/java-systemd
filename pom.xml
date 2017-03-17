@@ -15,10 +15,28 @@
 
     <developers>
         <developer>
+            <id>thjomnx</id>
             <name>Markus Enax</name>
-            <email>Markus.Enax@gmail.com></email>
+            <email>markus.enax@gmail.com</email>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/thjomnx/java-systemd.git</connection>
+        <developerConnection>scm:git:https://github.com/thjomnx/java-systemd.git</developerConnection>
+        <url>https://github.com/thjomnx/java-systemd</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License version 2.1</name>
+            <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1</url>
+        </license>
+        <license>
+            <name>Academic Free License version 3.0</name>
+            <url>https://opensource.org/licenses/AFL-3.0</url>
+        </license>
+    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
