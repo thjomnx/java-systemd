@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/thjomnx/java-systemd.svg?branch=master)](https://travis-ci.org/thjomnx/java-systemd)
 [![Sonarqube quality gate](https://sonarqube.com/api/badges/gate?key=de.thjom.java.systemd:java-systemd)](https://sonarqube.com/dashboard/index?id=de.thjom.java.systemd:java-systemd)
+[![License: LGPL v2.1](https://img.shields.io/badge/License-LGPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1)
+[![License: AFL 3.0](https://img.shields.io/badge/License-AFL%203.0-yellow.svg)](https://opensource.org/licenses/AFL-3.0)
 
 # java-systemd
 
@@ -25,7 +27,7 @@ in TestNG group "requireSystemd". There are two TestNG suites available:
 
 ## License
 
-LGPL 2.1 and AFL 3.0.
+LGPL v2.1 and AFL 3.0.
 
 ## Disclaimer
 
