@@ -13,6 +13,7 @@ package de.thjom.java.systemd;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -111,7 +112,11 @@ public class SignalSequencerTest implements DBusInterface {
                     tm = sequencer.poll(10000L, TimeUnit.MILLISECONDS);
                 }
                 else {
-                    tm = sequencer.poll(250L, TimeUnit.MILLISECONDS);
+                    Collection<TestSignal> drain = new ArrayList<>();
+                    sequencer.drainTo(drain);
+                    drainedData.addAll(drain);
+
+                    tm = null;
                 }
 
                 if (tm != null) {
@@ -133,6 +138,16 @@ public class SignalSequencerTest implements DBusInterface {
         Collections.sort(testData, new SignalSequencer.SignalComparator<>());
 
         Assert.assertTrue(Arrays.equals(drainedData.toArray(), testData.toArray()));
+    }
+
+    @Override
+    public boolean isRemote() {
+        return false;
+    }
+
+    @Override
+    public String getObjectPath() {
+        return Systemd.OBJECT_PATH;
     }
 
     private static class SignalProducer extends Thread {
@@ -191,16 +206,6 @@ public class SignalSequencerTest implements DBusInterface {
             return Long.hashCode(getSerial());
         }
 
-    }
-
-    @Override
-    public boolean isRemote() {
-        return false;
-    }
-
-    @Override
-    public String getObjectPath() {
-        return Systemd.OBJECT_PATH;
     }
 
 }
