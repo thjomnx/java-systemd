@@ -30,6 +30,8 @@ public final class Systemd {
 
     public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
 
+    public static final long DEFAULT_RETARDATION = 50L;
+
     public static enum InstanceType {
 
         SYSTEM(DBusConnection.SYSTEM),
@@ -120,13 +122,22 @@ public final class Systemd {
     }
 
     public static void disconnect(final InstanceType instanceType) throws DBusException {
+        disconnect(instanceType, DEFAULT_RETARDATION);
+    }
+
+    public static void disconnect(final InstanceType instanceType, final long retardationTime) throws DBusException {
         final int index = instanceType.getIndex();
 
         synchronized (instances) {
             Systemd instance = instances[index];
 
             if (instance != null) {
-                instance.close();
+                try {
+                    instance.close(retardationTime);
+                }
+                catch (final InterruptedException e) {
+                    log.error("Disconnection interrupted while retarding", e);
+                }
             }
 
             instances[index] = null;
@@ -134,14 +145,21 @@ public final class Systemd {
     }
 
     public static void disconnectAll() {
+        disconnectAll(DEFAULT_RETARDATION);
+    }
+
+    public static void disconnectAll(final long retardationTime) {
         synchronized (instances) {
             for (Systemd instance : instances) {
                 if (instance != null) {
                     try {
-                        instance.close();
+                        instance.close(retardationTime);
                     }
                     catch (final DBusException e) {
-                        log.error(e.getMessage());
+                        log.error("Unable to disconnect from bus(es)", e);
+                    }
+                    catch (final InterruptedException e) {
+                        log.error("Disconnection interrupted while retarding", e);
                     }
                 }
             }
@@ -163,11 +181,13 @@ public final class Systemd {
         }
     }
 
-    private void close() throws DBusException {
+    private void close(final long retardationTime) throws DBusException, InterruptedException {
         if (isConnected()) {
             log.debug(String.format("Disconnecting from %s bus", instanceType));
 
             dbus.disconnect();
+
+            Thread.sleep(retardationTime);
         }
 
         dbus = null;
