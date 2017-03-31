@@ -137,6 +137,8 @@ public final class Systemd {
                 }
                 catch (final InterruptedException e) {
                     log.error("Disconnection interrupted while retarding", e);
+
+                    Thread.currentThread().interrupt();
                 }
             }
 
@@ -160,6 +162,8 @@ public final class Systemd {
                     }
                     catch (final InterruptedException e) {
                         log.error("Disconnection interrupted while retarding", e);
+
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
