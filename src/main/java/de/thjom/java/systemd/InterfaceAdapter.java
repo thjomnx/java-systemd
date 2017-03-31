@@ -110,6 +110,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
             for (int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
 
+                // Exclude synthetic fields (occurs during code coverage analysis)
                 if (!field.isSynthetic()) {
                     Object obj = "";
 
