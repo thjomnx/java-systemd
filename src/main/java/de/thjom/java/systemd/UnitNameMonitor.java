@@ -39,16 +39,16 @@ public class UnitNameMonitor extends UnitMonitor {
     public void addDefaultHandlers() throws DBusException {
         manager.subscribe();
 
-        reloadingHandler = new ReloadingHandler();
+        reloadingHandler = new UnitNameMonitor.ReloadingHandler();
         manager.addHandler(Reloading.class, reloadingHandler);
 
-        unitFilesChangedHandler = new UnitFilesChangedHandler();
+        unitFilesChangedHandler = new UnitNameMonitor.UnitFilesChangedHandler();
         manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
 
-        unitNewHandler = new UnitNewHandler();
+        unitNewHandler = new UnitNameMonitor.UnitNewHandler();
         manager.addHandler(UnitNew.class, unitNewHandler);
 
-        unitRemovedHandler = new UnitRemovedHandler();
+        unitRemovedHandler = new UnitNameMonitor.UnitRemovedHandler();
         manager.addHandler(UnitRemoved.class, unitRemovedHandler);
     }
 

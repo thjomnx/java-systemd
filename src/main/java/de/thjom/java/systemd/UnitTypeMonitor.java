@@ -40,6 +40,8 @@ public class UnitTypeMonitor extends UnitMonitor {
         TIMER
     }
 
+    private static final String ERROR_MSG_UNITMAPPING = "Unable to map units";
+
     protected final EnumSet<MonitoredType> monitoredTypes = EnumSet.noneOf(MonitoredType.class);
 
     private ReloadingHandler reloadingHandler;
@@ -55,16 +57,16 @@ public class UnitTypeMonitor extends UnitMonitor {
     public final void addDefaultHandlers() throws DBusException {
         manager.subscribe();
 
-        reloadingHandler = new ReloadingHandler();
+        reloadingHandler = new UnitTypeMonitor.ReloadingHandler();
         manager.addHandler(Reloading.class, reloadingHandler);
 
-        unitFilesChangedHandler = new UnitFilesChangedHandler();
+        unitFilesChangedHandler = new UnitTypeMonitor.UnitFilesChangedHandler();
         manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
 
-        unitNewHandler = new UnitNewHandler();
+        unitNewHandler = new UnitTypeMonitor.UnitNewHandler();
         manager.addHandler(UnitNew.class, unitNewHandler);
 
-        unitRemovedHandler = new UnitRemovedHandler();
+        unitRemovedHandler = new UnitTypeMonitor.UnitRemovedHandler();
         manager.addHandler(UnitRemoved.class, unitRemovedHandler);
     }
 
@@ -163,7 +165,7 @@ public class UnitTypeMonitor extends UnitMonitor {
                     mapUnits();
                 }
                 catch (final DBusException e) {
-                    log.error("Unable to map units", e);
+                    log.error(ERROR_MSG_UNITMAPPING, e);
                 }
             }
         }
@@ -182,7 +184,7 @@ public class UnitTypeMonitor extends UnitMonitor {
                 mapUnits();
             }
             catch (final DBusException e) {
-                log.error("Unable to map units", e);
+                log.error(ERROR_MSG_UNITMAPPING, e);
             }
         }
 
@@ -200,7 +202,7 @@ public class UnitTypeMonitor extends UnitMonitor {
                 mapUnits();
             }
             catch (final DBusException e) {
-                log.error("Unable to map units", e);
+                log.error(ERROR_MSG_UNITMAPPING, e);
             }
         }
 
@@ -218,7 +220,7 @@ public class UnitTypeMonitor extends UnitMonitor {
                 mapUnits();
             }
             catch (final DBusException e) {
-                log.error("Unable to map units", e);
+                log.error(ERROR_MSG_UNITMAPPING, e);
             }
         }
 

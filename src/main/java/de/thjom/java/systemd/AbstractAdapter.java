@@ -103,7 +103,7 @@ abstract class AbstractAdapter {
     }
 
     protected SignalConsumer<PropertiesChanged> createStateConsumer() {
-        return new SignalConsumer<>(s -> {});
+        return new SignalConsumer<>(s -> { /* Default behavior (do nothing) */ });
     }
 
 }

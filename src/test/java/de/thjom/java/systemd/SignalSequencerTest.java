@@ -96,13 +96,6 @@ public class SignalSequencerTest implements DBusInterface {
         SignalProducer producer = new SignalProducer(sequencer, numSignals);
         producer.start();
 
-        try {
-            Thread.sleep(50L);
-        }
-        catch (InterruptedException e) {
-            Assert.fail(e.getMessage(), e);
-        }
-
         List<TestSignal> drainedData = new ArrayList<>();
         TestSignal tm = null;
 

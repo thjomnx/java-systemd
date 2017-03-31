@@ -25,14 +25,7 @@ import org.slf4j.LoggerFactory;
 
 public final class Systemd {
 
-    public static final String SERVICE_NAME = "org.freedesktop.systemd1";
-    public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
-
-    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
-
-    public static final long DEFAULT_RETARDATION = 50L;
-
-    public static enum InstanceType {
+    public enum InstanceType {
 
         SYSTEM(DBusConnection.SYSTEM),
         USER(DBusConnection.SESSION);
@@ -53,6 +46,13 @@ public final class Systemd {
         }
 
     }
+
+    public static final String SERVICE_NAME = "org.freedesktop.systemd1";
+    public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
+
+    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
+
+    public static final long DEFAULT_RETARDATION = 50L;
 
     private static final Logger log = LoggerFactory.getLogger(Systemd.class);
 
@@ -169,7 +169,9 @@ public final class Systemd {
     }
 
     private void open() throws DBusException {
-        log.debug(String.format("Connecting to %s bus", instanceType));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Connecting to %s bus", instanceType));
+        }
 
         try {
             dbus = DBusConnection.getConnection(instanceType.getIndex());
@@ -183,7 +185,9 @@ public final class Systemd {
 
     private void close(final long retardationTime) throws DBusException, InterruptedException {
         if (isConnected()) {
-            log.debug(String.format("Disconnecting from %s bus", instanceType));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Disconnecting from %s bus", instanceType));
+            }
 
             dbus.disconnect();
 
@@ -208,7 +212,9 @@ public final class Systemd {
                 throw new DBusException("Unable to create manager without bus (please connect first)");
             }
 
-            log.debug(String.format("Creating new manager instance on %s bus", instanceType));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Creating new manager instance on %s bus", instanceType));
+            }
 
             manager = Manager.create(dbus);
         }
