@@ -12,6 +12,8 @@
 package de.thjom.java.systemd;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.freedesktop.dbus.DBusConnection;
@@ -103,22 +105,26 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
 
         protected static final String[] getAllNames(final Class<?> type) {
             Field[] fields = type.getDeclaredFields();
-            String[] names = new String[fields.length];
+            List<String> names = new ArrayList<>(fields.length);
 
             for (int i = 0; i < fields.length; i++) {
-                Object obj = "";
+                Field field = fields[i];
 
-                try {
-                    obj = fields[i].get(null);
-                }
-                catch (final IllegalAccessException | IllegalArgumentException e) {
-                    log.error("Unable to enumerate field names", e);
-                }
+                if (!field.isSynthetic()) {
+                    Object obj = "";
 
-                names[i] = obj.toString();
+                    try {
+                        obj = field.get(null);
+                    }
+                    catch (final IllegalAccessException | IllegalArgumentException e) {
+                        log.error("Unable to enumerate field names", e);
+                    }
+
+                    names.add(obj.toString());
+                }
             }
 
-            return names;
+            return names.toArray(new String[names.size()]);
         }
 
     }
