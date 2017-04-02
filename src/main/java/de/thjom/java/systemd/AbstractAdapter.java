@@ -37,7 +37,7 @@ abstract class AbstractAdapter {
     public abstract <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException;
 
     public <T extends DBusSignal> void addConsumer(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
-        SignalConsumer<T> consumer = new SignalConsumer<>(s -> handler.handle(s));
+        SignalConsumer<T> consumer = new SignalConsumer<>(handler::handle);
         ForwardingHandler<T> forwarder = new ForwardingHandler<>(consumer);
 
         synchronized (forwarders) {
