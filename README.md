@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/thjomnx/java-systemd.svg?branch=master)](https://travis-ci.org/thjomnx/java-systemd)
-[![Sonarqube quality gate](https://sonarqube.com/api/badges/gate?key=de.thjom.java.systemd:java-systemd)](https://sonarqube.com/dashboard/index?id=de.thjom.java.systemd:java-systemd)
+[![Sonarqube quality gate](https://sonarqube.com/api/badges/gate?key=com.github.thjomnx:java-systemd)](https://sonarqube.com/dashboard/index?id=com.github.thjomnx:java-systemd)
 [![License: LGPL v2.1](https://img.shields.io/badge/license-LGPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1)
 [![License: AFL 3.0](https://img.shields.io/badge/license-AFL%203.0-yellow.svg)](https://opensource.org/licenses/AFL-3.0)
 
