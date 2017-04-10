@@ -37,27 +37,43 @@ public class Manager extends InterfaceAdapter {
         public static final String DEFAULT_BLOCK_IOACCOUNTING = "DefaultBlockIOAccounting";
         public static final String DEFAULT_CPUACCOUNTING = "DefaultCPUAccounting";
         public static final String DEFAULT_LIMIT_AS = "DefaultLimitAS";
+        public static final String DEFAULT_LIMIT_AS_SOFT = "DefaultLimitASSoft";
         public static final String DEFAULT_LIMIT_CORE = "DefaultLimitCORE";
+        public static final String DEFAULT_LIMIT_CORE_SOFT = "DefaultLimitCORESoft";
         public static final String DEFAULT_LIMIT_CPU = "DefaultLimitCPU";
+        public static final String DEFAULT_LIMIT_CPU_SOFT = "DefaultLimitCPUSoft";
         public static final String DEFAULT_LIMIT_DATA = "DefaultLimitDATA";
+        public static final String DEFAULT_LIMIT_DATA_SOFT = "DefaultLimitDATASoft";
         public static final String DEFAULT_LIMIT_FSIZE = "DefaultLimitFSIZE";
+        public static final String DEFAULT_LIMIT_FSIZE_SOFT = "DefaultLimitFSIZESoft";
         public static final String DEFAULT_LIMIT_LOCKS = "DefaultLimitLOCKS";
+        public static final String DEFAULT_LIMIT_LOCKS_SOFT = "DefaultLimitLOCKSSoft";
         public static final String DEFAULT_LIMIT_MEMLOCK = "DefaultLimitMEMLOCK";
+        public static final String DEFAULT_LIMIT_MEMLOCK_SOFT = "DefaultLimitMEMLOCKSoft";
         public static final String DEFAULT_LIMIT_MSGQUEUE = "DefaultLimitMSGQUEUE";
+        public static final String DEFAULT_LIMIT_MSGQUEUE_SOFT = "DefaultLimitMSGQUEUESoft";
         public static final String DEFAULT_LIMIT_NICE = "DefaultLimitNICE";
+        public static final String DEFAULT_LIMIT_NICE_SOFT = "DefaultLimitNICESoft";
         public static final String DEFAULT_LIMIT_NOFILE = "DefaultLimitNOFILE";
+        public static final String DEFAULT_LIMIT_NOFILE_SOFT = "DefaultLimitNOFILESoft";
         public static final String DEFAULT_LIMIT_NPROC = "DefaultLimitNPROC";
+        public static final String DEFAULT_LIMIT_NPROC_SOFT = "DefaultLimitNPROCSoft";
         public static final String DEFAULT_LIMIT_RSS = "DefaultLimitRSS";
+        public static final String DEFAULT_LIMIT_RSS_SOFT = "DefaultLimitRSSSoft";
         public static final String DEFAULT_LIMIT_RTPRIO = "DefaultLimitRTPRIO";
+        public static final String DEFAULT_LIMIT_RTPRIO_SOFT = "DefaultLimitRTPRIOSoft";
         public static final String DEFAULT_LIMIT_RTTIME = "DefaultLimitRTTIME";
+        public static final String DEFAULT_LIMIT_RTTIME_SOFT = "DefaultLimitRTTIMESoft";
         public static final String DEFAULT_LIMIT_SIGPENDING = "DefaultLimitSIGPENDING";
+        public static final String DEFAULT_LIMIT_SIGPENDING_SOFT = "DefaultLimitSIGPENDINGSoft";
         public static final String DEFAULT_LIMIT_STACK = "DefaultLimitSTACK";
+        public static final String DEFAULT_LIMIT_STACK_SOFT = "DefaultLimitSTACKSoft";
         public static final String DEFAULT_MEMORY_ACCOUNTING = "DefaultMemoryAccounting";
         public static final String DEFAULT_RESTART_USEC = "DefaultRestartUSec";
         public static final String DEFAULT_STANDARD_ERROR = "DefaultStandardError";
         public static final String DEFAULT_STANDARD_OUTPUT = "DefaultStandardOutput";
         public static final String DEFAULT_START_LIMIT_BURST = "DefaultStartLimitBurst";
-        public static final String DEFAULT_START_LIMIT_INTERVAL = "DefaultStartLimitInterval";
+        public static final String DEFAULT_START_LIMIT_INTERVAL_SEC = "DefaultStartLimitIntervalSec";
         public static final String DEFAULT_TASKS_ACCOUNTING = "DefaultTasksAccounting";
         public static final String DEFAULT_TASKS_MAX = "DefaultTasksMax";
         public static final String DEFAULT_TIMEOUT_START_USEC = "DefaultTimeoutStartUSec";
@@ -366,64 +382,128 @@ public class Manager extends InterfaceAdapter {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_AS);
     }
 
+    public BigInteger getDefaultLimitASSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_AS_SOFT);
+    }
+
     public BigInteger getDefaultLimitCORE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_CORE);
+    }
+
+    public BigInteger getDefaultLimitCORESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_CORE_SOFT);
     }
 
     public BigInteger getDefaultLimitCPU() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_CPU);
     }
 
+    public BigInteger getDefaultLimitCPUSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_CPU_SOFT);
+    }
+
     public BigInteger getDefaultLimitDATA() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_DATA);
+    }
+
+    public BigInteger getDefaultLimitDATASoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_DATA_SOFT);
     }
 
     public BigInteger getDefaultLimitFSIZE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_FSIZE);
     }
 
+    public BigInteger getDefaultLimitFSIZESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_FSIZE_SOFT);
+    }
+
     public BigInteger getDefaultLimitLOCKS() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_LOCKS);
+    }
+
+    public BigInteger getDefaultLimitLOCKSSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_LOCKS_SOFT);
     }
 
     public BigInteger getDefaultLimitMEMLOCK() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_MEMLOCK);
     }
 
+    public BigInteger getDefaultLimitMEMLOCKSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_MEMLOCK_SOFT);
+    }
+
     public BigInteger getDefaultLimitMSGQUEUE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_MSGQUEUE);
+    }
+
+    public BigInteger getDefaultLimitMSGQUEUESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_MSGQUEUE_SOFT);
     }
 
     public BigInteger getDefaultLimitNICE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_NICE);
     }
 
+    public BigInteger getDefaultLimitNICESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NICE_SOFT);
+    }
+
     public BigInteger getDefaultLimitNOFILE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_NOFILE);
+    }
+
+    public BigInteger getDefaultLimitNOFILESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NOFILE_SOFT);
     }
 
     public BigInteger getDefaultLimitNPROC() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_NPROC);
     }
 
+    public BigInteger getDefaultLimitNPROCSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NPROC_SOFT);
+    }
+
     public BigInteger getDefaultLimitRSS() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_RSS);
+    }
+
+    public BigInteger getDefaultLimitRSSSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RSS_SOFT);
     }
 
     public BigInteger getDefaultLimitRTPRIO() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_RTPRIO);
     }
 
+    public BigInteger getDefaultLimitRTPRIOSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RTPRIO_SOFT);
+    }
+
     public BigInteger getDefaultLimitRTTIME() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_RTTIME);
+    }
+
+    public BigInteger getDefaultLimitRTTIMESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RTTIME_SOFT);
     }
 
     public BigInteger getDefaultLimitSIGPENDING() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_SIGPENDING);
     }
 
+    public BigInteger getDefaultLimitSIGPENDINGSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_SIGPENDING_SOFT);
+    }
+
     public BigInteger getDefaultLimitSTACK() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_STACK);
+    }
+
+    public BigInteger getDefaultLimitSTACKSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_STACK_SOFT);
     }
 
     public boolean isDefaultMemoryAccounting() {
@@ -446,8 +526,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.DEFAULT_START_LIMIT_BURST);
     }
 
-    public BigInteger getDefaultStartLimitInterval() {
-        return properties.getBigInteger(Property.DEFAULT_START_LIMIT_INTERVAL);
+    public BigInteger getDefaultStartLimitIntervalSec() {
+        return properties.getBigInteger(Property.DEFAULT_START_LIMIT_INTERVAL_SEC);
     }
 
     public boolean isDefaultTasksAccounting() {
