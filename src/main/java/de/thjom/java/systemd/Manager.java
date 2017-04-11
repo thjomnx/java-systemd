@@ -526,8 +526,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.DEFAULT_START_LIMIT_BURST);
     }
 
-    public BigInteger getDefaultStartLimitIntervalSec() {
-        return properties.getBigInteger(Property.DEFAULT_START_LIMIT_INTERVAL_SEC);
+    public long getDefaultStartLimitIntervalSec() {
+        return properties.getLong(Property.DEFAULT_START_LIMIT_INTERVAL_SEC);
     }
 
     public boolean isDefaultTasksAccounting() {
