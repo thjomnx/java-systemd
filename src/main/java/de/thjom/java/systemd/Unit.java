@@ -135,6 +135,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String ON_FAILURE = "OnFailure";
         public static final String ON_FAILURE_JOB_MODE = "OnFailureJobMode";
         public static final String PART_OF = "PartOf";
+        public static final String PERPETUAL = "Perpetual";
         public static final String PROPAGATES_RELOAD_TO = "PropagatesReloadTo";
         public static final String REFUSE_MANUAL_START = "RefuseManualStart";
         public static final String REFUSE_MANUAL_STOP = "RefuseManualStop";
@@ -145,11 +146,16 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String REQUISITE = "Requisite";
         public static final String REQUISITE_OF = "RequisiteOf";
         public static final String SOURCE_PATH = "SourcePath";
+        public static final String START_LIMIT_INTERVAL_SEC = "StartLimitIntervalSec";
+        public static final String STATE_CHANGE_TIMESTAMP = "StateChangeTimestamp";
+        public static final String STATE_CHANGE_TIMESTAMP_MONOTONIC = "StateChangeTimestampMonotonic";
         public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
         public static final String SUB_STATE = "SubState";
         public static final String TRANSIENT = "Transient";
         public static final String TRIGGERED_BY = "TriggeredBy";
         public static final String TRIGGERS = "Triggers";
+        public static final String UNIT_FILE_PRESET = "UnitFilePreset";
+        public static final String UNIT_FILE_STATE = "UnitFileState";
         public static final String WANTED_BY = "WantedBy";
         public static final String WANTS = "Wants";
 
@@ -531,6 +537,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getVector(Property.PART_OF);
     }
 
+    public boolean isPerpetual() {
+        return unitProperties.getBoolean(Property.PERPETUAL);
+    }
+
     public Vector<String> getPropagatesReloadTo() {
         return unitProperties.getVector(Property.PROPAGATES_RELOAD_TO);
     }
@@ -571,6 +581,18 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.SOURCE_PATH);
     }
 
+    public long getStartLimitIntervalSec() {
+        return unitProperties.getLong(Property.START_LIMIT_INTERVAL_SEC);
+    }
+
+    public long getStateChangeTimestamp() {
+        return unitProperties.getLong(Property.STATE_CHANGE_TIMESTAMP);
+    }
+
+    public long getStateChangeTimestampMonotonic() {
+        return unitProperties.getLong(Property.STATE_CHANGE_TIMESTAMP_MONOTONIC);
+    }
+
     public boolean isStopWhenUnneeded() {
         return unitProperties.getBoolean(Property.STOP_WHEN_UNNEEDED);
     }
@@ -589,6 +611,14 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public Vector<String> getTriggers() {
         return unitProperties.getVector(Property.TRIGGERS);
+    }
+
+    public String getUnitFilePreset() {
+        return unitProperties.getString(Property.UNIT_FILE_PRESET);
+    }
+
+    public String getUnitFileState() {
+        return unitProperties.getString(Property.UNIT_FILE_STATE);
     }
 
     public Vector<String> getWantedBy() {
