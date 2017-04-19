@@ -26,12 +26,19 @@ public class Timer extends Unit {
 
     public static class Property extends InterfaceAdapter.Property {
 
-        public static final String UNIT = "Unit";
-        public static final String TIMERS_MONOTONIC = "TimersMonotonic";
-        public static final String TIMERS_CALENDAR = "TimersCalendar";
-        public static final String NEXT_ELAPSE_USEC_REALTIME = "NextElapseUSecRealtime";
+        public static final String ACCURACY_USEC = "AccuracyUSec";
+        public static final String LAST_TRIGGER_USEC = "LastTriggerUSec";
+        public static final String LAST_TRIGGER_USEC_MONOTONIC = "LastTriggerUSecMonotonic";
         public static final String NEXT_ELAPSE_USEC_MONOTONIC = "NextElapseUSecMonotonic";
+        public static final String NEXT_ELAPSE_USEC_REALTIME = "NextElapseUSecRealtime";
+        public static final String PERSISTENT = "Persistent";
+        public static final String RANDOMIZED_DELAY_USEC = "RandomizedDelayUSec";
+        public static final String REMAIN_AFTER_ELAPSE = "RemainAfterElapse";
         public static final String RESULT = "Result";
+        public static final String UNIT = "Unit";
+        public static final String TIMERS_CALENDAR = "TimersCalendar";
+        public static final String TIMERS_MONOTONIC = "TimersMonotonic";
+        public static final String WAKE_SYSTEM = "WakeSystem";
 
         private Property() {
             super();
@@ -63,28 +70,56 @@ public class Timer extends Unit {
         return (TimerInterface) super.getInterface();
     }
 
-    public String getUnit() {
-        return properties.getString(Property.UNIT);
+    public long getAccuracyUSec() {
+        return properties.getLong(Property.ACCURACY_USEC);
     }
 
-    public List<TimersMonotonic> getTimersMonotonic() {
-        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
+    public long getLastTriggerUSec() {
+        return properties.getLong(Property.LAST_TRIGGER_USEC);
     }
 
-    public List<TimersCalendar> getTimersCalendar() {
-        return TimersCalendar.list(properties.getVector(Property.TIMERS_CALENDAR));
-    }
-
-    public long getNextElapseUSecRealtime() {
-        return properties.getLong(Property.NEXT_ELAPSE_USEC_REALTIME);
+    public long getLastTriggerUSecMonotonic() {
+        return properties.getLong(Property.LAST_TRIGGER_USEC_MONOTONIC);
     }
 
     public long getNextElapseUSecMonotonic() {
         return properties.getLong(Property.NEXT_ELAPSE_USEC_MONOTONIC);
     }
 
+    public long getNextElapseUSecRealtime() {
+        return properties.getLong(Property.NEXT_ELAPSE_USEC_REALTIME);
+    }
+
+    public boolean isPersistent() {
+        return properties.getBoolean(Property.PERSISTENT);
+    }
+
+    public long getRandomizedDelayUSec() {
+        return properties.getLong(Property.RANDOMIZED_DELAY_USEC);
+    }
+
+    public boolean isRemainAfterElapse() {
+        return properties.getBoolean(Property.REMAIN_AFTER_ELAPSE);
+    }
+
     public String getResult() {
         return properties.getString(Property.RESULT);
+    }
+
+    public String getUnit() {
+        return properties.getString(Property.UNIT);
+    }
+
+    public List<TimersCalendar> getTimersCalendar() {
+        return TimersCalendar.list(properties.getVector(Property.TIMERS_CALENDAR));
+    }
+
+    public List<TimersMonotonic> getTimersMonotonic() {
+        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
+    }
+
+    public boolean isWakeSystem() {
+        return properties.getBoolean(Property.WAKE_SYSTEM);
     }
 
 }
