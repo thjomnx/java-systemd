@@ -22,9 +22,10 @@ public class Automount extends Unit {
 
     public static class Property extends InterfaceAdapter.Property {
 
-        public static final String WHERE = "Where";
         public static final String DIRECTORY_MODE = "DirectoryMode";
         public static final String RESULT = "Result";
+        public static final String TIMEOUT_IDLE_USEC = "TimeoutIdleUSec";
+        public static final String WHERE = "Where";
 
         private Property() {
             super();
@@ -56,16 +57,20 @@ public class Automount extends Unit {
         return (AutomountInterface) super.getInterface();
     }
 
-    public String getWhere() {
-        return properties.getString(Property.WHERE);
-    }
-
     public long getDirectoryMode() {
         return properties.getLong(Property.DIRECTORY_MODE);
     }
 
     public String getResult() {
         return properties.getString(Property.RESULT);
+    }
+
+    public long getTimeoutIdleUSec() {
+        return properties.getLong(Property.TIMEOUT_IDLE_USEC);
+    }
+
+    public String getWhere() {
+        return properties.getString(Property.WHERE);
     }
 
 }
