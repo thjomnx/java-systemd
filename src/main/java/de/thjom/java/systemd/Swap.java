@@ -20,6 +20,7 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.BlockIOBandwidth;
 import de.thjom.java.systemd.types.BlockIODeviceWeight;
+import de.thjom.java.systemd.types.BlockIOIops;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
@@ -47,16 +48,27 @@ public class Swap extends Unit {
         public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
+        public static final String CPU_WEIGHT = "CPUWeight";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
+        public static final String DYNAMIC_USER = "DynamicUser";
         public static final String ENVIRONMENT = "Environment";
         public static final String ENVIRONMENT_FILES = "EnvironmentFiles";
         public static final String EXEC_ACTIVATE = "ExecActivate";
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
+        public static final String GID = "GID";
         public static final String GROUP = "Group";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
+        public static final String IO_ACCOUNTING = "IOAccounting";
+        public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
+        public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
+        public static final String IO_READ_IOPS_MAX = "IOReadIOPSMax";
         public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IO_WEIGHT = "IOWeight";
+        public static final String IO_WRITE_BANDWIDTH_MAX = "IOWriteBandwidthMax";
+        public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String LIMIT_AS = "LimitAS";
@@ -76,7 +88,12 @@ public class Swap extends Unit {
         public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
         public static final String LIMIT_STACK = "LimitSTACK";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
+        public static final String MEMORY_DENY_WRITE_EXECUTE = "MemoryDenyWriteExecute";
+        public static final String MEMORY_HIGH = "MemoryHigh";
         public static final String MEMORY_LIMIT = "MemoryLimit";
+        public static final String MEMORY_LOW = "MemoryLow";
+        public static final String MEMORY_MAX = "MemoryMax";
+        public static final String MEMORY_SWAP_MAX = "MemorySwapMax";
         public static final String MOUNT_FLAGS = "MountFlags";
         public static final String NICE = "Nice";
         public static final String NON_BLOCKING = "NonBlocking";
@@ -86,8 +103,16 @@ public class Swap extends Unit {
         public static final String PRIORITY = "Priority";
         public static final String PRIVATE_NETWORK = "PrivateNetwork";
         public static final String PRIVATE_TMP = "PrivateTmp";
+        public static final String PRIVATE_USERS = "PrivateUsers";
+        public static final String PROTECT_CONTROL_GROUPS = "ProtectControlGroups";
+        public static final String PROTECT_KERNEL_MODULES = "ProtectKernelModules";
+        public static final String PROTECT_KERNEL_TUNABLES = "ProtectKernelTunables";
         public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
+        public static final String REMOVE_IPC = "RemoveIPC";
+        public static final String RESTRICT_REALTIME = "RestrictRealtime";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -96,8 +121,13 @@ public class Swap extends Unit {
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
         public static final String STANDARD_ERROR = "StandardError";
+        public static final String STANDARD_ERROR_FILE_DESCRIPTOR_NAME = "StandardErrorFileDescriptorName";
         public static final String STANDARD_INPUT = "StandardInput";
+        public static final String STANDARD_INPUT_FILE_DESCRIPTOR_NAME = "StandardInputFileDescriptorName";
         public static final String STANDARD_OUTPUT = "StandardOutput";
+        public static final String STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME = "StandardOutputFileDescriptorName";
+        public static final String STARTUP_CPU_WEIGHT = "StartupCPUWeight";
+        public static final String STARTUP_IO_WEIGHT = "StartupIOWeight";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -110,6 +140,7 @@ public class Swap extends Unit {
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
+        public static final String UID = "UID";
         public static final String UMASK = "UMask";
         public static final String USER = "User";
         public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
@@ -190,6 +221,10 @@ public class Swap extends Unit {
         return properties.getBigInteger(Property.CPU_SHARES);
     }
 
+    public BigInteger getCPUWeight() {
+        return properties.getBigInteger(Property.CPU_WEIGHT);
+    }
+
     public String getCapabilities() {
         return properties.getString(Property.CAPABILITIES);
     }
@@ -214,6 +249,10 @@ public class Swap extends Unit {
         return properties.getString(Property.DEVICE_POLICY);
     }
 
+    public boolean isDynamicUser() {
+        return properties.getBoolean(Property.DYNAMIC_USER);
+    }
+
     public Vector<String> getEnvironment() {
         return properties.getVector(Property.ENVIRONMENT);
     }
@@ -230,12 +269,12 @@ public class Swap extends Unit {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_DEACTIVATE));
     }
 
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
+    public int getGID() {
+        return properties.getInteger(Property.GID);
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
+    public String getGroup() {
+        return properties.getString(Property.GROUP);
     }
 
     public boolean isIgnoreSIGPIPE() {
@@ -244,6 +283,42 @@ public class Swap extends Unit {
 
     public Vector<String> getInaccessibleDirectories() {
         return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    }
+
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    }
+
+    public boolean isIOAccounting() {
+        return properties.getBoolean(Property.IO_ACCOUNTING);
+    }
+
+    public List<BlockIODeviceWeight> getIODeviceWeight() {
+        return BlockIODeviceWeight.list(properties.getVector(Property.IO_DEVICE_WEIGHT));
+    }
+
+    public List<BlockIOBandwidth> getIOReadBandwidthMax() {
+        return BlockIOBandwidth.list(properties.getVector(Property.IO_READ_BANDWIDTH_MAX));
+    }
+
+    public List<BlockIOIops> getIOReadIOPSMax() {
+        return BlockIOIops.list(properties.getVector(Property.IO_READ_IOPS_MAX));
+    }
+
+    public int getIOScheduling() {
+        return properties.getInteger(Property.IO_SCHEDULING);
+    }
+
+    public BigInteger getIOWeight() {
+        return properties.getBigInteger(Property.IO_WEIGHT);
+    }
+
+    public List<BlockIOBandwidth> getIOWriteBandwidthMax() {
+        return BlockIOBandwidth.list(properties.getVector(Property.IO_WRITE_BANDWIDTH_MAX));
+    }
+
+    public List<BlockIOIops> getIOWriteIOPSMax() {
+        return BlockIOIops.list(properties.getVector(Property.IO_WRITE_IOPS_MAX));
     }
 
     public String getKillMode() {
@@ -322,8 +397,28 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.MEMORY_ACCOUNTING);
     }
 
+    public boolean isMemoryDenyWriteExecute() {
+        return properties.getBoolean(Property.MEMORY_DENY_WRITE_EXECUTE);
+    }
+
+    public BigInteger getMemoryHigh() {
+        return properties.getBigInteger(Property.MEMORY_HIGH);
+    }
+
     public BigInteger getMemoryLimit() {
         return properties.getBigInteger(Property.MEMORY_LIMIT);
+    }
+
+    public BigInteger getMemoryLow() {
+        return properties.getBigInteger(Property.MEMORY_LOW);
+    }
+
+    public BigInteger getMemoryMax() {
+        return properties.getBigInteger(Property.MEMORY_MAX);
+    }
+
+    public BigInteger getMemorySwapMax() {
+        return properties.getBigInteger(Property.MEMORY_SWAP_MAX);
     }
 
     public BigInteger getMountFlags() {
@@ -362,12 +457,44 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.PRIVATE_TMP);
     }
 
+    public boolean isPrivateUsers() {
+        return properties.getBoolean(Property.PRIVATE_USERS);
+    }
+
+    public boolean isProtectControlGroups() {
+        return properties.getBoolean(Property.PROTECT_CONTROL_GROUPS);
+    }
+
+    public boolean isProtectKernelModules() {
+        return properties.getBoolean(Property.PROTECT_KERNEL_MODULES);
+    }
+
+    public boolean isProtectKernelTunables() {
+        return properties.getBoolean(Property.PROTECT_KERNEL_TUNABLES);
+    }
+
     public Vector<String> getReadOnlyDirectories() {
         return properties.getVector(Property.READ_ONLY_DIRECTORIES);
     }
 
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
+    }
+
     public Vector<String> getReadWriteDirectories() {
         return properties.getVector(Property.READ_WRITE_DIRECTORIES);
+    }
+
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
+    }
+
+    public boolean isRemoveIPC() {
+        return properties.getBoolean(Property.REMOVE_IPC);
+    }
+
+    public boolean isRestrictRealtime() {
+        return properties.getBoolean(Property.RESTRICT_REALTIME);
     }
 
     public String getResult() {
@@ -402,12 +529,32 @@ public class Swap extends Unit {
         return properties.getString(Property.STANDARD_ERROR);
     }
 
+    public String getStandardErrorFileDescriptorName() {
+        return properties.getString(Property.STANDARD_ERROR_FILE_DESCRIPTOR_NAME);
+    }
+
     public String getStandardInput() {
         return properties.getString(Property.STANDARD_INPUT);
     }
 
+    public String getStandardInputFileDescriptorName() {
+        return properties.getString(Property.STANDARD_INPUT_FILE_DESCRIPTOR_NAME);
+    }
+
     public String getStandardOutput() {
         return properties.getString(Property.STANDARD_OUTPUT);
+    }
+
+    public String getStandardOutputFileDescriptorName() {
+        return properties.getString(Property.STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME);
+    }
+
+    public BigInteger getStartupCPUWeight() {
+        return properties.getBigInteger(Property.STARTUP_CPU_WEIGHT);
+    }
+
+    public BigInteger getStartupIOWeight() {
+        return properties.getBigInteger(Property.STARTUP_IO_WEIGHT);
     }
 
     public Vector<String> getSupplementaryGroups() {
@@ -458,6 +605,10 @@ public class Swap extends Unit {
 
     public long getTimerSlackNS() {
         return properties.getLong(Property.TIMER_SLACK_NS);
+    }
+
+    public int getUID() {
+        return properties.getInteger(Property.UID);
     }
 
     public long getUMask() {
