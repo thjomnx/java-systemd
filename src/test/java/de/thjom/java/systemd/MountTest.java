@@ -43,9 +43,9 @@ public class MountTest extends UnitTest {
         setupPropertyMocks(Mount.class, Mount.SERVICE_NAME, Mount.Property.getAllNames());
 
         nonVariantProperties.add(Mount.Property.APP_ARMOR_PROFILE);
-        nonVariantProperties.add(Mount.Property.BLOCK_IODEVICE_WEIGHT);
-        nonVariantProperties.add(Mount.Property.BLOCK_IOREAD_BANDWIDTH);
-        nonVariantProperties.add(Mount.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Mount.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(Mount.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(Mount.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Mount.Property.DEVICE_ALLOW);
         nonVariantProperties.add(Mount.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Mount.Property.EXEC_MOUNT);

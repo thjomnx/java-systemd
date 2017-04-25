@@ -37,20 +37,20 @@ public class Service extends Unit {
     public static class Property extends InterfaceAdapter.Property {
 
         public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
-        public static final String BLOCK_IOACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IODEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IOREAD_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IOWEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IOWRITE_BANDWIDTH = "BlockIOWriteBandwidth";
+        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
+        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
+        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
+        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
+        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String BUS_NAME = "BusName";
-        public static final String CPUACCOUNTING = "CPUAccounting";
-        public static final String CPUAFFINITY = "CPUAffinity";
-        public static final String CPUQUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
-        public static final String CPUSCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPUSCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPUSCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPUSHARES = "CPUShares";
-        public static final String CPUUSAGE_NSEC = "CPUUsageNSec";
+        public static final String CPU_ACCOUNTING = "CPUAccounting";
+        public static final String CPU_AFFINITY = "CPUAffinity";
+        public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
+        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
+        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
+        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
+        public static final String CPU_SHARES = "CPUShares";
+        public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
@@ -77,7 +77,7 @@ public class Service extends Unit {
         public static final String FILE_DESCRIPTOR_STORE_MAX = "FileDescriptorStoreMax";
         public static final String GROUP = "Group";
         public static final String GUESS_MAIN_PID = "GuessMainPID";
-        public static final String IOSCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING = "IOScheduling";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
         public static final String KILL_MODE = "KillMode";
@@ -108,9 +108,9 @@ public class Service extends Unit {
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NOTIFY_ACCESS = "NotifyAccess";
-        public static final String OOMSCORE_ADJUST = "OOMScoreAdjust";
-        public static final String PAMNAME = "PAMName";
-        public static final String PIDFILE = "PIDFile";
+        public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
+        public static final String PAM_NAME = "PAMName";
+        public static final String PID_FILE = "PIDFile";
         public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
         public static final String PERSONALITY = "Personality";
@@ -144,8 +144,8 @@ public class Service extends Unit {
         public static final String START_LIMIT_ACTION = "StartLimitAction";
         public static final String START_LIMIT_BURST = "StartLimitBurst";
         public static final String START_LIMIT_INTERVAL = "StartLimitInterval";
-        public static final String STARTUP_BLOCK_IOWEIGHT = "StartupBlockIOWeight";
-        public static final String STARTUP_CPUSHARES = "StartupCPUShares";
+        public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
+        public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String STATUS_ERRNO = "StatusErrno";
         public static final String STATUS_TEXT = "StatusText";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
@@ -157,10 +157,10 @@ public class Service extends Unit {
         public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
         public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
-        public static final String TTYPATH = "TTYPath";
-        public static final String TTYRESET = "TTYReset";
-        public static final String TTYVHANGUP = "TTYVHangup";
-        public static final String TTYVTDISALLOCATE = "TTYVTDisallocate";
+        public static final String TTY_PATH = "TTYPath";
+        public static final String TTY_RESET = "TTYReset";
+        public static final String TTY_V_HANGUP = "TTYVHangup";
+        public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String TASKS_ACCOUNTING = "TasksAccounting";
         public static final String TASKS_CURRENT = "TasksCurrent";
         public static final String TASKS_MAX = "TasksMax";
@@ -169,8 +169,8 @@ public class Service extends Unit {
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TYPE = "Type";
         public static final String UMASK = "UMask";
-        public static final String USBFUNCTION_DESCRIPTORS = "USBFunctionDescriptors";
-        public static final String USBFUNCTION_STRINGS = "USBFunctionStrings";
+        public static final String USB_FUNCTION_DESCRIPTORS = "USBFunctionDescriptors";
+        public static final String USB_FUNCTION_STRINGS = "USBFunctionStrings";
         public static final String USER = "User";
         public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
         public static final String UTMP_MODE = "UtmpMode";
@@ -216,23 +216,23 @@ public class Service extends Unit {
     }
 
     public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IOACCOUNTING);
+        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
     public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IODEVICE_WEIGHT));
+        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
     public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOREAD_BANDWIDTH));
+        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IOWEIGHT);
+        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
     public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOWRITE_BANDWIDTH));
+        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public String getBusName() {
@@ -240,35 +240,35 @@ public class Service extends Unit {
     }
 
     public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPUACCOUNTING);
+        return properties.getBoolean(Property.CPU_ACCOUNTING);
     }
 
     public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPUAFFINITY).getValue();
+        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
     }
 
     public BigInteger getCPUQuotaPerSecUSec() {
-        return properties.getBigInteger(Property.CPUQUOTA_PER_SEC_USEC);
+        return properties.getBigInteger(Property.CPU_QUOTA_PER_SEC_USEC);
     }
 
     public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPUSCHEDULING_POLICY);
+        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
     }
 
     public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPUSCHEDULING_PRIORITY);
+        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
     }
 
     public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPUSCHEDULING_RESET_ON_FORK);
+        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
     }
 
     public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPUSHARES);
+        return properties.getBigInteger(Property.CPU_SHARES);
     }
 
     public BigInteger getCPUUsageNSec() {
-        return properties.getBigInteger(Property.CPUUSAGE_NSEC);
+        return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
     public String getCapabilities() {
@@ -376,7 +376,7 @@ public class Service extends Unit {
     }
 
     public int getIOScheduling() {
-        return properties.getInteger(Property.IOSCHEDULING);
+        return properties.getInteger(Property.IO_SCHEDULING);
     }
 
     public boolean isIgnoreSIGPIPE() {
@@ -500,15 +500,15 @@ public class Service extends Unit {
     }
 
     public int getOOMScoreAdjust() {
-        return properties.getInteger(Property.OOMSCORE_ADJUST);
+        return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
 
     public String getPAMName() {
-        return properties.getString(Property.PAMNAME);
+        return properties.getString(Property.PAM_NAME);
     }
 
     public String getPIDFile() {
-        return properties.getString(Property.PIDFILE);
+        return properties.getString(Property.PID_FILE);
     }
 
     public Vector<String> getPassEnvironment() {
@@ -650,11 +650,11 @@ public class Service extends Unit {
     }
 
     public BigInteger getStartupBlockIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_BLOCK_IOWEIGHT);
+        return properties.getBigInteger(Property.STARTUP_BLOCK_IO_WEIGHT);
     }
 
     public BigInteger getStartupCPUShares() {
-        return properties.getBigInteger(Property.STARTUP_CPUSHARES);
+        return properties.getBigInteger(Property.STARTUP_CPU_SHARES);
     }
 
     public int getStatusErrno() {
@@ -704,19 +704,19 @@ public class Service extends Unit {
     }
 
     public String getTTYPath() {
-        return properties.getString(Property.TTYPATH);
+        return properties.getString(Property.TTY_PATH);
     }
 
     public boolean isTTYReset() {
-        return properties.getBoolean(Property.TTYRESET);
+        return properties.getBoolean(Property.TTY_RESET);
     }
 
     public boolean isTTYVHangup() {
-        return properties.getBoolean(Property.TTYVHANGUP);
+        return properties.getBoolean(Property.TTY_V_HANGUP);
     }
 
     public boolean isTTYVTDisallocate() {
-        return properties.getBoolean(Property.TTYVTDISALLOCATE);
+        return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
     }
 
     public boolean isTasksAccounting() {
@@ -752,11 +752,11 @@ public class Service extends Unit {
     }
 
     public String getUSBFunctionDescriptors() {
-        return properties.getString(Property.USBFUNCTION_DESCRIPTORS);
+        return properties.getString(Property.USB_FUNCTION_DESCRIPTORS);
     }
 
     public String getUSBFunctionStrings() {
-        return properties.getString(Property.USBFUNCTION_STRINGS);
+        return properties.getString(Property.USB_FUNCTION_STRINGS);
     }
 
     public String getUser() {

@@ -34,8 +34,8 @@ public class Manager extends InterfaceAdapter {
         public static final String ARCHITECTURE = "Architecture";
         public static final String CONFIRM_SPAWN = "ConfirmSpawn";
         public static final String CONTROL_GROUP = "ControlGroup";
-        public static final String DEFAULT_BLOCK_IOACCOUNTING = "DefaultBlockIOAccounting";
-        public static final String DEFAULT_CPUACCOUNTING = "DefaultCPUAccounting";
+        public static final String DEFAULT_BLOCK_IO_ACCOUNTING = "DefaultBlockIOAccounting";
+        public static final String DEFAULT_CPU_ACCOUNTING = "DefaultCPUAccounting";
         public static final String DEFAULT_LIMIT_AS = "DefaultLimitAS";
         public static final String DEFAULT_LIMIT_AS_SOFT = "DefaultLimitASSoft";
         public static final String DEFAULT_LIMIT_CORE = "DefaultLimitCORE";
@@ -90,8 +90,8 @@ public class Manager extends InterfaceAdapter {
         public static final String GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "GeneratorsFinishTimestampMonotonic";
         public static final String GENERATORS_START_TIMESTAMP = "GeneratorsStartTimestamp";
         public static final String GENERATORS_START_TIMESTAMP_MONOTONIC = "GeneratorsStartTimestampMonotonic";
-        public static final String INIT_RDTIMESTAMP = "InitRDTimestamp";
-        public static final String INIT_RDTIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
+        public static final String INIT_RD_TIMESTAMP = "InitRDTimestamp";
+        public static final String INIT_RD_TIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
         public static final String KERNEL_TIMESTAMP = "KernelTimestamp";
         public static final String KERNEL_TIMESTAMP_MONOTONIC = "KernelTimestampMonotonic";
         public static final String LOADER_TIMESTAMP = "LoaderTimestamp";
@@ -371,11 +371,11 @@ public class Manager extends InterfaceAdapter {
     }
 
     public boolean isDefaultBlockIOAccounting() {
-        return properties.getBoolean(Property.DEFAULT_BLOCK_IOACCOUNTING);
+        return properties.getBoolean(Property.DEFAULT_BLOCK_IO_ACCOUNTING);
     }
 
     public boolean isDefaultCPUAccounting() {
-        return properties.getBoolean(Property.DEFAULT_CPUACCOUNTING);
+        return properties.getBoolean(Property.DEFAULT_CPU_ACCOUNTING);
     }
 
     public BigInteger getDefaultLimitAS() {
@@ -595,11 +595,11 @@ public class Manager extends InterfaceAdapter {
     }
 
     public long getInitRDTimestamp() {
-        return properties.getLong(Property.INIT_RDTIMESTAMP);
+        return properties.getLong(Property.INIT_RD_TIMESTAMP);
     }
 
     public long getInitRDTimestampMonotonic() {
-        return properties.getLong(Property.INIT_RDTIMESTAMP_MONOTONIC);
+        return properties.getLong(Property.INIT_RD_TIMESTAMP_MONOTONIC);
     }
 
     public long getKernelTimestamp() {

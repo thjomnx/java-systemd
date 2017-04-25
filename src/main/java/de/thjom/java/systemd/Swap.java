@@ -32,21 +32,21 @@ public class Swap extends Unit {
 
     public static class Property extends InterfaceAdapter.Property {
 
-        public static final String BLOCK_IOACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IODEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IOREAD_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IOWEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IOWRITE_BANDWIDTH = "BlockIOWriteBandwidth";
+        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
+        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
+        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
+        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
+        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
-        public static final String CPUACCOUNTING = "CPUAccounting";
-        public static final String CPUAFFINITY = "CPUAffinity";
-        public static final String CPUSCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPUSCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPUSCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPUSHARES = "CPUShares";
+        public static final String CPU_ACCOUNTING = "CPUAccounting";
+        public static final String CPU_AFFINITY = "CPUAffinity";
+        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
+        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
+        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
+        public static final String CPU_SHARES = "CPUShares";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String ENVIRONMENT = "Environment";
@@ -56,7 +56,7 @@ public class Swap extends Unit {
         public static final String GROUP = "Group";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
-        public static final String IOSCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING = "IOScheduling";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String LIMIT_AS = "LimitAS";
@@ -81,8 +81,8 @@ public class Swap extends Unit {
         public static final String NICE = "Nice";
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
-        public static final String OOMSCORE_ADJUST = "OOMScoreAdjust";
-        public static final String PAMNAME = "PAMName";
+        public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
+        public static final String PAM_NAME = "PAMName";
         public static final String PRIORITY = "Priority";
         public static final String PRIVATE_NETWORK = "PrivateNetwork";
         public static final String PRIVATE_TMP = "PrivateTmp";
@@ -103,13 +103,13 @@ public class Swap extends Unit {
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
-        public static final String TCPWRAP_NAME = "TCPWrapName";
+        public static final String TCP_WRAP_NAME = "TCPWrapName";
         public static final String TIMEOUT_USEC = "TimeoutUSec";
         public static final String TIMER_SLACK_NS = "TimerSlackNS";
-        public static final String TTYPATH = "TTYPath";
-        public static final String TTYRESET = "TTYReset";
-        public static final String TTYVHANGUP = "TTYVHangup";
-        public static final String TTYVTDISALLOCATE = "TTYVTDisallocate";
+        public static final String TTY_PATH = "TTYPath";
+        public static final String TTY_RESET = "TTYReset";
+        public static final String TTY_V_HANGUP = "TTYVHangup";
+        public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String UMASK = "UMask";
         public static final String USER = "User";
         public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
@@ -147,47 +147,47 @@ public class Swap extends Unit {
     }
 
     public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IOACCOUNTING);
+        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
     public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IODEVICE_WEIGHT));
+        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
     public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOREAD_BANDWIDTH));
+        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IOWEIGHT);
+        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
     public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOWRITE_BANDWIDTH));
+        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPUACCOUNTING);
+        return properties.getBoolean(Property.CPU_ACCOUNTING);
     }
 
     public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPUAFFINITY).getValue();
+        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
     }
 
     public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPUSCHEDULING_POLICY);
+        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
     }
 
     public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPUSCHEDULING_PRIORITY);
+        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
     }
 
     public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPUSCHEDULING_RESET_ON_FORK);
+        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
     }
 
     public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPUSHARES);
+        return properties.getBigInteger(Property.CPU_SHARES);
     }
 
     public String getCapabilities() {
@@ -235,7 +235,7 @@ public class Swap extends Unit {
     }
 
     public int getIOScheduling() {
-        return properties.getInteger(Property.IOSCHEDULING);
+        return properties.getInteger(Property.IO_SCHEDULING);
     }
 
     public boolean isIgnoreSIGPIPE() {
@@ -343,11 +343,11 @@ public class Swap extends Unit {
     }
 
     public int getOOMScoreAdjust() {
-        return properties.getInteger(Property.OOMSCORE_ADJUST);
+        return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
 
     public String getPAMName() {
-        return properties.getString(Property.PAMNAME);
+        return properties.getString(Property.PAM_NAME);
     }
 
     public int getPriority() {
@@ -433,23 +433,23 @@ public class Swap extends Unit {
     }
 
     public String getTCPWrapName() {
-        return properties.getString(Property.TCPWRAP_NAME);
+        return properties.getString(Property.TCP_WRAP_NAME);
     }
 
     public String getTTYPath() {
-        return properties.getString(Property.TTYPATH);
+        return properties.getString(Property.TTY_PATH);
     }
 
     public boolean isTTYReset() {
-        return properties.getBoolean(Property.TTYRESET);
+        return properties.getBoolean(Property.TTY_RESET);
     }
 
     public boolean isTTYVHangup() {
-        return properties.getBoolean(Property.TTYVHANGUP);
+        return properties.getBoolean(Property.TTY_V_HANGUP);
     }
 
     public boolean isTTYVTDisallocate() {
-        return properties.getBoolean(Property.TTYVTDISALLOCATE);
+        return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
     }
 
     public long getTimeoutUSec() {

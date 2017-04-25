@@ -22,7 +22,7 @@ public class Device extends Unit {
 
     public static class Property extends InterfaceAdapter.Property {
 
-        public static final String SYS_FSPATH = "SysFSPath";
+        public static final String SYS_FS_PATH = "SysFSPath";
 
         private Property() {
             super();
@@ -55,7 +55,7 @@ public class Device extends Unit {
     }
 
     public String getSysFSPath() {
-        return properties.getString(Property.SYS_FSPATH);
+        return properties.getString(Property.SYS_FS_PATH);
     }
 
 }

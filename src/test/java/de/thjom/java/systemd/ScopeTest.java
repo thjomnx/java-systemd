@@ -42,9 +42,9 @@ public class ScopeTest extends UnitTest {
 
         setupPropertyMocks(Scope.class, Scope.SERVICE_NAME, Scope.Property.getAllNames());
 
-        nonVariantProperties.add(Scope.Property.BLOCK_IODEVICE_WEIGHT);
-        nonVariantProperties.add(Scope.Property.BLOCK_IOREAD_BANDWIDTH);
-        nonVariantProperties.add(Scope.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Scope.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(Scope.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(Scope.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Scope.Property.DEVICE_ALLOW);
     }
 

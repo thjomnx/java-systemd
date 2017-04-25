@@ -42,9 +42,9 @@ public class SliceTest extends UnitTest {
 
         setupPropertyMocks(Slice.class, Slice.SERVICE_NAME, Slice.Property.getAllNames());
 
-        nonVariantProperties.add(Slice.Property.BLOCK_IODEVICE_WEIGHT);
-        nonVariantProperties.add(Slice.Property.BLOCK_IOREAD_BANDWIDTH);
-        nonVariantProperties.add(Slice.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Slice.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(Slice.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(Slice.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Slice.Property.DEVICE_ALLOW);
     }
 

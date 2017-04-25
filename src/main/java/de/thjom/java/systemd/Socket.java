@@ -43,20 +43,20 @@ public class Socket extends Unit {
         public static final String BACKLOG = "Backlog";
         public static final String BIND_IPV6_ONLY = "BindIPv6Only";
         public static final String BIND_TO_DEVICE = "BindToDevice";
-        public static final String BLOCK_IOACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IODEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IOREAD_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IOWEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IOWRITE_BANDWIDTH = "BlockIOWriteBandwidth";
+        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
+        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
+        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
+        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
+        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String BROADCAST = "Broadcast";
-        public static final String CPUACCOUNTING = "CPUAccounting";
-        public static final String CPUAFFINITY = "CPUAffinity";
-        public static final String CPUQUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
-        public static final String CPUSCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPUSCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPUSCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPUSHARES = "CPUShares";
-        public static final String CPUUSAGE_NSEC = "CPUUsageNSec";
+        public static final String CPU_ACCOUNTING = "CPUAccounting";
+        public static final String CPU_AFFINITY = "CPUAffinity";
+        public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
+        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
+        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
+        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
+        public static final String CPU_SHARES = "CPUShares";
+        public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
@@ -74,9 +74,9 @@ public class Socket extends Unit {
         public static final String FILE_DESCRIPTOR_NAME = "FileDescriptorName";
         public static final String FREE_BIND = "FreeBind";
         public static final String GROUP = "Group";
-        public static final String IOSCHEDULING = "IOScheduling";
-        public static final String IPTOS = "IPTOS";
-        public static final String IPTTL = "IPTTL";
+        public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IP_TOS = "IPTOS";
+        public static final String IP_TTL = "IPTTL";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
         public static final String KEEP_ALIVE = "KeepAlive";
@@ -86,37 +86,37 @@ public class Socket extends Unit {
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_ASSOFT = "LimitASSoft";
+        public static final String LIMIT_AS_SOFT = "LimitASSoft";
         public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CORESOFT = "LimitCORESoft";
+        public static final String LIMIT_CORE_SOFT = "LimitCORESoft";
         public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_CPUSOFT = "LimitCPUSoft";
+        public static final String LIMIT_CPU_SOFT = "LimitCPUSoft";
         public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_DATASOFT = "LimitDATASoft";
+        public static final String LIMIT_DATA_SOFT = "LimitDATASoft";
         public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_FSIZESOFT = "LimitFSIZESoft";
+        public static final String LIMIT_FSIZE_SOFT = "LimitFSIZESoft";
         public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_LOCKSSOFT = "LimitLOCKSSoft";
+        public static final String LIMIT_LOCKS_SOFT = "LimitLOCKSSoft";
         public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MEMLOCKSOFT = "LimitMEMLOCKSoft";
+        public static final String LIMIT_MEMLOCK_SOFT = "LimitMEMLOCKSoft";
         public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_MSGQUEUESOFT = "LimitMSGQUEUESoft";
+        public static final String LIMIT_MSGQUEUE_SOFT = "LimitMSGQUEUESoft";
         public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NICESOFT = "LimitNICESoft";
+        public static final String LIMIT_NICE_SOFT = "LimitNICESoft";
         public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NOFILESOFT = "LimitNOFILESoft";
+        public static final String LIMIT_NOFILE_SOFT = "LimitNOFILESoft";
         public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_NPROCSOFT = "LimitNPROCSoft";
+        public static final String LIMIT_NPROC_SOFT = "LimitNPROCSoft";
         public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RSSSOFT = "LimitRSSSoft";
+        public static final String LIMIT_RSS_SOFT = "LimitRSSSoft";
         public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTPRIOSOFT = "LimitRTPRIOSoft";
+        public static final String LIMIT_RTPRIO_SOFT = "LimitRTPRIOSoft";
         public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_RTTIMESOFT = "LimitRTTIMESoft";
+        public static final String LIMIT_RTTIME_SOFT = "LimitRTTIMESoft";
         public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_SIGPENDINGSOFT = "LimitSIGPENDINGSoft";
+        public static final String LIMIT_SIGPENDING_SOFT = "LimitSIGPENDINGSoft";
         public static final String LIMIT_STACK = "LimitSTACK";
-        public static final String LIMIT_STACKSOFT = "LimitSTACKSoft";
+        public static final String LIMIT_STACK_SOFT = "LimitSTACKSoft";
         public static final String LISTEN = "Listen";
         public static final String MARK = "Mark";
         public static final String MAX_CONNECTIONS = "MaxConnections";
@@ -132,8 +132,8 @@ public class Socket extends Unit {
         public static final String NO_DELAY = "NoDelay";
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String NON_BLOCKING = "NonBlocking";
-        public static final String OOMSCORE_ADJUST = "OOMScoreAdjust";
-        public static final String PAMNAME = "PAMName";
+        public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
+        public static final String PAM_NAME = "PAMName";
         public static final String PASS_CREDENTIALS = "PassCredentials";
         public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PASS_SECURITY = "PassSecurity";
@@ -173,8 +173,8 @@ public class Socket extends Unit {
         public static final String STANDARD_ERROR = "StandardError";
         public static final String STANDARD_INPUT = "StandardInput";
         public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String STARTUP_BLOCK_IOWEIGHT = "StartupBlockIOWeight";
-        public static final String STARTUP_CPUSHARES = "StartupCPUShares";
+        public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
+        public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYMLINKS = "Symlinks";
         public static final String SYSLOG_FACILITY = "SyslogFacility";
@@ -185,10 +185,10 @@ public class Socket extends Unit {
         public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
         public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
-        public static final String TTYPATH = "TTYPath";
-        public static final String TTYRESET = "TTYReset";
-        public static final String TTYVHANGUP = "TTYVHangup";
-        public static final String TTYVTDISALLOCATE = "TTYVTDisallocate";
+        public static final String TTY_PATH = "TTYPath";
+        public static final String TTY_RESET = "TTYReset";
+        public static final String TTY_V_HANGUP = "TTYVHangup";
+        public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String TASKS_ACCOUNTING = "TasksAccounting";
         public static final String TASKS_CURRENT = "TasksCurrent";
         public static final String TASKS_MAX = "TasksMax";
@@ -259,23 +259,23 @@ public class Socket extends Unit {
     }
 
     public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IOACCOUNTING);
+        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
     public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IODEVICE_WEIGHT));
+        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
     public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOREAD_BANDWIDTH));
+        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IOWEIGHT);
+        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
     public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOWRITE_BANDWIDTH));
+        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isBroadcast() {
@@ -283,35 +283,35 @@ public class Socket extends Unit {
     }
 
     public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPUACCOUNTING);
+        return properties.getBoolean(Property.CPU_ACCOUNTING);
     }
 
     public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPUAFFINITY).getValue();
+        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
     }
 
     public BigInteger getCPUQuotaPerSecUSec() {
-        return properties.getBigInteger(Property.CPUQUOTA_PER_SEC_USEC);
+        return properties.getBigInteger(Property.CPU_QUOTA_PER_SEC_USEC);
     }
 
     public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPUSCHEDULING_POLICY);
+        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
     }
 
     public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPUSCHEDULING_PRIORITY);
+        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
     }
 
     public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPUSCHEDULING_RESET_ON_FORK);
+        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
     }
 
     public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPUSHARES);
+        return properties.getBigInteger(Property.CPU_SHARES);
     }
 
     public BigInteger getCPUUsageNSec() {
-        return properties.getBigInteger(Property.CPUUSAGE_NSEC);
+        return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
     public String getCapabilities() {
@@ -383,15 +383,15 @@ public class Socket extends Unit {
     }
 
     public int getIOScheduling() {
-        return properties.getInteger(Property.IOSCHEDULING);
+        return properties.getInteger(Property.IO_SCHEDULING);
     }
 
     public int getIPTOS() {
-        return properties.getInteger(Property.IPTOS);
+        return properties.getInteger(Property.IP_TOS);
     }
 
     public int getIPTTL() {
-        return properties.getInteger(Property.IPTTL);
+        return properties.getInteger(Property.IP_TTL);
     }
 
     public boolean isIgnoreSIGPIPE() {
@@ -431,7 +431,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitASSoft() {
-        return properties.getBigInteger(Property.LIMIT_ASSOFT);
+        return properties.getBigInteger(Property.LIMIT_AS_SOFT);
     }
 
     public BigInteger getLimitCORE() {
@@ -439,7 +439,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitCORESoft() {
-        return properties.getBigInteger(Property.LIMIT_CORESOFT);
+        return properties.getBigInteger(Property.LIMIT_CORE_SOFT);
     }
 
     public BigInteger getLimitCPU() {
@@ -447,7 +447,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitCPUSoft() {
-        return properties.getBigInteger(Property.LIMIT_CPUSOFT);
+        return properties.getBigInteger(Property.LIMIT_CPU_SOFT);
     }
 
     public BigInteger getLimitDATA() {
@@ -455,7 +455,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitDATASoft() {
-        return properties.getBigInteger(Property.LIMIT_DATASOFT);
+        return properties.getBigInteger(Property.LIMIT_DATA_SOFT);
     }
 
     public BigInteger getLimitFSIZE() {
@@ -463,7 +463,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitFSIZESoft() {
-        return properties.getBigInteger(Property.LIMIT_FSIZESOFT);
+        return properties.getBigInteger(Property.LIMIT_FSIZE_SOFT);
     }
 
     public BigInteger getLimitLOCKS() {
@@ -471,7 +471,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitLOCKSSoft() {
-        return properties.getBigInteger(Property.LIMIT_LOCKSSOFT);
+        return properties.getBigInteger(Property.LIMIT_LOCKS_SOFT);
     }
 
     public BigInteger getLimitMEMLOCK() {
@@ -479,7 +479,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitMEMLOCKSoft() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCKSOFT);
+        return properties.getBigInteger(Property.LIMIT_MEMLOCK_SOFT);
     }
 
     public BigInteger getLimitMSGQUEUE() {
@@ -487,7 +487,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitMSGQUEUESoft() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUESOFT);
+        return properties.getBigInteger(Property.LIMIT_MSGQUEUE_SOFT);
     }
 
     public BigInteger getLimitNICE() {
@@ -495,7 +495,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitNICESoft() {
-        return properties.getBigInteger(Property.LIMIT_NICESOFT);
+        return properties.getBigInteger(Property.LIMIT_NICE_SOFT);
     }
 
     public BigInteger getLimitNOFILE() {
@@ -503,7 +503,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitNOFILESoft() {
-        return properties.getBigInteger(Property.LIMIT_NOFILESOFT);
+        return properties.getBigInteger(Property.LIMIT_NOFILE_SOFT);
     }
 
     public BigInteger getLimitNPROC() {
@@ -511,7 +511,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitNPROCSoft() {
-        return properties.getBigInteger(Property.LIMIT_NPROCSOFT);
+        return properties.getBigInteger(Property.LIMIT_NPROC_SOFT);
     }
 
     public BigInteger getLimitRSS() {
@@ -519,7 +519,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitRSSSoft() {
-        return properties.getBigInteger(Property.LIMIT_RSSSOFT);
+        return properties.getBigInteger(Property.LIMIT_RSS_SOFT);
     }
 
     public BigInteger getLimitRTPRIO() {
@@ -527,7 +527,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitRTPRIOSoft() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIOSOFT);
+        return properties.getBigInteger(Property.LIMIT_RTPRIO_SOFT);
     }
 
     public BigInteger getLimitRTTIME() {
@@ -535,7 +535,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitRTTIMESoft() {
-        return properties.getBigInteger(Property.LIMIT_RTTIMESOFT);
+        return properties.getBigInteger(Property.LIMIT_RTTIME_SOFT);
     }
 
     public BigInteger getLimitSIGPENDING() {
@@ -543,7 +543,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitSIGPENDINGSoft() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDINGSOFT);
+        return properties.getBigInteger(Property.LIMIT_SIGPENDING_SOFT);
     }
 
     public BigInteger getLimitSTACK() {
@@ -551,7 +551,7 @@ public class Socket extends Unit {
     }
 
     public BigInteger getLimitSTACKSoft() {
-        return properties.getBigInteger(Property.LIMIT_STACKSOFT);
+        return properties.getBigInteger(Property.LIMIT_STACK_SOFT);
     }
 
     public List<ListenInfo> getListen() {
@@ -615,11 +615,11 @@ public class Socket extends Unit {
     }
 
     public int getOOMScoreAdjust() {
-        return properties.getInteger(Property.OOMSCORE_ADJUST);
+        return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
 
     public String getPAMName() {
-        return properties.getString(Property.PAMNAME);
+        return properties.getString(Property.PAM_NAME);
     }
 
     public boolean isPassCredentials() {
@@ -785,11 +785,11 @@ public class Socket extends Unit {
     }
 
     public BigInteger getStartupBlockIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_BLOCK_IOWEIGHT);
+        return properties.getBigInteger(Property.STARTUP_BLOCK_IO_WEIGHT);
     }
 
     public BigInteger getStartupCPUShares() {
-        return properties.getBigInteger(Property.STARTUP_CPUSHARES);
+        return properties.getBigInteger(Property.STARTUP_CPU_SHARES);
     }
 
     public Vector<String> getSupplementaryGroups() {
@@ -835,19 +835,19 @@ public class Socket extends Unit {
     }
 
     public String getTTYPath() {
-        return properties.getString(Property.TTYPATH);
+        return properties.getString(Property.TTY_PATH);
     }
 
     public boolean isTTYReset() {
-        return properties.getBoolean(Property.TTYRESET);
+        return properties.getBoolean(Property.TTY_RESET);
     }
 
     public boolean isTTYVHangup() {
-        return properties.getBoolean(Property.TTYVHANGUP);
+        return properties.getBoolean(Property.TTY_V_HANGUP);
     }
 
     public boolean isTTYVTDisallocate() {
-        return properties.getBoolean(Property.TTYVTDISALLOCATE);
+        return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
     }
 
     public boolean isTasksAccounting() {
