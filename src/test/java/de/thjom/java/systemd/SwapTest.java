@@ -49,6 +49,11 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(Swap.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Swap.Property.EXEC_ACTIVATE);
         nonVariantProperties.add(Swap.Property.EXEC_DEACTIVATE);
+        nonVariantProperties.add(Swap.Property.IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(Swap.Property.IO_READ_BANDWIDTH_MAX);
+        nonVariantProperties.add(Swap.Property.IO_READ_IOPS_MAX);
+        nonVariantProperties.add(Swap.Property.IO_WRITE_BANDWIDTH_MAX);
+        nonVariantProperties.add(Swap.Property.IO_WRITE_IOPS_MAX);
         nonVariantProperties.add(Swap.Property.SYSTEM_CALL_FILTER);
     }
 

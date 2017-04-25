@@ -19,11 +19,11 @@ import org.freedesktop.dbus.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BlockIODeviceWeightTest {
+public class IODeviceWeightTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
-        BlockIODeviceWeight instance = new BlockIODeviceWeight(new Object[] { "foo", new UInt64("23") });
+        IODeviceWeight instance = new IODeviceWeight(new Object[] { "foo", new UInt64("23") });
 
         Assert.assertNotNull(instance);
         Assert.assertEquals(instance.getFilePath(), "foo");
@@ -35,7 +35,7 @@ public class BlockIODeviceWeightTest {
         Exception exc = null;
 
         try {
-            new BlockIODeviceWeight(new Object[0]);
+            new IODeviceWeight(new Object[0]);
         }
         catch (Exception e) {
             exc = e;
@@ -48,7 +48,7 @@ public class BlockIODeviceWeightTest {
     public void testBulkProcessing() {
         Vector<Object[]> vec = new Vector<>();
 
-        List<BlockIODeviceWeight> list = BlockIODeviceWeight.list(vec);
+        List<IODeviceWeight> list = IODeviceWeight.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
@@ -57,12 +57,12 @@ public class BlockIODeviceWeightTest {
         vec.add(new Object[] { "foo", new UInt64("23") });
         vec.add(new Object[] { "bar", new UInt64("42") });
 
-        list = BlockIODeviceWeight.list(vec);
+        list = IODeviceWeight.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
 
-        BlockIODeviceWeight item = list.get(0);
+        IODeviceWeight item = list.get(0);
 
         Assert.assertNotNull(item);
         Assert.assertEquals(item.getFilePath(), "foo");
@@ -83,7 +83,7 @@ public class BlockIODeviceWeightTest {
         Exception exc = null;
 
         try {
-            BlockIODeviceWeight.list(vec);
+            IODeviceWeight.list(vec);
         }
         catch (Exception e) {
             exc = e;
@@ -98,7 +98,7 @@ public class BlockIODeviceWeightTest {
         exc = null;
 
         try {
-            BlockIODeviceWeight.list(vec);
+            IODeviceWeight.list(vec);
         }
         catch (Exception e) {
             exc = e;

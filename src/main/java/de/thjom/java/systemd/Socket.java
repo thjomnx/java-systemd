@@ -20,8 +20,8 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.interfaces.SocketInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
-import de.thjom.java.systemd.types.BlockIOBandwidth;
-import de.thjom.java.systemd.types.BlockIODeviceWeight;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
@@ -262,20 +262,20 @@ public class Socket extends Unit {
         return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
-    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+    public List<IODeviceWeight> getBlockIODeviceWeight() {
+        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
-    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOReadBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
         return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
-    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOWriteBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isBroadcast() {

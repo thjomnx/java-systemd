@@ -17,8 +17,8 @@ import java.util.List;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ScopeInterface;
-import de.thjom.java.systemd.types.BlockIOBandwidth;
-import de.thjom.java.systemd.types.BlockIODeviceWeight;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 
 public class Scope extends Unit {
@@ -83,20 +83,20 @@ public class Scope extends Unit {
         return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
-    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+    public List<IODeviceWeight> getBlockIODeviceWeight() {
+        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
-    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOReadBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
         return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
-    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOWriteBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isCPUAccounting() {

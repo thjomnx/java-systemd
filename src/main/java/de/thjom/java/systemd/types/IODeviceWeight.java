@@ -18,21 +18,21 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.UInt64;
 
-public class BlockIODeviceWeight extends BlockIOPath {
+public class IODeviceWeight extends IOPath {
 
     private final BigInteger weight;
 
-    public BlockIODeviceWeight(final Object[] array) {
+    public IODeviceWeight(final Object[] array) {
         super(array[0]);
 
         this.weight = ((UInt64) array[1]).value();
     }
 
-    public static List<BlockIODeviceWeight> list(final Vector<Object[]> vector) {
-        List<BlockIODeviceWeight> weights = new ArrayList<>(vector.size());
+    public static List<IODeviceWeight> list(final Vector<Object[]> vector) {
+        List<IODeviceWeight> weights = new ArrayList<>(vector.size());
 
         for (Object[] array : vector) {
-            BlockIODeviceWeight weight = new BlockIODeviceWeight(array);
+            IODeviceWeight weight = new IODeviceWeight(array);
 
             weights.add(weight);
         }
@@ -46,7 +46,7 @@ public class BlockIODeviceWeight extends BlockIOPath {
 
     @Override
     public String toString() {
-        return String.format("BlockIODeviceWeight [filePath=%s, weight=%s]", filePath, weight);
+        return String.format("IODeviceWeight [filePath=%s, weight=%s]", filePath, weight);
     }
 
 }

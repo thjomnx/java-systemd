@@ -18,9 +18,9 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.SwapInterface;
-import de.thjom.java.systemd.types.BlockIOBandwidth;
-import de.thjom.java.systemd.types.BlockIODeviceWeight;
-import de.thjom.java.systemd.types.BlockIOIops;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
+import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
@@ -181,20 +181,20 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
-    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+    public List<IODeviceWeight> getBlockIODeviceWeight() {
+        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
-    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOReadBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
         return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
-    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOWriteBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isCPUAccounting() {
@@ -293,16 +293,16 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.IO_ACCOUNTING);
     }
 
-    public List<BlockIODeviceWeight> getIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.IO_DEVICE_WEIGHT));
+    public List<IODeviceWeight> getIODeviceWeight() {
+        return IODeviceWeight.list(properties.getVector(Property.IO_DEVICE_WEIGHT));
     }
 
-    public List<BlockIOBandwidth> getIOReadBandwidthMax() {
-        return BlockIOBandwidth.list(properties.getVector(Property.IO_READ_BANDWIDTH_MAX));
+    public List<IOBandwidth> getIOReadBandwidthMax() {
+        return IOBandwidth.list(properties.getVector(Property.IO_READ_BANDWIDTH_MAX));
     }
 
-    public List<BlockIOIops> getIOReadIOPSMax() {
-        return BlockIOIops.list(properties.getVector(Property.IO_READ_IOPS_MAX));
+    public List<IOIops> getIOReadIOPSMax() {
+        return IOIops.list(properties.getVector(Property.IO_READ_IOPS_MAX));
     }
 
     public int getIOScheduling() {
@@ -313,12 +313,12 @@ public class Swap extends Unit {
         return properties.getBigInteger(Property.IO_WEIGHT);
     }
 
-    public List<BlockIOBandwidth> getIOWriteBandwidthMax() {
-        return BlockIOBandwidth.list(properties.getVector(Property.IO_WRITE_BANDWIDTH_MAX));
+    public List<IOBandwidth> getIOWriteBandwidthMax() {
+        return IOBandwidth.list(properties.getVector(Property.IO_WRITE_BANDWIDTH_MAX));
     }
 
-    public List<BlockIOIops> getIOWriteIOPSMax() {
-        return BlockIOIops.list(properties.getVector(Property.IO_WRITE_IOPS_MAX));
+    public List<IOIops> getIOWriteIOPSMax() {
+        return IOIops.list(properties.getVector(Property.IO_WRITE_IOPS_MAX));
     }
 
     public String getKillMode() {

@@ -18,35 +18,35 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.UInt64;
 
-public class BlockIOBandwidth extends BlockIOPath {
+public class IOIops extends IOPath {
 
-    private final BigInteger bandwidth;
+    private final BigInteger iops;
 
-    public BlockIOBandwidth(final Object[] array) {
+    public IOIops(final Object[] array) {
         super(array[0]);
 
-        this.bandwidth = ((UInt64) array[1]).value();
+        this.iops = ((UInt64) array[1]).value();
     }
 
-    public static List<BlockIOBandwidth> list(final Vector<Object[]> vector) {
-        List<BlockIOBandwidth> bandwidths = new ArrayList<>(vector.size());
+    public static List<IOIops> list(final Vector<Object[]> vector) {
+        List<IOIops> list = new ArrayList<>(vector.size());
 
         for (Object[] array : vector) {
-            BlockIOBandwidth bandwidth = new BlockIOBandwidth(array);
+            IOIops iops = new IOIops(array);
 
-            bandwidths.add(bandwidth);
+            list.add(iops);
         }
 
-        return bandwidths;
+        return list;
     }
 
-    public BigInteger getBandwidth() {
-        return bandwidth;
+    public BigInteger getIops() {
+        return iops;
     }
 
     @Override
     public String toString() {
-        return String.format("BlockIOBandwidth [filePath=%s, bandwidth=%s]", filePath, bandwidth);
+        return String.format("IOIops [filePath=%s, iops=%s]", filePath, iops);
     }
 
 }

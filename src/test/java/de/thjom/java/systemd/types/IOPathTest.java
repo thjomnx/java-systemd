@@ -14,13 +14,13 @@ package de.thjom.java.systemd.types;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BlockIOPathTest {
+public class IOPathTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
         Object arg1 = "foo";
 
-        BlockIOPath instance = new BlockIOPath(arg1);
+        IOPath instance = new IOPath(arg1);
 
         Assert.assertNotNull(instance);
         Assert.assertEquals(instance.getFilePath(), "foo");
