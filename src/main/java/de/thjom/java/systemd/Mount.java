@@ -20,11 +20,11 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.interfaces.MountInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
@@ -64,12 +64,14 @@ public class Mount extends Unit {
         public static final String EXEC_MOUNT = "ExecMount";
         public static final String EXEC_REMOUNT = "ExecRemount";
         public static final String EXEC_UNMOUNT = "ExecUnmount";
+        public static final String FORCE_UNMOUNT = "ForceUnmount";
         public static final String GROUP = "Group";
         public static final String IO_SCHEDULING = "IOScheduling";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
+        public static final String LAZY_UNMOUNT = "LazyUnmount";
         public static final String LIMIT_AS = "LimitAS";
         public static final String LIMIT_AS_SOFT = "LimitASSoft";
         public static final String LIMIT_CORE = "LimitCORE";
@@ -310,6 +312,10 @@ public class Mount extends Unit {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_UNMOUNT));
     }
 
+    public boolean isForceUnmount() {
+        return properties.getBoolean(Property.FORCE_UNMOUNT);
+    }
+
     public String getGroup() {
         return properties.getString(Property.GROUP);
     }
@@ -332,6 +338,10 @@ public class Mount extends Unit {
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
+    }
+
+    public boolean isLazyUnmount() {
+        return properties.getBoolean(Property.LAZY_UNMOUNT);
     }
 
     public BigInteger getLimitAS() {

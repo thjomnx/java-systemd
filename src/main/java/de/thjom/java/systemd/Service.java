@@ -20,11 +20,11 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
@@ -131,6 +131,7 @@ public class Service extends Unit {
         public static final String ROOT_DIRECTORY_START_ONLY = "RootDirectoryStartOnly";
         public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
         public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
+        public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
         public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
@@ -591,6 +592,10 @@ public class Service extends Unit {
 
     public long getRuntimeDirectoryMode() {
         return properties.getLong(Property.RUNTIME_DIRECTORY_MODE);
+    }
+
+    public long getRuntimeMaxUSec() {
+        return properties.getLong(Property.RUNTIME_MAX_USEC);
     }
 
     public SELinuxContext getSELinuxContext() {

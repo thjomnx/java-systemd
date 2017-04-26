@@ -20,11 +20,11 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.interfaces.SocketInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.ListenInfo;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
@@ -120,6 +120,7 @@ public class Socket extends Unit {
         public static final String LISTEN = "Listen";
         public static final String MARK = "Mark";
         public static final String MAX_CONNECTIONS = "MaxConnections";
+        public static final String MAX_CONNECTIONS_PER_SOURCE = "MaxConnectionsPerSource";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_CURRENT = "MemoryCurrent";
         public static final String MEMORY_LIMIT = "MemoryLimit";
@@ -185,6 +186,8 @@ public class Socket extends Unit {
         public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
         public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
+        public static final String TRIGGER_LIMIT_BURST = "TriggerLimitBurst";
+        public static final String TRIGGER_LIMIT_INTERVAL_USEC = "TriggerLimitIntervalUSec";
         public static final String TTY_PATH = "TTYPath";
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
@@ -566,6 +569,10 @@ public class Socket extends Unit {
         return properties.getLong(Property.MAX_CONNECTIONS);
     }
 
+    public long getMaxConnectionsPerSource() {
+        return properties.getLong(Property.MAX_CONNECTIONS_PER_SOURCE);
+    }
+
     public boolean isMemoryAccounting() {
         return properties.getBoolean(Property.MEMORY_ACCOUNTING);
     }
@@ -832,6 +839,14 @@ public class Socket extends Unit {
         Object[] array = (Object[]) properties.getVariant(Property.SYSTEM_CALL_FILTER).getValue();
 
         return new SystemCallFilter(array);
+    }
+
+    public long getTriggerLimitBurst() {
+        return properties.getLong(Property.TRIGGER_LIMIT_BURST);
+    }
+
+    public long getTriggerLimitIntervalUSec() {
+        return properties.getLong(Property.TRIGGER_LIMIT_INTERVAL_USEC);
     }
 
     public String getTTYPath() {
