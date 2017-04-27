@@ -17,6 +17,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.exceptions.NotConnected;
@@ -91,6 +93,10 @@ public final class Systemd {
 
     public static final Date timestampToDate(final long timestamp) {
         return new Date(timestamp / 1000);
+    }
+
+    public static final String id128ToString(final byte[] id128) {
+        return DatatypeConverter.printHexBinary(id128).toLowerCase();
     }
 
     public static Systemd get() throws DBusException {

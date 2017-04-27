@@ -123,6 +123,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String INACTIVE_ENTER_TIMESTAMP_MONOTONIC = "InactiveEnterTimestampMonotonic";
         public static final String INACTIVE_EXIT_TIMESTAMP = "InactiveExitTimestamp";
         public static final String INACTIVE_EXIT_TIMESTAMP_MONOTONIC = "InactiveExitTimestampMonotonic";
+        public static final String INVOCATION_ID = "InvocationID";
         public static final String JOB = "Job";
         public static final String JOB_TIMEOUT_ACTION = "JobTimeoutAction";
         public static final String JOB_TIMEOUT_REBOOT_ARGUMENT = "JobTimeoutRebootArgument";
@@ -483,6 +484,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public long getInactiveExitTimestampMonotonic() {
         return unitProperties.getLong(Property.INACTIVE_EXIT_TIMESTAMP_MONOTONIC);
+    }
+
+    public byte[] getInvocationID() {
+        return (byte[]) unitProperties.getVariant(Property.INVOCATION_ID).getValue();
     }
 
     public Job getJob() {
