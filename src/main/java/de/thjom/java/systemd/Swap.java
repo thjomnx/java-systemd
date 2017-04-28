@@ -18,12 +18,12 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.SwapInterface;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
-import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
+import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
 public class Swap extends Unit {
@@ -599,8 +599,8 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
     }
 
-    public long getTimeoutUSec() {
-        return properties.getLong(Property.TIMEOUT_USEC);
+    public BigInteger getTimeoutUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
 
     public long getTimerSlackNS() {

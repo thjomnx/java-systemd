@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd;
 
+import java.math.BigInteger;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.AutomountInterface;
@@ -65,8 +67,8 @@ public class Automount extends Unit {
         return properties.getString(Property.RESULT);
     }
 
-    public long getTimeoutIdleUSec() {
-        return properties.getLong(Property.TIMEOUT_IDLE_USEC);
+    public BigInteger getTimeoutIdleUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_IDLE_USEC);
     }
 
     public String getWhere() {

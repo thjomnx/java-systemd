@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd;
 
+import java.math.BigInteger;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.BusNameInterface;
@@ -79,8 +81,8 @@ public class BusName extends Unit {
         return properties.getString(Property.RESULT);
     }
 
-    public long getTimeoutUSec() {
-        return properties.getLong(Property.TIMEOUT_USEC);
+    public BigInteger getTimeoutUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
 
 }

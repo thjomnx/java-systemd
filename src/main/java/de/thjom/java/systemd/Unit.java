@@ -15,6 +15,7 @@ import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
 import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
 import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -504,8 +505,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.JOB_TIMEOUT_REBOOT_ARGUMENT);
     }
 
-    public long getJobTimeoutUSec() {
-        return unitProperties.getLong(Property.JOB_TIMEOUT_USEC);
+    public BigInteger getJobTimeoutUSec() {
+        return unitProperties.getBigInteger(Property.JOB_TIMEOUT_USEC);
     }
 
     public Vector<String> getJoinsNamespaceOf() {

@@ -329,8 +329,8 @@ public class Socket extends Unit {
         return properties.getLong(Property.CONTROL_PID);
     }
 
-    public long getDeferAcceptUSec() {
-        return properties.getLong(Property.DEFER_ACCEPT_USEC);
+    public BigInteger getDeferAcceptUSec() {
+        return properties.getBigInteger(Property.DEFER_ACCEPT_USEC);
     }
 
     public boolean isDelegate() {
@@ -409,16 +409,16 @@ public class Socket extends Unit {
         return properties.getBoolean(Property.KEEP_ALIVE);
     }
 
-    public long getKeepAliveIntervalUSec() {
-        return properties.getLong(Property.KEEP_ALIVE_INTERVAL_USEC);
+    public BigInteger getKeepAliveIntervalUSec() {
+        return properties.getBigInteger(Property.KEEP_ALIVE_INTERVAL_USEC);
     }
 
     public long getKeepAliveProbes() {
         return properties.getLong(Property.KEEP_ALIVE_PROBES);
     }
 
-    public long getKeepAliveTimeUSec() {
-        return properties.getLong(Property.KEEP_ALIVE_TIME_USEC);
+    public BigInteger getKeepAliveTimeUSec() {
+        return properties.getBigInteger(Property.KEEP_ALIVE_TIME_USEC);
     }
 
     public String getKillMode() {
@@ -845,8 +845,8 @@ public class Socket extends Unit {
         return properties.getLong(Property.TRIGGER_LIMIT_BURST);
     }
 
-    public long getTriggerLimitIntervalUSec() {
-        return properties.getLong(Property.TRIGGER_LIMIT_INTERVAL_USEC);
+    public BigInteger getTriggerLimitIntervalUSec() {
+        return properties.getBigInteger(Property.TRIGGER_LIMIT_INTERVAL_USEC);
     }
 
     public String getTTYPath() {
@@ -877,12 +877,12 @@ public class Socket extends Unit {
         return properties.getBigInteger(Property.TASKS_MAX);
     }
 
-    public long getTimeoutUSec() {
-        return properties.getLong(Property.TIMEOUT_USEC);
+    public BigInteger getTimeoutUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
 
-    public long getTimerSlackNSec() {
-        return properties.getLong(Property.TIMER_SLACK_NSEC);
+    public BigInteger getTimerSlackNSec() {
+        return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
     public boolean isTransparent() {

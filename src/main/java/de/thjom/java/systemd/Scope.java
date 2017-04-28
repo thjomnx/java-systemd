@@ -17,9 +17,9 @@ import java.util.List;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ScopeInterface;
+import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
-import de.thjom.java.systemd.types.DeviceAllowControl;
 
 public class Scope extends Unit {
 
@@ -155,8 +155,8 @@ public class Scope extends Unit {
         return properties.getString(Property.SLICE);
     }
 
-    public long getTimeoutStopUSec() {
-        return properties.getLong(Property.TIMEOUT_STOP_USEC);
+    public BigInteger getTimeoutStopUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_STOP_USEC);
     }
 
 }

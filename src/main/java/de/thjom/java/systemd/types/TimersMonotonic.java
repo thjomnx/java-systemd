@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd.types;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -20,12 +21,12 @@ import org.freedesktop.dbus.UInt64;
 public class TimersMonotonic {
 
     private final String timerBase;
-    private final long offsetUSec;
+    private final BigInteger offsetUSec;
     private final long nextElapsePoint;
 
     public TimersMonotonic(final Object[] array) {
         this.timerBase = String.valueOf(array[0]);
-        this.offsetUSec = ((UInt64) array[1]).longValue();
+        this.offsetUSec = ((UInt64) array[1]).value();
         this.nextElapsePoint = ((UInt64) array[2]).longValue();
     }
 
@@ -45,7 +46,7 @@ public class TimersMonotonic {
         return timerBase;
     }
 
-    public long getOffsetUSec() {
+    public BigInteger getOffsetUSec() {
         return offsetUSec;
     }
 

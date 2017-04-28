@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -70,32 +71,32 @@ public class Timer extends Unit {
         return (TimerInterface) super.getInterface();
     }
 
-    public long getAccuracyUSec() {
-        return properties.getLong(Property.ACCURACY_USEC);
+    public BigInteger getAccuracyUSec() {
+        return properties.getBigInteger(Property.ACCURACY_USEC);
     }
 
-    public long getLastTriggerUSec() {
-        return properties.getLong(Property.LAST_TRIGGER_USEC);
+    public BigInteger getLastTriggerUSec() {
+        return properties.getBigInteger(Property.LAST_TRIGGER_USEC);
     }
 
-    public long getLastTriggerUSecMonotonic() {
-        return properties.getLong(Property.LAST_TRIGGER_USEC_MONOTONIC);
+    public BigInteger getLastTriggerUSecMonotonic() {
+        return properties.getBigInteger(Property.LAST_TRIGGER_USEC_MONOTONIC);
     }
 
-    public long getNextElapseUSecMonotonic() {
-        return properties.getLong(Property.NEXT_ELAPSE_USEC_MONOTONIC);
+    public BigInteger getNextElapseUSecMonotonic() {
+        return properties.getBigInteger(Property.NEXT_ELAPSE_USEC_MONOTONIC);
     }
 
-    public long getNextElapseUSecRealtime() {
-        return properties.getLong(Property.NEXT_ELAPSE_USEC_REALTIME);
+    public BigInteger getNextElapseUSecRealtime() {
+        return properties.getBigInteger(Property.NEXT_ELAPSE_USEC_REALTIME);
     }
 
     public boolean isPersistent() {
         return properties.getBoolean(Property.PERSISTENT);
     }
 
-    public long getRandomizedDelayUSec() {
-        return properties.getLong(Property.RANDOMIZED_DELAY_USEC);
+    public BigInteger getRandomizedDelayUSec() {
+        return properties.getBigInteger(Property.RANDOMIZED_DELAY_USEC);
     }
 
     public boolean isRemainAfterElapse() {

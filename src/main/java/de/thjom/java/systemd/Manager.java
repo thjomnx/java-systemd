@@ -510,8 +510,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getBoolean(Property.DEFAULT_MEMORY_ACCOUNTING);
     }
 
-    public long getDefaultRestartUSec() {
-        return properties.getLong(Property.DEFAULT_RESTART_USEC);
+    public BigInteger getDefaultRestartUSec() {
+        return properties.getBigInteger(Property.DEFAULT_RESTART_USEC);
     }
 
     public String getDefaultStandardError() {
@@ -538,16 +538,16 @@ public class Manager extends InterfaceAdapter {
         return properties.getBigInteger(Property.DEFAULT_TASKS_MAX);
     }
 
-    public long getDefaultTimeoutStartUSec() {
-        return properties.getLong(Property.DEFAULT_TIMEOUT_START_USEC);
+    public BigInteger getDefaultTimeoutStartUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMEOUT_START_USEC);
     }
 
-    public long getDefaultTimeoutStopUSec() {
-        return properties.getLong(Property.DEFAULT_TIMEOUT_STOP_USEC);
+    public BigInteger getDefaultTimeoutStopUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMEOUT_STOP_USEC);
     }
 
-    public long getDefaultTimerAccuracyUSec() {
-        return properties.getLong(Property.DEFAULT_TIMER_ACCURACY_USEC);
+    public BigInteger getDefaultTimerAccuracyUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMER_ACCURACY_USEC);
     }
 
     public Vector<String> getEnvironment() {
@@ -650,8 +650,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getDouble(Property.PROGRESS);
     }
 
-    public long getRuntimeWatchdogUSec() {
-        return properties.getLong(Property.RUNTIME_WATCHDOG_USEC);
+    public BigInteger getRuntimeWatchdogUSec() {
+        return properties.getBigInteger(Property.RUNTIME_WATCHDOG_USEC);
     }
 
     public long getSecurityFinishTimestamp() {
@@ -674,8 +674,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getBoolean(Property.SHOW_STATUS);
     }
 
-    public long getShutdownWatchdogUSec() {
-        return properties.getLong(Property.SHUTDOWN_WATCHDOG_USEC);
+    public BigInteger getShutdownWatchdogUSec() {
+        return properties.getBigInteger(Property.SHUTDOWN_WATCHDOG_USEC);
     }
 
     public String getSystemState() {
@@ -686,8 +686,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getString(Property.TAINTED);
     }
 
-    public long getTimerSlackNSec() {
-        return properties.getLong(Property.TIMER_SLACK_NSEC);
+    public BigInteger getTimerSlackNSec() {
+        return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
     public Vector<String> getUnitPath() {

@@ -564,8 +564,8 @@ public class Service extends Unit {
         return properties.getString(Property.RESTART);
     }
 
-    public long getRestartUSec() {
-        return properties.getLong(Property.RESTART_USEC);
+    public BigInteger getRestartUSec() {
+        return properties.getBigInteger(Property.RESTART_USEC);
     }
 
     public AddressFamilyRestriction getRestrictAddressFamilies() {
@@ -594,8 +594,8 @@ public class Service extends Unit {
         return properties.getLong(Property.RUNTIME_DIRECTORY_MODE);
     }
 
-    public long getRuntimeMaxUSec() {
-        return properties.getLong(Property.RUNTIME_MAX_USEC);
+    public BigInteger getRuntimeMaxUSec() {
+        return properties.getBigInteger(Property.RUNTIME_MAX_USEC);
     }
 
     public SELinuxContext getSELinuxContext() {
@@ -736,16 +736,16 @@ public class Service extends Unit {
         return properties.getBigInteger(Property.TASKS_MAX);
     }
 
-    public long getTimeoutStartUSec() {
-        return properties.getLong(Property.TIMEOUT_START_USEC);
+    public BigInteger getTimeoutStartUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_START_USEC);
     }
 
-    public long getTimeoutStopUSec() {
-        return properties.getLong(Property.TIMEOUT_STOP_USEC);
+    public BigInteger getTimeoutStopUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_STOP_USEC);
     }
 
-    public long getTimerSlackNSec() {
-        return properties.getLong(Property.TIMER_SLACK_NSEC);
+    public BigInteger getTimerSlackNSec() {
+        return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
     public String getType() {
@@ -784,8 +784,8 @@ public class Service extends Unit {
         return properties.getLong(Property.WATCHDOG_TIMESTAMP_MONOTONIC);
     }
 
-    public long getWatchdogUSec() {
-        return properties.getLong(Property.WATCHDOG_USEC);
+    public BigInteger getWatchdogUSec() {
+        return properties.getBigInteger(Property.WATCHDOG_USEC);
     }
 
     public String getWorkingDirectory() {

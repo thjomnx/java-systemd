@@ -692,12 +692,12 @@ public class Mount extends Unit {
         return properties.getBigInteger(Property.TASKS_MAX);
     }
 
-    public long getTimeoutUSec() {
-        return properties.getLong(Property.TIMEOUT_USEC);
+    public BigInteger getTimeoutUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
 
-    public long getTimerSlackNSec() {
-        return properties.getLong(Property.TIMER_SLACK_NSEC);
+    public BigInteger getTimerSlackNSec() {
+        return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
     public String getType() {
