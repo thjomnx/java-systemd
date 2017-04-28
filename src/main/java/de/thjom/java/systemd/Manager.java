@@ -235,6 +235,10 @@ public class Manager extends InterfaceAdapter {
         getInterface().resetFailedUnit(name);
     }
 
+    public void unrefUnit(final String name) {
+        getInterface().unrefUnit(name);
+    }
+
     public synchronized void subscribe() {
         if (!subscribed) {
             getInterface().subscribe();

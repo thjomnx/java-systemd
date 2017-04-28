@@ -335,6 +335,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         manager.resetFailedUnit(name);
     }
 
+    public void unref() {
+        manager.unrefUnit(name);
+    }
+
     public void setProperties(final boolean runtime, final Map<String, Object> properties) {
         throw new UnsupportedOperationException();
     }
