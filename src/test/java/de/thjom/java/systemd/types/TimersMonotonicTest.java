@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd.types;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,7 +27,7 @@ public class TimersMonotonicTest {
 
         Assert.assertNotNull(instance);
         Assert.assertEquals(instance.getTimerBase(), "foo");
-        Assert.assertEquals(instance.getOffsetUSec(), (long) 1234);
+        Assert.assertEquals(instance.getOffsetUSec(), BigInteger.valueOf((long) 1234));
         Assert.assertEquals(instance.getNextElapsePoint(), (long) 2345);
     }
 
@@ -66,14 +67,14 @@ public class TimersMonotonicTest {
 
         Assert.assertNotNull(item);
         Assert.assertEquals(item.getTimerBase(), "foo1");
-        Assert.assertEquals(item.getOffsetUSec(), (long) 1234);
+        Assert.assertEquals(item.getOffsetUSec(), BigInteger.valueOf((long) 1234));
         Assert.assertEquals(item.getNextElapsePoint(), (long) 2345);
 
         item = list.get(1);
 
         Assert.assertNotNull(item);
         Assert.assertEquals(item.getTimerBase(), "foo2");
-        Assert.assertEquals(item.getOffsetUSec(), (long) 4321);
+        Assert.assertEquals(item.getOffsetUSec(), BigInteger.valueOf((long) 4321));
         Assert.assertEquals(item.getNextElapsePoint(), (long) 5432);
     }
 
