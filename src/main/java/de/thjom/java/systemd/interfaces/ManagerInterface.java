@@ -26,26 +26,47 @@ import de.thjom.java.systemd.types.UnitType;
 @DBusInterfaceName(value = de.thjom.java.systemd.Manager.SERVICE_NAME)
 public interface ManagerInterface extends DBusInterface {
 
+    @DBusMemberName(value = "CancelJob")
+    void cancelJob(final long id);
+
+    @DBusMemberName(value = "ClearJobs")
+    void clearJobs();
+
+    @DBusMemberName(value = "Dump")
+    String dump();
+
+    @DBusMemberName(value = "GetDefaultTarget")
+    String getDefaultTarget();
+
+    @DBusMemberName(value = "Halt")
+    void halt();
+
+    @DBusMemberName(value = "KExec")
+    void kExec();
+
+    @DBusMemberName(value = "KillUnit")
+    void killUnit(final String name, final String who, final int signal);
+
     @DBusMemberName(value = "ListUnitFiles")
     List<UnitFileType> listUnitFiles();
 
     @DBusMemberName(value = "ListUnits")
     List<UnitType> listUnits();
 
-    @DBusMemberName(value = "StartUnit")
-    Path startUnit(final String name, final String mode);
+    @DBusMemberName(value = "PowerOff")
+    void powerOff();
 
-    @DBusMemberName(value = "StopUnit")
-    Path stopUnit(final String name, final String mode);
+    @DBusMemberName(value = "Reboot")
+    void reboot();
 
-    @DBusMemberName(value = "ReloadUnit")
-    Path reloadUnit(final String name, final String mode);
+    @DBusMemberName(value = "Reexecute")
+    void reexecute();
 
-    @DBusMemberName(value = "RestartUnit")
-    Path restartUnit(final String name, final String mode);
+    @DBusMemberName(value = "RefUnit")
+    void refUnit(final String name);
 
-    @DBusMemberName(value = "TryRestartUnit")
-    Path tryRestartUnit(final String name, final String mode);
+    @DBusMemberName(value = "Reload")
+    void reload();
 
     @DBusMemberName(value = "ReloadOrRestartUnit")
     Path reloadOrRestartUnit(final String name, final String mode);
@@ -53,11 +74,23 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ReloadOrTryRestartUnit")
     Path reloadOrTryRestartUnit(final String name, final String mode);
 
-    @DBusMemberName(value = "KillUnit")
-    void killUnit(final String name, final String who, final int signal);
+    @DBusMemberName(value = "ReloadUnit")
+    Path reloadUnit(final String name, final String mode);
 
     @DBusMemberName(value = "ResetFailedUnit")
     void resetFailedUnit(final String name);
+
+    @DBusMemberName(value = "RestartUnit")
+    Path restartUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "StartUnit")
+    Path startUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "StopUnit")
+    Path stopUnit(final String name, final String mode);
+
+    @DBusMemberName(value = "TryRestartUnit")
+    Path tryRestartUnit(final String name, final String mode);
 
     @DBusMemberName(value = "UnrefUnit")
     void unrefUnit(final String name);
@@ -67,9 +100,6 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "Unsubscribe")
     void unsubscribe();
-
-    @DBusMemberName(value = "Dump")
-    String dump();
 
     public final class JobNew extends Signal {
 

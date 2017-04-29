@@ -159,6 +159,38 @@ public class Manager extends InterfaceAdapter {
         return intro.Introspect();
     }
 
+    public void cancelJob(final long id) {
+        getInterface().cancelJob(id);
+    }
+
+    public void clearJobs() {
+        getInterface().clearJobs();
+    }
+
+    public String dump() {
+        return getInterface().dump();
+    }
+
+    public String getDefaultTarget() {
+        return getInterface().getDefaultTarget();
+    }
+
+    public void halt() {
+        getInterface().halt();
+    }
+
+    public void kExec() {
+        getInterface().kExec();
+    }
+
+    public void killUnit(final String name, final Who who, final int signal) {
+        killUnit(name, who.getValue(), signal);
+    }
+
+    public void killUnit(final String name, final String who, final int signal) {
+        getInterface().killUnit(name, who, signal);
+    }
+
     public List<UnitFileType> listUnitFiles() {
         return getInterface().listUnitFiles();
     }
@@ -167,44 +199,24 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnits();
     }
 
-    public org.freedesktop.dbus.Path startUnit(final String name, final Mode mode) {
-        return startUnit(name, mode.getValue());
+    public void powerOff() {
+        getInterface().powerOff();
     }
 
-    public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {
-        return getInterface().startUnit(name, mode);
+    public void reboot() {
+        getInterface().reboot();
     }
 
-    public org.freedesktop.dbus.Path stopUnit(final String name, final Mode mode) {
-        return stopUnit(name, mode.getValue());
+    public void reexecute() {
+        getInterface().reexecute();
     }
 
-    public org.freedesktop.dbus.Path stopUnit(final String name, final String mode) {
-        return getInterface().stopUnit(name, mode);
+    public void refUnit(final String name) {
+        getInterface().refUnit(name);
     }
 
-    public org.freedesktop.dbus.Path reloadUnit(final String name, final Mode mode) {
-        return reloadUnit(name, mode.getValue());
-    }
-
-    public org.freedesktop.dbus.Path reloadUnit(final String name, final String mode) {
-        return getInterface().reloadUnit(name, mode);
-    }
-
-    public org.freedesktop.dbus.Path restartUnit(final String name, final Mode mode) {
-        return restartUnit(name, mode.getValue());
-    }
-
-    public org.freedesktop.dbus.Path restartUnit(final String name, final String mode) {
-        return getInterface().restartUnit(name, mode);
-    }
-
-    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
-        return tryRestartUnit(name, mode.getValue());
-    }
-
-    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final String mode) {
-        return getInterface().tryRestartUnit(name, mode);
+    public void reload() {
+        getInterface().reload();
     }
 
     public org.freedesktop.dbus.Path reloadOrRestartUnit(final String name, final Mode mode) {
@@ -223,16 +235,48 @@ public class Manager extends InterfaceAdapter {
         return getInterface().reloadOrTryRestartUnit(name, mode);
     }
 
-    public void killUnit(final String name, final Who who, final int signal) {
-        killUnit(name, who.getValue(), signal);
+    public org.freedesktop.dbus.Path reloadUnit(final String name, final Mode mode) {
+        return reloadUnit(name, mode.getValue());
     }
 
-    public void killUnit(final String name, final String who, final int signal) {
-        getInterface().killUnit(name, who, signal);
+    public org.freedesktop.dbus.Path reloadUnit(final String name, final String mode) {
+        return getInterface().reloadUnit(name, mode);
     }
 
     public void resetFailedUnit(final String name) {
         getInterface().resetFailedUnit(name);
+    }
+
+    public org.freedesktop.dbus.Path restartUnit(final String name, final Mode mode) {
+        return restartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path restartUnit(final String name, final String mode) {
+        return getInterface().restartUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path startUnit(final String name, final Mode mode) {
+        return startUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {
+        return getInterface().startUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path stopUnit(final String name, final Mode mode) {
+        return stopUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path stopUnit(final String name, final String mode) {
+        return getInterface().stopUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
+        return tryRestartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final String mode) {
+        return getInterface().tryRestartUnit(name, mode);
     }
 
     public void unrefUnit(final String name) {
@@ -356,10 +400,6 @@ public class Manager extends InterfaceAdapter {
         }
 
         return unit;
-    }
-
-    public String dump() {
-        return getInterface().dump();
     }
 
     public String getArchitecture() {
