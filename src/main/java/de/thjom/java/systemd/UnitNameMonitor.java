@@ -97,6 +97,23 @@ public class UnitNameMonitor extends UnitMonitor {
         }
     }
 
+    @Override
+    public boolean monitorsUnit(final String unitName) {
+        boolean monitored = super.monitorsUnit(unitName);
+
+        if (!monitored) {
+            for (String monitoredName : monitoredNames) {
+                if (Systemd.escapePath(monitoredName).equals(unitName)) {
+                    monitored = true;
+
+                    break;
+                }
+            }
+        }
+
+        return monitored;
+    }
+
     public class ReloadingHandler implements DBusSigHandler<Reloading> {
 
         @Override
