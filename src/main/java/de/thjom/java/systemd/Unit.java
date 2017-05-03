@@ -238,13 +238,13 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     @Override
     public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         manager.subscribe();
-        dbus.addSigHandler(type, this.getInterface(), handler);
+        dbus.addSigHandler(type, getInterface(), handler);
     }
 
     @Override
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         if (handler != null) {
-            dbus.removeSigHandler(type, this.getInterface(), handler);
+            dbus.removeSigHandler(type, getInterface(), handler);
         }
     }
 
