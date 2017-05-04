@@ -155,7 +155,7 @@ public class UnitTypeMonitor extends UnitMonitor {
             String dot = Systemd.escapePath(".");
 
             for (MonitoredType monitoredType : monitoredTypes) {
-                if (unitName.endsWith(dot + monitoredType.name())) {
+                if (unitName.endsWith(dot + monitoredType.name().toLowerCase())) {
                     monitored = true;
 
                     break;
