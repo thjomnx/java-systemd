@@ -650,20 +650,30 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         private final String activeState;
         private final String subState;
 
-        public StateTuple(final Map<String, Variant<?>> properties) {
-            this.loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>("-")).getValue());
-            this.activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>("-")).getValue());
-            this.subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>("-")).getValue());
+        public StateTuple(final String loadState, final String activeState, final String subState) {
+            this.loadState = loadState;
+            this.activeState = activeState;
+            this.subState = subState;
         }
 
-        public StateTuple(final Unit unit, final Map<String, Variant<?>> properties) {
-            this.loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>(unit.getLoadState())).getValue());
-            this.activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>(unit.getActiveState())).getValue());
-            this.subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>(unit.getSubState())).getValue());
+        public static StateTuple of(final Unit unit) {
+            return new StateTuple(unit.getLoadState(), unit.getActiveState(), unit.getSubState());
         }
 
-        public static StateTuple from(final Unit unit, final Map<String, Variant<?>> properties) {
-            return new StateTuple(unit, properties);
+        public static StateTuple of(final Map<String, Variant<?>> properties) {
+            String loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>("-")).getValue());
+            String activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>("-")).getValue());
+            String subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>("-")).getValue());
+
+            return new StateTuple(loadState, activeState, subState);
+        }
+
+        public static StateTuple of(final Unit unit, final Map<String, Variant<?>> properties) {
+            String loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>(unit.getLoadState())).getValue());
+            String activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>(unit.getActiveState())).getValue());
+            String subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>(unit.getSubState())).getValue());
+
+            return new StateTuple(loadState, activeState, subState);
         }
 
         public String getLoadState() {
