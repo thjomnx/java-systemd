@@ -32,12 +32,26 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
+import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
+import de.thjom.java.systemd.interfaces.ManagerInterface.UnitNew;
+import de.thjom.java.systemd.interfaces.ManagerInterface.UnitRemoved;
+
 abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier {
+
+    protected static final String ERROR_MSG_MONITOR_REFRESH = "Error while refreshing internal monitor state";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final Manager manager;
     protected final ConcurrentMap<String, Unit> monitoredUnits = new ConcurrentHashMap<>();
+
+    protected ReloadingHandler reloadingHandler;
+    protected UnitFilesChangedHandler unitFilesChangedHandler;
+    protected UnitNewHandler unitNewHandler;
+    protected UnitRemovedHandler unitRemovedHandler;
+
+    protected boolean daemonReloading;
 
     private Timer pollingTimer;
 
@@ -88,7 +102,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
                     refresh();
                 }
                 catch (final DBusException e) {
-                    log.error("Error while refreshing internal monitor state", e);
+                    log.error(ERROR_MSG_MONITOR_REFRESH, e);
                 }
             }
 
@@ -117,11 +131,78 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
     }
 
     public Optional<Unit> getMonitoredUnit(final String unitName) {
-        return Optional.ofNullable(monitoredUnits.get(unitName));
+        return Optional.ofNullable(monitoredUnits.get(Systemd.escapePath(unitName)));
     }
 
     public Collection<Unit> getMonitoredUnits() {
         return monitoredUnits.values();
+    }
+
+    public class ReloadingHandler implements DBusSigHandler<Reloading> {
+
+        @Override
+        public void handle(final Reloading signal) {
+            if (signal.isActive()) {
+                if (log.isDebugEnabled()) {
+                    log.debug(String.format("Signal received ('daemon-reload' started: %s)", signal));
+                }
+            }
+            else {
+                if (log.isDebugEnabled()) {
+                    log.debug(String.format("Signal received ('daemon-reload' finished: %s)", signal));
+                }
+
+                try {
+                    refresh();
+                }
+                catch (final DBusException e) {
+                    log.error(ERROR_MSG_MONITOR_REFRESH, e);
+                }
+            }
+
+            daemonReloading = signal.isActive();
+        }
+
+    }
+
+    public class UnitFilesChangedHandler implements DBusSigHandler<UnitFilesChanged> {
+
+        @Override
+        public void handle(final UnitFilesChanged signal) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Signal received (unit files changed: %s)", signal));
+            }
+
+            try {
+                refresh();
+            }
+            catch (final DBusException e) {
+                log.error(ERROR_MSG_MONITOR_REFRESH, e);
+            }
+        }
+
+    }
+
+    public class UnitNewHandler implements DBusSigHandler<UnitNew> {
+
+        @Override
+        public void handle(final UnitNew signal) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Signal received (unit new: %s)", signal));
+            }
+        }
+
+    }
+
+    public class UnitRemovedHandler implements DBusSigHandler<UnitRemoved> {
+
+        @Override
+        public void handle(final UnitRemoved signal) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Signal received (unit removed: %s)", signal));
+            }
+        }
+
     }
 
 }

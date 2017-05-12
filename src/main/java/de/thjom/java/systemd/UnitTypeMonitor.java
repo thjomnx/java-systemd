@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.util.EnumSet;
 
-import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
@@ -40,14 +39,7 @@ public class UnitTypeMonitor extends UnitMonitor {
         TIMER
     }
 
-    private static final String ERROR_MSG_UNITMAPPING = "Unable to map units";
-
     protected final EnumSet<MonitoredType> monitoredTypes = EnumSet.noneOf(MonitoredType.class);
-
-    private ReloadingHandler reloadingHandler;
-    private UnitFilesChangedHandler unitFilesChangedHandler;
-    private UnitNewHandler unitNewHandler;
-    private UnitRemovedHandler unitRemovedHandler;
 
     public UnitTypeMonitor(final Manager manager) {
         super(manager);
@@ -57,49 +49,63 @@ public class UnitTypeMonitor extends UnitMonitor {
     public final void addDefaultHandlers() throws DBusException {
         manager.subscribe();
 
-        reloadingHandler = new UnitTypeMonitor.ReloadingHandler();
-        manager.addHandler(Reloading.class, reloadingHandler);
+        reloadingHandler = new ReloadingHandler();
+        manager.addConsumer(Reloading.class, reloadingHandler);
 
-        unitFilesChangedHandler = new UnitTypeMonitor.UnitFilesChangedHandler();
-        manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
+        unitFilesChangedHandler = new UnitFilesChangedHandler();
+        manager.addConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
 
-        unitNewHandler = new UnitTypeMonitor.UnitNewHandler();
-        manager.addHandler(UnitNew.class, unitNewHandler);
+        unitNewHandler = new UnitNewHandler() {
 
-        unitRemovedHandler = new UnitTypeMonitor.UnitRemovedHandler();
-        manager.addHandler(UnitRemoved.class, unitRemovedHandler);
+            @Override
+            public void handle(final UnitNew signal) {
+                super.handle(signal);
+
+                if (!daemonReloading) {
+                    try {
+                        refresh();
+                    }
+                    catch (final DBusException e) {
+                        log.error(ERROR_MSG_MONITOR_REFRESH, e);
+                    }
+                }
+            }
+
+        };
+
+        manager.addConsumer(UnitNew.class, unitNewHandler);
+
+        unitRemovedHandler = new UnitRemovedHandler() {
+
+            @Override
+            public void handle(final UnitRemoved signal) {
+                super.handle(signal);
+
+                if (!daemonReloading) {
+                    try {
+                        refresh();
+                    }
+                    catch (final DBusException e) {
+                        log.error(ERROR_MSG_MONITOR_REFRESH, e);
+                    }
+                }
+            }
+
+        };
+
+        manager.addConsumer(UnitRemoved.class, unitRemovedHandler);
     }
 
     @Override
     public final void removeDefaultHandlers() throws DBusException {
-        manager.removeHandler(Reloading.class, reloadingHandler);
-        manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
-        manager.removeHandler(UnitNew.class, unitNewHandler);
-        manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
+        manager.removeConsumer(Reloading.class, reloadingHandler);
+        manager.removeConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
+        manager.removeConsumer(UnitNew.class, unitNewHandler);
+        manager.removeConsumer(UnitRemoved.class, unitRemovedHandler);
     }
 
     @Override
-    public void refresh() throws DBusException {
-        mapUnits();
-    }
-
-    public final void addMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
-        for (MonitoredType monitoredType : monitoredTypes) {
-            this.monitoredTypes.add(monitoredType);
-        }
-
-        mapUnits();
-    }
-
-    public final void removeMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
-        for (MonitoredType monitoredType : monitoredTypes) {
-            this.monitoredTypes.remove(monitoredType);
-        }
-
-        mapUnits();
-    }
-
-    protected final synchronized void mapUnits() throws DBusException {
+    public synchronized void refresh() throws DBusException {
         monitoredUnits.clear();
 
         for (UnitType unit : manager.listUnits()) {
@@ -147,6 +153,22 @@ public class UnitTypeMonitor extends UnitMonitor {
         }
     }
 
+    public final void addMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
+        for (MonitoredType monitoredType : monitoredTypes) {
+            this.monitoredTypes.add(monitoredType);
+        }
+
+        refresh();
+    }
+
+    public final void removeMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
+        for (MonitoredType monitoredType : monitoredTypes) {
+            this.monitoredTypes.remove(monitoredType);
+        }
+
+        refresh();
+    }
+
     @Override
     public boolean monitorsUnit(final String unitName) {
         boolean monitored = super.monitorsUnit(unitName);
@@ -164,85 +186,6 @@ public class UnitTypeMonitor extends UnitMonitor {
         }
 
         return monitored;
-    }
-
-    public class ReloadingHandler implements DBusSigHandler<Reloading> {
-
-        @Override
-        public void handle(final Reloading signal) {
-            if (signal.isActive()) {
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("Signal received ('daemon-reload' started: %s)", signal));
-                }
-            }
-            else {
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("Signal received ('daemon-reload' finished: %s)", signal));
-                }
-
-                try {
-                    mapUnits();
-                }
-                catch (final DBusException e) {
-                    log.error(ERROR_MSG_UNITMAPPING, e);
-                }
-            }
-        }
-
-    }
-
-    public class UnitFilesChangedHandler implements DBusSigHandler<UnitFilesChanged> {
-
-        @Override
-        public void handle(final UnitFilesChanged signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit files changed: %s)", signal));
-            }
-
-            try {
-                mapUnits();
-            }
-            catch (final DBusException e) {
-                log.error(ERROR_MSG_UNITMAPPING, e);
-            }
-        }
-
-    }
-
-    public class UnitNewHandler implements DBusSigHandler<UnitNew> {
-
-        @Override
-        public void handle(final UnitNew signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit new: %s)", signal));
-            }
-
-            try {
-                mapUnits();
-            }
-            catch (final DBusException e) {
-                log.error(ERROR_MSG_UNITMAPPING, e);
-            }
-        }
-
-    }
-
-    public class UnitRemovedHandler implements DBusSigHandler<UnitRemoved> {
-
-        @Override
-        public void handle(final UnitRemoved signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit removed: %s)", signal));
-            }
-
-            try {
-                mapUnits();
-            }
-            catch (final DBusException e) {
-                log.error(ERROR_MSG_UNITMAPPING, e);
-            }
-        }
-
     }
 
 }

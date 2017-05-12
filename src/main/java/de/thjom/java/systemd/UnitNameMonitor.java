@@ -14,7 +14,6 @@ package de.thjom.java.systemd;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
@@ -26,11 +25,6 @@ public class UnitNameMonitor extends UnitMonitor {
 
     protected final Set<String> monitoredNames = new HashSet<>();
 
-    private ReloadingHandler reloadingHandler;
-    private UnitFilesChangedHandler unitFilesChangedHandler;
-    private UnitNewHandler unitNewHandler;
-    private UnitRemovedHandler unitRemovedHandler;
-
     public UnitNameMonitor(final Manager manager) {
         super(manager);
     }
@@ -39,25 +33,64 @@ public class UnitNameMonitor extends UnitMonitor {
     public void addDefaultHandlers() throws DBusException {
         manager.subscribe();
 
-        reloadingHandler = new UnitNameMonitor.ReloadingHandler();
-        manager.addHandler(Reloading.class, reloadingHandler);
+        reloadingHandler = new ReloadingHandler();
+        manager.addConsumer(Reloading.class, reloadingHandler);
 
-        unitFilesChangedHandler = new UnitNameMonitor.UnitFilesChangedHandler();
-        manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
+        unitFilesChangedHandler = new UnitFilesChangedHandler();
+        manager.addConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
 
-        unitNewHandler = new UnitNameMonitor.UnitNewHandler();
-        manager.addHandler(UnitNew.class, unitNewHandler);
+        unitNewHandler = new UnitNewHandler() {
 
-        unitRemovedHandler = new UnitNameMonitor.UnitRemovedHandler();
-        manager.addHandler(UnitRemoved.class, unitRemovedHandler);
+            @Override
+            public void handle(final UnitNew signal) {
+                super.handle(signal);
+
+                if (!daemonReloading) {
+                    String id = signal.getId();
+
+                    synchronized (UnitNameMonitor.this) {
+                        if (monitoredNames.contains(id)) {
+                            try {
+                                monitoredUnits.put(Systemd.escapePath(id), manager.getUnit(id));
+                            }
+                            catch (final DBusException e) {
+                                log.error(String.format("Unable to add monitored unit '%s'", id), e);
+                            }
+                        }
+                    }
+                }
+            }
+
+        };
+
+        manager.addConsumer(UnitNew.class, unitNewHandler);
+
+        unitRemovedHandler = new UnitRemovedHandler() {
+
+            @Override
+            public void handle(final UnitRemoved signal) {
+                super.handle(signal);
+
+                if (!daemonReloading) {
+                    String id = signal.getId();
+
+                    synchronized (UnitNameMonitor.this) {
+                        monitoredUnits.remove(Systemd.escapePath(id));
+                    }
+                }
+            }
+
+        };
+
+        manager.addConsumer(UnitRemoved.class, unitRemovedHandler);
     }
 
     @Override
     public void removeDefaultHandlers() throws DBusException {
-        manager.removeHandler(Reloading.class, reloadingHandler);
-        manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
-        manager.removeHandler(UnitNew.class, unitNewHandler);
-        manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
+        manager.removeConsumer(Reloading.class, reloadingHandler);
+        manager.removeConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
+        manager.removeConsumer(UnitNew.class, unitNewHandler);
+        manager.removeConsumer(UnitRemoved.class, unitRemovedHandler);
     }
 
     @Override
@@ -112,76 +145,6 @@ public class UnitNameMonitor extends UnitMonitor {
         }
 
         return monitored;
-    }
-
-    public class ReloadingHandler implements DBusSigHandler<Reloading> {
-
-        @Override
-        public void handle(final Reloading signal) {
-            if (signal.isActive()) {
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("Signal received ('daemon-reload' started: %s)", signal));
-                }
-            }
-            else {
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("Signal received ('daemon-reload' finished: %s)", signal));
-                }
-            }
-        }
-
-    }
-
-    public class UnitFilesChangedHandler implements DBusSigHandler<UnitFilesChanged> {
-
-        @Override
-        public void handle(final UnitFilesChanged signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit files changed: %s)", signal));
-            }
-        }
-
-    }
-
-    public class UnitNewHandler implements DBusSigHandler<UnitNew> {
-
-        @Override
-        public void handle(final UnitNew signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit new: %s)", signal));
-            }
-
-            String id = signal.getId();
-
-            synchronized (UnitNameMonitor.this) {
-                if (monitoredNames.contains(id)) {
-                    try {
-                        monitoredUnits.put(Systemd.escapePath(id), manager.getUnit(id));
-                    }
-                    catch (final DBusException e) {
-                        log.error(String.format("Unable to add monitored unit '%s'", id), e);
-                    }
-                }
-            }
-        }
-
-    }
-
-    public class UnitRemovedHandler implements DBusSigHandler<UnitRemoved> {
-
-        @Override
-        public void handle(final UnitRemoved signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit removed: %s)", signal));
-            }
-
-            String id = signal.getId();
-
-            synchronized (UnitNameMonitor.this) {
-                monitoredUnits.remove(Systemd.escapePath(id));
-            }
-        }
-
     }
 
 }
