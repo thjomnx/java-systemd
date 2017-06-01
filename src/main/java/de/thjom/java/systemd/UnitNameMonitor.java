@@ -16,11 +16,6 @@ import java.util.Set;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
-import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
-import de.thjom.java.systemd.interfaces.ManagerInterface.UnitNew;
-import de.thjom.java.systemd.interfaces.ManagerInterface.UnitRemoved;
-
 public class UnitNameMonitor extends UnitMonitor {
 
     protected final Set<String> monitoredNames = new HashSet<>();
@@ -30,75 +25,22 @@ public class UnitNameMonitor extends UnitMonitor {
     }
 
     @Override
-    public void addDefaultHandlers() throws DBusException {
-        manager.subscribe();
-
-        reloadingHandler = new ReloadingHandler();
-        manager.addConsumer(Reloading.class, reloadingHandler);
-
-        unitFilesChangedHandler = new UnitFilesChangedHandler();
-        manager.addConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
-
-        unitNewHandler = new UnitNewHandler() {
-
-            @Override
-            public void handle(final UnitNew signal) {
-                super.handle(signal);
-
-                if (!daemonReloading) {
-                    String id = signal.getId();
-
-                    synchronized (UnitNameMonitor.this) {
-                        if (monitoredNames.contains(id)) {
-                            try {
-                                monitoredUnits.put(Systemd.escapePath(id), manager.getUnit(id));
-                            }
-                            catch (final DBusException e) {
-                                log.error(String.format("Unable to add monitored unit '%s'", id), e);
-                            }
-                        }
-                    }
-                }
-            }
-
-        };
-
-        manager.addConsumer(UnitNew.class, unitNewHandler);
-
-        unitRemovedHandler = new UnitRemovedHandler() {
-
-            @Override
-            public void handle(final UnitRemoved signal) {
-                super.handle(signal);
-
-                if (!daemonReloading) {
-                    String id = signal.getId();
-
-                    synchronized (UnitNameMonitor.this) {
-                        monitoredUnits.remove(Systemd.escapePath(id));
-                    }
-                }
-            }
-
-        };
-
-        manager.addConsumer(UnitRemoved.class, unitRemovedHandler);
-    }
-
-    @Override
-    public void removeDefaultHandlers() throws DBusException {
-        manager.removeConsumer(Reloading.class, reloadingHandler);
-        manager.removeConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
-        manager.removeConsumer(UnitNew.class, unitNewHandler);
-        manager.removeConsumer(UnitRemoved.class, unitRemovedHandler);
+    public synchronized void reset() {
+        monitoredNames.clear();
+        monitoredUnits.clear();
     }
 
     @Override
     public synchronized void refresh() throws DBusException {
-        monitoredUnits.clear();
+        try {
+            monitoredUnits.clear();
 
-        for (String unitName : monitoredNames) {
-            monitoredUnits.put(Systemd.escapePath(unitName), manager.getUnit(unitName));
+            for (String unitName : monitoredNames) {
+                monitoredUnits.put(Systemd.escapePath(unitName), manager.getUnit(unitName));
+            }
+        }
+        finally {
+            unitMonitorListeners.forEach(l -> l.monitorRefreshed(monitoredUnits.values()));
         }
     }
 
