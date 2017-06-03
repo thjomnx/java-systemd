@@ -41,6 +41,63 @@ public class UnitTypeMonitor extends UnitMonitor {
         super(manager);
     }
 
+    protected boolean isIncluded(final UnitType unit) {
+        boolean monitored = false;
+
+        for (MonitoredType type : monitoredTypes) {
+            switch (type) {
+                case AUTOMOUNT:
+                    monitored = unit.isAutomount();
+                    break;
+                case BUSNAME:
+                    monitored = unit.isBusName();
+                    break;
+                case DEVICE:
+                    monitored = unit.isDevice();
+                    break;
+                case MOUNT:
+                    monitored = unit.isMount();
+                    break;
+                case PATH:
+                    monitored = unit.isPath();
+                    break;
+                case SCOPE:
+                    monitored = unit.isScope();
+                    break;
+                case SERVICE:
+                    monitored = unit.isService();
+                    break;
+                case SLICE:
+                    monitored = unit.isSlice();
+                    break;
+                case SNAPSHOT:
+                    monitored = unit.isSnapshot();
+                    break;
+                case SOCKET:
+                    monitored = unit.isSocket();
+                    break;
+                case SWAP:
+                    monitored = unit.isSwap();
+                    break;
+                case TARGET:
+                    monitored = unit.isTarget();
+                    break;
+                case TIMER:
+                    monitored = unit.isTimer();
+                    break;
+                default:
+                    monitored = false;
+                    break;
+            }
+
+            if (monitored) {
+                break;
+            }
+        }
+
+        return monitored;
+    }
+
     @Override
     public synchronized void reset() {
         monitoredTypes.clear();
@@ -53,46 +110,10 @@ public class UnitTypeMonitor extends UnitMonitor {
             monitoredUnits.clear();
 
             for (UnitType unit : manager.listUnits()) {
-                String name = unit.getUnitName();
+                if (isIncluded(unit)) {
+                    String name = unit.getUnitName();
 
-                if (unit.isAutomount() && monitoredTypes.contains(MonitoredType.AUTOMOUNT)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getAutomount(name));
-                }
-                else if (unit.isBusName() && monitoredTypes.contains(MonitoredType.BUSNAME)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getBusName(name));
-                }
-                else if (unit.isDevice() && monitoredTypes.contains(MonitoredType.DEVICE)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getDevice(name));
-                }
-                else if (unit.isMount() && monitoredTypes.contains(MonitoredType.MOUNT)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getMount(name));
-                }
-                else if (unit.isPath() && monitoredTypes.contains(MonitoredType.PATH)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getPath(name));
-                }
-                else if (unit.isScope() && monitoredTypes.contains(MonitoredType.SCOPE)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getScope(name));
-                }
-                else if (unit.isService() && monitoredTypes.contains(MonitoredType.SERVICE)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getService(name));
-                }
-                else if (unit.isSlice() && monitoredTypes.contains(MonitoredType.SLICE)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getSlice(name));
-                }
-                else if (unit.isSnapshot() && monitoredTypes.contains(MonitoredType.SNAPSHOT)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getSnapshot(name));
-                }
-                else if (unit.isSocket() && monitoredTypes.contains(MonitoredType.SOCKET)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getSocket(name));
-                }
-                else if (unit.isSwap() && monitoredTypes.contains(MonitoredType.SWAP)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getSwap(name));
-                }
-                else if (unit.isTarget() && monitoredTypes.contains(MonitoredType.TARGET)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getTarget(name));
-                }
-                else if (unit.isTimer() && monitoredTypes.contains(MonitoredType.TIMER)) {
-                    monitoredUnits.put(Systemd.escapePath(name), manager.getTimer(name));
+                    monitoredUnits.put(Systemd.escapePath(name), manager.getUnit(name));
                 }
             }
         }
