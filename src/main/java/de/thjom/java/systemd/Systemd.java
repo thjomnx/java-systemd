@@ -163,9 +163,6 @@ public final class Systemd {
                     try {
                         instance.close(retardationTime);
                     }
-                    catch (final DBusException e) {
-                        log.error("Unable to disconnect from bus(es)", e);
-                    }
                     catch (final InterruptedException e) {
                         log.error("Disconnection interrupted while retarding", e);
 
@@ -193,7 +190,7 @@ public final class Systemd {
         }
     }
 
-    private void close(final long retardationTime) throws DBusException, InterruptedException {
+    private void close(final long retardationTime) throws InterruptedException {
         if (isConnected()) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Disconnecting from %s bus", instanceType));
