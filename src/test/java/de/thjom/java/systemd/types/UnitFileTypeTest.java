@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import junit.framework.Assert;
 
 public class UnitFileTypeTest {
 
