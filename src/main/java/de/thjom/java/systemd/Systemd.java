@@ -123,15 +123,15 @@ public final class Systemd {
         return instance;
     }
 
-    public static void disconnect() throws DBusException {
+    public static void disconnect() {
         disconnect(InstanceType.SYSTEM);
     }
 
-    public static void disconnect(final InstanceType instanceType) throws DBusException {
+    public static void disconnect(final InstanceType instanceType) {
         disconnect(instanceType, DEFAULT_RETARDATION);
     }
 
-    public static void disconnect(final InstanceType instanceType, final long retardationTime) throws DBusException {
+    public static void disconnect(final InstanceType instanceType, final long retardationTime) {
         final int index = instanceType.getIndex();
 
         synchronized (instances) {

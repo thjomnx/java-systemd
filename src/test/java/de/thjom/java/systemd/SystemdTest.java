@@ -60,12 +60,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -80,12 +75,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -109,12 +99,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect(InstanceType.USER);
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect(InstanceType.USER);
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -129,12 +114,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect(InstanceType.USER);
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect(InstanceType.USER);
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -158,32 +138,17 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
         // Disconnect once more #1
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
         // Disconnect once more #2
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
     }
@@ -228,12 +193,7 @@ public class SystemdTest {
             Assert.fail(e.getMessage(), e);
         }
         finally {
-            try {
-                Systemd.disconnect();
-            }
-            catch (DBusException e) {
-                Assert.fail(e.getMessage(), e);
-            }
+            Systemd.disconnect();
         }
     }
 
@@ -255,12 +215,7 @@ public class SystemdTest {
             Assert.fail(e.getMessage(), e);
         }
         finally {
-            try {
-                Systemd.disconnect(InstanceType.USER);
-            }
-            catch (DBusException e) {
-                Assert.fail(e.getMessage(), e);
-            }
+            Systemd.disconnect(InstanceType.USER);
         }
     }
 
