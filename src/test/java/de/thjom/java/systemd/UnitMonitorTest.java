@@ -13,6 +13,7 @@ package de.thjom.java.systemd;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.awaitility.Awaitility;
@@ -139,7 +140,15 @@ public class UnitMonitorTest extends AbstractTestCase {
 
             monitor.startPolling(250L, 360000L);
 
-            Awaitility.await().untilTrue(refreshed);
+            // Use 'until(..)' with 'Callable<T>' until Hamcrest dependency errors are fixed
+            Awaitility.await().until(new Callable<Boolean>() {
+
+                @Override
+                public Boolean call() throws Exception {
+                    return refreshed.get();
+                }
+
+            });
 
             monitor.stopPolling();
         }

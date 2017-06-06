@@ -71,7 +71,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>2.7.17</version>
+      <version>2.8.9</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -88,7 +88,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>2.20</version>
           <configuration>
             <suiteXmlFiles>
               <suiteXmlFile>src/test/resources/suites/auto.xml</suiteXmlFile>
@@ -178,10 +178,18 @@
       <id>sonar</id>
 
       <dependencies>
+        <!-- JaCoCo listeners do not work with recent Surefire/TestNG versions -->
+        <dependency>
+          <groupId>org.testng</groupId>
+          <artifactId>testng</artifactId>
+          <version>6.9.7</version>
+          <scope>test</scope>
+        </dependency>
+
         <dependency>
           <groupId>org.sonarsource.java</groupId>
           <artifactId>sonar-jacoco-listeners</artifactId>
-          <version>4.7.1.9272</version>
+          <version>4.10.0.10260</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
