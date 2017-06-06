@@ -41,6 +41,7 @@ public class UnitFileTypeTest {
         UnitFileType type1 = new UnitFileType("/usr/lib/systemd/system/avahi-daemon.service", "loaded");
         UnitFileType type2 = new UnitFileType("/usr/lib/systemd/system/polkit.service", "loaded");
 
+        // Test list sorting
         List<UnitFileType> list = new ArrayList<>();
         list.add(type2);
         list.add(type1);
@@ -52,6 +53,9 @@ public class UnitFileTypeTest {
 
         Assert.assertSame(list.get(0), type1);
         Assert.assertSame(list.get(1), type2);
+
+        // Test null check
+        Assert.assertEquals(type1.compareTo(null), Integer.MAX_VALUE);
     }
 
 }

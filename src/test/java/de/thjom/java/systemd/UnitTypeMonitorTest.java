@@ -224,6 +224,30 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
     }
 
+    @Test(description="Tests refreshing of monitor state.")
+    public void testMonitorRefreshing() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.values());
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+
+        try {
+            monitor.refresh();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+    }
+
     @Test(description="Tests reset of monitoring configuration.")
     public void testMonitorResetting() {
         UnitTypeMonitor monitor = null;

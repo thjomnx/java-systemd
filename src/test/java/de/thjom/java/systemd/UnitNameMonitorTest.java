@@ -151,6 +151,32 @@ public class UnitNameMonitorTest extends AbstractTestCase {
         }
     }
 
+    @Test(description="Tests refreshing of monitor state.")
+    public void testMonitorRefreshing() {
+        UnitNameMonitor monitor = null;
+
+        try {
+            monitor = new UnitNameMonitor(systemd.getManager());
+            monitor.addUnits("avahi-daemon.service");
+            monitor.addUnits("cronie.service");
+            monitor.addUnits("polkit.service");
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+
+        try {
+            monitor.refresh();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+    }
+
     @Test(description="Tests reset of monitoring configuration.")
     public void testMonitorResetting() {
         UnitNameMonitor monitor = null;

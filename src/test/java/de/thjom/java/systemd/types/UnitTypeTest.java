@@ -78,6 +78,7 @@ public class UnitTypeTest {
                 new Path(Unit.OBJECT_PATH + Systemd.escapePath(unitName2)),
                 new UInt32(42L), "dummy type", new Path("dummy_path"));
 
+        // Test list sorting
         List<UnitType> list = new ArrayList<>();
         list.add(type2);
         list.add(type1);
@@ -89,6 +90,9 @@ public class UnitTypeTest {
 
         Assert.assertSame(list.get(0), type1);
         Assert.assertSame(list.get(1), type2);
+
+        // Test null check
+        Assert.assertEquals(type1.compareTo(null), Integer.MAX_VALUE);
     }
 
 }
