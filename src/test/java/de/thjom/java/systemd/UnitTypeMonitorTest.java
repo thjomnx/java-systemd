@@ -19,7 +19,6 @@ import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
@@ -27,7 +26,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import de.thjom.java.systemd.UnitTypeMonitor.MonitoredType;
-import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.MountInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
@@ -60,12 +58,9 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
     @Override
     @BeforeClass
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        super.setup();
 
         try {
-            Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class)).thenReturn(miface);
-            Mockito.when(dbus.getRemoteObject(Mockito.eq(Systemd.SERVICE_NAME), Mockito.eq(Systemd.OBJECT_PATH), Mockito.eq(PropertyInterface.class))).thenReturn(piface);
-
             Mockito.when(miface.listUnits()).then(new Answer<List<UnitType>>() {
 
                 @Override
@@ -274,6 +269,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         try {
             monitor = new UnitTypeMonitor(systemd.getManager());
             monitor.addDefaultHandlers();
+            monitor.removeDefaultHandlers();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
