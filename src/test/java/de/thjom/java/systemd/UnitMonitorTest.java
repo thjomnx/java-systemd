@@ -13,6 +13,7 @@ package de.thjom.java.systemd;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.freedesktop.DBus;
 import org.freedesktop.DBus.Properties.PropertiesChanged;
@@ -107,6 +108,46 @@ public class UnitMonitorTest extends AbstractTestCase {
 
             // Test lambda expression
             monitor.addListener((u, p) -> { /* Do nothing (test case) */ });
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+    }
+
+    @Test(description="Tests configuration of timer feature.")
+    public void testTimerConfiguration() {
+        final AtomicBoolean refreshed = new AtomicBoolean();
+
+        UnitMonitor monitor = null;
+
+        // Test addition and removal of all types
+        try {
+            monitor = new UnitMonitor(systemd.getManager()) {
+
+                @Override
+                public void reset() {
+                    // Do nothing (simple mock object)
+                }
+
+                @Override
+                public void refresh() throws DBusException {
+                    refreshed.set(true);
+                }
+
+            };
+
+            monitor.startPolling(250L, 360000L);
+
+            while (refreshed.get() == false) {
+                try {
+                    Thread.sleep(100L);
+                }
+                catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+            monitor.stopPolling();
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
