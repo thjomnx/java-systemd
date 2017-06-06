@@ -22,10 +22,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Systemd;
-import de.thjom.java.systemd.Unit;
-import de.thjom.java.systemd.UnitNameMonitor;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
@@ -100,16 +96,9 @@ public class UnitNameMonitorTest extends AbstractTestCase {
     public void testMonitorConfiguration() {
         UnitNameMonitor monitor = null;
 
+        // Test addition of single name
         try {
             monitor = new UnitNameMonitor(systemd.getManager());
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
-
-        Assert.assertNotNull(monitor);
-
-        try {
             monitor.addUnits("avahi-daemon.service");
         }
         catch (DBusException e) {
@@ -118,6 +107,7 @@ public class UnitNameMonitorTest extends AbstractTestCase {
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 1);
 
+        // Test addition of multiple names
         try {
             monitor.addUnits("cronie.service", "polkit.service");
         }
@@ -127,9 +117,89 @@ public class UnitNameMonitorTest extends AbstractTestCase {
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
 
+        // Test re-addition of already added names
         monitor.addUnits(monitor.getMonitoredUnits().toArray(new Unit[0]));
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+
+        // Test removal of single name
+        monitor.removeUnits("cronie.service");
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 2);
+
+        // Test removal of multiple names
+        monitor.removeUnits("avahi-daemon.service", "polkit.service");
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 0);
+
+        // Test addition and removal of resolved unit(s)
+        try {
+            Unit avahi = systemd.getManager().getUnit("avahi-daemon.service");
+            Unit cronie = systemd.getManager().getUnit("cronie.service");
+            Unit polkit = systemd.getManager().getUnit("polkit.service");
+
+            monitor.addUnits(avahi, cronie, polkit);
+
+            Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+
+            monitor.removeUnits(avahi, cronie, polkit);
+
+            Assert.assertEquals(monitor.getMonitoredUnits().size(), 0);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+    }
+
+    @Test(description="Tests reset of monitoring configuration.")
+    public void testMonitorResetting() {
+        UnitNameMonitor monitor = null;
+
+        try {
+            monitor = new UnitNameMonitor(systemd.getManager());
+            monitor.addUnits("avahi-daemon.service");
+            monitor.addUnits("cronie.service");
+            monitor.addUnits("polkit.service");
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+
+        monitor.reset();
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 0);
+    }
+
+    @Test(description="Tests configuration of default handlers.")
+    public void testDefaultHandlers() {
+        UnitNameMonitor monitor = null;
+
+        try {
+            monitor = new UnitNameMonitor(systemd.getManager());
+            monitor.addDefaultHandlers();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+    }
+
+    @Test(description="Tests query methods on a configured monitor.")
+    public void testMonitorInterrogation() {
+        UnitNameMonitor monitor = null;
+
+        try {
+            monitor = new UnitNameMonitor(systemd.getManager());
+            monitor.addUnits("avahi-daemon.service");
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertTrue(monitor.monitorsUnit("avahi-daemon.service"));
+        Assert.assertFalse(monitor.monitorsUnit("cronie.service"));
+
     }
 
     @Test(groups="manual", description="Tests concurrent access on monitored collection.")
