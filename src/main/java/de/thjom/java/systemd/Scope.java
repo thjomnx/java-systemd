@@ -26,7 +26,7 @@ public class Scope extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
         public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";

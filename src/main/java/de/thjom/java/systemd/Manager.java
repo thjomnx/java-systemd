@@ -29,7 +29,7 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Manager";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ARCHITECTURE = "Architecture";
         public static final String CONFIRM_SPAWN = "ConfirmSpawn";

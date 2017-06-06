@@ -22,7 +22,7 @@ public class BusName extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".BusName";
     public static final String UNIT_SUFFIX = ".busname";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACCEPT_FILE_DESCRIPTORS = "AcceptFileDescriptors";
         public static final String ACTIVATING = "Activating";

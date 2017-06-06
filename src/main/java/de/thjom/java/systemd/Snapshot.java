@@ -20,7 +20,7 @@ public class Snapshot extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Snapshot";
     public static final String UNIT_SUFFIX = ".snapshot";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String CLEANUP = "Cleanup";
 

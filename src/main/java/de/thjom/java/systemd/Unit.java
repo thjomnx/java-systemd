@@ -85,7 +85,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     }
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACTIVE_ENTER_TIMESTAMP = "ActiveEnterTimestamp";
         public static final String ACTIVE_ENTER_TIMESTAMP_MONOTONIC = "ActiveEnterTimestampMonotonic";

@@ -25,7 +25,7 @@ public class Timer extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Timer";
     public static final String UNIT_SUFFIX = ".timer";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACCURACY_USEC = "AccuracyUSec";
         public static final String LAST_TRIGGER_USEC = "LastTriggerUSec";
