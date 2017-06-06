@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.awaitility.Awaitility;
 import org.freedesktop.DBus;
 import org.freedesktop.DBus.Properties.PropertiesChanged;
 import org.freedesktop.dbus.DBusSigHandler;
@@ -138,14 +139,7 @@ public class UnitMonitorTest extends AbstractTestCase {
 
             monitor.startPolling(250L, 360000L);
 
-            while (refreshed.get() == false) {
-                try {
-                    Thread.sleep(100L);
-                }
-                catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
+            Awaitility.await().untilTrue(refreshed);
 
             monitor.stopPolling();
         }
