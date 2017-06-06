@@ -146,7 +146,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
     }
 
     public boolean monitorsUnit(final String unitName) {
-        return monitoredUnits.containsKey(unitName);
+        return monitoredUnits.containsKey(Systemd.escapePath(unitName));
     }
 
     public Optional<Unit> getMonitoredUnit(final String unitName) {
