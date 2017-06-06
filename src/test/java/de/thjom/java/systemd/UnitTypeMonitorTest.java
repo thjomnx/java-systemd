@@ -26,10 +26,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Systemd;
-import de.thjom.java.systemd.Unit;
-import de.thjom.java.systemd.UnitTypeMonitor;
 import de.thjom.java.systemd.UnitTypeMonitor.MonitoredType;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.MountInterface;
@@ -177,18 +173,19 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
     public void testMonitorConfiguration() {
         UnitTypeMonitor monitor = null;
 
+        // Test addition and removal of all types
         try {
             monitor = new UnitTypeMonitor(systemd.getManager());
-            monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
+            monitor.addMonitoredTypes(MonitoredType.values());
+            monitor.removeMonitoredTypes(MonitoredType.values());
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
         }
 
-        Assert.assertNotNull(monitor);
-
+        // Test specific additions (subset of types)
         try {
-            monitor.addDefaultHandlers();
+            monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -196,6 +193,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 4);
 
+        // Test another specific addition (adds to subset)
         try {
             monitor.addMonitoredTypes(MonitoredType.SERVICE);
         }
@@ -205,6 +203,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
 
+        // Test re-addition of already added types
         try {
             monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SERVICE, MonitoredType.SOCKET);
         }
@@ -213,6 +212,65 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         }
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+
+        // Test specific removal (removes from subset)
+        try {
+            monitor.removeMonitoredTypes(MonitoredType.MOUNT);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+    }
+
+    @Test(description="Tests reset of monitoring configuration.")
+    public void testMonitorResetting() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.values());
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+
+        monitor.reset();
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 0);
+    }
+
+    @Test(description="Tests configuration of default handlers.")
+    public void testDefaultHandlers() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addDefaultHandlers();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+    }
+
+    @Test(description="Tests query methods on a configured monitor.")
+    public void testMonitorInterrogation() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.MOUNT);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertTrue(monitor.monitorsUnit("boot.mount"));
+        Assert.assertFalse(monitor.monitorsUnit("systemd-initctl.socket"));
+
     }
 
     @Test(groups="manual", description="Tests concurrent access on monitored collection.")
