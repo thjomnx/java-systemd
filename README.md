@@ -12,7 +12,7 @@ This library shall:
 - Provide adapters for the internals of the dbus-java API in order to
     - ease the access to systemds methods and properties
     - omit automatic (and low-performance) reflection stuff being done in dbus-java
-    - provide observer patterns for objects along D-Bus signalling
+    - provide observer-like patterns for objects along D-Bus signalling
 
 ## Usage
 
@@ -35,5 +35,3 @@ These are no "official" Java bindings for systemd via D-Bus. I only work on it i
 - The kid is sleeping
 - My wife is hacking on her medical research topics
 - No beers in the fridge
-
-This project is currently in some sort of prototyping phase. Be aware, things may change.
