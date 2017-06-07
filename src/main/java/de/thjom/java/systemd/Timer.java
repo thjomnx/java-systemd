@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -24,14 +25,21 @@ public class Timer extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Timer";
     public static final String UNIT_SUFFIX = ".timer";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String UNIT = "Unit";
-        public static final String TIMERS_MONOTONIC = "TimersMonotonic";
-        public static final String TIMERS_CALENDAR = "TimersCalendar";
-        public static final String NEXT_ELAPSE_USEC_REALTIME = "NextElapseUSecRealtime";
+        public static final String ACCURACY_USEC = "AccuracyUSec";
+        public static final String LAST_TRIGGER_USEC = "LastTriggerUSec";
+        public static final String LAST_TRIGGER_USEC_MONOTONIC = "LastTriggerUSecMonotonic";
         public static final String NEXT_ELAPSE_USEC_MONOTONIC = "NextElapseUSecMonotonic";
+        public static final String NEXT_ELAPSE_USEC_REALTIME = "NextElapseUSecRealtime";
+        public static final String PERSISTENT = "Persistent";
+        public static final String RANDOMIZED_DELAY_USEC = "RandomizedDelayUSec";
+        public static final String REMAIN_AFTER_ELAPSE = "RemainAfterElapse";
         public static final String RESULT = "Result";
+        public static final String UNIT = "Unit";
+        public static final String TIMERS_CALENDAR = "TimersCalendar";
+        public static final String TIMERS_MONOTONIC = "TimersMonotonic";
+        public static final String WAKE_SYSTEM = "WakeSystem";
 
         private Property() {
             super();
@@ -63,28 +71,56 @@ public class Timer extends Unit {
         return (TimerInterface) super.getInterface();
     }
 
-    public String getUnit() {
-        return properties.getString(Property.UNIT);
+    public BigInteger getAccuracyUSec() {
+        return properties.getBigInteger(Property.ACCURACY_USEC);
     }
 
-    public List<TimersMonotonic> getTimersMonotonic() {
-        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
+    public BigInteger getLastTriggerUSec() {
+        return properties.getBigInteger(Property.LAST_TRIGGER_USEC);
+    }
+
+    public BigInteger getLastTriggerUSecMonotonic() {
+        return properties.getBigInteger(Property.LAST_TRIGGER_USEC_MONOTONIC);
+    }
+
+    public BigInteger getNextElapseUSecMonotonic() {
+        return properties.getBigInteger(Property.NEXT_ELAPSE_USEC_MONOTONIC);
+    }
+
+    public BigInteger getNextElapseUSecRealtime() {
+        return properties.getBigInteger(Property.NEXT_ELAPSE_USEC_REALTIME);
+    }
+
+    public boolean isPersistent() {
+        return properties.getBoolean(Property.PERSISTENT);
+    }
+
+    public BigInteger getRandomizedDelayUSec() {
+        return properties.getBigInteger(Property.RANDOMIZED_DELAY_USEC);
+    }
+
+    public boolean isRemainAfterElapse() {
+        return properties.getBoolean(Property.REMAIN_AFTER_ELAPSE);
+    }
+
+    public String getResult() {
+        return properties.getString(Property.RESULT);
+    }
+
+    public String getUnit() {
+        return properties.getString(Property.UNIT);
     }
 
     public List<TimersCalendar> getTimersCalendar() {
         return TimersCalendar.list(properties.getVector(Property.TIMERS_CALENDAR));
     }
 
-    public long getNextElapseUSecRealtime() {
-        return properties.getLong(Property.NEXT_ELAPSE_USEC_REALTIME);
+    public List<TimersMonotonic> getTimersMonotonic() {
+        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
     }
 
-    public long getNextElapseUSecMonotonic() {
-        return properties.getLong(Property.NEXT_ELAPSE_USEC_MONOTONIC);
-    }
-
-    public String getResult() {
-        return properties.getString(Property.RESULT);
+    public boolean isWakeSystem() {
+        return properties.getBoolean(Property.WAKE_SYSTEM);
     }
 
 }

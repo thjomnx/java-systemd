@@ -37,6 +37,14 @@ public class SystemdTest {
         Assert.assertEquals(Systemd.timestampToDate(tstamp * 1000), now);
     }
 
+    @Test(description="Tests conversion of SD-ID128 structs (e.g. 'InvocationID') to java.lang.String object.")
+    public void testId128StringConversion() {
+        byte[] id128 = new byte[] { 90, -125, -39, -3, -28, 103, 64, 10, -122, -97, -50, 13, 67, 113, 123, -125 };
+        String str = Systemd.id128ToString(id128);
+
+        Assert.assertEquals(str, "5a83d9fde467400a869fce0d43717b83");
+    }
+
     @Test(groups="requireSystemd", description="Tests D-Bus connectivity to system instance.")
     public void testSystemInstanceConnectivity() {
         // Connects automatically to bus
@@ -52,12 +60,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -72,12 +75,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -101,12 +99,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect(InstanceType.USER);
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect(InstanceType.USER);
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -121,12 +114,7 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect(InstanceType.USER);
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect(InstanceType.USER);
 
         Assert.assertFalse(systemd.isConnected());
 
@@ -150,32 +138,17 @@ public class SystemdTest {
         Assert.assertTrue(systemd.isConnected());
 
         // Disconnect from bus
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
         // Disconnect once more #1
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
 
         // Disconnect once more #2
-        try {
-            Systemd.disconnect();
-        }
-        catch (DBusException e) {
-            Assert.fail(e.getMessage(), e);
-        }
+        Systemd.disconnect();
 
         Assert.assertFalse(systemd.isConnected());
     }
@@ -220,12 +193,7 @@ public class SystemdTest {
             Assert.fail(e.getMessage(), e);
         }
         finally {
-            try {
-                Systemd.disconnect();
-            }
-            catch (DBusException e) {
-                Assert.fail(e.getMessage(), e);
-            }
+            Systemd.disconnect();
         }
     }
 
@@ -247,12 +215,7 @@ public class SystemdTest {
             Assert.fail(e.getMessage(), e);
         }
         finally {
-            try {
-                Systemd.disconnect(InstanceType.USER);
-            }
-            catch (DBusException e) {
-                Assert.fail(e.getMessage(), e);
-            }
+            Systemd.disconnect(InstanceType.USER);
         }
     }
 

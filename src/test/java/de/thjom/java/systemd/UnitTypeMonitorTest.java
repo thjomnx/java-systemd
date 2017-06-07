@@ -19,19 +19,13 @@ import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import de.thjom.java.systemd.Manager;
-import de.thjom.java.systemd.Systemd;
-import de.thjom.java.systemd.Unit;
-import de.thjom.java.systemd.UnitTypeMonitor;
 import de.thjom.java.systemd.UnitTypeMonitor.MonitoredType;
-import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.MountInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
@@ -64,12 +58,9 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
     @Override
     @BeforeClass
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        super.setup();
 
         try {
-            Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class)).thenReturn(miface);
-            Mockito.when(dbus.getRemoteObject(Mockito.eq(Systemd.SERVICE_NAME), Mockito.eq(Systemd.OBJECT_PATH), Mockito.eq(PropertyInterface.class))).thenReturn(piface);
-
             Mockito.when(miface.listUnits()).then(new Answer<List<UnitType>>() {
 
                 @Override
@@ -177,18 +168,19 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
     public void testMonitorConfiguration() {
         UnitTypeMonitor monitor = null;
 
+        // Test addition and removal of all types
         try {
             monitor = new UnitTypeMonitor(systemd.getManager());
-            monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
+            monitor.addMonitoredTypes(MonitoredType.values());
+            monitor.removeMonitoredTypes(MonitoredType.values());
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
         }
 
-        Assert.assertNotNull(monitor);
-
+        // Test specific additions (subset of types)
         try {
-            monitor.addDefaultHandlers();
+            monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SOCKET);
         }
         catch (DBusException e) {
             Assert.fail(e.getMessage(), e);
@@ -196,6 +188,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 4);
 
+        // Test another specific addition (adds to subset)
         try {
             monitor.addMonitoredTypes(MonitoredType.SERVICE);
         }
@@ -205,6 +198,7 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
 
+        // Test re-addition of already added types
         try {
             monitor.addMonitoredTypes(MonitoredType.MOUNT, MonitoredType.SERVICE, MonitoredType.SOCKET);
         }
@@ -213,6 +207,90 @@ public class UnitTypeMonitorTest extends AbstractTestCase {
         }
 
         Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+
+        // Test specific removal (removes from subset)
+        try {
+            monitor.removeMonitoredTypes(MonitoredType.MOUNT);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 3);
+    }
+
+    @Test(description="Tests refreshing of monitor state.")
+    public void testMonitorRefreshing() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.values());
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+
+        try {
+            monitor.refresh();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+    }
+
+    @Test(description="Tests reset of monitoring configuration.")
+    public void testMonitorResetting() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.values());
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 6);
+
+        monitor.reset();
+
+        Assert.assertEquals(monitor.getMonitoredUnits().size(), 0);
+    }
+
+    @Test(description="Tests configuration of default handlers.")
+    public void testDefaultHandlers() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addDefaultHandlers();
+            monitor.removeDefaultHandlers();
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+    }
+
+    @Test(description="Tests query methods on a configured monitor.")
+    public void testMonitorInterrogation() {
+        UnitTypeMonitor monitor = null;
+
+        try {
+            monitor = new UnitTypeMonitor(systemd.getManager());
+            monitor.addMonitoredTypes(MonitoredType.MOUNT);
+        }
+        catch (DBusException e) {
+            Assert.fail(e.getMessage(), e);
+        }
+
+        Assert.assertTrue(monitor.monitorsUnit("boot.mount"));
+        Assert.assertFalse(monitor.monitorsUnit("systemd-initctl.socket"));
+
     }
 
     @Test(groups="manual", description="Tests concurrent access on monitored collection.")

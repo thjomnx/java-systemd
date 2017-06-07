@@ -46,4 +46,7 @@ public interface UnitInterface extends DBusInterface {
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
 
+    @DBusMemberName(value = "Unref")
+    void unref();
+
 }

@@ -17,24 +17,24 @@ import java.util.List;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.ScopeInterface;
-import de.thjom.java.systemd.types.BlockIOBandwidth;
-import de.thjom.java.systemd.types.BlockIODeviceWeight;
 import de.thjom.java.systemd.types.DeviceAllowControl;
+import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceWeight;
 
 public class Scope extends Unit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String BLOCK_IOACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IODEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IOREAD_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IOWEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IOWRITE_BANDWIDTH = "BlockIOWriteBandwidth";
-        public static final String CPUACCOUNTING = "CPUAccounting";
-        public static final String CPUSHARES = "CPUShares";
+        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
+        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
+        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
+        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
+        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
+        public static final String CPU_ACCOUNTING = "CPUAccounting";
+        public static final String CPU_SHARES = "CPUShares";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROLLER = "Controller";
         public static final String DEVICE_ALLOW = "DeviceAllow";
@@ -80,31 +80,31 @@ public class Scope extends Unit {
     }
 
     public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IOACCOUNTING);
+        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
     }
 
-    public List<BlockIODeviceWeight> getBlockIODeviceWeight() {
-        return BlockIODeviceWeight.list(properties.getVector(Property.BLOCK_IODEVICE_WEIGHT));
+    public List<IODeviceWeight> getBlockIODeviceWeight() {
+        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
-    public List<BlockIOBandwidth> getBlockIOReadBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOREAD_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOReadBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IOWEIGHT);
+        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
     }
 
-    public List<BlockIOBandwidth> getBlockIOWriteBandwidth() {
-        return BlockIOBandwidth.list(properties.getVector(Property.BLOCK_IOWRITE_BANDWIDTH));
+    public List<IOBandwidth> getBlockIOWriteBandwidth() {
+        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPUACCOUNTING);
+        return properties.getBoolean(Property.CPU_ACCOUNTING);
     }
 
     public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPUSHARES);
+        return properties.getBigInteger(Property.CPU_SHARES);
     }
 
     public String getControlGroup() {
@@ -155,8 +155,8 @@ public class Scope extends Unit {
         return properties.getString(Property.SLICE);
     }
 
-    public long getTimeoutStopUSec() {
-        return properties.getLong(Property.TIMEOUT_STOP_USEC);
+    public BigInteger getTimeoutStopUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_STOP_USEC);
     }
 
 }

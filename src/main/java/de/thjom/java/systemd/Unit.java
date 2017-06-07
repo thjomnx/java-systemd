@@ -15,6 +15,7 @@ import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
 import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
 import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -84,7 +85,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     }
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACTIVE_ENTER_TIMESTAMP = "ActiveEnterTimestamp";
         public static final String ACTIVE_ENTER_TIMESTAMP_MONOTONIC = "ActiveEnterTimestampMonotonic";
@@ -123,6 +124,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String INACTIVE_ENTER_TIMESTAMP_MONOTONIC = "InactiveEnterTimestampMonotonic";
         public static final String INACTIVE_EXIT_TIMESTAMP = "InactiveExitTimestamp";
         public static final String INACTIVE_EXIT_TIMESTAMP_MONOTONIC = "InactiveExitTimestampMonotonic";
+        public static final String INVOCATION_ID = "InvocationID";
         public static final String JOB = "Job";
         public static final String JOB_TIMEOUT_ACTION = "JobTimeoutAction";
         public static final String JOB_TIMEOUT_REBOOT_ARGUMENT = "JobTimeoutRebootArgument";
@@ -135,6 +137,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String ON_FAILURE = "OnFailure";
         public static final String ON_FAILURE_JOB_MODE = "OnFailureJobMode";
         public static final String PART_OF = "PartOf";
+        public static final String PERPETUAL = "Perpetual";
         public static final String PROPAGATES_RELOAD_TO = "PropagatesReloadTo";
         public static final String REFUSE_MANUAL_START = "RefuseManualStart";
         public static final String REFUSE_MANUAL_STOP = "RefuseManualStop";
@@ -145,11 +148,16 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String REQUISITE = "Requisite";
         public static final String REQUISITE_OF = "RequisiteOf";
         public static final String SOURCE_PATH = "SourcePath";
+        public static final String START_LIMIT_INTERVAL_SEC = "StartLimitIntervalSec";
+        public static final String STATE_CHANGE_TIMESTAMP = "StateChangeTimestamp";
+        public static final String STATE_CHANGE_TIMESTAMP_MONOTONIC = "StateChangeTimestampMonotonic";
         public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
         public static final String SUB_STATE = "SubState";
         public static final String TRANSIENT = "Transient";
         public static final String TRIGGERED_BY = "TriggeredBy";
         public static final String TRIGGERS = "Triggers";
+        public static final String UNIT_FILE_PRESET = "UnitFilePreset";
+        public static final String UNIT_FILE_STATE = "UnitFileState";
         public static final String WANTED_BY = "WantedBy";
         public static final String WANTS = "Wants";
 
@@ -230,13 +238,13 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     @Override
     public <T extends DBusSignal> void addHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         manager.subscribe();
-        dbus.addSigHandler(type, this.getInterface(), handler);
+        dbus.addSigHandler(type, getInterface(), handler);
     }
 
     @Override
     public <T extends DBusSignal> void removeHandler(final Class<T> type, final DBusSigHandler<T> handler) throws DBusException {
         if (handler != null) {
-            dbus.removeSigHandler(type, this.getInterface(), handler);
+            dbus.removeSigHandler(type, getInterface(), handler);
         }
     }
 
@@ -325,6 +333,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public void resetFailed() {
         manager.resetFailedUnit(name);
+    }
+
+    public void unref() {
+        manager.unrefUnit(name);
     }
 
     public void setProperties(final boolean runtime, final Map<String, Object> properties) {
@@ -479,6 +491,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getLong(Property.INACTIVE_EXIT_TIMESTAMP_MONOTONIC);
     }
 
+    public byte[] getInvocationID() {
+        return (byte[]) unitProperties.getVariant(Property.INVOCATION_ID).getValue();
+    }
+
     public Job getJob() {
         Object[] array = (Object[]) unitProperties.getVariant(Property.JOB).getValue();
 
@@ -493,8 +509,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.JOB_TIMEOUT_REBOOT_ARGUMENT);
     }
 
-    public long getJobTimeoutUSec() {
-        return unitProperties.getLong(Property.JOB_TIMEOUT_USEC);
+    public BigInteger getJobTimeoutUSec() {
+        return unitProperties.getBigInteger(Property.JOB_TIMEOUT_USEC);
     }
 
     public Vector<String> getJoinsNamespaceOf() {
@@ -529,6 +545,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public Vector<String> getPartOf() {
         return unitProperties.getVector(Property.PART_OF);
+    }
+
+    public boolean isPerpetual() {
+        return unitProperties.getBoolean(Property.PERPETUAL);
     }
 
     public Vector<String> getPropagatesReloadTo() {
@@ -571,6 +591,18 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.SOURCE_PATH);
     }
 
+    public long getStartLimitIntervalSec() {
+        return unitProperties.getLong(Property.START_LIMIT_INTERVAL_SEC);
+    }
+
+    public long getStateChangeTimestamp() {
+        return unitProperties.getLong(Property.STATE_CHANGE_TIMESTAMP);
+    }
+
+    public long getStateChangeTimestampMonotonic() {
+        return unitProperties.getLong(Property.STATE_CHANGE_TIMESTAMP_MONOTONIC);
+    }
+
     public boolean isStopWhenUnneeded() {
         return unitProperties.getBoolean(Property.STOP_WHEN_UNNEEDED);
     }
@@ -589,6 +621,14 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public Vector<String> getTriggers() {
         return unitProperties.getVector(Property.TRIGGERS);
+    }
+
+    public String getUnitFilePreset() {
+        return unitProperties.getString(Property.UNIT_FILE_PRESET);
+    }
+
+    public String getUnitFileState() {
+        return unitProperties.getString(Property.UNIT_FILE_STATE);
     }
 
     public Vector<String> getWantedBy() {
@@ -610,20 +650,30 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         private final String activeState;
         private final String subState;
 
-        public StateTuple(final Map<String, Variant<?>> properties) {
-            this.loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>("-")).getValue());
-            this.activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>("-")).getValue());
-            this.subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>("-")).getValue());
+        public StateTuple(final String loadState, final String activeState, final String subState) {
+            this.loadState = loadState;
+            this.activeState = activeState;
+            this.subState = subState;
         }
 
-        public StateTuple(final Unit unit, final Map<String, Variant<?>> properties) {
-            this.loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>(unit.getLoadState())).getValue());
-            this.activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>(unit.getActiveState())).getValue());
-            this.subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>(unit.getSubState())).getValue());
+        public static StateTuple of(final Unit unit) {
+            return new StateTuple(unit.getLoadState(), unit.getActiveState(), unit.getSubState());
         }
 
-        public static StateTuple from(final Unit unit, final Map<String, Variant<?>> properties) {
-            return new StateTuple(unit, properties);
+        public static StateTuple of(final Map<String, Variant<?>> properties) {
+            String loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>("-")).getValue());
+            String activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>("-")).getValue());
+            String subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>("-")).getValue());
+
+            return new StateTuple(loadState, activeState, subState);
+        }
+
+        public static StateTuple of(final Unit unit, final Map<String, Variant<?>> properties) {
+            String loadState = String.valueOf(properties.getOrDefault(LOAD_STATE, new Variant<>(unit.getLoadState())).getValue());
+            String activeState = String.valueOf(properties.getOrDefault(ACTIVE_STATE, new Variant<>(unit.getActiveState())).getValue());
+            String subState = String.valueOf(properties.getOrDefault(SUB_STATE, new Variant<>(unit.getSubState())).getValue());
+
+            return new StateTuple(loadState, activeState, subState);
         }
 
         public String getLoadState() {

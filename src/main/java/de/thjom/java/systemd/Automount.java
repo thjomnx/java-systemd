@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd;
 
+import java.math.BigInteger;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.AutomountInterface;
@@ -20,11 +22,12 @@ public class Automount extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Automount";
     public static final String UNIT_SUFFIX = ".automount";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String WHERE = "Where";
         public static final String DIRECTORY_MODE = "DirectoryMode";
         public static final String RESULT = "Result";
+        public static final String TIMEOUT_IDLE_USEC = "TimeoutIdleUSec";
+        public static final String WHERE = "Where";
 
         private Property() {
             super();
@@ -56,16 +59,20 @@ public class Automount extends Unit {
         return (AutomountInterface) super.getInterface();
     }
 
-    public String getWhere() {
-        return properties.getString(Property.WHERE);
-    }
-
     public long getDirectoryMode() {
         return properties.getLong(Property.DIRECTORY_MODE);
     }
 
     public String getResult() {
         return properties.getString(Property.RESULT);
+    }
+
+    public BigInteger getTimeoutIdleUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_IDLE_USEC);
+    }
+
+    public String getWhere() {
+        return properties.getString(Property.WHERE);
     }
 
 }

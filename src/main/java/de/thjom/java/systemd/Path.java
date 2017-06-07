@@ -23,7 +23,7 @@ public class Path extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Path";
     public static final String UNIT_SUFFIX = ".path";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String DIRECTORY_MODE = "DirectoryMode";
         public static final String MAKE_DIRECTORY = "MakeDirectory";

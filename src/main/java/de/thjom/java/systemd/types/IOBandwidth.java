@@ -18,21 +18,21 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.UInt64;
 
-public class BlockIOBandwidth extends BlockIOPath {
+public class IOBandwidth extends IOPath {
 
     private final BigInteger bandwidth;
 
-    public BlockIOBandwidth(final Object[] array) {
+    public IOBandwidth(final Object[] array) {
         super(array[0]);
 
         this.bandwidth = ((UInt64) array[1]).value();
     }
 
-    public static List<BlockIOBandwidth> list(final Vector<Object[]> vector) {
-        List<BlockIOBandwidth> bandwidths = new ArrayList<>(vector.size());
+    public static List<IOBandwidth> list(final Vector<Object[]> vector) {
+        List<IOBandwidth> bandwidths = new ArrayList<>(vector.size());
 
         for (Object[] array : vector) {
-            BlockIOBandwidth bandwidth = new BlockIOBandwidth(array);
+            IOBandwidth bandwidth = new IOBandwidth(array);
 
             bandwidths.add(bandwidth);
         }
@@ -46,7 +46,7 @@ public class BlockIOBandwidth extends BlockIOPath {
 
     @Override
     public String toString() {
-        return String.format("BlockIOBandwidth [filePath=%s, bandwidth=%s]", filePath, bandwidth);
+        return String.format("IOBandwidth [filePath=%s, bandwidth=%s]", filePath, bandwidth);
     }
 
 }

@@ -90,11 +90,10 @@ final class SignalSequencer<T extends DBusSignal> {
 
     public int drainTo(final Collection<? super T> drain) {
         List<T> buffered = new ArrayList<>(buffer.size());
-        buffer.drainTo(buffered);
+        int transferred = buffer.drainTo(buffered);
 
         sequencer.addAll(buffered);
 
-        int count = 0;
         T head;
 
         do {
@@ -102,12 +101,11 @@ final class SignalSequencer<T extends DBusSignal> {
 
             if (head != null) {
                 drain.add(head);
-                count++;
             }
         }
         while (head != null);
 
-        return count;
+        return transferred;
     }
 
     public void clear() {

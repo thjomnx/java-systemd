@@ -123,12 +123,12 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
     }
 
     @Override
-    public int compareTo(final UnitType o) {
-        if (o == null) {
+    public int compareTo(final UnitType other) {
+        if (other == null) {
             return Integer.MAX_VALUE;
         }
         else {
-            return unitName.compareTo(o.unitName);
+            return unitName.compareTo(other.unitName);
         }
     }
 

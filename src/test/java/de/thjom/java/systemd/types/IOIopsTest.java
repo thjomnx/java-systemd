@@ -2,8 +2,8 @@
  * Java-systemd implementation
  * Copyright (c) 2016 Markus Enax
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of either the GNU Lesser General Public License Version 2 or the
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of either the GNU Lesser General Public License Version 2 or the
  * Academic Free Licence Version 3.0.
  *
  * Full licence texts are included in the COPYING file with this program.
@@ -19,15 +19,15 @@ import org.freedesktop.dbus.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class BlockIOBandwidthTest {
+public class IOIopsTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
-        BlockIOBandwidth instance = new BlockIOBandwidth(new Object[] { "foo", new UInt64("23") });
+        IOIops instance = new IOIops(new Object[] { "foo", new UInt64("23") });
 
         Assert.assertNotNull(instance);
         Assert.assertEquals(instance.getFilePath(), "foo");
-        Assert.assertEquals(instance.getBandwidth(), new BigInteger("23"));
+        Assert.assertEquals(instance.getIops(), new BigInteger("23"));
     }
 
     @Test(description="Tests constructor failure cases due to malformed arguments.")
@@ -35,7 +35,7 @@ public class BlockIOBandwidthTest {
         Exception exc = null;
 
         try {
-            new BlockIOBandwidth(new Object[0]);
+            new IOIops(new Object[0]);
         }
         catch (Exception e) {
             exc = e;
@@ -48,7 +48,7 @@ public class BlockIOBandwidthTest {
     public void testBulkProcessing() {
         Vector<Object[]> vec = new Vector<>();
 
-        List<BlockIOBandwidth> list = BlockIOBandwidth.list(vec);
+        List<IOIops> list = IOIops.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
@@ -57,22 +57,22 @@ public class BlockIOBandwidthTest {
         vec.add(new Object[] { "foo", new UInt64("23") });
         vec.add(new Object[] { "bar", new UInt64("42") });
 
-        list = BlockIOBandwidth.list(vec);
+        list = IOIops.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
 
-        BlockIOBandwidth item = list.get(0);
+        IOIops item = list.get(0);
 
         Assert.assertNotNull(item);
         Assert.assertEquals(item.getFilePath(), "foo");
-        Assert.assertEquals(item.getBandwidth(), new BigInteger("23"));
+        Assert.assertEquals(item.getIops(), new BigInteger("23"));
 
         item = list.get(1);
 
         Assert.assertNotNull(item);
         Assert.assertEquals(item.getFilePath(), "bar");
-        Assert.assertEquals(item.getBandwidth(), new BigInteger("42"));
+        Assert.assertEquals(item.getIops(), new BigInteger("42"));
     }
 
     @Test(description="Tests processing failure cases on multiple data rows.")
@@ -83,7 +83,7 @@ public class BlockIOBandwidthTest {
         Exception exc = null;
 
         try {
-            BlockIOBandwidth.list(vec);
+            IOIops.list(vec);
         }
         catch (Exception e) {
             exc = e;
@@ -98,7 +98,7 @@ public class BlockIOBandwidthTest {
         exc = null;
 
         try {
-            BlockIOBandwidth.list(vec);
+            IOIops.list(vec);
         }
         catch (Exception e) {
             exc = e;

@@ -42,13 +42,18 @@ public class SwapTest extends UnitTest {
 
         setupPropertyMocks(Swap.class, Swap.SERVICE_NAME, Swap.Property.getAllNames());
 
-        nonVariantProperties.add(Swap.Property.BLOCK_IODEVICE_WEIGHT);
-        nonVariantProperties.add(Swap.Property.BLOCK_IOREAD_BANDWIDTH);
-        nonVariantProperties.add(Swap.Property.BLOCK_IOWRITE_BANDWIDTH);
+        nonVariantProperties.add(Swap.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(Swap.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(Swap.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Swap.Property.DEVICE_ALLOW);
         nonVariantProperties.add(Swap.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Swap.Property.EXEC_ACTIVATE);
         nonVariantProperties.add(Swap.Property.EXEC_DEACTIVATE);
+        nonVariantProperties.add(Swap.Property.IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(Swap.Property.IO_READ_BANDWIDTH_MAX);
+        nonVariantProperties.add(Swap.Property.IO_READ_IOPS_MAX);
+        nonVariantProperties.add(Swap.Property.IO_WRITE_BANDWIDTH_MAX);
+        nonVariantProperties.add(Swap.Property.IO_WRITE_IOPS_MAX);
         nonVariantProperties.add(Swap.Property.SYSTEM_CALL_FILTER);
     }
 

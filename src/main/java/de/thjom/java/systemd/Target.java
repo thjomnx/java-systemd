@@ -20,7 +20,7 @@ public class Target extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Target";
     public static final String UNIT_SUFFIX = ".target";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         // No properties available so far
 

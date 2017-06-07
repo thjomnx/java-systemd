@@ -32,7 +32,7 @@ import org.testng.Assert;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
-public class AbstractTestCase {
+class AbstractTestCase {
 
     @Mock
     protected DBusConnection dbus;

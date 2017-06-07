@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd;
 
+import java.math.BigInteger;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.BusNameInterface;
@@ -20,7 +22,7 @@ public class BusName extends Unit {
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".BusName";
     public static final String UNIT_SUFFIX = ".busname";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACCEPT_FILE_DESCRIPTORS = "AcceptFileDescriptors";
         public static final String ACTIVATING = "Activating";
@@ -79,8 +81,8 @@ public class BusName extends Unit {
         return properties.getString(Property.RESULT);
     }
 
-    public long getTimeoutUSec() {
-        return properties.getLong(Property.TIMEOUT_USEC);
+    public BigInteger getTimeoutUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
 
 }

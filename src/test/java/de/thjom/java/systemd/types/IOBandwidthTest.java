@@ -19,16 +19,15 @@ import org.freedesktop.dbus.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TimersMonotonicTest {
+public class IOBandwidthTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
-        TimersMonotonic instance = new TimersMonotonic(new Object[] { "foo", new UInt64("1234"), new UInt64("2345") });
+        IOBandwidth instance = new IOBandwidth(new Object[] { "foo", new UInt64("23") });
 
         Assert.assertNotNull(instance);
-        Assert.assertEquals(instance.getTimerBase(), "foo");
-        Assert.assertEquals(instance.getOffsetUSec(), BigInteger.valueOf((long) 1234));
-        Assert.assertEquals(instance.getNextElapsePoint(), (long) 2345);
+        Assert.assertEquals(instance.getFilePath(), "foo");
+        Assert.assertEquals(instance.getBandwidth(), new BigInteger("23"));
     }
 
     @Test(description="Tests constructor failure cases due to malformed arguments.")
@@ -36,7 +35,7 @@ public class TimersMonotonicTest {
         Exception exc = null;
 
         try {
-            new TimersMonotonic(new Object[0]);
+            new IOBandwidth(new Object[0]);
         }
         catch (Exception e) {
             exc = e;
@@ -49,33 +48,31 @@ public class TimersMonotonicTest {
     public void testBulkProcessing() {
         Vector<Object[]> vec = new Vector<>();
 
-        List<TimersMonotonic> list = TimersMonotonic.list(vec);
+        List<IOBandwidth> list = IOBandwidth.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo1", new UInt64("1234"), new UInt64("2345") });
-        vec.add(new Object[] { "foo2", new UInt64("4321"), new UInt64("5432") });
+        vec.add(new Object[] { "foo", new UInt64("23") });
+        vec.add(new Object[] { "bar", new UInt64("42") });
 
-        list = TimersMonotonic.list(vec);
+        list = IOBandwidth.list(vec);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
 
-        TimersMonotonic item = list.get(0);
+        IOBandwidth item = list.get(0);
 
         Assert.assertNotNull(item);
-        Assert.assertEquals(item.getTimerBase(), "foo1");
-        Assert.assertEquals(item.getOffsetUSec(), BigInteger.valueOf((long) 1234));
-        Assert.assertEquals(item.getNextElapsePoint(), (long) 2345);
+        Assert.assertEquals(item.getFilePath(), "foo");
+        Assert.assertEquals(item.getBandwidth(), new BigInteger("23"));
 
         item = list.get(1);
 
         Assert.assertNotNull(item);
-        Assert.assertEquals(item.getTimerBase(), "foo2");
-        Assert.assertEquals(item.getOffsetUSec(), BigInteger.valueOf((long) 4321));
-        Assert.assertEquals(item.getNextElapsePoint(), (long) 5432);
+        Assert.assertEquals(item.getFilePath(), "bar");
+        Assert.assertEquals(item.getBandwidth(), new BigInteger("42"));
     }
 
     @Test(description="Tests processing failure cases on multiple data rows.")
@@ -86,7 +83,7 @@ public class TimersMonotonicTest {
         Exception exc = null;
 
         try {
-            TimersMonotonic.list(vec);
+            IOBandwidth.list(vec);
         }
         catch (Exception e) {
             exc = e;
@@ -96,12 +93,12 @@ public class TimersMonotonicTest {
 
         // Next test
         vec.clear();
-        vec.add(new Object[] { "foo", "bar", 1 });
+        vec.add(new Object[] { "foo", (int) 1 });
 
         exc = null;
 
         try {
-            TimersMonotonic.list(vec);
+            IOBandwidth.list(vec);
         }
         catch (Exception e) {
             exc = e;

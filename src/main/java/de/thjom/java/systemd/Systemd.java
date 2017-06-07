@@ -17,6 +17,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.freedesktop.dbus.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.exceptions.NotConnected;
@@ -93,6 +95,10 @@ public final class Systemd {
         return new Date(timestamp / 1000);
     }
 
+    public static final String id128ToString(final byte[] id128) {
+        return DatatypeConverter.printHexBinary(id128).toLowerCase();
+    }
+
     public static Systemd get() throws DBusException {
         return get(InstanceType.SYSTEM);
     }
@@ -117,15 +123,15 @@ public final class Systemd {
         return instance;
     }
 
-    public static void disconnect() throws DBusException {
+    public static void disconnect() {
         disconnect(InstanceType.SYSTEM);
     }
 
-    public static void disconnect(final InstanceType instanceType) throws DBusException {
+    public static void disconnect(final InstanceType instanceType) {
         disconnect(instanceType, DEFAULT_RETARDATION);
     }
 
-    public static void disconnect(final InstanceType instanceType, final long retardationTime) throws DBusException {
+    public static void disconnect(final InstanceType instanceType, final long retardationTime) {
         final int index = instanceType.getIndex();
 
         synchronized (instances) {
@@ -157,9 +163,6 @@ public final class Systemd {
                     try {
                         instance.close(retardationTime);
                     }
-                    catch (final DBusException e) {
-                        log.error("Unable to disconnect from bus(es)", e);
-                    }
                     catch (final InterruptedException e) {
                         log.error("Disconnection interrupted while retarding", e);
 
@@ -187,7 +190,7 @@ public final class Systemd {
         }
     }
 
-    private void close(final long retardationTime) throws DBusException, InterruptedException {
+    private void close(final long retardationTime) throws InterruptedException {
         if (isConnected()) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Disconnecting from %s bus", instanceType));

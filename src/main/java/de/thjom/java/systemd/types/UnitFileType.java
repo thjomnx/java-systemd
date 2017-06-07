@@ -41,12 +41,12 @@ public class UnitFileType extends UnitBase implements Comparable<UnitFileType> {
     }
 
     @Override
-    public int compareTo(final UnitFileType o) {
-        if (o == null) {
+    public int compareTo(final UnitFileType other) {
+        if (other == null) {
             return Integer.MAX_VALUE;
         }
         else {
-            return path.compareTo(o.path);
+            return path.compareTo(other.path);
         }
     }
 

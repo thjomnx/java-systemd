@@ -29,35 +29,51 @@ public class Manager extends InterfaceAdapter {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Manager";
 
-    public static class Property extends InterfaceAdapter.Property {
+    public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ARCHITECTURE = "Architecture";
         public static final String CONFIRM_SPAWN = "ConfirmSpawn";
         public static final String CONTROL_GROUP = "ControlGroup";
-        public static final String DEFAULT_BLOCK_IOACCOUNTING = "DefaultBlockIOAccounting";
-        public static final String DEFAULT_CPUACCOUNTING = "DefaultCPUAccounting";
+        public static final String DEFAULT_BLOCK_IO_ACCOUNTING = "DefaultBlockIOAccounting";
+        public static final String DEFAULT_CPU_ACCOUNTING = "DefaultCPUAccounting";
         public static final String DEFAULT_LIMIT_AS = "DefaultLimitAS";
+        public static final String DEFAULT_LIMIT_AS_SOFT = "DefaultLimitASSoft";
         public static final String DEFAULT_LIMIT_CORE = "DefaultLimitCORE";
+        public static final String DEFAULT_LIMIT_CORE_SOFT = "DefaultLimitCORESoft";
         public static final String DEFAULT_LIMIT_CPU = "DefaultLimitCPU";
+        public static final String DEFAULT_LIMIT_CPU_SOFT = "DefaultLimitCPUSoft";
         public static final String DEFAULT_LIMIT_DATA = "DefaultLimitDATA";
+        public static final String DEFAULT_LIMIT_DATA_SOFT = "DefaultLimitDATASoft";
         public static final String DEFAULT_LIMIT_FSIZE = "DefaultLimitFSIZE";
+        public static final String DEFAULT_LIMIT_FSIZE_SOFT = "DefaultLimitFSIZESoft";
         public static final String DEFAULT_LIMIT_LOCKS = "DefaultLimitLOCKS";
+        public static final String DEFAULT_LIMIT_LOCKS_SOFT = "DefaultLimitLOCKSSoft";
         public static final String DEFAULT_LIMIT_MEMLOCK = "DefaultLimitMEMLOCK";
+        public static final String DEFAULT_LIMIT_MEMLOCK_SOFT = "DefaultLimitMEMLOCKSoft";
         public static final String DEFAULT_LIMIT_MSGQUEUE = "DefaultLimitMSGQUEUE";
+        public static final String DEFAULT_LIMIT_MSGQUEUE_SOFT = "DefaultLimitMSGQUEUESoft";
         public static final String DEFAULT_LIMIT_NICE = "DefaultLimitNICE";
+        public static final String DEFAULT_LIMIT_NICE_SOFT = "DefaultLimitNICESoft";
         public static final String DEFAULT_LIMIT_NOFILE = "DefaultLimitNOFILE";
+        public static final String DEFAULT_LIMIT_NOFILE_SOFT = "DefaultLimitNOFILESoft";
         public static final String DEFAULT_LIMIT_NPROC = "DefaultLimitNPROC";
+        public static final String DEFAULT_LIMIT_NPROC_SOFT = "DefaultLimitNPROCSoft";
         public static final String DEFAULT_LIMIT_RSS = "DefaultLimitRSS";
+        public static final String DEFAULT_LIMIT_RSS_SOFT = "DefaultLimitRSSSoft";
         public static final String DEFAULT_LIMIT_RTPRIO = "DefaultLimitRTPRIO";
+        public static final String DEFAULT_LIMIT_RTPRIO_SOFT = "DefaultLimitRTPRIOSoft";
         public static final String DEFAULT_LIMIT_RTTIME = "DefaultLimitRTTIME";
+        public static final String DEFAULT_LIMIT_RTTIME_SOFT = "DefaultLimitRTTIMESoft";
         public static final String DEFAULT_LIMIT_SIGPENDING = "DefaultLimitSIGPENDING";
+        public static final String DEFAULT_LIMIT_SIGPENDING_SOFT = "DefaultLimitSIGPENDINGSoft";
         public static final String DEFAULT_LIMIT_STACK = "DefaultLimitSTACK";
+        public static final String DEFAULT_LIMIT_STACK_SOFT = "DefaultLimitSTACKSoft";
         public static final String DEFAULT_MEMORY_ACCOUNTING = "DefaultMemoryAccounting";
         public static final String DEFAULT_RESTART_USEC = "DefaultRestartUSec";
         public static final String DEFAULT_STANDARD_ERROR = "DefaultStandardError";
         public static final String DEFAULT_STANDARD_OUTPUT = "DefaultStandardOutput";
         public static final String DEFAULT_START_LIMIT_BURST = "DefaultStartLimitBurst";
-        public static final String DEFAULT_START_LIMIT_INTERVAL = "DefaultStartLimitInterval";
+        public static final String DEFAULT_START_LIMIT_INTERVAL_SEC = "DefaultStartLimitIntervalSec";
         public static final String DEFAULT_TASKS_ACCOUNTING = "DefaultTasksAccounting";
         public static final String DEFAULT_TASKS_MAX = "DefaultTasksMax";
         public static final String DEFAULT_TIMEOUT_START_USEC = "DefaultTimeoutStartUSec";
@@ -74,8 +90,8 @@ public class Manager extends InterfaceAdapter {
         public static final String GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "GeneratorsFinishTimestampMonotonic";
         public static final String GENERATORS_START_TIMESTAMP = "GeneratorsStartTimestamp";
         public static final String GENERATORS_START_TIMESTAMP_MONOTONIC = "GeneratorsStartTimestampMonotonic";
-        public static final String INIT_RDTIMESTAMP = "InitRDTimestamp";
-        public static final String INIT_RDTIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
+        public static final String INIT_RD_TIMESTAMP = "InitRDTimestamp";
+        public static final String INIT_RD_TIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
         public static final String KERNEL_TIMESTAMP = "KernelTimestamp";
         public static final String KERNEL_TIMESTAMP_MONOTONIC = "KernelTimestampMonotonic";
         public static final String LOADER_TIMESTAMP = "LoaderTimestamp";
@@ -143,6 +159,38 @@ public class Manager extends InterfaceAdapter {
         return intro.Introspect();
     }
 
+    public void cancelJob(final long id) {
+        getInterface().cancelJob(id);
+    }
+
+    public void clearJobs() {
+        getInterface().clearJobs();
+    }
+
+    public String dump() {
+        return getInterface().dump();
+    }
+
+    public String getDefaultTarget() {
+        return getInterface().getDefaultTarget();
+    }
+
+    public void halt() {
+        getInterface().halt();
+    }
+
+    public void kExec() {
+        getInterface().kExec();
+    }
+
+    public void killUnit(final String name, final Who who, final int signal) {
+        killUnit(name, who.getValue(), signal);
+    }
+
+    public void killUnit(final String name, final String who, final int signal) {
+        getInterface().killUnit(name, who, signal);
+    }
+
     public List<UnitFileType> listUnitFiles() {
         return getInterface().listUnitFiles();
     }
@@ -151,44 +199,24 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnits();
     }
 
-    public org.freedesktop.dbus.Path startUnit(final String name, final Mode mode) {
-        return startUnit(name, mode.getValue());
+    public void powerOff() {
+        getInterface().powerOff();
     }
 
-    public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {
-        return getInterface().startUnit(name, mode);
+    public void reboot() {
+        getInterface().reboot();
     }
 
-    public org.freedesktop.dbus.Path stopUnit(final String name, final Mode mode) {
-        return stopUnit(name, mode.getValue());
+    public void reexecute() {
+        getInterface().reexecute();
     }
 
-    public org.freedesktop.dbus.Path stopUnit(final String name, final String mode) {
-        return getInterface().stopUnit(name, mode);
+    public void refUnit(final String name) {
+        getInterface().refUnit(name);
     }
 
-    public org.freedesktop.dbus.Path reloadUnit(final String name, final Mode mode) {
-        return reloadUnit(name, mode.getValue());
-    }
-
-    public org.freedesktop.dbus.Path reloadUnit(final String name, final String mode) {
-        return getInterface().reloadUnit(name, mode);
-    }
-
-    public org.freedesktop.dbus.Path restartUnit(final String name, final Mode mode) {
-        return restartUnit(name, mode.getValue());
-    }
-
-    public org.freedesktop.dbus.Path restartUnit(final String name, final String mode) {
-        return getInterface().restartUnit(name, mode);
-    }
-
-    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
-        return tryRestartUnit(name, mode.getValue());
-    }
-
-    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final String mode) {
-        return getInterface().tryRestartUnit(name, mode);
+    public void reload() {
+        getInterface().reload();
     }
 
     public org.freedesktop.dbus.Path reloadOrRestartUnit(final String name, final Mode mode) {
@@ -207,16 +235,52 @@ public class Manager extends InterfaceAdapter {
         return getInterface().reloadOrTryRestartUnit(name, mode);
     }
 
-    public void killUnit(final String name, final Who who, final int signal) {
-        killUnit(name, who.getValue(), signal);
+    public org.freedesktop.dbus.Path reloadUnit(final String name, final Mode mode) {
+        return reloadUnit(name, mode.getValue());
     }
 
-    public void killUnit(final String name, final String who, final int signal) {
-        getInterface().killUnit(name, who, signal);
+    public org.freedesktop.dbus.Path reloadUnit(final String name, final String mode) {
+        return getInterface().reloadUnit(name, mode);
     }
 
     public void resetFailedUnit(final String name) {
         getInterface().resetFailedUnit(name);
+    }
+
+    public org.freedesktop.dbus.Path restartUnit(final String name, final Mode mode) {
+        return restartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path restartUnit(final String name, final String mode) {
+        return getInterface().restartUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path startUnit(final String name, final Mode mode) {
+        return startUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {
+        return getInterface().startUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path stopUnit(final String name, final Mode mode) {
+        return stopUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path stopUnit(final String name, final String mode) {
+        return getInterface().stopUnit(name, mode);
+    }
+
+    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
+        return tryRestartUnit(name, mode.getValue());
+    }
+
+    public org.freedesktop.dbus.Path tryRestartUnit(final String name, final String mode) {
+        return getInterface().tryRestartUnit(name, mode);
+    }
+
+    public void unrefUnit(final String name) {
+        getInterface().unrefUnit(name);
     }
 
     public synchronized void subscribe() {
@@ -338,10 +402,6 @@ public class Manager extends InterfaceAdapter {
         return unit;
     }
 
-    public String dump() {
-        return getInterface().dump();
-    }
-
     public String getArchitecture() {
         return properties.getString(Property.ARCHITECTURE);
     }
@@ -355,83 +415,147 @@ public class Manager extends InterfaceAdapter {
     }
 
     public boolean isDefaultBlockIOAccounting() {
-        return properties.getBoolean(Property.DEFAULT_BLOCK_IOACCOUNTING);
+        return properties.getBoolean(Property.DEFAULT_BLOCK_IO_ACCOUNTING);
     }
 
     public boolean isDefaultCPUAccounting() {
-        return properties.getBoolean(Property.DEFAULT_CPUACCOUNTING);
+        return properties.getBoolean(Property.DEFAULT_CPU_ACCOUNTING);
     }
 
     public BigInteger getDefaultLimitAS() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_AS);
     }
 
+    public BigInteger getDefaultLimitASSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_AS_SOFT);
+    }
+
     public BigInteger getDefaultLimitCORE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_CORE);
+    }
+
+    public BigInteger getDefaultLimitCORESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_CORE_SOFT);
     }
 
     public BigInteger getDefaultLimitCPU() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_CPU);
     }
 
+    public BigInteger getDefaultLimitCPUSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_CPU_SOFT);
+    }
+
     public BigInteger getDefaultLimitDATA() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_DATA);
+    }
+
+    public BigInteger getDefaultLimitDATASoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_DATA_SOFT);
     }
 
     public BigInteger getDefaultLimitFSIZE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_FSIZE);
     }
 
+    public BigInteger getDefaultLimitFSIZESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_FSIZE_SOFT);
+    }
+
     public BigInteger getDefaultLimitLOCKS() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_LOCKS);
+    }
+
+    public BigInteger getDefaultLimitLOCKSSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_LOCKS_SOFT);
     }
 
     public BigInteger getDefaultLimitMEMLOCK() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_MEMLOCK);
     }
 
+    public BigInteger getDefaultLimitMEMLOCKSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_MEMLOCK_SOFT);
+    }
+
     public BigInteger getDefaultLimitMSGQUEUE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_MSGQUEUE);
+    }
+
+    public BigInteger getDefaultLimitMSGQUEUESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_MSGQUEUE_SOFT);
     }
 
     public BigInteger getDefaultLimitNICE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_NICE);
     }
 
+    public BigInteger getDefaultLimitNICESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NICE_SOFT);
+    }
+
     public BigInteger getDefaultLimitNOFILE() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_NOFILE);
+    }
+
+    public BigInteger getDefaultLimitNOFILESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NOFILE_SOFT);
     }
 
     public BigInteger getDefaultLimitNPROC() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_NPROC);
     }
 
+    public BigInteger getDefaultLimitNPROCSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_NPROC_SOFT);
+    }
+
     public BigInteger getDefaultLimitRSS() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_RSS);
+    }
+
+    public BigInteger getDefaultLimitRSSSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RSS_SOFT);
     }
 
     public BigInteger getDefaultLimitRTPRIO() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_RTPRIO);
     }
 
+    public BigInteger getDefaultLimitRTPRIOSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RTPRIO_SOFT);
+    }
+
     public BigInteger getDefaultLimitRTTIME() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_RTTIME);
+    }
+
+    public BigInteger getDefaultLimitRTTIMESoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_RTTIME_SOFT);
     }
 
     public BigInteger getDefaultLimitSIGPENDING() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_SIGPENDING);
     }
 
+    public BigInteger getDefaultLimitSIGPENDINGSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_SIGPENDING_SOFT);
+    }
+
     public BigInteger getDefaultLimitSTACK() {
         return properties.getBigInteger(Property.DEFAULT_LIMIT_STACK);
+    }
+
+    public BigInteger getDefaultLimitSTACKSoft() {
+        return properties.getBigInteger(Property.DEFAULT_LIMIT_STACK_SOFT);
     }
 
     public boolean isDefaultMemoryAccounting() {
         return properties.getBoolean(Property.DEFAULT_MEMORY_ACCOUNTING);
     }
 
-    public long getDefaultRestartUSec() {
-        return properties.getLong(Property.DEFAULT_RESTART_USEC);
+    public BigInteger getDefaultRestartUSec() {
+        return properties.getBigInteger(Property.DEFAULT_RESTART_USEC);
     }
 
     public String getDefaultStandardError() {
@@ -446,8 +570,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.DEFAULT_START_LIMIT_BURST);
     }
 
-    public BigInteger getDefaultStartLimitInterval() {
-        return properties.getBigInteger(Property.DEFAULT_START_LIMIT_INTERVAL);
+    public long getDefaultStartLimitIntervalSec() {
+        return properties.getLong(Property.DEFAULT_START_LIMIT_INTERVAL_SEC);
     }
 
     public boolean isDefaultTasksAccounting() {
@@ -458,16 +582,16 @@ public class Manager extends InterfaceAdapter {
         return properties.getBigInteger(Property.DEFAULT_TASKS_MAX);
     }
 
-    public long getDefaultTimeoutStartUSec() {
-        return properties.getLong(Property.DEFAULT_TIMEOUT_START_USEC);
+    public BigInteger getDefaultTimeoutStartUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMEOUT_START_USEC);
     }
 
-    public long getDefaultTimeoutStopUSec() {
-        return properties.getLong(Property.DEFAULT_TIMEOUT_STOP_USEC);
+    public BigInteger getDefaultTimeoutStopUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMEOUT_STOP_USEC);
     }
 
-    public long getDefaultTimerAccuracyUSec() {
-        return properties.getLong(Property.DEFAULT_TIMER_ACCURACY_USEC);
+    public BigInteger getDefaultTimerAccuracyUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMER_ACCURACY_USEC);
     }
 
     public Vector<String> getEnvironment() {
@@ -515,11 +639,11 @@ public class Manager extends InterfaceAdapter {
     }
 
     public long getInitRDTimestamp() {
-        return properties.getLong(Property.INIT_RDTIMESTAMP);
+        return properties.getLong(Property.INIT_RD_TIMESTAMP);
     }
 
     public long getInitRDTimestampMonotonic() {
-        return properties.getLong(Property.INIT_RDTIMESTAMP_MONOTONIC);
+        return properties.getLong(Property.INIT_RD_TIMESTAMP_MONOTONIC);
     }
 
     public long getKernelTimestamp() {
@@ -570,8 +694,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getDouble(Property.PROGRESS);
     }
 
-    public long getRuntimeWatchdogUSec() {
-        return properties.getLong(Property.RUNTIME_WATCHDOG_USEC);
+    public BigInteger getRuntimeWatchdogUSec() {
+        return properties.getBigInteger(Property.RUNTIME_WATCHDOG_USEC);
     }
 
     public long getSecurityFinishTimestamp() {
@@ -594,8 +718,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getBoolean(Property.SHOW_STATUS);
     }
 
-    public long getShutdownWatchdogUSec() {
-        return properties.getLong(Property.SHUTDOWN_WATCHDOG_USEC);
+    public BigInteger getShutdownWatchdogUSec() {
+        return properties.getBigInteger(Property.SHUTDOWN_WATCHDOG_USEC);
     }
 
     public String getSystemState() {
@@ -606,8 +730,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getString(Property.TAINTED);
     }
 
-    public long getTimerSlackNSec() {
-        return properties.getLong(Property.TIMER_SLACK_NSEC);
+    public BigInteger getTimerSlackNSec() {
+        return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
     public Vector<String> getUnitPath() {

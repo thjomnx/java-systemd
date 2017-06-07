@@ -11,11 +11,11 @@
 
 package de.thjom.java.systemd.types;
 
-class BlockIOPath {
+class IOPath {
 
     protected final String filePath;
 
-    protected BlockIOPath(final Object filePath) {
+    protected IOPath(final Object filePath) {
         this.filePath = String.valueOf(filePath);
     }
 

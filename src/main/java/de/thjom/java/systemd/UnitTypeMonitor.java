@@ -13,13 +13,8 @@ package de.thjom.java.systemd;
 
 import java.util.EnumSet;
 
-import org.freedesktop.dbus.DBusSigHandler;
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.thjom.java.systemd.interfaces.ManagerInterface.Reloading;
-import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
-import de.thjom.java.systemd.interfaces.ManagerInterface.UnitNew;
-import de.thjom.java.systemd.interfaces.ManagerInterface.UnitRemoved;
 import de.thjom.java.systemd.types.UnitType;
 
 public class UnitTypeMonitor extends UnitMonitor {
@@ -40,47 +35,91 @@ public class UnitTypeMonitor extends UnitMonitor {
         TIMER
     }
 
-    private static final String ERROR_MSG_UNITMAPPING = "Unable to map units";
-
     protected final EnumSet<MonitoredType> monitoredTypes = EnumSet.noneOf(MonitoredType.class);
-
-    private ReloadingHandler reloadingHandler;
-    private UnitFilesChangedHandler unitFilesChangedHandler;
-    private UnitNewHandler unitNewHandler;
-    private UnitRemovedHandler unitRemovedHandler;
 
     public UnitTypeMonitor(final Manager manager) {
         super(manager);
     }
 
-    @Override
-    public final void addDefaultHandlers() throws DBusException {
-        manager.subscribe();
+    protected boolean isIncluded(final UnitType unit) {
+        boolean monitored = false;
 
-        reloadingHandler = new UnitTypeMonitor.ReloadingHandler();
-        manager.addHandler(Reloading.class, reloadingHandler);
+        for (MonitoredType type : monitoredTypes) {
+            switch (type) {
+                case AUTOMOUNT:
+                    monitored = unit.isAutomount();
+                    break;
+                case BUSNAME:
+                    monitored = unit.isBusName();
+                    break;
+                case DEVICE:
+                    monitored = unit.isDevice();
+                    break;
+                case MOUNT:
+                    monitored = unit.isMount();
+                    break;
+                case PATH:
+                    monitored = unit.isPath();
+                    break;
+                case SCOPE:
+                    monitored = unit.isScope();
+                    break;
+                case SERVICE:
+                    monitored = unit.isService();
+                    break;
+                case SLICE:
+                    monitored = unit.isSlice();
+                    break;
+                case SNAPSHOT:
+                    monitored = unit.isSnapshot();
+                    break;
+                case SOCKET:
+                    monitored = unit.isSocket();
+                    break;
+                case SWAP:
+                    monitored = unit.isSwap();
+                    break;
+                case TARGET:
+                    monitored = unit.isTarget();
+                    break;
+                case TIMER:
+                    monitored = unit.isTimer();
+                    break;
+                default:
+                    monitored = false;
+                    break;
+            }
 
-        unitFilesChangedHandler = new UnitTypeMonitor.UnitFilesChangedHandler();
-        manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
+            if (monitored) {
+                break;
+            }
+        }
 
-        unitNewHandler = new UnitTypeMonitor.UnitNewHandler();
-        manager.addHandler(UnitNew.class, unitNewHandler);
-
-        unitRemovedHandler = new UnitTypeMonitor.UnitRemovedHandler();
-        manager.addHandler(UnitRemoved.class, unitRemovedHandler);
+        return monitored;
     }
 
     @Override
-    public final void removeDefaultHandlers() throws DBusException {
-        manager.removeHandler(Reloading.class, reloadingHandler);
-        manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
-        manager.removeHandler(UnitNew.class, unitNewHandler);
-        manager.removeHandler(UnitRemoved.class, unitRemovedHandler);
+    public synchronized void reset() {
+        monitoredTypes.clear();
+        monitoredUnits.clear();
     }
 
     @Override
-    public void refresh() throws DBusException {
-        mapUnits();
+    public synchronized void refresh() throws DBusException {
+        try {
+            monitoredUnits.clear();
+
+            for (UnitType unit : manager.listUnits()) {
+                if (isIncluded(unit)) {
+                    String name = unit.getUnitName();
+
+                    monitoredUnits.put(Systemd.escapePath(name), manager.getUnit(name));
+                }
+            }
+        }
+        finally {
+            unitMonitorListeners.forEach(l -> l.monitorRefreshed(monitoredUnits.values()));
+        }
     }
 
     public final void addMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
@@ -88,7 +127,7 @@ public class UnitTypeMonitor extends UnitMonitor {
             this.monitoredTypes.add(monitoredType);
         }
 
-        mapUnits();
+        refresh();
     }
 
     public final void removeMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
@@ -96,134 +135,26 @@ public class UnitTypeMonitor extends UnitMonitor {
             this.monitoredTypes.remove(monitoredType);
         }
 
-        mapUnits();
+        refresh();
     }
 
-    protected final synchronized void mapUnits() throws DBusException {
-        monitoredUnits.clear();
+    @Override
+    public boolean monitorsUnit(final String unitName) {
+        boolean monitored = super.monitorsUnit(unitName);
 
-        for (UnitType unit : manager.listUnits()) {
-            String name = unit.getUnitName();
+        if (!monitored) {
+            String dot = Systemd.escapePath(".");
 
-            if (unit.isAutomount() && monitoredTypes.contains(MonitoredType.AUTOMOUNT)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getAutomount(name));
-            }
-            else if (unit.isBusName() && monitoredTypes.contains(MonitoredType.BUSNAME)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getBusName(name));
-            }
-            else if (unit.isDevice() && monitoredTypes.contains(MonitoredType.DEVICE)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getDevice(name));
-            }
-            else if (unit.isMount() && monitoredTypes.contains(MonitoredType.MOUNT)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getMount(name));
-            }
-            else if (unit.isPath() && monitoredTypes.contains(MonitoredType.PATH)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getPath(name));
-            }
-            else if (unit.isScope() && monitoredTypes.contains(MonitoredType.SCOPE)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getScope(name));
-            }
-            else if (unit.isService() && monitoredTypes.contains(MonitoredType.SERVICE)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getService(name));
-            }
-            else if (unit.isSlice() && monitoredTypes.contains(MonitoredType.SLICE)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getSlice(name));
-            }
-            else if (unit.isSnapshot() && monitoredTypes.contains(MonitoredType.SNAPSHOT)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getSnapshot(name));
-            }
-            else if (unit.isSocket() && monitoredTypes.contains(MonitoredType.SOCKET)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getSocket(name));
-            }
-            else if (unit.isSwap() && monitoredTypes.contains(MonitoredType.SWAP)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getSwap(name));
-            }
-            else if (unit.isTarget() && monitoredTypes.contains(MonitoredType.TARGET)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getTarget(name));
-            }
-            else if (unit.isTimer() && monitoredTypes.contains(MonitoredType.TIMER)) {
-                monitoredUnits.put(Systemd.escapePath(name), manager.getTimer(name));
-            }
-        }
-    }
+            for (MonitoredType monitoredType : monitoredTypes) {
+                if (unitName.endsWith(dot + monitoredType.name().toLowerCase())) {
+                    monitored = true;
 
-    public class ReloadingHandler implements DBusSigHandler<Reloading> {
-
-        @Override
-        public void handle(final Reloading signal) {
-            if (signal.isActive()) {
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("Signal received ('daemon-reload' started: %s)", signal));
-                }
-            }
-            else {
-                if (log.isDebugEnabled()) {
-                    log.debug(String.format("Signal received ('daemon-reload' finished: %s)", signal));
-                }
-
-                try {
-                    mapUnits();
-                }
-                catch (final DBusException e) {
-                    log.error(ERROR_MSG_UNITMAPPING, e);
+                    break;
                 }
             }
         }
 
-    }
-
-    public class UnitFilesChangedHandler implements DBusSigHandler<UnitFilesChanged> {
-
-        @Override
-        public void handle(final UnitFilesChanged signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit files changed: %s)", signal));
-            }
-
-            try {
-                mapUnits();
-            }
-            catch (final DBusException e) {
-                log.error(ERROR_MSG_UNITMAPPING, e);
-            }
-        }
-
-    }
-
-    public class UnitNewHandler implements DBusSigHandler<UnitNew> {
-
-        @Override
-        public void handle(final UnitNew signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit new: %s)", signal));
-            }
-
-            try {
-                mapUnits();
-            }
-            catch (final DBusException e) {
-                log.error(ERROR_MSG_UNITMAPPING, e);
-            }
-        }
-
-    }
-
-    public class UnitRemovedHandler implements DBusSigHandler<UnitRemoved> {
-
-        @Override
-        public void handle(final UnitRemoved signal) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Signal received (unit removed: %s)", signal));
-            }
-
-            try {
-                mapUnits();
-            }
-            catch (final DBusException e) {
-                log.error(ERROR_MSG_UNITMAPPING, e);
-            }
-        }
-
+        return monitored;
     }
 
 }
