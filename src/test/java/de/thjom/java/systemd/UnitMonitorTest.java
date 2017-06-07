@@ -31,9 +31,8 @@ public class UnitMonitorTest extends AbstractTestCase {
     @Override
     @BeforeClass
     public void setup() {
+        // Override only for annotation
         super.setup();
-
-        // TODO
     }
 
     @Test(description="Tests configuration with handler callbacks.")
