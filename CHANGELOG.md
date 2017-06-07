@@ -1,4 +1,4 @@
-# java-systemd - change log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
