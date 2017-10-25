@@ -96,7 +96,7 @@ public class IpAddressPolicy {
             builder.append("unknown");
         }
 
-        builder.append(", prefix=");
+        builder.append("/");
         builder.append(prefix);
         builder.append("]");
 
