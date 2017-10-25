@@ -58,6 +58,9 @@ public class ServiceTest extends UnitTest {
         nonVariantProperties.add(Service.Property.SELINUX_CONTEXT);
         nonVariantProperties.add(Service.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Service.Property.SYSTEM_CALL_FILTER);
+
+        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_ALLOW);
+        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_DENY);
     }
 
     @Test(description="Tests basic manager accessibility.")

@@ -46,6 +46,9 @@ public class SliceTest extends UnitTest {
         nonVariantProperties.add(Slice.Property.BLOCK_IO_READ_BANDWIDTH);
         nonVariantProperties.add(Slice.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Slice.Property.DEVICE_ALLOW);
+
+        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_ALLOW);
+        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_DENY);
     }
 
     @Test(description="Tests basic manager accessibility.")
