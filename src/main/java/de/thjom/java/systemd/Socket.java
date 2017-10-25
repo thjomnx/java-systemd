@@ -30,7 +30,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Socket extends Unit {
+public class Socket extends Unit implements IpAccountable, MemoryAccountable {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Socket";
     public static final String UNIT_SUFFIX = ".socket";
@@ -210,7 +210,7 @@ public class Socket extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(Property.class, IpAccountable.Property.class, MemoryAccountable.Property.class);
         }
 
     }

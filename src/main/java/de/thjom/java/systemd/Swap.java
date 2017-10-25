@@ -26,7 +26,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Swap extends Unit {
+public class Swap extends Unit implements IpAccountable {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -152,7 +152,7 @@ public class Swap extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(Property.class, IpAccountable.Property.class);
         }
 
     }
