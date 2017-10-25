@@ -103,25 +103,28 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
             // Do nothing (static implementation)
         }
 
-        protected static final String[] getAllNames(final Class<?> type) {
-            Field[] fields = type.getDeclaredFields();
-            List<String> names = new ArrayList<>(fields.length);
+        protected static final String[] getAllNames(final Class<?>... types) {
+            List<String> names = new ArrayList<>();
 
-            for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
+            for (Class<?> type : types) {
+                Field[] fields = type.getDeclaredFields();
 
-                // Exclude synthetic fields (occurs during code coverage analysis)
-                if (!field.isSynthetic()) {
-                    Object obj = "";
+                for (int i = 0; i < fields.length; i++) {
+                    Field field = fields[i];
 
-                    try {
-                        obj = field.get(null);
+                    // Exclude synthetic fields (occurs during code coverage analysis)
+                    if (!field.isSynthetic()) {
+                        Object obj = "";
+
+                        try {
+                            obj = field.get(null);
+                        }
+                        catch (final IllegalAccessException | IllegalArgumentException e) {
+                            log.error("Unable to enumerate field names", e);
+                        }
+
+                        names.add(obj.toString());
                     }
-                    catch (final IllegalAccessException | IllegalArgumentException e) {
-                        log.error("Unable to enumerate field names", e);
-                    }
-
-                    names.add(obj.toString());
                 }
             }
 
