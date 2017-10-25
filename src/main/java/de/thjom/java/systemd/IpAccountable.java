@@ -40,7 +40,7 @@ public interface IpAccountable {
 
     Properties getProperties();
 
-    default boolean isIpAccounting() {
+    default boolean isIPAccounting() {
         return getProperties().getBoolean(Property.IP_ACCOUNTING);
     }
 
@@ -52,19 +52,19 @@ public interface IpAccountable {
         return IpAddressPolicy.list(getProperties().getVector(Property.IP_ADDRESS_DENY));
     }
 
-    default BigInteger getIpEgressBytes() {
+    default BigInteger getIPEgressBytes() {
         return getProperties().getBigInteger(Property.IP_EGRESS_BYTES);
     }
 
-    default BigInteger getIpEgressPackets() {
+    default BigInteger getIPEgressPackets() {
         return getProperties().getBigInteger(Property.IP_EGRESS_PACKETS);
     }
 
-    default BigInteger getIpIngressBytes() {
+    default BigInteger getIPIngressBytes() {
         return getProperties().getBigInteger(Property.IP_INGRESS_BYTES);
     }
 
-    default BigInteger getIpIngressPackets() {
+    default BigInteger getIPIngressPackets() {
         return getProperties().getBigInteger(Property.IP_INGRESS_PACKETS);
     }
 
