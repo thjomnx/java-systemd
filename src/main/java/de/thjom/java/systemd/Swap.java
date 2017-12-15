@@ -152,7 +152,10 @@ public class Swap extends Unit implements IpAccountable {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class, IpAccountable.Property.class);
+            return getAllNames(
+                    Property.class,
+                    IpAccountable.Property.class
+            );
         }
 
     }

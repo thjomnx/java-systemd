@@ -47,7 +47,12 @@ public class Slice extends Unit implements IoAccountable, IpAccountable, MemoryA
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class, IoAccountable.class, IpAccountable.Property.class, MemoryAccountable.Property.class);
+            return getAllNames(
+                    Property.class,
+                    IoAccountable.Property.class,
+                    IpAccountable.Property.class,
+                    MemoryAccountable.Property.class
+            );
         }
 
     }

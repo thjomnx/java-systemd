@@ -60,6 +60,12 @@ public class SocketTest extends UnitTest {
 
         nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_DENY);
+
+        nonVariantProperties.add(IoAccountable.Property.IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccountable.Property.IO_READ_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccountable.Property.IO_READ_IOPS_MAX);
+        nonVariantProperties.add(IoAccountable.Property.IO_WRITE_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccountable.Property.IO_WRITE_IOPS_MAX);
     }
 
     @Test(description="Tests basic manager accessibility.")
