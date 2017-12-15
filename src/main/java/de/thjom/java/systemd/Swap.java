@@ -26,7 +26,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Swap extends Unit implements IpAccountable {
+public class Swap extends Unit implements Limitable, IpAccountable {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -71,22 +71,6 @@ public class Swap extends Unit implements IpAccountable {
         public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_STACK = "LimitSTACK";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_DENY_WRITE_EXECUTE = "MemoryDenyWriteExecute";
         public static final String MEMORY_HIGH = "MemoryHigh";
@@ -154,6 +138,7 @@ public class Swap extends Unit implements IpAccountable {
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    Limitable.Property.class,
                     IpAccountable.Property.class
             );
         }
@@ -330,70 +315,6 @@ public class Swap extends Unit implements IpAccountable {
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    public BigInteger getLimitAS() {
-        return properties.getBigInteger(Property.LIMIT_AS);
-    }
-
-    public BigInteger getLimitCORE() {
-        return properties.getBigInteger(Property.LIMIT_CORE);
-    }
-
-    public BigInteger getLimitCPU() {
-        return properties.getBigInteger(Property.LIMIT_CPU);
-    }
-
-    public BigInteger getLimitDATA() {
-        return properties.getBigInteger(Property.LIMIT_DATA);
-    }
-
-    public BigInteger getLimitFSIZE() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE);
-    }
-
-    public BigInteger getLimitLOCKS() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS);
-    }
-
-    public BigInteger getLimitMEMLOCK() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK);
-    }
-
-    public BigInteger getLimitMSGQUEUE() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE);
-    }
-
-    public BigInteger getLimitNICE() {
-        return properties.getBigInteger(Property.LIMIT_NICE);
-    }
-
-    public BigInteger getLimitNOFILE() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE);
-    }
-
-    public BigInteger getLimitNPROC() {
-        return properties.getBigInteger(Property.LIMIT_NPROC);
-    }
-
-    public BigInteger getLimitRSS() {
-        return properties.getBigInteger(Property.LIMIT_RSS);
-    }
-
-    public BigInteger getLimitRTPRIO() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO);
-    }
-
-    public BigInteger getLimitRTTIME() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME);
-    }
-
-    public BigInteger getLimitSIGPENDING() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING);
-    }
-
-    public BigInteger getLimitSTACK() {
-        return properties.getBigInteger(Property.LIMIT_STACK);
     }
 
     public boolean isMemoryAccounting() {

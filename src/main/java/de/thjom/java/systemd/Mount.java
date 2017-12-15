@@ -29,7 +29,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Mount extends Unit implements IoAccountable, IpAccountable, MemoryAccountable {
+public class Mount extends Unit implements Limitable, IoAccountable, IpAccountable, MemoryAccountable {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Mount";
     public static final String UNIT_SUFFIX = ".mount";
@@ -74,38 +74,6 @@ public class Mount extends Unit implements IoAccountable, IpAccountable, MemoryA
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String LAZY_UNMOUNT = "LazyUnmount";
-        public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_AS_SOFT = "LimitASSoft";
-        public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CORE_SOFT = "LimitCORESoft";
-        public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_CPU_SOFT = "LimitCPUSoft";
-        public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_DATA_SOFT = "LimitDATASoft";
-        public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_FSIZE_SOFT = "LimitFSIZESoft";
-        public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_LOCKS_SOFT = "LimitLOCKSSoft";
-        public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MEMLOCK_SOFT = "LimitMEMLOCKSoft";
-        public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_MSGQUEUE_SOFT = "LimitMSGQUEUESoft";
-        public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NICE_SOFT = "LimitNICESoft";
-        public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NOFILE_SOFT = "LimitNOFILESoft";
-        public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_NPROC_SOFT = "LimitNPROCSoft";
-        public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RSS_SOFT = "LimitRSSSoft";
-        public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTPRIO_SOFT = "LimitRTPRIOSoft";
-        public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_RTTIME_SOFT = "LimitRTTIMESoft";
-        public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_SIGPENDING_SOFT = "LimitSIGPENDINGSoft";
-        public static final String LIMIT_STACK = "LimitSTACK";
-        public static final String LIMIT_STACK_SOFT = "LimitSTACKSoft";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_CURRENT = "MemoryCurrent";
         public static final String MEMORY_LIMIT = "MemoryLimit";
@@ -177,6 +145,7 @@ public class Mount extends Unit implements IoAccountable, IpAccountable, MemoryA
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    Limitable.Property.class,
                     IoAccountable.Property.class,
                     IpAccountable.Property.class,
                     MemoryAccountable.Property.class
@@ -357,134 +326,6 @@ public class Mount extends Unit implements IoAccountable, IpAccountable, MemoryA
 
     public boolean isLazyUnmount() {
         return properties.getBoolean(Property.LAZY_UNMOUNT);
-    }
-
-    public BigInteger getLimitAS() {
-        return properties.getBigInteger(Property.LIMIT_AS);
-    }
-
-    public BigInteger getLimitASSoft() {
-        return properties.getBigInteger(Property.LIMIT_AS_SOFT);
-    }
-
-    public BigInteger getLimitCORE() {
-        return properties.getBigInteger(Property.LIMIT_CORE);
-    }
-
-    public BigInteger getLimitCORESoft() {
-        return properties.getBigInteger(Property.LIMIT_CORE_SOFT);
-    }
-
-    public BigInteger getLimitCPU() {
-        return properties.getBigInteger(Property.LIMIT_CPU);
-    }
-
-    public BigInteger getLimitCPUSoft() {
-        return properties.getBigInteger(Property.LIMIT_CPU_SOFT);
-    }
-
-    public BigInteger getLimitDATA() {
-        return properties.getBigInteger(Property.LIMIT_DATA);
-    }
-
-    public BigInteger getLimitDATASoft() {
-        return properties.getBigInteger(Property.LIMIT_DATA_SOFT);
-    }
-
-    public BigInteger getLimitFSIZE() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE);
-    }
-
-    public BigInteger getLimitFSIZESoft() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE_SOFT);
-    }
-
-    public BigInteger getLimitLOCKS() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS);
-    }
-
-    public BigInteger getLimitLOCKSSoft() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS_SOFT);
-    }
-
-    public BigInteger getLimitMEMLOCK() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK);
-    }
-
-    public BigInteger getLimitMEMLOCKSoft() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK_SOFT);
-    }
-
-    public BigInteger getLimitMSGQUEUE() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE);
-    }
-
-    public BigInteger getLimitMSGQUEUESoft() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE_SOFT);
-    }
-
-    public BigInteger getLimitNICE() {
-        return properties.getBigInteger(Property.LIMIT_NICE);
-    }
-
-    public BigInteger getLimitNICESoft() {
-        return properties.getBigInteger(Property.LIMIT_NICE_SOFT);
-    }
-
-    public BigInteger getLimitNOFILE() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE);
-    }
-
-    public BigInteger getLimitNOFILESoft() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE_SOFT);
-    }
-
-    public BigInteger getLimitNPROC() {
-        return properties.getBigInteger(Property.LIMIT_NPROC);
-    }
-
-    public BigInteger getLimitNPROCSoft() {
-        return properties.getBigInteger(Property.LIMIT_NPROC_SOFT);
-    }
-
-    public BigInteger getLimitRSS() {
-        return properties.getBigInteger(Property.LIMIT_RSS);
-    }
-
-    public BigInteger getLimitRSSSoft() {
-        return properties.getBigInteger(Property.LIMIT_RSS_SOFT);
-    }
-
-    public BigInteger getLimitRTPRIO() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO);
-    }
-
-    public BigInteger getLimitRTPRIOSoft() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO_SOFT);
-    }
-
-    public BigInteger getLimitRTTIME() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME);
-    }
-
-    public BigInteger getLimitRTTIMESoft() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME_SOFT);
-    }
-
-    public BigInteger getLimitSIGPENDING() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING);
-    }
-
-    public BigInteger getLimitSIGPENDINGSoft() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING_SOFT);
-    }
-
-    public BigInteger getLimitSTACK() {
-        return properties.getBigInteger(Property.LIMIT_STACK);
-    }
-
-    public BigInteger getLimitSTACKSoft() {
-        return properties.getBigInteger(Property.LIMIT_STACK_SOFT);
     }
 
     public boolean isMemoryAccounting() {
