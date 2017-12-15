@@ -21,7 +21,7 @@ import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 
-public class Scope extends Unit implements IpAccountable, MemoryAccountable {
+public class Scope extends Unit implements IoAccountable, IpAccountable, MemoryAccountable {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
@@ -54,7 +54,7 @@ public class Scope extends Unit implements IpAccountable, MemoryAccountable {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class, IpAccountable.Property.class, MemoryAccountable.Property.class);
+            return getAllNames(Property.class, IoAccountable.class, IpAccountable.Property.class, MemoryAccountable.Property.class);
         }
 
     }

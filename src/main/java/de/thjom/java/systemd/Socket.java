@@ -30,7 +30,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Socket extends Unit implements IpAccountable, MemoryAccountable {
+public class Socket extends Unit implements IoAccountable, IpAccountable, MemoryAccountable {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Socket";
     public static final String UNIT_SUFFIX = ".socket";
@@ -75,6 +75,8 @@ public class Socket extends Unit implements IpAccountable, MemoryAccountable {
         public static final String FREE_BIND = "FreeBind";
         public static final String GROUP = "Group";
         public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IP_TOS = "IPTOS";
         public static final String IP_TTL = "IPTTL";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
@@ -210,7 +212,7 @@ public class Socket extends Unit implements IpAccountable, MemoryAccountable {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class, IpAccountable.Property.class, MemoryAccountable.Property.class);
+            return getAllNames(Property.class, IoAccountable.class, IpAccountable.Property.class, MemoryAccountable.Property.class);
         }
 
     }
@@ -387,6 +389,14 @@ public class Socket extends Unit implements IpAccountable, MemoryAccountable {
 
     public int getIOScheduling() {
         return properties.getInteger(Property.IO_SCHEDULING);
+    }
+
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
+    }
+
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public int getIPTOS() {

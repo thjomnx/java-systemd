@@ -78,6 +78,8 @@ public class Service extends Unit implements IpAccountable, MemoryAccountable {
         public static final String GROUP = "Group";
         public static final String GUESS_MAIN_PID = "GuessMainPID";
         public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
         public static final String KILL_MODE = "KillMode";
@@ -378,6 +380,14 @@ public class Service extends Unit implements IpAccountable, MemoryAccountable {
 
     public int getIOScheduling() {
         return properties.getInteger(Property.IO_SCHEDULING);
+    }
+
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
+    }
+
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public boolean isIgnoreSIGPIPE() {
