@@ -17,6 +17,10 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
@@ -29,7 +33,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Service extends Unit implements Limitable, IoAccountable, IpAccountable, MemoryAccountable {
+public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting, MemoryAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
@@ -81,7 +85,7 @@ public class Service extends Unit implements Limitable, IoAccountable, IpAccount
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String MAIN_PID = "MainPID";
@@ -173,10 +177,10 @@ public class Service extends Unit implements Limitable, IoAccountable, IpAccount
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
-                    Limitable.Property.class,
-                    IoAccountable.Property.class,
-                    IpAccountable.Property.class,
-                    MemoryAccountable.Property.class
+                    Ulimit.Property.class,
+                    IoAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    MemoryAccounting.Property.class
             );
         }
 
@@ -352,6 +356,7 @@ public class Service extends Unit implements Limitable, IoAccountable, IpAccount
         return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
     }
 
+    @Override
     public String getFailureAction() {
         return properties.getString(Property.FAILURE_ACTION);
     }
@@ -384,8 +389,8 @@ public class Service extends Unit implements Limitable, IoAccountable, IpAccount
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
     public String getKillMode() {
@@ -488,6 +493,7 @@ public class Service extends Unit implements Limitable, IoAccountable, IpAccount
         return properties.getVector(Property.READ_WRITE_DIRECTORIES);
     }
 
+    @Override
     public String getRebootArgument() {
         return properties.getString(Property.REBOOT_ARGUMENT);
     }
@@ -578,10 +584,12 @@ public class Service extends Unit implements Limitable, IoAccountable, IpAccount
         return properties.getString(Property.STANDARD_OUTPUT);
     }
 
+    @Override
     public String getStartLimitAction() {
         return properties.getString(Property.START_LIMIT_ACTION);
     }
 
+    @Override
     public long getStartLimitBurst() {
         return properties.getLong(Property.START_LIMIT_BURST);
     }

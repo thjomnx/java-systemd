@@ -95,7 +95,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
         return Objects.hash(dbus.getUniqueName(), getObjectPath());
     }
 
-    protected static class AdapterProperty {
+    public static class AdapterProperty {
 
         private static final Logger log = LoggerFactory.getLogger(AdapterProperty.class);
 

@@ -18,6 +18,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 
 public class SwapTest extends UnitTest {
@@ -56,8 +57,8 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(Swap.Property.IO_WRITE_IOPS_MAX);
         nonVariantProperties.add(Swap.Property.SYSTEM_CALL_FILTER);
 
-        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_ALLOW);
-        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_DENY);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
     }
 
     @Test(description="Tests basic manager accessibility.")

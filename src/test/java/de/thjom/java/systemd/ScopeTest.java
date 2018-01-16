@@ -18,6 +18,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.ScopeInterface;
 
 public class ScopeTest extends UnitTest {
@@ -47,14 +49,14 @@ public class ScopeTest extends UnitTest {
         nonVariantProperties.add(Scope.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Scope.Property.DEVICE_ALLOW);
 
-        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_ALLOW);
-        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_DENY);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
 
-        nonVariantProperties.add(IoAccountable.Property.IO_DEVICE_WEIGHT);
-        nonVariantProperties.add(IoAccountable.Property.IO_READ_BANDWIDTH_MAX);
-        nonVariantProperties.add(IoAccountable.Property.IO_READ_IOPS_MAX);
-        nonVariantProperties.add(IoAccountable.Property.IO_WRITE_BANDWIDTH_MAX);
-        nonVariantProperties.add(IoAccountable.Property.IO_WRITE_IOPS_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_WRITE_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_WRITE_IOPS_MAX);
     }
 
     @Test(description="Tests basic manager accessibility.")

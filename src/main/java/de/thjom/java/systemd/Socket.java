@@ -17,6 +17,10 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SocketInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
@@ -30,7 +34,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Socket extends Unit implements Limitable, IoAccountable, IpAccountable, MemoryAccountable {
+public class Socket extends Unit implements Ulimit, IoAccounting, IpAccounting, MemoryAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Socket";
     public static final String UNIT_SUFFIX = ".socket";
@@ -182,10 +186,10 @@ public class Socket extends Unit implements Limitable, IoAccountable, IpAccounta
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
-                    Limitable.Property.class,
-                    IoAccountable.Property.class,
-                    IpAccountable.Property.class,
-                    MemoryAccountable.Property.class
+                    Ulimit.Property.class,
+                    IoAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    MemoryAccounting.Property.class
             );
         }
 

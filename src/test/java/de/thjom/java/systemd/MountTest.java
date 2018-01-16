@@ -18,6 +18,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.MountInterface;
 
 public class MountTest extends UnitTest {
@@ -56,14 +58,14 @@ public class MountTest extends UnitTest {
         nonVariantProperties.add(Mount.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Mount.Property.SYSTEM_CALL_FILTER);
 
-        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_ALLOW);
-        nonVariantProperties.add(IpAccountable.Property.IP_ADDRESS_DENY);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
 
-        nonVariantProperties.add(IoAccountable.Property.IO_DEVICE_WEIGHT);
-        nonVariantProperties.add(IoAccountable.Property.IO_READ_BANDWIDTH_MAX);
-        nonVariantProperties.add(IoAccountable.Property.IO_READ_IOPS_MAX);
-        nonVariantProperties.add(IoAccountable.Property.IO_WRITE_BANDWIDTH_MAX);
-        nonVariantProperties.add(IoAccountable.Property.IO_WRITE_IOPS_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_WRITE_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_WRITE_IOPS_MAX);
     }
 
     @Test(description="Tests basic manager accessibility.")

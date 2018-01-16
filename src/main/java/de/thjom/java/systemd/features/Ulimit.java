@@ -9,11 +9,14 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd;
+package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
 
-public interface Limitable {
+import de.thjom.java.systemd.InterfaceAdapter;
+import de.thjom.java.systemd.Properties;
+
+public interface Ulimit {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 

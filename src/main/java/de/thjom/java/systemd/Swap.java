@@ -17,6 +17,8 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
@@ -26,7 +28,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Swap extends Unit implements Limitable, IpAccountable {
+public class Swap extends Unit implements Ulimit, IpAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -138,8 +140,8 @@ public class Swap extends Unit implements Limitable, IpAccountable {
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
-                    Limitable.Property.class,
-                    IpAccountable.Property.class
+                    Ulimit.Property.class,
+                    IpAccounting.Property.class
             );
         }
 

@@ -9,14 +9,16 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd;
+package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
 import java.util.List;
 
+import de.thjom.java.systemd.InterfaceAdapter;
+import de.thjom.java.systemd.Properties;
 import de.thjom.java.systemd.types.IpAddressPolicy;
 
-public interface IpAccountable {
+public interface IpAccounting {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
