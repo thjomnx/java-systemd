@@ -199,6 +199,14 @@ public class Manager extends InterfaceAdapter {
         return getInterface().listUnits();
     }
 
+    public long lookupDynamicUserByName(final String name) {
+        return getInterface().lookupDynamicUserByName(name);
+    }
+
+    public String lookupDynamicUserByUID(final long uid) {
+        return getInterface().lookupDynamicUserByUID(uid);
+    }
+
     public void powerOff() {
         getInterface().powerOff();
     }

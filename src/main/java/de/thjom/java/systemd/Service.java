@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
@@ -33,7 +34,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting, MemoryAccounting {
+public class Service extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
@@ -105,10 +106,6 @@ public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting,
         public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String PRIVATE_NETWORK = "PrivateNetwork";
-        public static final String PRIVATE_TMP = "PrivateTmp";
-        public static final String PROTECT_HOME = "ProtectHome";
-        public static final String PROTECT_SYSTEM = "ProtectSystem";
         public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
         public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
         public static final String REBOOT_ARGUMENT = "RebootArgument";
@@ -119,8 +116,6 @@ public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting,
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String ROOT_DIRECTORY_START_ONLY = "RootDirectoryStartOnly";
-        public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
-        public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
         public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -177,10 +172,11 @@ public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting,
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
-                    Ulimit.Property.class,
+                    DynamicUserAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    MemoryAccounting.Property.class
+                    MemoryAccounting.Property.class,
+                    Ulimit.Property.class
             );
         }
 
@@ -469,22 +465,6 @@ public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting,
         return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
-    public boolean isPrivateNetwork() {
-        return properties.getBoolean(Property.PRIVATE_NETWORK);
-    }
-
-    public boolean isPrivateTmp() {
-        return properties.getBoolean(Property.PRIVATE_TMP);
-    }
-
-    public String getProtectHome() {
-        return properties.getString(Property.PROTECT_HOME);
-    }
-
-    public String getProtectSystem() {
-        return properties.getString(Property.PROTECT_SYSTEM);
-    }
-
     public Vector<String> getReadOnlyDirectories() {
         return properties.getVector(Property.READ_ONLY_DIRECTORIES);
     }
@@ -526,14 +506,6 @@ public class Service extends Unit implements Ulimit, IoAccounting, IpAccounting,
 
     public boolean isRootDirectoryStartOnly() {
         return properties.getBoolean(Property.ROOT_DIRECTORY_START_ONLY);
-    }
-
-    public Vector<String> getRuntimeDirectory() {
-        return properties.getVector(Property.RUNTIME_DIRECTORY);
-    }
-
-    public long getRuntimeDirectoryMode() {
-        return properties.getLong(Property.RUNTIME_DIRECTORY_MODE);
     }
 
     public BigInteger getRuntimeMaxUSec() {

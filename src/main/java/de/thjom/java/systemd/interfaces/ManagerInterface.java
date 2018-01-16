@@ -53,6 +53,12 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ListUnits")
     List<UnitType> listUnits();
 
+    @DBusMemberName(value = "LookupDynamicUserByName")
+    long lookupDynamicUserByName(final String name);
+
+    @DBusMemberName(value = "LookupDynamicUserByUID")
+    String lookupDynamicUserByUID(final long uid);
+
     @DBusMemberName(value = "PowerOff")
     void powerOff();
 

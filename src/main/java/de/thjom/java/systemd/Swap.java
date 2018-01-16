@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
@@ -28,7 +29,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Swap extends Unit implements Ulimit, IpAccounting {
+public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -87,9 +88,6 @@ public class Swap extends Unit implements Ulimit, IpAccounting {
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PRIORITY = "Priority";
-        public static final String PRIVATE_NETWORK = "PrivateNetwork";
-        public static final String PRIVATE_TMP = "PrivateTmp";
-        public static final String PRIVATE_USERS = "PrivateUsers";
         public static final String PROTECT_CONTROL_GROUPS = "ProtectControlGroups";
         public static final String PROTECT_KERNEL_MODULES = "ProtectKernelModules";
         public static final String PROTECT_KERNEL_TUNABLES = "ProtectKernelTunables";
@@ -97,7 +95,6 @@ public class Swap extends Unit implements Ulimit, IpAccounting {
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
-        public static final String REMOVE_IPC = "RemoveIPC";
         public static final String RESTRICT_REALTIME = "RestrictRealtime";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -140,8 +137,9 @@ public class Swap extends Unit implements Ulimit, IpAccounting {
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
-                    Ulimit.Property.class,
-                    IpAccounting.Property.class
+                    DynamicUserAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    Ulimit.Property.class
             );
         }
 
@@ -239,6 +237,7 @@ public class Swap extends Unit implements Ulimit, IpAccounting {
         return properties.getString(Property.DEVICE_POLICY);
     }
 
+    @Override
     public boolean isDynamicUser() {
         return properties.getBoolean(Property.DYNAMIC_USER);
     }
@@ -375,18 +374,6 @@ public class Swap extends Unit implements Ulimit, IpAccounting {
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public boolean isPrivateNetwork() {
-        return properties.getBoolean(Property.PRIVATE_NETWORK);
-    }
-
-    public boolean isPrivateTmp() {
-        return properties.getBoolean(Property.PRIVATE_TMP);
-    }
-
-    public boolean isPrivateUsers() {
-        return properties.getBoolean(Property.PRIVATE_USERS);
-    }
-
     public boolean isProtectControlGroups() {
         return properties.getBoolean(Property.PROTECT_CONTROL_GROUPS);
     }
@@ -413,10 +400,6 @@ public class Swap extends Unit implements Ulimit, IpAccounting {
 
     public Vector<String> getReadWritePaths() {
         return properties.getVector(Property.READ_WRITE_PATHS);
-    }
-
-    public boolean isRemoveIPC() {
-        return properties.getBoolean(Property.REMOVE_IPC);
     }
 
     public boolean isRestrictRealtime() {
