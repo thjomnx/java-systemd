@@ -62,7 +62,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DEFER_ACCEPT_USEC = "DeferAcceptUSec";
@@ -79,13 +78,12 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         public static final String FILE_DESCRIPTOR_NAME = "FileDescriptorName";
         public static final String FREE_BIND = "FreeBind";
         public static final String GROUP = "Group";
-        public static final String IO_SCHEDULING = "IOScheduling";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IP_TOS = "IPTOS";
         public static final String IP_TTL = "IPTTL";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String KEEP_ALIVE = "KeepAlive";
         public static final String KEEP_ALIVE_INTERVAL_USEC = "KeepAliveIntervalUSec";
         public static final String KEEP_ALIVE_PROBES = "KeepAliveProbes";
@@ -117,8 +115,8 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         public static final String PIPE_SIZE = "PipeSize";
         public static final String PRIORITY = "Priority";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RECEIVE_BUFFER = "ReceiveBuffer";
         public static final String REMOVE_ON_STOP = "RemoveOnStop";
         public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
@@ -293,10 +291,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -361,10 +355,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         return properties.getString(Property.GROUP);
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
-    }
-
     public int getIOSchedulingClass() {
         return properties.getInteger(Property.IO_SCHEDULING_CLASS);
     }
@@ -385,8 +375,8 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
     public boolean isKeepAlive() {
@@ -513,12 +503,12 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
     public BigInteger getReceiveBuffer() {

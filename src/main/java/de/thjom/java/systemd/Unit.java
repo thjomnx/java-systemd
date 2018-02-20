@@ -154,7 +154,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String SOURCE_PATH = "SourcePath";
         public static final String START_LIMIT_ACTION = "StartLimitAction";
         public static final String START_LIMIT_BURST = "StartLimitBurst";
-        public static final String START_LIMIT_INTERVAL_SEC = "StartLimitIntervalSec";
+        public static final String START_LIMIT_INTERVAL_USEC = "StartLimitIntervalUSec";
         public static final String STATE_CHANGE_TIMESTAMP = "StateChangeTimestamp";
         public static final String STATE_CHANGE_TIMESTAMP_MONOTONIC = "StateChangeTimestampMonotonic";
         public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
@@ -622,8 +622,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getLong(Property.START_LIMIT_BURST);
     }
 
-    public long getStartLimitIntervalSec() {
-        return unitProperties.getLong(Property.START_LIMIT_INTERVAL_SEC);
+    public long getStartLimitIntervalUSec() {
+        return unitProperties.getLong(Property.START_LIMIT_INTERVAL_USEC);
     }
 
     public long getStateChangeTimestamp() {

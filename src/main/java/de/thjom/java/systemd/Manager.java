@@ -73,7 +73,7 @@ public class Manager extends InterfaceAdapter {
         public static final String DEFAULT_STANDARD_ERROR = "DefaultStandardError";
         public static final String DEFAULT_STANDARD_OUTPUT = "DefaultStandardOutput";
         public static final String DEFAULT_START_LIMIT_BURST = "DefaultStartLimitBurst";
-        public static final String DEFAULT_START_LIMIT_INTERVAL_SEC = "DefaultStartLimitIntervalSec";
+        public static final String DEFAULT_START_LIMIT_INTERVAL_USEC = "DefaultStartLimitIntervalUSec";
         public static final String DEFAULT_TASKS_ACCOUNTING = "DefaultTasksAccounting";
         public static final String DEFAULT_TASKS_MAX = "DefaultTasksMax";
         public static final String DEFAULT_TIMEOUT_START_USEC = "DefaultTimeoutStartUSec";
@@ -109,6 +109,7 @@ public class Manager extends InterfaceAdapter {
         public static final String SECURITY_FINISH_TIMESTAMP_MONOTONIC = "SecurityFinishTimestampMonotonic";
         public static final String SECURITY_START_TIMESTAMP = "SecurityStartTimestamp";
         public static final String SECURITY_START_TIMESTAMP_MONOTONIC = "SecurityStartTimestampMonotonic";
+        public static final String SERVICE_WATCHDOGS = "ServiceWatchdogs";
         public static final String SHOW_STATUS = "ShowStatus";
         public static final String SHUTDOWN_WATCHDOG_USEC = "ShutdownWatchdogUSec";
         public static final String SYSTEM_STATE = "SystemState";
@@ -578,8 +579,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.DEFAULT_START_LIMIT_BURST);
     }
 
-    public long getDefaultStartLimitIntervalSec() {
-        return properties.getLong(Property.DEFAULT_START_LIMIT_INTERVAL_SEC);
+    public long getDefaultStartLimitIntervalUSec() {
+        return properties.getLong(Property.DEFAULT_START_LIMIT_INTERVAL_USEC);
     }
 
     public boolean isDefaultTasksAccounting() {
@@ -720,6 +721,10 @@ public class Manager extends InterfaceAdapter {
 
     public long getSecurityStartTimestampMonotonic() {
         return properties.getLong(Property.SECURITY_START_TIMESTAMP_MONOTONIC);
+    }
+
+    public boolean isServiceWatchdogs() {
+        return properties.getBoolean(Property.SERVICE_WATCHDOGS);
     }
 
     public boolean isShowStatus() {

@@ -56,7 +56,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
@@ -78,11 +77,9 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String EXEC_START_PRE = "ExecStartPre";
         public static final String EXEC_STOP = "ExecStop";
         public static final String EXEC_STOP_POST = "ExecStopPost";
-        public static final String FAILURE_ACTION = "FailureAction";
         public static final String FILE_DESCRIPTOR_STORE_MAX = "FileDescriptorStoreMax";
         public static final String GROUP = "Group";
         public static final String GUESS_MAIN_PID = "GuessMainPID";
-        public static final String IO_SCHEDULING = "IOScheduling";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
@@ -106,9 +103,8 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
-        public static final String REBOOT_ARGUMENT = "RebootArgument";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
         public static final String RESTART = "Restart";
         public static final String RESTART_USEC = "RestartUSec";
@@ -127,9 +123,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String STANDARD_ERROR = "StandardError";
         public static final String STANDARD_INPUT = "StandardInput";
         public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String START_LIMIT_ACTION = "StartLimitAction";
-        public static final String START_LIMIT_BURST = "StartLimitBurst";
-        public static final String START_LIMIT_INTERVAL = "StartLimitInterval";
         public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
         public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String STATUS_ERRNO = "StatusErrno";
@@ -264,10 +257,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -352,11 +341,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
     }
 
-    @Override
-    public String getFailureAction() {
-        return properties.getString(Property.FAILURE_ACTION);
-    }
-
     public long getFileDescriptorStoreMax() {
         return properties.getLong(Property.FILE_DESCRIPTOR_STORE_MAX);
     }
@@ -367,10 +351,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public boolean isGuessMainPID() {
         return properties.getBoolean(Property.GUESS_MAIN_PID);
-    }
-
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
     }
 
     public int getIOSchedulingClass() {
@@ -465,17 +445,12 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
-    }
-
-    @Override
-    public String getRebootArgument() {
-        return properties.getString(Property.REBOOT_ARGUMENT);
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
     public boolean isRemainAfterExit() {
@@ -554,20 +529,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public String getStandardOutput() {
         return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    @Override
-    public String getStartLimitAction() {
-        return properties.getString(Property.START_LIMIT_ACTION);
-    }
-
-    @Override
-    public long getStartLimitBurst() {
-        return properties.getLong(Property.START_LIMIT_BURST);
-    }
-
-    public BigInteger getStartLimitInterval() {
-        return properties.getBigInteger(Property.START_LIMIT_INTERVAL);
     }
 
     public BigInteger getStartupBlockIOWeight() {

@@ -56,7 +56,6 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
@@ -71,11 +70,10 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         public static final String EXEC_UNMOUNT = "ExecUnmount";
         public static final String FORCE_UNMOUNT = "ForceUnmount";
         public static final String GROUP = "Group";
-        public static final String IO_SCHEDULING = "IOScheduling";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String LAZY_UNMOUNT = "LazyUnmount";
@@ -92,8 +90,8 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -236,10 +234,6 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -296,10 +290,6 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         return properties.getString(Property.GROUP);
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
-    }
-
     public int getIOSchedulingClass() {
         return properties.getInteger(Property.IO_SCHEDULING_CLASS);
     }
@@ -312,8 +302,8 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
     public String getKillMode() {
@@ -380,12 +370,12 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
     public AddressFamilyRestriction getRestrictAddressFamilies() {
