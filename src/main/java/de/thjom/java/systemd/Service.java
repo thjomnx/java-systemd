@@ -17,6 +17,11 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
@@ -29,7 +34,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Service extends Unit {
+public class Service extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
@@ -51,7 +56,6 @@ public class Service extends Unit {
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
@@ -73,31 +77,15 @@ public class Service extends Unit {
         public static final String EXEC_START_PRE = "ExecStartPre";
         public static final String EXEC_STOP = "ExecStop";
         public static final String EXEC_STOP_POST = "ExecStopPost";
-        public static final String FAILURE_ACTION = "FailureAction";
         public static final String FILE_DESCRIPTOR_STORE_MAX = "FileDescriptorStoreMax";
         public static final String GROUP = "Group";
         public static final String GUESS_MAIN_PID = "GuessMainPID";
-        public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_STACK = "LimitSTACK";
         public static final String MAIN_PID = "MainPID";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_CURRENT = "MemoryCurrent";
@@ -115,13 +103,8 @@ public class Service extends Unit {
         public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String PRIVATE_NETWORK = "PrivateNetwork";
-        public static final String PRIVATE_TMP = "PrivateTmp";
-        public static final String PROTECT_HOME = "ProtectHome";
-        public static final String PROTECT_SYSTEM = "ProtectSystem";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
-        public static final String REBOOT_ARGUMENT = "RebootArgument";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
         public static final String RESTART = "Restart";
         public static final String RESTART_USEC = "RestartUSec";
@@ -129,8 +112,6 @@ public class Service extends Unit {
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String ROOT_DIRECTORY_START_ONLY = "RootDirectoryStartOnly";
-        public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
-        public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
         public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -142,9 +123,6 @@ public class Service extends Unit {
         public static final String STANDARD_ERROR = "StandardError";
         public static final String STANDARD_INPUT = "StandardInput";
         public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String START_LIMIT_ACTION = "StartLimitAction";
-        public static final String START_LIMIT_BURST = "StartLimitBurst";
-        public static final String START_LIMIT_INTERVAL = "StartLimitInterval";
         public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
         public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String STATUS_ERRNO = "StatusErrno";
@@ -185,7 +163,14 @@ public class Service extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(
+                    Property.class,
+                    DynamicUserAccounting.Property.class,
+                    IoAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    MemoryAccounting.Property.class,
+                    Ulimit.Property.class
+            );
         }
 
     }
@@ -272,10 +257,6 @@ public class Service extends Unit {
         return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -360,10 +341,6 @@ public class Service extends Unit {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
     }
 
-    public String getFailureAction() {
-        return properties.getString(Property.FAILURE_ACTION);
-    }
-
     public long getFileDescriptorStoreMax() {
         return properties.getLong(Property.FILE_DESCRIPTOR_STORE_MAX);
     }
@@ -376,16 +353,20 @@ public class Service extends Unit {
         return properties.getBoolean(Property.GUESS_MAIN_PID);
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
+    }
+
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public boolean isIgnoreSIGPIPE() {
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
     public String getKillMode() {
@@ -394,70 +375,6 @@ public class Service extends Unit {
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    public BigInteger getLimitAS() {
-        return properties.getBigInteger(Property.LIMIT_AS);
-    }
-
-    public BigInteger getLimitCORE() {
-        return properties.getBigInteger(Property.LIMIT_CORE);
-    }
-
-    public BigInteger getLimitCPU() {
-        return properties.getBigInteger(Property.LIMIT_CPU);
-    }
-
-    public BigInteger getLimitDATA() {
-        return properties.getBigInteger(Property.LIMIT_DATA);
-    }
-
-    public BigInteger getLimitFSIZE() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE);
-    }
-
-    public BigInteger getLimitLOCKS() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS);
-    }
-
-    public BigInteger getLimitMEMLOCK() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK);
-    }
-
-    public BigInteger getLimitMSGQUEUE() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE);
-    }
-
-    public BigInteger getLimitNICE() {
-        return properties.getBigInteger(Property.LIMIT_NICE);
-    }
-
-    public BigInteger getLimitNOFILE() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE);
-    }
-
-    public BigInteger getLimitNPROC() {
-        return properties.getBigInteger(Property.LIMIT_NPROC);
-    }
-
-    public BigInteger getLimitRSS() {
-        return properties.getBigInteger(Property.LIMIT_RSS);
-    }
-
-    public BigInteger getLimitRTPRIO() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO);
-    }
-
-    public BigInteger getLimitRTTIME() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME);
-    }
-
-    public BigInteger getLimitSIGPENDING() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING);
-    }
-
-    public BigInteger getLimitSTACK() {
-        return properties.getBigInteger(Property.LIMIT_STACK);
     }
 
     public int getMainPID() {
@@ -528,32 +445,12 @@ public class Service extends Unit {
         return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
-    public boolean isPrivateNetwork() {
-        return properties.getBoolean(Property.PRIVATE_NETWORK);
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public boolean isPrivateTmp() {
-        return properties.getBoolean(Property.PRIVATE_TMP);
-    }
-
-    public String getProtectHome() {
-        return properties.getString(Property.PROTECT_HOME);
-    }
-
-    public String getProtectSystem() {
-        return properties.getString(Property.PROTECT_SYSTEM);
-    }
-
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
-    }
-
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
-    }
-
-    public String getRebootArgument() {
-        return properties.getString(Property.REBOOT_ARGUMENT);
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
     public boolean isRemainAfterExit() {
@@ -584,14 +481,6 @@ public class Service extends Unit {
 
     public boolean isRootDirectoryStartOnly() {
         return properties.getBoolean(Property.ROOT_DIRECTORY_START_ONLY);
-    }
-
-    public Vector<String> getRuntimeDirectory() {
-        return properties.getVector(Property.RUNTIME_DIRECTORY);
-    }
-
-    public long getRuntimeDirectoryMode() {
-        return properties.getLong(Property.RUNTIME_DIRECTORY_MODE);
     }
 
     public BigInteger getRuntimeMaxUSec() {
@@ -640,18 +529,6 @@ public class Service extends Unit {
 
     public String getStandardOutput() {
         return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    public String getStartLimitAction() {
-        return properties.getString(Property.START_LIMIT_ACTION);
-    }
-
-    public long getStartLimitBurst() {
-        return properties.getLong(Property.START_LIMIT_BURST);
-    }
-
-    public BigInteger getStartLimitInterval() {
-        return properties.getBigInteger(Property.START_LIMIT_INTERVAL);
     }
 
     public BigInteger getStartupBlockIOWeight() {
