@@ -149,7 +149,17 @@ class AbstractTestCase {
                                 }
                             }
                             else {
-                                return new Variant<>(Mockito.mock(returnType));
+                                try {
+                                    return new Variant<>(Mockito.mock(returnType));
+                                }
+                                catch (IllegalArgumentException e) {
+                                    ParameterizedType paramType = (ParameterizedType) genericReturnType;
+                                    String typeName = paramType.getActualTypeArguments()[0].getTypeName();
+
+                                    System.err.format("Unit=%s, Property=%s, Property type=%s<%s>%s", serviceName, propertyName, returnType.getName(), typeName, System.lineSeparator());
+
+                                    throw e;
+                                }
                             }
                         }
 

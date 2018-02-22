@@ -17,6 +17,11 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.MountInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
@@ -29,7 +34,7 @@ import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Mount extends Unit {
+public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Mount";
     public static final String UNIT_SUFFIX = ".mount";
@@ -51,7 +56,6 @@ public class Mount extends Unit {
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
@@ -66,44 +70,13 @@ public class Mount extends Unit {
         public static final String EXEC_UNMOUNT = "ExecUnmount";
         public static final String FORCE_UNMOUNT = "ForceUnmount";
         public static final String GROUP = "Group";
-        public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String LAZY_UNMOUNT = "LazyUnmount";
-        public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_AS_SOFT = "LimitASSoft";
-        public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CORE_SOFT = "LimitCORESoft";
-        public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_CPU_SOFT = "LimitCPUSoft";
-        public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_DATA_SOFT = "LimitDATASoft";
-        public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_FSIZE_SOFT = "LimitFSIZESoft";
-        public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_LOCKS_SOFT = "LimitLOCKSSoft";
-        public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MEMLOCK_SOFT = "LimitMEMLOCKSoft";
-        public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_MSGQUEUE_SOFT = "LimitMSGQUEUESoft";
-        public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NICE_SOFT = "LimitNICESoft";
-        public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NOFILE_SOFT = "LimitNOFILESoft";
-        public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_NPROC_SOFT = "LimitNPROCSoft";
-        public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RSS_SOFT = "LimitRSSSoft";
-        public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTPRIO_SOFT = "LimitRTPRIOSoft";
-        public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_RTTIME_SOFT = "LimitRTTIMESoft";
-        public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_SIGPENDING_SOFT = "LimitSIGPENDINGSoft";
-        public static final String LIMIT_STACK = "LimitSTACK";
-        public static final String LIMIT_STACK_SOFT = "LimitSTACKSoft";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_CURRENT = "MemoryCurrent";
         public static final String MEMORY_LIMIT = "MemoryLimit";
@@ -117,17 +90,11 @@ public class Mount extends Unit {
         public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String PRIVATE_NETWORK = "PrivateNetwork";
-        public static final String PRIVATE_TMP = "PrivateTmp";
-        public static final String PROTECT_HOME = "ProtectHome";
-        public static final String PROTECT_SYSTEM = "ProtectSystem";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
-        public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
-        public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
@@ -173,7 +140,14 @@ public class Mount extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(
+                    Property.class,
+                    DynamicUserAccounting.Property.class,
+                    IoAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    MemoryAccounting.Property.class,
+                    Ulimit.Property.class
+            );
         }
 
     }
@@ -260,10 +234,6 @@ public class Mount extends Unit {
         return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -320,16 +290,20 @@ public class Mount extends Unit {
         return properties.getString(Property.GROUP);
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
+    }
+
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public boolean isIgnoreSIGPIPE() {
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
     public String getKillMode() {
@@ -342,134 +316,6 @@ public class Mount extends Unit {
 
     public boolean isLazyUnmount() {
         return properties.getBoolean(Property.LAZY_UNMOUNT);
-    }
-
-    public BigInteger getLimitAS() {
-        return properties.getBigInteger(Property.LIMIT_AS);
-    }
-
-    public BigInteger getLimitASSoft() {
-        return properties.getBigInteger(Property.LIMIT_AS_SOFT);
-    }
-
-    public BigInteger getLimitCORE() {
-        return properties.getBigInteger(Property.LIMIT_CORE);
-    }
-
-    public BigInteger getLimitCORESoft() {
-        return properties.getBigInteger(Property.LIMIT_CORE_SOFT);
-    }
-
-    public BigInteger getLimitCPU() {
-        return properties.getBigInteger(Property.LIMIT_CPU);
-    }
-
-    public BigInteger getLimitCPUSoft() {
-        return properties.getBigInteger(Property.LIMIT_CPU_SOFT);
-    }
-
-    public BigInteger getLimitDATA() {
-        return properties.getBigInteger(Property.LIMIT_DATA);
-    }
-
-    public BigInteger getLimitDATASoft() {
-        return properties.getBigInteger(Property.LIMIT_DATA_SOFT);
-    }
-
-    public BigInteger getLimitFSIZE() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE);
-    }
-
-    public BigInteger getLimitFSIZESoft() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE_SOFT);
-    }
-
-    public BigInteger getLimitLOCKS() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS);
-    }
-
-    public BigInteger getLimitLOCKSSoft() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS_SOFT);
-    }
-
-    public BigInteger getLimitMEMLOCK() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK);
-    }
-
-    public BigInteger getLimitMEMLOCKSoft() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK_SOFT);
-    }
-
-    public BigInteger getLimitMSGQUEUE() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE);
-    }
-
-    public BigInteger getLimitMSGQUEUESoft() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE_SOFT);
-    }
-
-    public BigInteger getLimitNICE() {
-        return properties.getBigInteger(Property.LIMIT_NICE);
-    }
-
-    public BigInteger getLimitNICESoft() {
-        return properties.getBigInteger(Property.LIMIT_NICE_SOFT);
-    }
-
-    public BigInteger getLimitNOFILE() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE);
-    }
-
-    public BigInteger getLimitNOFILESoft() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE_SOFT);
-    }
-
-    public BigInteger getLimitNPROC() {
-        return properties.getBigInteger(Property.LIMIT_NPROC);
-    }
-
-    public BigInteger getLimitNPROCSoft() {
-        return properties.getBigInteger(Property.LIMIT_NPROC_SOFT);
-    }
-
-    public BigInteger getLimitRSS() {
-        return properties.getBigInteger(Property.LIMIT_RSS);
-    }
-
-    public BigInteger getLimitRSSSoft() {
-        return properties.getBigInteger(Property.LIMIT_RSS_SOFT);
-    }
-
-    public BigInteger getLimitRTPRIO() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO);
-    }
-
-    public BigInteger getLimitRTPRIOSoft() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO_SOFT);
-    }
-
-    public BigInteger getLimitRTTIME() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME);
-    }
-
-    public BigInteger getLimitRTTIMESoft() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME_SOFT);
-    }
-
-    public BigInteger getLimitSIGPENDING() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING);
-    }
-
-    public BigInteger getLimitSIGPENDINGSoft() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING_SOFT);
-    }
-
-    public BigInteger getLimitSTACK() {
-        return properties.getBigInteger(Property.LIMIT_STACK);
-    }
-
-    public BigInteger getLimitSTACKSoft() {
-        return properties.getBigInteger(Property.LIMIT_STACK_SOFT);
     }
 
     public boolean isMemoryAccounting() {
@@ -524,28 +370,12 @@ public class Mount extends Unit {
         return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
-    public boolean isPrivateNetwork() {
-        return properties.getBoolean(Property.PRIVATE_NETWORK);
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public boolean isPrivateTmp() {
-        return properties.getBoolean(Property.PRIVATE_TMP);
-    }
-
-    public String getProtectHome() {
-        return properties.getString(Property.PROTECT_HOME);
-    }
-
-    public String getProtectSystem() {
-        return properties.getString(Property.PROTECT_SYSTEM);
-    }
-
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
-    }
-
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
     public AddressFamilyRestriction getRestrictAddressFamilies() {
@@ -560,14 +390,6 @@ public class Mount extends Unit {
 
     public String getRootDirectory() {
         return properties.getString(Property.ROOT_DIRECTORY);
-    }
-
-    public Vector<String> getRuntimeDirectory() {
-        return properties.getVector(Property.RUNTIME_DIRECTORY);
-    }
-
-    public long getRuntimeDirectoryMode() {
-        return properties.getLong(Property.RUNTIME_DIRECTORY_MODE);
     }
 
     public SELinuxContext getSELinuxContext() {

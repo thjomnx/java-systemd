@@ -16,12 +16,15 @@ import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.interfaces.SliceInterface;
+import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
-import de.thjom.java.systemd.types.DeviceAllowControl;
 
-public class Slice extends Unit {
+public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Slice";
     public static final String UNIT_SUFFIX = ".slice";
@@ -47,7 +50,12 @@ public class Slice extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(
+                    Property.class,
+                    IoAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    MemoryAccounting.Property.class
+            );
         }
 
     }

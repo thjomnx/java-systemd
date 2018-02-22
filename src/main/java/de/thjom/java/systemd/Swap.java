@@ -17,6 +17,9 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
@@ -26,7 +29,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 
-public class Swap extends Unit {
+public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -38,7 +41,6 @@ public class Swap extends Unit {
         public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
         public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
         public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
@@ -59,34 +61,16 @@ public class Swap extends Unit {
         public static final String GID = "GID";
         public static final String GROUP = "Group";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String IO_ACCOUNTING = "IOAccounting";
         public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
         public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
         public static final String IO_READ_IOPS_MAX = "IOReadIOPSMax";
-        public static final String IO_SCHEDULING = "IOScheduling";
         public static final String IO_WEIGHT = "IOWeight";
         public static final String IO_WRITE_BANDWIDTH_MAX = "IOWriteBandwidthMax";
         public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_STACK = "LimitSTACK";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_DENY_WRITE_EXECUTE = "MemoryDenyWriteExecute";
         public static final String MEMORY_HIGH = "MemoryHigh";
@@ -101,17 +85,11 @@ public class Swap extends Unit {
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PRIORITY = "Priority";
-        public static final String PRIVATE_NETWORK = "PrivateNetwork";
-        public static final String PRIVATE_TMP = "PrivateTmp";
-        public static final String PRIVATE_USERS = "PrivateUsers";
         public static final String PROTECT_CONTROL_GROUPS = "ProtectControlGroups";
         public static final String PROTECT_KERNEL_MODULES = "ProtectKernelModules";
         public static final String PROTECT_KERNEL_TUNABLES = "ProtectKernelTunables";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
-        public static final String REMOVE_IPC = "RemoveIPC";
         public static final String RESTRICT_REALTIME = "RestrictRealtime";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -133,9 +111,8 @@ public class Swap extends Unit {
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
-        public static final String TCP_WRAP_NAME = "TCPWrapName";
         public static final String TIMEOUT_USEC = "TimeoutUSec";
-        public static final String TIMER_SLACK_NS = "TimerSlackNS";
+        public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TTY_PATH = "TTYPath";
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
@@ -152,7 +129,12 @@ public class Swap extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(
+                    Property.class,
+                    DynamicUserAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    Ulimit.Property.class
+            );
         }
 
     }
@@ -225,10 +207,6 @@ public class Swap extends Unit {
         return properties.getBigInteger(Property.CPU_WEIGHT);
     }
 
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -249,6 +227,7 @@ public class Swap extends Unit {
         return properties.getString(Property.DEVICE_POLICY);
     }
 
+    @Override
     public boolean isDynamicUser() {
         return properties.getBoolean(Property.DYNAMIC_USER);
     }
@@ -281,10 +260,6 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
-    }
-
     public Vector<String> getInaccessiblePaths() {
         return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
@@ -305,10 +280,6 @@ public class Swap extends Unit {
         return IOIops.list(properties.getVector(Property.IO_READ_IOPS_MAX));
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
-    }
-
     public BigInteger getIOWeight() {
         return properties.getBigInteger(Property.IO_WEIGHT);
     }
@@ -327,70 +298,6 @@ public class Swap extends Unit {
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    public BigInteger getLimitAS() {
-        return properties.getBigInteger(Property.LIMIT_AS);
-    }
-
-    public BigInteger getLimitCORE() {
-        return properties.getBigInteger(Property.LIMIT_CORE);
-    }
-
-    public BigInteger getLimitCPU() {
-        return properties.getBigInteger(Property.LIMIT_CPU);
-    }
-
-    public BigInteger getLimitDATA() {
-        return properties.getBigInteger(Property.LIMIT_DATA);
-    }
-
-    public BigInteger getLimitFSIZE() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE);
-    }
-
-    public BigInteger getLimitLOCKS() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS);
-    }
-
-    public BigInteger getLimitMEMLOCK() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK);
-    }
-
-    public BigInteger getLimitMSGQUEUE() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE);
-    }
-
-    public BigInteger getLimitNICE() {
-        return properties.getBigInteger(Property.LIMIT_NICE);
-    }
-
-    public BigInteger getLimitNOFILE() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE);
-    }
-
-    public BigInteger getLimitNPROC() {
-        return properties.getBigInteger(Property.LIMIT_NPROC);
-    }
-
-    public BigInteger getLimitRSS() {
-        return properties.getBigInteger(Property.LIMIT_RSS);
-    }
-
-    public BigInteger getLimitRTPRIO() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO);
-    }
-
-    public BigInteger getLimitRTTIME() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME);
-    }
-
-    public BigInteger getLimitSIGPENDING() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING);
-    }
-
-    public BigInteger getLimitSTACK() {
-        return properties.getBigInteger(Property.LIMIT_STACK);
     }
 
     public boolean isMemoryAccounting() {
@@ -449,18 +356,6 @@ public class Swap extends Unit {
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public boolean isPrivateNetwork() {
-        return properties.getBoolean(Property.PRIVATE_NETWORK);
-    }
-
-    public boolean isPrivateTmp() {
-        return properties.getBoolean(Property.PRIVATE_TMP);
-    }
-
-    public boolean isPrivateUsers() {
-        return properties.getBoolean(Property.PRIVATE_USERS);
-    }
-
     public boolean isProtectControlGroups() {
         return properties.getBoolean(Property.PROTECT_CONTROL_GROUPS);
     }
@@ -473,24 +368,12 @@ public class Swap extends Unit {
         return properties.getBoolean(Property.PROTECT_KERNEL_TUNABLES);
     }
 
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
-    }
-
     public Vector<String> getReadOnlyPaths() {
         return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
-    }
-
     public Vector<String> getReadWritePaths() {
         return properties.getVector(Property.READ_WRITE_PATHS);
-    }
-
-    public boolean isRemoveIPC() {
-        return properties.getBoolean(Property.REMOVE_IPC);
     }
 
     public boolean isRestrictRealtime() {
@@ -579,10 +462,6 @@ public class Swap extends Unit {
         return new SystemCallFilter(array);
     }
 
-    public String getTCPWrapName() {
-        return properties.getString(Property.TCP_WRAP_NAME);
-    }
-
     public String getTTYPath() {
         return properties.getString(Property.TTY_PATH);
     }
@@ -603,8 +482,8 @@ public class Swap extends Unit {
         return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
 
-    public long getTimerSlackNS() {
-        return properties.getLong(Property.TIMER_SLACK_NS);
+    public long getTimerSlackNSec() {
+        return properties.getLong(Property.TIMER_SLACK_NSEC);
     }
 
     public int getUID() {

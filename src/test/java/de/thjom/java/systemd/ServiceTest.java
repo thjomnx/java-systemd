@@ -18,6 +18,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
 
 public class ServiceTest extends UnitTest {
@@ -58,6 +60,15 @@ public class ServiceTest extends UnitTest {
         nonVariantProperties.add(Service.Property.SELINUX_CONTEXT);
         nonVariantProperties.add(Service.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Service.Property.SYSTEM_CALL_FILTER);
+
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
+        nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
+
+        nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_WRITE_BANDWIDTH_MAX);
+        nonVariantProperties.add(IoAccounting.Property.IO_WRITE_IOPS_MAX);
     }
 
     @Test(description="Tests basic manager accessibility.")

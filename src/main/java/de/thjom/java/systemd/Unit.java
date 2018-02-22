@@ -105,6 +105,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String CAN_RELOAD = "CanReload";
         public static final String CAN_START = "CanStart";
         public static final String CAN_STOP = "CanStop";
+        public static final String COLLECT_MODE = "CollectMode";
         public static final String CONDITION_RESULT = "ConditionResult";
         public static final String CONDITION_TIMESTAMP = "ConditionTimestamp";
         public static final String CONDITION_TIMESTAMP_MONOTONIC = "ConditionTimestampMonotonic";
@@ -116,6 +117,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String DESCRIPTION = "Description";
         public static final String DOCUMENTATION = "Documentation";
         public static final String DROP_IN_PATHS = "DropInPaths";
+        public static final String FAILURE_ACTION = "FailureAction";
         public static final String FOLLOWING = "Following";
         public static final String FRAGMENT_PATH = "FragmentPath";
         public static final String ID = "Id";
@@ -126,6 +128,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String INACTIVE_EXIT_TIMESTAMP_MONOTONIC = "InactiveExitTimestampMonotonic";
         public static final String INVOCATION_ID = "InvocationID";
         public static final String JOB = "Job";
+        public static final String JOB_RUNNING_TIMEOUT_USEC = "JobRunningTimeoutUSec";
         public static final String JOB_TIMEOUT_ACTION = "JobTimeoutAction";
         public static final String JOB_TIMEOUT_REBOOT_ARGUMENT = "JobTimeoutRebootArgument";
         public static final String JOB_TIMEOUT_USEC = "JobTimeoutUSec";
@@ -139,6 +142,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String PART_OF = "PartOf";
         public static final String PERPETUAL = "Perpetual";
         public static final String PROPAGATES_RELOAD_TO = "PropagatesReloadTo";
+        public static final String REBOOT_ARGUMENT = "RebootArgument";
         public static final String REFUSE_MANUAL_START = "RefuseManualStart";
         public static final String REFUSE_MANUAL_STOP = "RefuseManualStop";
         public static final String RELOAD_PROPAGATED_FROM = "ReloadPropagatedFrom";
@@ -148,11 +152,14 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String REQUISITE = "Requisite";
         public static final String REQUISITE_OF = "RequisiteOf";
         public static final String SOURCE_PATH = "SourcePath";
-        public static final String START_LIMIT_INTERVAL_SEC = "StartLimitIntervalSec";
+        public static final String START_LIMIT_ACTION = "StartLimitAction";
+        public static final String START_LIMIT_BURST = "StartLimitBurst";
+        public static final String START_LIMIT_INTERVAL_USEC = "StartLimitIntervalUSec";
         public static final String STATE_CHANGE_TIMESTAMP = "StateChangeTimestamp";
         public static final String STATE_CHANGE_TIMESTAMP_MONOTONIC = "StateChangeTimestampMonotonic";
         public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
         public static final String SUB_STATE = "SubState";
+        public static final String SUCCESS_ACTION = "SuccessAction";
         public static final String TRANSIENT = "Transient";
         public static final String TRIGGERED_BY = "TriggeredBy";
         public static final String TRIGGERS = "Triggers";
@@ -415,6 +422,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getBoolean(Property.CAN_STOP);
     }
 
+    public String getCollectMode() {
+        return unitProperties.getString(Property.COLLECT_MODE);
+    }
+
     public boolean getConditionResult() {
         return unitProperties.getBoolean(Property.CONDITION_RESULT);
     }
@@ -459,6 +470,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getVector(Property.DROP_IN_PATHS);
     }
 
+    public String getFailureAction() {
+        return unitProperties.getString(Property.FAILURE_ACTION);
+    }
+
     public String getFollowing() {
         return unitProperties.getString(Property.FOLLOWING);
     }
@@ -499,6 +514,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         Object[] array = (Object[]) unitProperties.getVariant(Property.JOB).getValue();
 
         return new Job(array);
+    }
+
+    public BigInteger getJobRunningTimeoutUSec() {
+        return unitProperties.getBigInteger(Property.JOB_RUNNING_TIMEOUT_USEC);
     }
 
     public String getJobTimeoutAction() {
@@ -555,6 +574,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getVector(Property.PROPAGATES_RELOAD_TO);
     }
 
+    public String getRebootArgument() {
+        return unitProperties.getString(Property.REBOOT_ARGUMENT);
+    }
+
     public boolean isRefuseManualStart() {
         return unitProperties.getBoolean(Property.REFUSE_MANUAL_START);
     }
@@ -591,8 +614,16 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.SOURCE_PATH);
     }
 
-    public long getStartLimitIntervalSec() {
-        return unitProperties.getLong(Property.START_LIMIT_INTERVAL_SEC);
+    public String getStartLimitAction() {
+        return unitProperties.getString(Property.START_LIMIT_ACTION);
+    }
+
+    public long getStartLimitBurst() {
+        return unitProperties.getLong(Property.START_LIMIT_BURST);
+    }
+
+    public long getStartLimitIntervalUSec() {
+        return unitProperties.getLong(Property.START_LIMIT_INTERVAL_USEC);
     }
 
     public long getStateChangeTimestamp() {
@@ -609,6 +640,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public String getSubState() {
         return unitProperties.getString(Property.SUB_STATE);
+    }
+
+    public String getSuccessAction() {
+        return unitProperties.getString(Property.SUCCESS_ACTION);
     }
 
     public boolean isTransient() {
