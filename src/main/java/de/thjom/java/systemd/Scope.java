@@ -23,6 +23,7 @@ import de.thjom.java.systemd.interfaces.ScopeInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
+import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAccounting {
 
@@ -85,6 +86,10 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
     @Override
     public ScopeInterface getInterface() {
         return (ScopeInterface) super.getInterface();
+    }
+
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public boolean isBlockIOAccounting() {

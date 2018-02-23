@@ -11,13 +11,20 @@
 
 package de.thjom.java.systemd.interfaces;
 
+import java.util.List;
+
 import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.DBusMemberName;
+
+import de.thjom.java.systemd.types.UnitProcessType;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Scope.SERVICE_NAME)
 public interface ScopeInterface extends UnitInterface {
 
     @DBusMemberName(value = "Abandon")
     void abandon();
+
+    @DBusMemberName(value = "GetProcesses")
+    List<UnitProcessType> getProcesses();
 
 }

@@ -33,6 +33,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
@@ -172,6 +173,10 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
         return (MountInterface) super.getInterface();
     }
 
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
+    }
+
     public BigInteger getAmbientCapabilities() {
         return properties.getBigInteger(Property.AMBIENT_CAPABILITIES);
     }
@@ -284,10 +289,6 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
 
     public boolean isForceUnmount() {
         return properties.getBoolean(Property.FORCE_UNMOUNT);
-    }
-
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
     }
 
     public int getIOSchedulingClass() {
@@ -528,10 +529,6 @@ public class Mount extends Unit implements DynamicUserAccounting, IoAccounting, 
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
     }
 
     public String getUtmpIdentifier() {

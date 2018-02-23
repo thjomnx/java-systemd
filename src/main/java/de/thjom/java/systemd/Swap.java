@@ -28,6 +28,7 @@ import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, Ulimit {
 
@@ -153,6 +154,10 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
     @Override
     public SwapInterface getInterface() {
         return (SwapInterface) super.getInterface();
+    }
+
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public boolean isBlockIOAccounting() {

@@ -33,6 +33,7 @@ import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Service extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
@@ -195,6 +196,10 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return (ServiceInterface) super.getInterface();
     }
 
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
+    }
+
     public AppArmorProfile getAppArmorProfile() {
         Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
 
@@ -343,10 +348,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public long getFileDescriptorStoreMax() {
         return properties.getLong(Property.FILE_DESCRIPTOR_STORE_MAX);
-    }
-
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
     }
 
     public boolean isGuessMainPID() {
@@ -639,10 +640,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public String getUSBFunctionStrings() {
         return properties.getString(Property.USB_FUNCTION_STRINGS);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
     }
 
     public String getUtmpIdentifier() {

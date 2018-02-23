@@ -11,9 +11,17 @@
 
 package de.thjom.java.systemd.interfaces;
 
+import java.util.List;
+
 import org.freedesktop.dbus.DBusInterfaceName;
+import org.freedesktop.dbus.DBusMemberName;
+
+import de.thjom.java.systemd.types.UnitProcessType;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Slice.SERVICE_NAME)
 public interface SliceInterface extends UnitInterface {
+
+    @DBusMemberName(value = "GetProcesses")
+    List<UnitProcessType> getProcesses();
 
 }

@@ -338,6 +338,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         manager.killUnit(name, who, signal);
     }
 
+    public void ref() {
+        manager.refUnit(name);
+    }
+
     public void resetFailed() {
         manager.resetFailedUnit(name);
     }

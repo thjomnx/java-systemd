@@ -23,6 +23,7 @@ import de.thjom.java.systemd.interfaces.SliceInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
+import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAccounting {
 
@@ -78,6 +79,10 @@ public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAcc
     @Override
     public SliceInterface getInterface() {
         return (SliceInterface) super.getInterface();
+    }
+
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public boolean isBlockIOAccounting() {

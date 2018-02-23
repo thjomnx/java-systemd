@@ -34,6 +34,7 @@ import de.thjom.java.systemd.types.ListenInfo;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Socket extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
@@ -209,6 +210,10 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         return (SocketInterface) super.getInterface();
     }
 
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
+    }
+
     public boolean isAccept() {
         return properties.getBoolean(Property.ACCEPT);
     }
@@ -349,10 +354,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
 
     public boolean isFreeBind() {
         return properties.getBoolean(Property.FREE_BIND);
-    }
-
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
     }
 
     public int getIOSchedulingClass() {
@@ -713,10 +714,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
     }
 
     public String getUtmpIdentifier() {

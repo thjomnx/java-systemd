@@ -43,6 +43,9 @@ public interface UnitInterface extends DBusInterface {
     @DBusMemberName(value = "Kill")
     void kill(final String who, final int signal);
 
+    @DBusMemberName(value = "Ref")
+    void ref();
+
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
 
