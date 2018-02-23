@@ -25,6 +25,8 @@ public interface DynamicUserAccounting {
         public static final String CONFIGURATION_DIRECTORY = "ConfigurationDirectory";
         public static final String CONFIGURATION_DIRECTORY_MODE = "ConfigurationDirectoryMode";
         public static final String DYNAMIC_USER = "DynamicUser";
+        public static final String GID = "GID";
+        public static final String GROUP = "Group";
         public static final String LOGS_DIRECTORY = "LogsDirectory";
         public static final String LOGS_DIRECTORY_MODE = "LogsDirectoryMode";
         public static final String PRIVATE_NETWORK = "PrivateNetwork";
@@ -37,6 +39,8 @@ public interface DynamicUserAccounting {
         public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String STATE_DIRECTORY = "StateDirectory";
         public static final String STATE_DIRECTORY_MODE = "StateDirectoryMode";
+        public static final String UID = "UID";
+        public static final String USER = "User";
 
         private Property() {
             super();
@@ -68,6 +72,14 @@ public interface DynamicUserAccounting {
 
     default boolean isDynamicUser() {
         return getProperties().getBoolean(Property.DYNAMIC_USER);
+    }
+
+    default int getGID() {
+        return getProperties().getInteger(Property.GID);
+    }
+
+    default String getGroup() {
+        return getProperties().getString(Property.GROUP);
     }
 
     default Vector<String> getLogsDirectory() {
@@ -116,6 +128,14 @@ public interface DynamicUserAccounting {
 
     default long getStateDirectoryMode() {
         return getProperties().getLong(Property.STATE_DIRECTORY_MODE);
+    }
+
+    default int getUID() {
+        return getProperties().getInteger(Property.UID);
+    }
+
+    default String getUser() {
+        return getProperties().getString(Property.USER);
     }
 
 }

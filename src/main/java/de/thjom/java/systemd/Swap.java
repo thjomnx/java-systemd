@@ -58,8 +58,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String ENVIRONMENT_FILES = "EnvironmentFiles";
         public static final String EXEC_ACTIVATE = "ExecActivate";
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
-        public static final String GID = "GID";
-        public static final String GROUP = "Group";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String IO_ACCOUNTING = "IOAccounting";
@@ -117,9 +115,7 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
-        public static final String UID = "UID";
         public static final String UMASK = "UMask";
-        public static final String USER = "User";
         public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
         public static final String WHAT = "What";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
@@ -246,14 +242,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
 
     public List<ExecutionInfo> getExecDeactivate() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_DEACTIVATE));
-    }
-
-    public int getGID() {
-        return properties.getInteger(Property.GID);
-    }
-
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
     }
 
     public boolean isIgnoreSIGPIPE() {
@@ -486,16 +474,8 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return properties.getLong(Property.TIMER_SLACK_NSEC);
     }
 
-    public int getUID() {
-        return properties.getInteger(Property.UID);
-    }
-
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
     }
 
     public String getUtmpIdentifier() {
