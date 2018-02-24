@@ -21,6 +21,7 @@ import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SocketInterface;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
@@ -36,7 +37,7 @@ import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Socket extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
+public class Socket extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Socket";
     public static final String UNIT_SUFFIX = ".socket";
@@ -181,6 +182,7 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     MemoryAccounting.Property.class,
+                    TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
         }
@@ -671,18 +673,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
 
     public boolean isTTYVTDisallocate() {
         return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
-    }
-
-    public boolean isTasksAccounting() {
-        return properties.getBoolean(Property.TASKS_ACCOUNTING);
-    }
-
-    public BigInteger getTasksCurrent() {
-        return properties.getBigInteger(Property.TASKS_CURRENT);
-    }
-
-    public BigInteger getTasksMax() {
-        return properties.getBigInteger(Property.TASKS_MAX);
     }
 
     public BigInteger getTimeoutUSec() {

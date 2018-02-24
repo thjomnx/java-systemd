@@ -20,6 +20,7 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
@@ -31,7 +32,7 @@ import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, MemoryAccounting, Ulimit {
+public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -125,6 +126,7 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, M
                     DynamicUserAccounting.Property.class,
                     IpAccounting.Property.class,
                     MemoryAccounting.Property.class,
+                    TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
         }
