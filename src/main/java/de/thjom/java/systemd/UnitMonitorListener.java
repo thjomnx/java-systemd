@@ -16,6 +16,6 @@ import java.util.Collection;
 @FunctionalInterface
 public interface UnitMonitorListener {
 
-    void monitorRefreshed(final Collection<Unit> monitoredUnits);
+    void monitorRefreshed(Collection<Unit> monitoredUnits);
 
 }
