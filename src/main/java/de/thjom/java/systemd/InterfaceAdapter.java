@@ -99,7 +99,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
 
         protected static final String ERROR_PROPERTY_MISSING = "Unable to retrieve property (not implemented)";
 
-        private static final Logger log = LoggerFactory.getLogger(AdapterProperty.class);
+        private static final Logger LOG = LoggerFactory.getLogger(AdapterProperty.class);
 
         protected AdapterProperty() {
             // Do nothing (static implementation)
@@ -122,7 +122,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
                             obj = field.get(null);
                         }
                         catch (final IllegalAccessException | IllegalArgumentException e) {
-                            log.error("Unable to enumerate field names", e);
+                            LOG.error("Unable to enumerate field names", e);
                         }
 
                         names.add(obj.toString());
