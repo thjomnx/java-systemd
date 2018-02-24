@@ -95,9 +95,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         public static final String MARK = "Mark";
         public static final String MAX_CONNECTIONS = "MaxConnections";
         public static final String MAX_CONNECTIONS_PER_SOURCE = "MaxConnectionsPerSource";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_CURRENT = "MemoryCurrent";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MESSAGE_QUEUE_MAX_MESSAGES = "MessageQueueMaxMessages";
         public static final String MESSAGE_QUEUE_MESSAGE_SIZE = "MessageQueueMessageSize";
         public static final String MOUNT_FLAGS = "MountFlags";
@@ -418,18 +415,6 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
 
     public long getMaxConnectionsPerSource() {
         return properties.getLong(Property.MAX_CONNECTIONS_PER_SOURCE);
-    }
-
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryCurrent() {
-        return properties.getBigInteger(Property.MEMORY_CURRENT);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
     }
 
     public long getMessageQueueMaxMessages() {

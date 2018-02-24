@@ -97,6 +97,8 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
 
     public static class AdapterProperty {
 
+        protected static final String ERROR_PROPERTY_MISSING = "Unable to retrieve property (not implemented)";
+
         private static final Logger log = LoggerFactory.getLogger(AdapterProperty.class);
 
         protected AdapterProperty() {

@@ -20,7 +20,11 @@ public interface MemoryAccounting {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
+        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
+        public static final String MEMORY_CURRENT = "MemoryCurrent";
+        public static final String MEMORY_DENY_WRITE_EXECUTE = "MemoryDenyWriteExecute";
         public static final String MEMORY_HIGH = "MemoryHigh";
+        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MEMORY_LOW = "MemoryLow";
         public static final String MEMORY_MAX = "MemoryMax";
         public static final String MEMORY_SWAP_MAX = "MemorySwapMax";
@@ -37,8 +41,24 @@ public interface MemoryAccounting {
 
     Properties getProperties();
 
+    default boolean isMemoryAccounting() {
+        return getProperties().getBoolean(Property.MEMORY_ACCOUNTING);
+    }
+
+    default BigInteger getMemoryCurrent() {
+        return getProperties().getBigInteger(Property.MEMORY_CURRENT);
+    }
+
+    default boolean isMemoryDenyWriteExecute() {
+        return getProperties().getBoolean(Property.MEMORY_DENY_WRITE_EXECUTE);
+    }
+
     default BigInteger getMemoryHigh() {
         return getProperties().getBigInteger(Property.MEMORY_HIGH);
+    }
+
+    default BigInteger getMemoryLimit() {
+        return getProperties().getBigInteger(Property.MEMORY_LIMIT);
     }
 
     default BigInteger getMemoryLow() {

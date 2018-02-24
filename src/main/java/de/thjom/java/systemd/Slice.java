@@ -42,8 +42,6 @@ public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAcc
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String SLICE = "Slice";
 
         private Property() {
@@ -125,12 +123,9 @@ public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAcc
         return properties.getString(Property.DEVICE_POLICY);
     }
 
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
+    @Override
+    public boolean isMemoryDenyWriteExecute() {
+        throw new UnsupportedOperationException(Property.ERROR_PROPERTY_MISSING);
     }
 
     public String getSlice() {

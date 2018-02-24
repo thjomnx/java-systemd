@@ -45,8 +45,6 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String RESULT = "Result";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
@@ -144,12 +142,9 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
         return properties.getInteger(Property.KILL_SIGNAL);
     }
 
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
+    @Override
+    public boolean isMemoryDenyWriteExecute() {
+        throw new UnsupportedOperationException(Property.ERROR_PROPERTY_MISSING);
     }
 
     public String getResult() {

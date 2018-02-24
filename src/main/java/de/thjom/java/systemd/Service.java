@@ -88,9 +88,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String MAIN_PID = "MainPID";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_CURRENT = "MemoryCurrent";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MOUNT_FLAGS = "MountFlags";
         public static final String NFILE_DESCRIPTOR_STORE = "NFileDescriptorStore";
         public static final String NICE = "Nice";
@@ -380,18 +377,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public int getMainPID() {
         return properties.getInteger(Property.MAIN_PID);
-    }
-
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryCurrent() {
-        return properties.getBigInteger(Property.MEMORY_CURRENT);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
     }
 
     public BigInteger getMountFlags() {

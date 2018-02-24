@@ -19,6 +19,7 @@ import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
@@ -30,7 +31,7 @@ import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, Ulimit {
+public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, MemoryAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -70,13 +71,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_DENY_WRITE_EXECUTE = "MemoryDenyWriteExecute";
-        public static final String MEMORY_HIGH = "MemoryHigh";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
-        public static final String MEMORY_LOW = "MemoryLow";
-        public static final String MEMORY_MAX = "MemoryMax";
-        public static final String MEMORY_SWAP_MAX = "MemorySwapMax";
         public static final String MOUNT_FLAGS = "MountFlags";
         public static final String NICE = "Nice";
         public static final String NON_BLOCKING = "NonBlocking";
@@ -130,6 +124,7 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
                     Property.class,
                     DynamicUserAccounting.Property.class,
                     IpAccounting.Property.class,
+                    MemoryAccounting.Property.class,
                     Ulimit.Property.class
             );
         }
@@ -291,34 +286,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public boolean isMemoryDenyWriteExecute() {
-        return properties.getBoolean(Property.MEMORY_DENY_WRITE_EXECUTE);
-    }
-
-    public BigInteger getMemoryHigh() {
-        return properties.getBigInteger(Property.MEMORY_HIGH);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
-    }
-
-    public BigInteger getMemoryLow() {
-        return properties.getBigInteger(Property.MEMORY_LOW);
-    }
-
-    public BigInteger getMemoryMax() {
-        return properties.getBigInteger(Property.MEMORY_MAX);
-    }
-
-    public BigInteger getMemorySwapMax() {
-        return properties.getBigInteger(Property.MEMORY_SWAP_MAX);
     }
 
     public BigInteger getMountFlags() {
