@@ -15,10 +15,9 @@ import java.math.BigInteger;
 import java.util.List;
 
 import de.thjom.java.systemd.InterfaceAdapter;
-import de.thjom.java.systemd.Properties;
 import de.thjom.java.systemd.types.IpAddressPolicy;
 
-public interface IpAccounting {
+public interface IpAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
@@ -39,8 +38,6 @@ public interface IpAccounting {
         }
 
     }
-
-    Properties getProperties();
 
     default boolean isIPAccounting() {
         return getProperties().getBoolean(Property.IP_ACCOUNTING);

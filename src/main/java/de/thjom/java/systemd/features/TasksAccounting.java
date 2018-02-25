@@ -14,9 +14,8 @@ package de.thjom.java.systemd.features;
 import java.math.BigInteger;
 
 import de.thjom.java.systemd.InterfaceAdapter;
-import de.thjom.java.systemd.Properties;
 
-public interface TasksAccounting {
+public interface TasksAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
@@ -33,8 +32,6 @@ public interface TasksAccounting {
         }
 
     }
-
-    Properties getProperties();
 
     default boolean isTasksAccounting() {
         return getProperties().getBoolean(Property.TASKS_ACCOUNTING);

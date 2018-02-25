@@ -14,9 +14,8 @@ package de.thjom.java.systemd.features;
 import java.math.BigInteger;
 
 import de.thjom.java.systemd.InterfaceAdapter;
-import de.thjom.java.systemd.Properties;
 
-public interface Ulimit {
+public interface Ulimit extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
@@ -62,8 +61,6 @@ public interface Ulimit {
         }
 
     }
-
-    Properties getProperties();
 
     default BigInteger getLimitAS() {
         return getProperties().getBigInteger(Property.LIMIT_AS);

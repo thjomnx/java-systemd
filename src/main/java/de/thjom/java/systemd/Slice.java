@@ -16,9 +16,9 @@ import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.BaseMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
-import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.interfaces.SliceInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
@@ -26,7 +26,7 @@ import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
+public class Slice extends Unit implements IoAccounting, IpAccounting, BaseMemoryAccounting, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Slice";
     public static final String UNIT_SUFFIX = ".slice";
@@ -54,7 +54,7 @@ public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAcc
                     Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    MemoryAccounting.Property.class,
+                    BaseMemoryAccounting.Property.class,
                     TasksAccounting.Property.class
             );
         }
@@ -123,11 +123,6 @@ public class Slice extends Unit implements IoAccounting, IpAccounting, MemoryAcc
 
     public String getDevicePolicy() {
         return properties.getString(Property.DEVICE_POLICY);
-    }
-
-    @Override
-    public boolean isMemoryDenyWriteExecute() {
-        throw new UnsupportedOperationException(Property.ERROR_PROPERTY_MISSING);
     }
 
     public String getSlice() {

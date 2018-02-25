@@ -15,12 +15,11 @@ import java.math.BigInteger;
 import java.util.List;
 
 import de.thjom.java.systemd.InterfaceAdapter;
-import de.thjom.java.systemd.Properties;
 import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 
-public interface IoAccounting {
+public interface IoAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
@@ -41,8 +40,6 @@ public interface IoAccounting {
         }
 
     }
-
-    Properties getProperties();
 
     default boolean isIOAccounting() {
         return getProperties().getBoolean(Property.IO_ACCOUNTING);

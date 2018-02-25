@@ -16,9 +16,9 @@ import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.BaseMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
-import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.interfaces.ScopeInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
@@ -26,7 +26,7 @@ import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
+public class Scope extends Unit implements IoAccounting, IpAccounting, BaseMemoryAccounting, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
@@ -61,7 +61,7 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
                     Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    MemoryAccounting.Property.class,
+                    BaseMemoryAccounting.Property.class,
                     TasksAccounting.Property.class
             );
         }
@@ -142,11 +142,6 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    @Override
-    public boolean isMemoryDenyWriteExecute() {
-        throw new UnsupportedOperationException(Property.ERROR_PROPERTY_MISSING);
     }
 
     public String getResult() {
