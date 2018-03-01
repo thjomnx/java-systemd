@@ -13,6 +13,7 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -42,6 +43,8 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, BaseMemor
         public static final String CPU_SHARES = "CPUShares";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROLLER = "Controller";
+        public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String KILL_MODE = "KillMode";
@@ -126,6 +129,14 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, BaseMemor
 
     public String getController() {
         return properties.getString(Property.CONTROLLER);
+    }
+
+    public boolean isDelegate() {
+        return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {

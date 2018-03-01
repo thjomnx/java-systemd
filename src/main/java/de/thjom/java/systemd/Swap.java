@@ -54,6 +54,8 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, M
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_WEIGHT = "CPUWeight";
+        public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DYNAMIC_USER = "DynamicUser";
@@ -203,6 +205,14 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, M
 
     public BigInteger getCPUWeight() {
         return properties.getBigInteger(Property.CPU_WEIGHT);
+    }
+
+    public boolean isDelegate() {
+        return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public BigInteger getCapabilityBoundingSet() {

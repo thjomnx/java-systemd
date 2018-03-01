@@ -68,6 +68,7 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
         public static final String CONTROL_PID = "ControlPID";
         public static final String DEFER_ACCEPT_USEC = "DeferAcceptUSec";
         public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DIRECTORY_MODE = "DirectoryMode";
@@ -309,6 +310,10 @@ public class Socket extends Unit implements DynamicUserAccounting, IoAccounting,
 
     public boolean isDelegate() {
         return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {

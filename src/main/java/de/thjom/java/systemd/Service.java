@@ -62,6 +62,7 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String ENVIRONMENT = "Environment";
@@ -275,6 +276,10 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public boolean isDelegate() {
         return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
