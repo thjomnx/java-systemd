@@ -18,6 +18,7 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
@@ -32,7 +33,7 @@ import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
+public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -125,6 +126,7 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, M
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    ExtendedCpuAccounting.Property.class,
                     DynamicUserAccounting.Property.class,
                     IpAccounting.Property.class,
                     MemoryAccounting.Property.class,
@@ -179,34 +181,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, M
         return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
-    }
-
-    public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
-    }
-
-    public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
-    }
-
-    public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
-    }
-
-    public BigInteger getCPUWeight() {
-        return properties.getBigInteger(Property.CPU_WEIGHT);
-    }
-
     public boolean isDelegate() {
         return properties.getBoolean(Property.DELEGATE);
     }
@@ -233,11 +207,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, M
 
     public String getDevicePolicy() {
         return properties.getString(Property.DEVICE_POLICY);
-    }
-
-    @Override
-    public boolean isDynamicUser() {
-        return properties.getBoolean(Property.DYNAMIC_USER);
     }
 
     public Vector<String> getEnvironment() {

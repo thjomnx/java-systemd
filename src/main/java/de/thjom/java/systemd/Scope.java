@@ -18,6 +18,7 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.BaseMemoryAccounting;
+import de.thjom.java.systemd.features.CpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
@@ -27,7 +28,7 @@ import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Scope extends Unit implements IoAccounting, IpAccounting, BaseMemoryAccounting, TasksAccounting {
+public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, BaseMemoryAccounting, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
@@ -62,6 +63,7 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, BaseMemor
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    CpuAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     BaseMemoryAccounting.Property.class,
@@ -113,14 +115,6 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, BaseMemor
 
     public List<IOBandwidth> getBlockIOWriteBandwidth() {
         return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
-    }
-
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
     }
 
     public String getControlGroup() {

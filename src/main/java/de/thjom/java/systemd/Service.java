@@ -18,6 +18,7 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
@@ -36,7 +37,7 @@ import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Service extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
+public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
@@ -165,6 +166,7 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    ExtendedCpuAccounting.Property.class,
                     DynamicUserAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
@@ -228,38 +230,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public String getBusName() {
         return properties.getString(Property.BUS_NAME);
-    }
-
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
-    }
-
-    public BigInteger getCPUQuotaPerSecUSec() {
-        return properties.getBigInteger(Property.CPU_QUOTA_PER_SEC_USEC);
-    }
-
-    public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
-    }
-
-    public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
-    }
-
-    public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
-    }
-
-    public BigInteger getCPUUsageNSec() {
-        return properties.getBigInteger(Property.CPU_USAGE_NSEC);
     }
 
     public BigInteger getCapabilityBoundingSet() {
