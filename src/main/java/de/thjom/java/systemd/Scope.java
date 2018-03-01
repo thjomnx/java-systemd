@@ -17,7 +17,7 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
-import de.thjom.java.systemd.features.BaseMemoryAccounting;
+import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.features.CpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
@@ -28,7 +28,7 @@ import de.thjom.java.systemd.types.IOBandwidth;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, BaseMemoryAccounting, TasksAccounting {
+public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
@@ -66,7 +66,7 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
                     CpuAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    BaseMemoryAccounting.Property.class,
+                    MemoryAccounting.Property.class,
                     TasksAccounting.Property.class
             );
         }

@@ -21,7 +21,7 @@ import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
-import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.MountInterface;
@@ -37,7 +37,7 @@ import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting, Ulimit {
+public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Mount";
     public static final String UNIT_SUFFIX = ".mount";
@@ -147,7 +147,7 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
                     DynamicUserAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    MemoryAccounting.Property.class,
+                    ExtendedMemoryAccounting.Property.class,
                     TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
