@@ -19,9 +19,9 @@ import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.ExtendedCpuAccounting;
+import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
-import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
@@ -124,8 +124,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String STANDARD_ERROR = "StandardError";
         public static final String STANDARD_INPUT = "StandardInput";
         public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
-        public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String STATUS_ERRNO = "StatusErrno";
         public static final String STATUS_TEXT = "StatusText";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
@@ -492,14 +490,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getStandardOutput() {
         return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    public BigInteger getStartupBlockIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_BLOCK_IO_WEIGHT);
-    }
-
-    public BigInteger getStartupCPUShares() {
-        return properties.getBigInteger(Property.STARTUP_CPU_SHARES);
     }
 
     public int getStatusErrno() {

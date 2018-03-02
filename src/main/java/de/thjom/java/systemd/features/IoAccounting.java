@@ -30,6 +30,8 @@ public interface IoAccounting extends Feature {
         public static final String IO_WEIGHT = "IOWeight";
         public static final String IO_WRITE_BANDWIDTH_MAX = "IOWriteBandwidthMax";
         public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
+        public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
+        public static final String STARTUP_IO_WEIGHT = "StartupIOWeight";
 
         private Property() {
             super();
@@ -67,6 +69,14 @@ public interface IoAccounting extends Feature {
 
     default List<IOIops> getIOWriteIOPSMax() {
         return IOIops.list(getProperties().getVector(Property.IO_WRITE_IOPS_MAX));
+    }
+
+    default BigInteger getStartupBlockIOWeight() {
+        return getProperties().getBigInteger(Property.STARTUP_BLOCK_IO_WEIGHT);
+    }
+
+    default BigInteger getStartupIOWeight() {
+        return getProperties().getBigInteger(Property.STARTUP_IO_WEIGHT);
     }
 
 }

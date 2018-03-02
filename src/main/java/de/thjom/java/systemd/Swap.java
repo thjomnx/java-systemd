@@ -19,8 +19,8 @@ import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.ExtendedCpuAccounting;
-import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
@@ -101,8 +101,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String STANDARD_INPUT_FILE_DESCRIPTOR_NAME = "StandardInputFileDescriptorName";
         public static final String STANDARD_OUTPUT = "StandardOutput";
         public static final String STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME = "StandardOutputFileDescriptorName";
-        public static final String STARTUP_CPU_WEIGHT = "StartupCPUWeight";
-        public static final String STARTUP_IO_WEIGHT = "StartupIOWeight";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -371,14 +369,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public String getStandardOutputFileDescriptorName() {
         return properties.getString(Property.STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME);
-    }
-
-    public BigInteger getStartupCPUWeight() {
-        return properties.getBigInteger(Property.STARTUP_CPU_WEIGHT);
-    }
-
-    public BigInteger getStartupIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_IO_WEIGHT);
     }
 
     public Vector<String> getSupplementaryGroups() {

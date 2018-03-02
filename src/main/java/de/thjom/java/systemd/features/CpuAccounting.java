@@ -24,6 +24,8 @@ public interface CpuAccounting extends Feature {
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CPU_WEIGHT = "CPUWeight";
+        public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
+        public static final String STARTUP_CPU_WEIGHT = "StartupCPUWeight";
 
         private Property() {
             super();
@@ -53,6 +55,14 @@ public interface CpuAccounting extends Feature {
 
     default BigInteger getCPUWeight() {
         return getProperties().getBigInteger(Property.CPU_WEIGHT);
+    }
+
+    default BigInteger getStartupCPUShares() {
+        return getProperties().getBigInteger(Property.STARTUP_CPU_SHARES);
+    }
+
+    default BigInteger getStartupCPUWeight() {
+        return getProperties().getBigInteger(Property.STARTUP_CPU_WEIGHT);
     }
 
 }
