@@ -172,8 +172,16 @@ public class Manager extends InterfaceAdapter {
         return getInterface().dump();
     }
 
+    public void exit() {
+        getInterface().exit();
+    }
+
     public String getDefaultTarget() {
         return getInterface().getDefaultTarget();
+    }
+
+    public org.freedesktop.dbus.Path getUnitByPID(final int pid) {
+        return getInterface().getUnitByPID(pid);
     }
 
     public void halt() {
@@ -198,6 +206,10 @@ public class Manager extends InterfaceAdapter {
 
     public List<UnitType> listUnits() {
         return getInterface().listUnits();
+    }
+
+    public org.freedesktop.dbus.Path loadUnit(final String name) {
+        return getInterface().loadUnit(name);
     }
 
     public long lookupDynamicUserByName(final String name) {
@@ -252,6 +264,10 @@ public class Manager extends InterfaceAdapter {
         return getInterface().reloadUnit(name, mode);
     }
 
+    public void resetFailed() {
+        getInterface().resetFailed();
+    }
+
     public void resetFailedUnit(final String name) {
         getInterface().resetFailedUnit(name);
     }
@@ -266,6 +282,10 @@ public class Manager extends InterfaceAdapter {
 
     public org.freedesktop.dbus.Path startUnit(final String name, final Mode mode) {
         return startUnit(name, mode.getValue());
+    }
+
+    public void setExitCode(final byte value) {
+        getInterface().setExitCode(value);
     }
 
     public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {

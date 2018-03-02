@@ -35,8 +35,14 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "Dump")
     String dump();
 
+    @DBusMemberName(value = "Exit")
+    void exit();
+
     @DBusMemberName(value = "GetDefaultTarget")
     String getDefaultTarget();
+
+    @DBusMemberName(value = "GetUnitByPID")
+    Path getUnitByPID(int pid);
 
     @DBusMemberName(value = "Halt")
     void halt();
@@ -52,6 +58,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "ListUnits")
     List<UnitType> listUnits();
+
+    @DBusMemberName(value = "LoadUnit")
+    Path loadUnit(String name);
 
     @DBusMemberName(value = "LookupDynamicUserByName")
     long lookupDynamicUserByName(String name);
@@ -83,11 +92,17 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ReloadUnit")
     Path reloadUnit(String name, String mode);
 
+    @DBusMemberName(value = "ResetFailed")
+    void resetFailed();
+
     @DBusMemberName(value = "ResetFailedUnit")
     void resetFailedUnit(String name);
 
     @DBusMemberName(value = "RestartUnit")
     Path restartUnit(String name, String mode);
+
+    @DBusMemberName(value = "SetExitCode")
+    void setExitCode(byte value);
 
     @DBusMemberName(value = "StartUnit")
     Path startUnit(String name, String mode);
@@ -95,14 +110,14 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "StopUnit")
     Path stopUnit(String name, String mode);
 
+    @DBusMemberName(value = "Subscribe")
+    void subscribe();
+
     @DBusMemberName(value = "TryRestartUnit")
     Path tryRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "UnrefUnit")
     void unrefUnit(String name);
-
-    @DBusMemberName(value = "Subscribe")
-    void subscribe();
 
     @DBusMemberName(value = "Unsubscribe")
     void unsubscribe();
