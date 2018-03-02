@@ -15,7 +15,9 @@ import java.util.List;
 
 import org.freedesktop.dbus.DBusInterfaceName;
 import org.freedesktop.dbus.DBusMemberName;
+import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.Signal;
 import de.thjom.java.systemd.types.UnitProcessType;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Scope.SERVICE_NAME)
@@ -26,5 +28,13 @@ public interface ScopeInterface extends UnitInterface {
 
     @DBusMemberName(value = "GetProcesses")
     List<UnitProcessType> getProcesses();
+
+    class RequestStop extends Signal {
+
+        public RequestStop(String objectPath) throws DBusException {
+            super(objectPath);
+        }
+
+    }
 
 }
