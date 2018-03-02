@@ -52,6 +52,8 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String MOUNT_FLAGS = "MountFlags";
@@ -189,6 +191,14 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public Vector<String> getInaccessiblePaths() {
         return properties.getVector(Property.INACCESSIBLE_PATHS);
+    }
+
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
+    }
+
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public String getKillMode() {
