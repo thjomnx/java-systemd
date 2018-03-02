@@ -122,7 +122,7 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "Unsubscribe")
     void unsubscribe();
 
-    public class JobNew extends Signal {
+    class JobNew extends Signal {
 
         public JobNew(String objectPath, long id, Path job, String unit) throws DBusException {
             super(objectPath, id, job, unit);
@@ -142,7 +142,7 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public class JobRemoved extends Signal {
+    class JobRemoved extends Signal {
 
         public JobRemoved(String objectPath, long id, Path job, String unit, String result) throws DBusException {
             super(objectPath, id, job, unit, result);
