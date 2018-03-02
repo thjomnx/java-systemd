@@ -23,6 +23,11 @@ public interface IoAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
+        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
+        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
+        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
+        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
+        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String IO_ACCOUNTING = "IOAccounting";
         public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
         public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
@@ -41,6 +46,26 @@ public interface IoAccounting extends Feature {
             return getAllNames(Property.class);
         }
 
+    }
+
+    default boolean isBlockIOAccounting() {
+        return getProperties().getBoolean(Property.BLOCK_IO_ACCOUNTING);
+    }
+
+    default List<IODeviceWeight> getBlockIODeviceWeight() {
+        return IODeviceWeight.list(getProperties().getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+    }
+
+    default List<IOBandwidth> getBlockIOReadBandwidth() {
+        return IOBandwidth.list(getProperties().getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+    }
+
+    default BigInteger getBlockIOWeight() {
+        return getProperties().getBigInteger(Property.BLOCK_IO_WEIGHT);
+    }
+
+    default List<IOBandwidth> getBlockIOWriteBandwidth() {
+        return IOBandwidth.list(getProperties().getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     default boolean isIOAccounting() {

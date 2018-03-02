@@ -30,8 +30,6 @@ import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.ListenInfo;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
@@ -51,20 +49,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String BACKLOG = "Backlog";
         public static final String BIND_IPV6_ONLY = "BindIPv6Only";
         public static final String BIND_TO_DEVICE = "BindToDevice";
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String BROADCAST = "Broadcast";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_AFFINITY = "CPUAffinity";
-        public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
-        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPU_SHARES = "CPUShares";
-        public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DEFER_ACCEPT_USEC = "DeferAcceptUSec";
@@ -238,26 +223,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public String getBindToDevice() {
         return properties.getString(Property.BIND_TO_DEVICE);
-    }
-
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isBroadcast() {

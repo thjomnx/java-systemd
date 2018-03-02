@@ -20,6 +20,7 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
+import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
@@ -27,34 +28,19 @@ import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
-import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
+public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_AFFINITY = "CPUAffinity";
-        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPU_SHARES = "CPUShares";
-        public static final String CPU_WEIGHT = "CPUWeight";
         public static final String DELEGATE = "Delegate";
         public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
@@ -66,13 +52,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
-        public static final String IO_ACCOUNTING = "IOAccounting";
-        public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
-        public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
-        public static final String IO_READ_IOPS_MAX = "IOReadIOPSMax";
-        public static final String IO_WEIGHT = "IOWeight";
-        public static final String IO_WRITE_BANDWIDTH_MAX = "IOWriteBandwidthMax";
-        public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String MOUNT_FLAGS = "MountFlags";
@@ -126,6 +105,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
                     Property.class,
                     ExtendedCpuAccounting.Property.class,
                     DynamicUserAccounting.Property.class,
+                    IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     ExtendedMemoryAccounting.Property.class,
                     TasksAccounting.Property.class,
@@ -157,26 +137,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public List<UnitProcessType> getProcesses() {
         return getInterface().getProcesses();
-    }
-
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public boolean isDelegate() {
@@ -229,34 +189,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public Vector<String> getInaccessiblePaths() {
         return properties.getVector(Property.INACCESSIBLE_PATHS);
-    }
-
-    public boolean isIOAccounting() {
-        return properties.getBoolean(Property.IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getIOReadBandwidthMax() {
-        return IOBandwidth.list(properties.getVector(Property.IO_READ_BANDWIDTH_MAX));
-    }
-
-    public List<IOIops> getIOReadIOPSMax() {
-        return IOIops.list(properties.getVector(Property.IO_READ_IOPS_MAX));
-    }
-
-    public BigInteger getIOWeight() {
-        return properties.getBigInteger(Property.IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getIOWriteBandwidthMax() {
-        return IOBandwidth.list(properties.getVector(Property.IO_WRITE_BANDWIDTH_MAX));
-    }
-
-    public List<IOIops> getIOWriteIOPSMax() {
-        return IOIops.list(properties.getVector(Property.IO_WRITE_IOPS_MAX));
     }
 
     public String getKillMode() {

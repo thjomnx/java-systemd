@@ -24,8 +24,6 @@ import de.thjom.java.systemd.features.MemoryAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.interfaces.ScopeInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.UnitProcessType;
 
 public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
@@ -35,13 +33,6 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_SHARES = "CPUShares";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROLLER = "Controller";
         public static final String DELEGATE = "Delegate";
@@ -93,28 +84,12 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         return (ScopeInterface) super.getInterface();
     }
 
+    public void abandon() {
+        getInterface().abandon();
+    }
+
     public List<UnitProcessType> getProcesses() {
         return getInterface().getProcesses();
-    }
-
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public String getControlGroup() {

@@ -45,9 +45,6 @@ public class ServiceTest extends UnitTest {
         setupPropertyMocks(Service.class, Service.SERVICE_NAME, Service.Property.getAllNames());
 
         nonVariantProperties.add(Service.Property.APP_ARMOR_PROFILE);
-        nonVariantProperties.add(Service.Property.BLOCK_IO_DEVICE_WEIGHT);
-        nonVariantProperties.add(Service.Property.BLOCK_IO_READ_BANDWIDTH);
-        nonVariantProperties.add(Service.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Service.Property.DEVICE_ALLOW);
         nonVariantProperties.add(Service.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Service.Property.EXEC_RELOAD);
@@ -64,6 +61,9 @@ public class ServiceTest extends UnitTest {
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
 
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);

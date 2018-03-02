@@ -44,14 +44,14 @@ public class SliceTest extends UnitTest {
 
         setupPropertyMocks(Slice.class, Slice.SERVICE_NAME, Slice.Property.getAllNames());
 
-        nonVariantProperties.add(Slice.Property.BLOCK_IO_DEVICE_WEIGHT);
-        nonVariantProperties.add(Slice.Property.BLOCK_IO_READ_BANDWIDTH);
-        nonVariantProperties.add(Slice.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Slice.Property.DEVICE_ALLOW);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
 
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);

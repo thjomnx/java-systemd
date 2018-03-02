@@ -30,8 +30,6 @@ import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
@@ -45,20 +43,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String BUS_NAME = "BusName";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_AFFINITY = "CPUAffinity";
-        public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
-        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPU_SHARES = "CPUShares";
-        public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
@@ -204,26 +189,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
 
         return new AppArmorProfile(array);
-    }
-
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     public String getBusName() {

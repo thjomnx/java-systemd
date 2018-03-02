@@ -45,9 +45,6 @@ public class SocketTest extends UnitTest {
         setupPropertyMocks(Socket.class, Socket.SERVICE_NAME, Socket.Property.getAllNames());
 
         nonVariantProperties.add(Socket.Property.APP_ARMOR_PROFILE);
-        nonVariantProperties.add(Socket.Property.BLOCK_IO_DEVICE_WEIGHT);
-        nonVariantProperties.add(Socket.Property.BLOCK_IO_READ_BANDWIDTH);
-        nonVariantProperties.add(Socket.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Socket.Property.DEVICE_ALLOW);
         nonVariantProperties.add(Socket.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Socket.Property.EXEC_START_POST);
@@ -63,6 +60,9 @@ public class SocketTest extends UnitTest {
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
 
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);
