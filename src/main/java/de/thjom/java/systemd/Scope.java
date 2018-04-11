@@ -88,6 +88,10 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         getInterface().abandon();
     }
 
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
+    }
+
     public List<UnitProcessType> getProcesses() {
         return getInterface().getProcesses();
     }

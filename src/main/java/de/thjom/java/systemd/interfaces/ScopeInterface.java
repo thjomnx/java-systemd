@@ -26,6 +26,9 @@ public interface ScopeInterface extends UnitInterface {
     @DBusMemberName(value = "Abandon")
     void abandon();
 
+    @DBusMemberName(value = "AttachProcesses")
+    void attachProcesses(String cgroupPath, long[] pids);
+
     @DBusMemberName(value = "GetProcesses")
     List<UnitProcessType> getProcesses();
 

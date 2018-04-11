@@ -28,6 +28,7 @@ import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
+import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -39,7 +40,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
-        public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DELEGATE = "Delegate";
         public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
@@ -61,14 +61,11 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
+        public static final String OPTIONS = "Options";
         public static final String PAM_NAME = "PAMName";
         public static final String PRIORITY = "Priority";
-        public static final String PROTECT_CONTROL_GROUPS = "ProtectControlGroups";
-        public static final String PROTECT_KERNEL_MODULES = "ProtectKernelModules";
-        public static final String PROTECT_KERNEL_TUNABLES = "ProtectKernelTunables";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
-        public static final String RESTRICT_REALTIME = "RestrictRealtime";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -76,12 +73,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_ERROR_FILE_DESCRIPTOR_NAME = "StandardErrorFileDescriptorName";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_INPUT_FILE_DESCRIPTOR_NAME = "StandardInputFileDescriptorName";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME = "StandardOutputFileDescriptorName";
+        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -94,7 +86,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String UMASK = "UMask";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
         public static final String WHAT = "What";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
 
@@ -137,6 +128,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return (SwapInterface) super.getInterface();
     }
 
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
+    }
+
     public List<UnitProcessType> getProcesses() {
         return getInterface().getProcesses();
     }
@@ -151,10 +146,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
-    }
-
-    public String getControlGroup() {
-        return properties.getString(Property.CONTROL_GROUP);
     }
 
     public long getControlPID() {
@@ -229,6 +220,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
 
+    public String getOptions() {
+        return properties.getString(Property.OPTIONS);
+    }
+
     public String getPAMName() {
         return properties.getString(Property.PAM_NAME);
     }
@@ -237,28 +232,12 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public boolean isProtectControlGroups() {
-        return properties.getBoolean(Property.PROTECT_CONTROL_GROUPS);
-    }
-
-    public boolean isProtectKernelModules() {
-        return properties.getBoolean(Property.PROTECT_KERNEL_MODULES);
-    }
-
-    public boolean isProtectKernelTunables() {
-        return properties.getBoolean(Property.PROTECT_KERNEL_TUNABLES);
-    }
-
     public Vector<String> getReadOnlyPaths() {
         return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
     public Vector<String> getReadWritePaths() {
         return properties.getVector(Property.READ_WRITE_PATHS);
-    }
-
-    public boolean isRestrictRealtime() {
-        return properties.getBoolean(Property.RESTRICT_REALTIME);
     }
 
     public String getResult() {
@@ -289,28 +268,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getString(Property.SLICE);
     }
 
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
+    public SmackProcessLabel getSmackProcessLabel() {
+        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
 
-    public String getStandardErrorFileDescriptorName() {
-        return properties.getString(Property.STANDARD_ERROR_FILE_DESCRIPTOR_NAME);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardInputFileDescriptorName() {
-        return properties.getString(Property.STANDARD_INPUT_FILE_DESCRIPTOR_NAME);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    public String getStandardOutputFileDescriptorName() {
-        return properties.getString(Property.STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME);
+        return new SmackProcessLabel(array);
     }
 
     public Vector<String> getSupplementaryGroups() {
@@ -361,10 +322,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
     }
 
     public String getWhat() {

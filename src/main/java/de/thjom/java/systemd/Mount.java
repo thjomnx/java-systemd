@@ -25,8 +25,6 @@ import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.MountInterface;
-import de.thjom.java.systemd.types.AddressFamilyRestriction;
-import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
@@ -42,10 +40,7 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String AMBIENT_CAPABILITIES = "AmbientCapabilities";
-        public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
-        public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DELEGATE = "Delegate";
         public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
@@ -73,12 +68,8 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String OPTIONS = "Options";
         public static final String PAMNAME = "PAMName";
-        public static final String PASS_ENVIRONMENT = "PassEnvironment";
-        public static final String PERSONALITY = "Personality";
-        public static final String PRIVATE_DEVICES = "PrivateDevices";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
-        public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SELINUX_CONTEXT = "SELinuxContext";
@@ -89,17 +80,10 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         public static final String SLICE = "Slice";
         public static final String SLOPPY_OPTIONS = "SloppyOptions";
         public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
-        public static final String SYSLOG_FACILITY = "SyslogFacility";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
-        public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
-        public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
-        public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
         public static final String TTY_PATH = "TTYPath";
         public static final String TTY_RESET = "TTYReset";
@@ -112,9 +96,6 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TYPE = "Type";
         public static final String UMASK = "UMask";
-        public static final String USER = "User";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
-        public static final String UTMP_MODE = "UtmpMode";
         public static final String WHAT = "What";
         public static final String WHERE = "Where";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
@@ -158,26 +139,16 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return (MountInterface) super.getInterface();
     }
 
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
+    }
+
     public List<UnitProcessType> getProcesses() {
         return getInterface().getProcesses();
     }
 
-    public BigInteger getAmbientCapabilities() {
-        return properties.getBigInteger(Property.AMBIENT_CAPABILITIES);
-    }
-
-    public AppArmorProfile getAppArmorProfile() {
-        Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
-
-        return new AppArmorProfile(array);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
-    }
-
-    public String getControlGroup() {
-        return properties.getString(Property.CONTROL_GROUP);
     }
 
     public long getControlPID() {
@@ -284,30 +255,12 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return properties.getString(Property.PAMNAME);
     }
 
-    public Vector<String> getPassEnvironment() {
-        return properties.getVector(Property.PASS_ENVIRONMENT);
-    }
-
-    public String getPersonality() {
-        return properties.getString(Property.PERSONALITY);
-    }
-
-    public boolean isPrivateDevices() {
-        return properties.getBoolean(Property.PRIVATE_DEVICES);
-    }
-
     public Vector<String> getReadOnlyPaths() {
         return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
     public Vector<String> getReadWritePaths() {
         return properties.getVector(Property.READ_WRITE_PATHS);
-    }
-
-    public AddressFamilyRestriction getRestrictAddressFamilies() {
-        Object[] array = (Object[]) properties.getVariant(Property.RESTRICT_ADDRESS_FAMILIES).getValue();
-
-        return new AddressFamilyRestriction(array);
     }
 
     public String getResult() {
@@ -354,32 +307,12 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return new SmackProcessLabel(array);
     }
 
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
     public Vector<String> getSupplementaryGroups() {
         return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
     }
 
-    public int getSyslogFacility() {
-        return properties.getInteger(Property.SYSLOG_FACILITY);
-    }
-
     public String getSyslogIdentifier() {
         return properties.getString(Property.SYSLOG_IDENTIFIER);
-    }
-
-    public int getSyslogLevel() {
-        return properties.getInteger(Property.SYSLOG_LEVEL);
     }
 
     public boolean isSyslogLevelPrefix() {
@@ -388,14 +321,6 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
 
     public int getSyslogPriority() {
         return properties.getInteger(Property.SYSLOG_PRIORITY);
-    }
-
-    public Vector<String> getSystemCallArchitectures() {
-        return properties.getVector(Property.SYSTEM_CALL_ARCHITECTURES);
-    }
-
-    public int getSystemCallErrorNumber() {
-        return properties.getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
     }
 
     public SystemCallFilter getSystemCallFilter() {
@@ -434,14 +359,6 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
-    }
-
-    public String getUtmpMode() {
-        return properties.getString(Property.UTMP_MODE);
     }
 
     public String getWhat() {

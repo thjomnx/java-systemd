@@ -25,8 +25,6 @@ import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
-import de.thjom.java.systemd.types.AddressFamilyRestriction;
-import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
@@ -42,10 +40,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
         public static final String BUS_NAME = "BusName";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
-        public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DELEGATE = "Delegate";
         public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
@@ -82,19 +78,16 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NOTIFY_ACCESS = "NotifyAccess";
+        public static final String N_RESTARTS = "NRestarts";
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PID_FILE = "PIDFile";
-        public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
-        public static final String PERSONALITY = "Personality";
-        public static final String PRIVATE_DEVICES = "PrivateDevices";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
         public static final String RESTART = "Restart";
         public static final String RESTART_USEC = "RestartUSec";
-        public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String ROOT_DIRECTORY_START_ONLY = "RootDirectoryStartOnly";
@@ -106,19 +99,12 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
         public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
         public static final String STATUS_ERRNO = "StatusErrno";
         public static final String STATUS_TEXT = "StatusText";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
-        public static final String SYSLOG_FACILITY = "SyslogFacility";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
-        public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
-        public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
-        public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
         public static final String TTY_PATH = "TTYPath";
         public static final String TTY_RESET = "TTYReset";
@@ -134,9 +120,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String UMASK = "UMask";
         public static final String USB_FUNCTION_DESCRIPTORS = "USBFunctionDescriptors";
         public static final String USB_FUNCTION_STRINGS = "USBFunctionStrings";
-        public static final String USER = "User";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
-        public static final String UTMP_MODE = "UtmpMode";
         public static final String WATCHDOG_TIMESTAMP = "WatchdogTimestamp";
         public static final String WATCHDOG_TIMESTAMP_MONOTONIC = "WatchdogTimestampMonotonic";
         public static final String WATCHDOG_USEC = "WatchdogUSec";
@@ -181,14 +164,12 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return (ServiceInterface) super.getInterface();
     }
 
-    public List<UnitProcessType> getProcesses() {
-        return getInterface().getProcesses();
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
     }
 
-    public AppArmorProfile getAppArmorProfile() {
-        Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
-
-        return new AppArmorProfile(array);
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public String getBusName() {
@@ -197,10 +178,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
-    }
-
-    public String getControlGroup() {
-        return properties.getString(Property.CONTROL_GROUP);
     }
 
     public long getControlPID() {
@@ -343,6 +320,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getString(Property.NOTIFY_ACCESS);
     }
 
+    public long getNRestarts() {
+        return properties.getLong(Property.N_RESTARTS);
+    }
+
     public int getOOMScoreAdjust() {
         return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
@@ -355,20 +336,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getString(Property.PID_FILE);
     }
 
-    public Vector<String> getPassEnvironment() {
-        return properties.getVector(Property.PASS_ENVIRONMENT);
-    }
-
     public boolean isPermissionsStartOnly() {
         return properties.getBoolean(Property.PERMISSIONS_START_ONLY);
-    }
-
-    public String getPersonality() {
-        return properties.getString(Property.PERSONALITY);
-    }
-
-    public boolean isPrivateDevices() {
-        return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
     public Vector<String> getReadOnlyPaths() {
@@ -389,12 +358,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public BigInteger getRestartUSec() {
         return properties.getBigInteger(Property.RESTART_USEC);
-    }
-
-    public AddressFamilyRestriction getRestrictAddressFamilies() {
-        Object[] array = (Object[]) properties.getVariant(Property.RESTRICT_ADDRESS_FAMILIES).getValue();
-
-        return new AddressFamilyRestriction(array);
     }
 
     public String getResult() {
@@ -445,18 +408,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return new SmackProcessLabel(array);
     }
 
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
     public int getStatusErrno() {
         return properties.getInteger(Property.STATUS_ERRNO);
     }
@@ -469,16 +420,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
     }
 
-    public int getSyslogFacility() {
-        return properties.getInteger(Property.SYSLOG_FACILITY);
-    }
-
     public String getSyslogIdentifier() {
         return properties.getString(Property.SYSLOG_IDENTIFIER);
-    }
-
-    public int getSyslogLevel() {
-        return properties.getInteger(Property.SYSLOG_LEVEL);
     }
 
     public boolean isSyslogLevelPrefix() {
@@ -487,14 +430,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public int getSyslogPriority() {
         return properties.getInteger(Property.SYSLOG_PRIORITY);
-    }
-
-    public Vector<String> getSystemCallArchitectures() {
-        return properties.getVector(Property.SYSTEM_CALL_ARCHITECTURES);
-    }
-
-    public int getSystemCallErrorNumber() {
-        return properties.getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
     }
 
     public SystemCallFilter getSystemCallFilter() {
@@ -545,14 +480,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getUSBFunctionStrings() {
         return properties.getString(Property.USB_FUNCTION_STRINGS);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
-    }
-
-    public String getUtmpMode() {
-        return properties.getString(Property.UTMP_MODE);
     }
 
     public long getWatchdogTimestamp() {

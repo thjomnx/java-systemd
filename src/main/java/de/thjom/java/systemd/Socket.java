@@ -25,8 +25,6 @@ import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SocketInterface;
-import de.thjom.java.systemd.types.AddressFamilyRestriction;
-import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
@@ -44,8 +42,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACCEPT = "Accept";
-        public static final String AMBIENT_CAPABILITIES = "AmbientCapabilities";
-        public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
         public static final String BACKLOG = "Backlog";
         public static final String BIND_IPV6_ONLY = "BindIPv6Only";
         public static final String BIND_TO_DEVICE = "BindToDevice";
@@ -95,17 +91,13 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PASS_CREDENTIALS = "PassCredentials";
-        public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PASS_SECURITY = "PassSecurity";
-        public static final String PERSONALITY = "Personality";
         public static final String PIPE_SIZE = "PipeSize";
         public static final String PRIORITY = "Priority";
-        public static final String PRIVATE_DEVICES = "PrivateDevices";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RECEIVE_BUFFER = "ReceiveBuffer";
         public static final String REMOVE_ON_STOP = "RemoveOnStop";
-        public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String REUSE_PORT = "ReusePort";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -124,19 +116,13 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String SOCKET_MODE = "SocketMode";
         public static final String SOCKET_PROTOCOL = "SocketProtocol";
         public static final String SOCKET_USER = "SocketUser";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYMLINKS = "Symlinks";
-        public static final String SYSLOG_FACILITY = "SyslogFacility";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
-        public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
-        public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
-        public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
+        public static final String TCP_CONGESTION = "TCPCongestion";
         public static final String TRIGGER_LIMIT_BURST = "TriggerLimitBurst";
         public static final String TRIGGER_LIMIT_INTERVAL_USEC = "TriggerLimitIntervalUSec";
         public static final String TTY_PATH = "TTYPath";
@@ -150,9 +136,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TRANSPARENT = "Transparent";
         public static final String UMASK = "UMask";
-        public static final String USER = "User";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
-        public static final String UTMP_MODE = "UtmpMode";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
         public static final String WRITABLE = "Writable";
 
@@ -195,22 +178,16 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return (SocketInterface) super.getInterface();
     }
 
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
+    }
+
     public List<UnitProcessType> getProcesses() {
         return getInterface().getProcesses();
     }
 
     public boolean isAccept() {
         return properties.getBoolean(Property.ACCEPT);
-    }
-
-    public BigInteger getAmbientCapabilities() {
-        return properties.getBigInteger(Property.AMBIENT_CAPABILITIES);
-    }
-
-    public AppArmorProfile getAppArmorProfile() {
-        Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
-
-        return new AppArmorProfile(array);
     }
 
     public long getBacklog() {
@@ -405,16 +382,8 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getBoolean(Property.PASS_CREDENTIALS);
     }
 
-    public Vector<String> getPassEnvironment() {
-        return properties.getVector(Property.PASS_ENVIRONMENT);
-    }
-
     public boolean isPassSecurity() {
         return properties.getBoolean(Property.PASS_SECURITY);
-    }
-
-    public String getPersonality() {
-        return properties.getString(Property.PERSONALITY);
     }
 
     public BigInteger getPipeSize() {
@@ -423,10 +392,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public int getPriority() {
         return properties.getInteger(Property.PRIORITY);
-    }
-
-    public boolean isPrivateDevices() {
-        return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
     public Vector<String> getReadOnlyPaths() {
@@ -443,12 +408,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public boolean isRemoveOnStop() {
         return properties.getBoolean(Property.REMOVE_ON_STOP);
-    }
-
-    public AddressFamilyRestriction getRestrictAddressFamilies() {
-        Object[] array = (Object[]) properties.getVariant(Property.RESTRICT_ADDRESS_FAMILIES).getValue();
-
-        return new AddressFamilyRestriction(array);
     }
 
     public String getResult() {
@@ -527,18 +486,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getString(Property.SOCKET_USER);
     }
 
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
     public Vector<String> getSupplementaryGroups() {
         return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
     }
@@ -547,16 +494,8 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getVector(Property.SYMLINKS);
     }
 
-    public int getSyslogFacility() {
-        return properties.getInteger(Property.SYSLOG_FACILITY);
-    }
-
     public String getSyslogIdentifier() {
         return properties.getString(Property.SYSLOG_IDENTIFIER);
-    }
-
-    public int getSyslogLevel() {
-        return properties.getInteger(Property.SYSLOG_LEVEL);
     }
 
     public boolean isSyslogLevelPrefix() {
@@ -567,18 +506,14 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getInteger(Property.SYSLOG_PRIORITY);
     }
 
-    public Vector<String> getSystemCallArchitectures() {
-        return properties.getVector(Property.SYSTEM_CALL_ARCHITECTURES);
-    }
-
-    public int getSystemCallErrorNumber() {
-        return properties.getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
-    }
-
     public SystemCallFilter getSystemCallFilter() {
         Object[] array = (Object[]) properties.getVariant(Property.SYSTEM_CALL_FILTER).getValue();
 
         return new SystemCallFilter(array);
+    }
+
+    public String getTCPCongestion() {
+        return properties.getString(Property.TCP_CONGESTION);
     }
 
     public long getTriggerLimitBurst() {
@@ -619,14 +554,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
-    }
-
-    public String getUtmpMode() {
-        return properties.getString(Property.UTMP_MODE);
     }
 
     public String getWorkingDirectory() {

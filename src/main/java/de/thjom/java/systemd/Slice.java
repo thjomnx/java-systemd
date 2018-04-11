@@ -32,7 +32,6 @@ public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccoun
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String CONTROL_GROUP = "ControlGroup";
         public static final String DELEGATE = "Delegate";
         public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
@@ -76,12 +75,12 @@ public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         return (SliceInterface) super.getInterface();
     }
 
-    public List<UnitProcessType> getProcesses() {
-        return getInterface().getProcesses();
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
     }
 
-    public String getControlGroup() {
-        return properties.getString(Property.CONTROL_GROUP);
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public boolean isDelegate() {

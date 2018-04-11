@@ -21,6 +21,9 @@ import de.thjom.java.systemd.types.UnitProcessType;
 @DBusInterfaceName(value = de.thjom.java.systemd.Service.SERVICE_NAME)
 public interface ServiceInterface extends UnitInterface {
 
+    @DBusMemberName(value = "AttachProcesses")
+    void attachProcesses(String cgroupPath, long[] pids);
+
     @DBusMemberName(value = "GetProcesses")
     List<UnitProcessType> getProcesses();
 

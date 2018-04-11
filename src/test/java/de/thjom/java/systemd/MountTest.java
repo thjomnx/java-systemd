@@ -18,6 +18,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.MountInterface;
@@ -44,16 +45,17 @@ public class MountTest extends UnitTest {
 
         setupPropertyMocks(Mount.class, Mount.SERVICE_NAME, Mount.Property.getAllNames());
 
-        nonVariantProperties.add(Mount.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(Mount.Property.DEVICE_ALLOW);
         nonVariantProperties.add(Mount.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Mount.Property.EXEC_MOUNT);
         nonVariantProperties.add(Mount.Property.EXEC_REMOUNT);
         nonVariantProperties.add(Mount.Property.EXEC_UNMOUNT);
-        nonVariantProperties.add(Mount.Property.RESTRICT_ADDRESS_FAMILIES);
         nonVariantProperties.add(Mount.Property.SELINUX_CONTEXT);
         nonVariantProperties.add(Mount.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Mount.Property.SYSTEM_CALL_FILTER);
+
+        nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
+        nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);

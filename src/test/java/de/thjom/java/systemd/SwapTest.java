@@ -18,6 +18,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.SwapInterface;
@@ -48,7 +49,11 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(Swap.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Swap.Property.EXEC_ACTIVATE);
         nonVariantProperties.add(Swap.Property.EXEC_DEACTIVATE);
+        nonVariantProperties.add(Swap.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Swap.Property.SYSTEM_CALL_FILTER);
+
+        nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
+        nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
