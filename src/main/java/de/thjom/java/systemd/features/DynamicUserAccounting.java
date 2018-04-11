@@ -17,6 +17,8 @@ import java.util.Vector;
 import de.thjom.java.systemd.InterfaceAdapter;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
+import de.thjom.java.systemd.types.SELinuxContext;
+import de.thjom.java.systemd.types.SmackProcessLabel;
 
 public interface DynamicUserAccounting extends Feature {
 
@@ -57,6 +59,8 @@ public interface DynamicUserAccounting extends Feature {
         public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
         public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String RUNTIME_DIRECTORY_PRESERVE = "RuntimeDirectoryPreserve";
+        public static final String SELINUX_CONTEXT = "SELinuxContext";
+        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String STANDARD_ERROR = "StandardError";
         public static final String STANDARD_ERROR_FILE_DESCRIPTOR_NAME = "StandardErrorFileDescriptorName";
         public static final String STANDARD_INPUT = "StandardInput";
@@ -227,6 +231,18 @@ public interface DynamicUserAccounting extends Feature {
 
     default String getRuntimeDirectoryPreserve() {
         return getProperties().getString(Property.RUNTIME_DIRECTORY_PRESERVE);
+    }
+
+    default SELinuxContext getSELinuxContext() {
+        Object[] array = (Object[]) getProperties().getVariant(Property.SELINUX_CONTEXT).getValue();
+
+        return new SELinuxContext(array);
+    }
+
+    default SmackProcessLabel getSmackProcessLabel() {
+        Object[] array = (Object[]) getProperties().getVariant(Property.SMACK_PROCESS_LABEL).getValue();
+
+        return new SmackProcessLabel(array);
     }
 
     default String getStandardError() {

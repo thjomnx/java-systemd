@@ -53,12 +53,12 @@ public class ServiceTest extends UnitTest {
         nonVariantProperties.add(Service.Property.EXEC_START_PRE);
         nonVariantProperties.add(Service.Property.EXEC_STOP);
         nonVariantProperties.add(Service.Property.EXEC_STOP_POST);
-        nonVariantProperties.add(Service.Property.SELINUX_CONTEXT);
-        nonVariantProperties.add(Service.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Service.Property.SYSTEM_CALL_FILTER);
 
         nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);

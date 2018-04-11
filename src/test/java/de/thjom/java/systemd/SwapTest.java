@@ -49,11 +49,12 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(Swap.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Swap.Property.EXEC_ACTIVATE);
         nonVariantProperties.add(Swap.Property.EXEC_DEACTIVATE);
-        nonVariantProperties.add(Swap.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Swap.Property.SYSTEM_CALL_FILTER);
 
         nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);

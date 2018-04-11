@@ -50,12 +50,12 @@ public class MountTest extends UnitTest {
         nonVariantProperties.add(Mount.Property.EXEC_MOUNT);
         nonVariantProperties.add(Mount.Property.EXEC_REMOUNT);
         nonVariantProperties.add(Mount.Property.EXEC_UNMOUNT);
-        nonVariantProperties.add(Mount.Property.SELINUX_CONTEXT);
-        nonVariantProperties.add(Mount.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Mount.Property.SYSTEM_CALL_FILTER);
 
         nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);

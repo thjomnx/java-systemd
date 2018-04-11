@@ -28,7 +28,6 @@ import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -73,7 +72,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
-        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -266,12 +264,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public String getSlice() {
         return properties.getString(Property.SLICE);
-    }
-
-    public SmackProcessLabel getSmackProcessLabel() {
-        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
-
-        return new SmackProcessLabel(array);
     }
 
     public Vector<String> getSupplementaryGroups() {

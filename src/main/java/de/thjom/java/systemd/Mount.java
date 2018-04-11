@@ -28,8 +28,6 @@ import de.thjom.java.systemd.interfaces.MountInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.SELinuxContext;
-import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -72,14 +70,12 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
-        public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
         public static final String SLOPPY_OPTIONS = "SloppyOptions";
-        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -271,12 +267,6 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return properties.getString(Property.ROOT_DIRECTORY);
     }
 
-    public SELinuxContext getSELinuxContext() {
-        Object[] array = (Object[]) properties.getVariant(Property.SELINUX_CONTEXT).getValue();
-
-        return new SELinuxContext(array);
-    }
-
     public boolean isSameProcessGroup() {
         return properties.getBoolean(Property.SAME_PROCESS_GROUP);
     }
@@ -299,12 +289,6 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
 
     public boolean isSloppyOptions() {
         return properties.getBoolean(Property.SLOPPY_OPTIONS);
-    }
-
-    public SmackProcessLabel getSmackProcessLabel() {
-        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
-
-        return new SmackProcessLabel(array);
     }
 
     public Vector<String> getSupplementaryGroups() {

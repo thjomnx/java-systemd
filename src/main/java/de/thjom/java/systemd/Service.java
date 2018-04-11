@@ -28,8 +28,6 @@ import de.thjom.java.systemd.interfaces.ServiceInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.SELinuxContext;
-import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -92,13 +90,11 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String ROOT_DIRECTORY_START_ONLY = "RootDirectoryStartOnly";
         public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
-        public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
-        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String STATUS_ERRNO = "StatusErrno";
         public static final String STATUS_TEXT = "StatusText";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
@@ -376,12 +372,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getBigInteger(Property.RUNTIME_MAX_USEC);
     }
 
-    public SELinuxContext getSELinuxContext() {
-        Object[] array = (Object[]) properties.getVariant(Property.SELINUX_CONTEXT).getValue();
-
-        return new SELinuxContext(array);
-    }
-
     public boolean isSameProcessGroup() {
         return properties.getBoolean(Property.SAME_PROCESS_GROUP);
     }
@@ -400,12 +390,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getSlice() {
         return properties.getString(Property.SLICE);
-    }
-
-    public SmackProcessLabel getSmackProcessLabel() {
-        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
-
-        return new SmackProcessLabel(array);
     }
 
     public int getStatusErrno() {

@@ -29,8 +29,6 @@ import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
 import de.thjom.java.systemd.types.ListenInfo;
-import de.thjom.java.systemd.types.SELinuxContext;
-import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -101,7 +99,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String RESULT = "Result";
         public static final String REUSE_PORT = "ReusePort";
         public static final String ROOT_DIRECTORY = "RootDirectory";
-        public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
         public static final String SEND_BUFFER = "SendBuffer";
@@ -111,7 +108,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String SMACK_LABEL = "SmackLabel";
         public static final String SMACK_LABEL_IPIN = "SmackLabelIPIn";
         public static final String SMACK_LABEL_IPOUT = "SmackLabelIPOut";
-        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String SOCKET_GROUP = "SocketGroup";
         public static final String SOCKET_MODE = "SocketMode";
         public static final String SOCKET_PROTOCOL = "SocketProtocol";
@@ -422,12 +418,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getString(Property.ROOT_DIRECTORY);
     }
 
-    public SELinuxContext getSELinuxContext() {
-        Object[] array = (Object[]) properties.getVariant(Property.SELINUX_CONTEXT).getValue();
-
-        return new SELinuxContext(array);
-    }
-
     public boolean isSameProcessGroup() {
         return properties.getBoolean(Property.SAME_PROCESS_GROUP);
     }
@@ -462,12 +452,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public String getSmackLabelIPOut() {
         return properties.getString(Property.SMACK_LABEL_IPOUT);
-    }
-
-    public SmackProcessLabel getSmackProcessLabel() {
-        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
-
-        return new SmackProcessLabel(array);
     }
 
     public String getSocketGroup() {

@@ -52,12 +52,12 @@ public class SocketTest extends UnitTest {
         nonVariantProperties.add(Socket.Property.EXEC_STOP_POST);
         nonVariantProperties.add(Socket.Property.EXEC_STOP_PRE);
         nonVariantProperties.add(Socket.Property.LISTEN);
-        nonVariantProperties.add(Socket.Property.SELINUX_CONTEXT);
-        nonVariantProperties.add(Socket.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Socket.Property.SYSTEM_CALL_FILTER);
 
         nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
