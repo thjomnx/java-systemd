@@ -12,11 +12,14 @@
 package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Vector;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
+import de.thjom.java.systemd.types.BindPath;
+import de.thjom.java.systemd.types.FileSystemInfo;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 
@@ -26,6 +29,8 @@ public interface DynamicUserAccounting extends Feature {
 
         public static final String AMBIENT_CAPABILITIES = "AmbientCapabilities";
         public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
+        public static final String BIND_PATHS = "BindPaths";
+        public static final String BIND_READ_ONLY_PATHS = "BindReadOnlyPaths";
         public static final String CACHE_DIRECTORY = "CacheDirectory";
         public static final String CACHE_DIRECTORY_MODE = "CacheDirectoryMode";
         public static final String CONFIGURATION_DIRECTORY = "ConfigurationDirectory";
@@ -74,6 +79,7 @@ public interface DynamicUserAccounting extends Feature {
         public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
         public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
+        public static final String TEMPORARY_FILE_SYSTEM = "TemporaryFileSystem";
         public static final String UID = "UID";
         public static final String USER = "User";
         public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
@@ -97,6 +103,14 @@ public interface DynamicUserAccounting extends Feature {
         Object[] array = (Object[]) getProperties().getVariant(Property.APP_ARMOR_PROFILE).getValue();
 
         return new AppArmorProfile(array);
+    }
+
+    default List<BindPath> getBindPaths() {
+        return BindPath.list(getProperties().getVector(Property.BIND_PATHS));
+    }
+
+    default List<BindPath> getBindReadOnlyPaths() {
+        return BindPath.list(getProperties().getVector(Property.BIND_READ_ONLY_PATHS));
     }
 
     default Vector<String> getCacheDirectory() {
@@ -295,6 +309,10 @@ public interface DynamicUserAccounting extends Feature {
 
     default int getSystemCallErrorNumber() {
         return getProperties().getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
+    }
+
+    default List<FileSystemInfo> getTemporaryFileSystem() {
+        return FileSystemInfo.list(getProperties().getVector(Property.TEMPORARY_FILE_SYSTEM));
     }
 
     default int getUID() {
