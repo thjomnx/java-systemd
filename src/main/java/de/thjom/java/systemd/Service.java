@@ -28,6 +28,7 @@ import de.thjom.java.systemd.interfaces.ServiceInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
+import de.thjom.java.systemd.types.ExitStatusType;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -85,6 +86,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
         public static final String RESTART = "Restart";
+        public static final String RESTART_FORCE_EXIT_STATUS = "RestartForceExitStatus";
+        public static final String RESTART_PREVENT_EXIT_STATUS = "RestartPreventExitStatus";
         public static final String RESTART_USEC = "RestartUSec";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -97,6 +100,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String SLICE = "Slice";
         public static final String STATUS_ERRNO = "StatusErrno";
         public static final String STATUS_TEXT = "StatusText";
+        public static final String SUCCESS_EXIT_STATUS = "SuccessExitStatus";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -352,6 +356,14 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getString(Property.RESTART);
     }
 
+    public ExitStatusType getRestartForceExitStatus() {
+        return ExitStatusType.of((Object[]) properties.getVariant(Property.RESTART_FORCE_EXIT_STATUS).getValue());
+    }
+
+    public ExitStatusType getRestartPreventExitStatus() {
+        return ExitStatusType.of((Object[]) properties.getVariant(Property.RESTART_PREVENT_EXIT_STATUS).getValue());
+    }
+
     public BigInteger getRestartUSec() {
         return properties.getBigInteger(Property.RESTART_USEC);
     }
@@ -398,6 +410,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getStatusText() {
         return properties.getString(Property.STATUS_TEXT);
+    }
+
+    public ExitStatusType getSuccessExitStatus() {
+        return ExitStatusType.of((Object[]) properties.getVariant(Property.SUCCESS_EXIT_STATUS).getValue());
     }
 
     public Vector<String> getSupplementaryGroups() {

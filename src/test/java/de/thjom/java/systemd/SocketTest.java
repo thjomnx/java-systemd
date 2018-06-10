@@ -57,6 +57,7 @@ public class SocketTest extends UnitTest {
         nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(DynamicUserAccounting.Property.BIND_PATHS);
         nonVariantProperties.add(DynamicUserAccounting.Property.BIND_READ_ONLY_PATHS);
+        nonVariantProperties.add(DynamicUserAccounting.Property.LOG_EXTRA_FIELDS);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
         nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
         nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);

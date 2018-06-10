@@ -41,6 +41,7 @@ public interface DynamicUserAccounting extends Feature {
         public static final String GROUP = "Group";
         public static final String KEYRING_MODE = "KeyringMode";
         public static final String LOCK_PERSONALITY = "LockPersonality";
+        public static final String LOG_EXTRA_FIELDS = "LogExtraFields";
         public static final String LOG_LEVEL_MAX = "LogLevelMax";
         public static final String LOGS_DIRECTORY = "LogsDirectory";
         public static final String LOGS_DIRECTORY_MODE = "LogsDirectoryMode";
@@ -81,6 +82,7 @@ public interface DynamicUserAccounting extends Feature {
         public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String TEMPORARY_FILE_SYSTEM = "TemporaryFileSystem";
         public static final String UID = "UID";
+        public static final String UNSET_ENVIRONMENT = "UnsetEnvironment";
         public static final String USER = "User";
         public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
         public static final String UTMP_MODE = "UtmpMode";
@@ -151,6 +153,10 @@ public interface DynamicUserAccounting extends Feature {
 
     default boolean isLockPersonality() {
         return getProperties().getBoolean(Property.LOCK_PERSONALITY);
+    }
+
+    default Vector<byte[]> getLogExtraFields() {
+        return getProperties().getVector(Property.LOG_EXTRA_FIELDS);
     }
 
     default int getLogLevelMax() {
@@ -317,6 +323,10 @@ public interface DynamicUserAccounting extends Feature {
 
     default int getUID() {
         return getProperties().getInteger(Property.UID);
+    }
+
+    default Vector<String> getUnsetEnvironment() {
+        return getProperties().getVector(Property.UNSET_ENVIRONMENT);
     }
 
     default String getUser() {
