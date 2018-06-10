@@ -92,6 +92,9 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ReloadUnit")
     Path reloadUnit(String name, String mode);
 
+    @DBusMemberName(value = "RemoveSnapshot")
+    void removeSnapshot(String name);
+
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
 
@@ -100,6 +103,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "RestartUnit")
     Path restartUnit(String name, String mode);
+
+    @DBusMemberName(value = "SetEnvironment")
+    void setEnvironment(String name);
 
     @DBusMemberName(value = "SetExitCode")
     void setExitCode(byte value);
@@ -113,11 +119,20 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "Subscribe")
     void subscribe();
 
+    @DBusMemberName(value = "SwitchRoot")
+    void switchRoot(String newRoot, String init);
+
     @DBusMemberName(value = "TryRestartUnit")
     Path tryRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "UnrefUnit")
     void unrefUnit(String name);
+
+    @DBusMemberName(value = "UnsetAndSetEnvironment")
+    void unsetAndSetEnvironment(List<String> namesToUnset, List<String> namesToSet);
+
+    @DBusMemberName(value = "UnsetEnvironment")
+    void unsetEnvironment(List<String> names);
 
     @DBusMemberName(value = "Unsubscribe")
     void unsubscribe();

@@ -264,6 +264,10 @@ public class Manager extends InterfaceAdapter {
         return getInterface().reloadUnit(name, mode);
     }
 
+    public void removeSnapshot(final String name) {
+        getInterface().removeSnapshot(name);
+    }
+
     public void resetFailed() {
         getInterface().resetFailed();
     }
@@ -284,6 +288,10 @@ public class Manager extends InterfaceAdapter {
         return startUnit(name, mode.getValue());
     }
 
+    public void setEnvironment(final String name) {
+        getInterface().setEnvironment(name);
+    }
+
     public void setExitCode(final byte value) {
         getInterface().setExitCode(value);
     }
@@ -300,6 +308,18 @@ public class Manager extends InterfaceAdapter {
         return getInterface().stopUnit(name, mode);
     }
 
+    public synchronized void subscribe() {
+        if (!subscribed) {
+            getInterface().subscribe();
+
+            subscribed = true;
+        }
+    }
+
+    public void switchRoot(final String newRoot, final String init) {
+        getInterface().switchRoot(newRoot, init);
+    }
+
     public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
         return tryRestartUnit(name, mode.getValue());
     }
@@ -312,12 +332,12 @@ public class Manager extends InterfaceAdapter {
         getInterface().unrefUnit(name);
     }
 
-    public synchronized void subscribe() {
-        if (!subscribed) {
-            getInterface().subscribe();
+    public void unsetAndSetEnvironment(final List<String> namesToUnset, final List<String> namesToSet) {
+        getInterface().unsetAndSetEnvironment(namesToUnset, namesToSet);
+    }
 
-            subscribed = true;
-        }
+    public void unsetEnvironment(final List<String> names) {
+        getInterface().unsetEnvironment(names);
     }
 
     public synchronized void unsubscribe() {
