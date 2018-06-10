@@ -18,48 +18,32 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.ExtendedCpuAccounting;
+import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
-import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
-import de.thjom.java.systemd.types.AddressFamilyRestriction;
-import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
-import de.thjom.java.systemd.types.SELinuxContext;
-import de.thjom.java.systemd.types.SmackProcessLabel;
+import de.thjom.java.systemd.types.ExitStatusType;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Service extends Unit implements DynamicUserAccounting, IoAccounting, IpAccounting, MemoryAccounting, Ulimit {
+public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String BUS_NAME = "BusName";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_AFFINITY = "CPUAffinity";
-        public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
-        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPU_SHARES = "CPUShares";
-        public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
-        public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String ENVIRONMENT = "Environment";
@@ -87,54 +71,40 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
         public static final String MAIN_PID = "MainPID";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_CURRENT = "MemoryCurrent";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MOUNT_FLAGS = "MountFlags";
         public static final String NFILE_DESCRIPTOR_STORE = "NFileDescriptorStore";
         public static final String NICE = "Nice";
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NOTIFY_ACCESS = "NotifyAccess";
+        public static final String N_RESTARTS = "NRestarts";
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PID_FILE = "PIDFile";
-        public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
-        public static final String PERSONALITY = "Personality";
-        public static final String PRIVATE_DEVICES = "PrivateDevices";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
         public static final String RESTART = "Restart";
+        public static final String RESTART_FORCE_EXIT_STATUS = "RestartForceExitStatus";
+        public static final String RESTART_PREVENT_EXIT_STATUS = "RestartPreventExitStatus";
         public static final String RESTART_USEC = "RestartUSec";
-        public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String ROOT_DIRECTORY_START_ONLY = "RootDirectoryStartOnly";
         public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
-        public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
-        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
-        public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String STATUS_ERRNO = "StatusErrno";
         public static final String STATUS_TEXT = "StatusText";
+        public static final String SUCCESS_EXIT_STATUS = "SuccessExitStatus";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
-        public static final String SYSLOG_FACILITY = "SyslogFacility";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
-        public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
-        public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
-        public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
         public static final String TTY_PATH = "TTYPath";
         public static final String TTY_RESET = "TTYReset";
@@ -150,9 +120,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String UMASK = "UMask";
         public static final String USB_FUNCTION_DESCRIPTORS = "USBFunctionDescriptors";
         public static final String USB_FUNCTION_STRINGS = "USBFunctionStrings";
-        public static final String USER = "User";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
-        public static final String UTMP_MODE = "UtmpMode";
         public static final String WATCHDOG_TIMESTAMP = "WatchdogTimestamp";
         public static final String WATCHDOG_TIMESTAMP_MONOTONIC = "WatchdogTimestampMonotonic";
         public static final String WATCHDOG_USEC = "WatchdogUSec";
@@ -165,10 +132,12 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    ExtendedCpuAccounting.Property.class,
                     DynamicUserAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    MemoryAccounting.Property.class,
+                    ExtendedMemoryAccounting.Property.class,
+                    TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
         }
@@ -195,74 +164,20 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return (ServiceInterface) super.getInterface();
     }
 
-    public AppArmorProfile getAppArmorProfile() {
-        Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
-
-        return new AppArmorProfile(array);
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
     }
 
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public String getBusName() {
         return properties.getString(Property.BUS_NAME);
     }
 
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
-    }
-
-    public BigInteger getCPUQuotaPerSecUSec() {
-        return properties.getBigInteger(Property.CPU_QUOTA_PER_SEC_USEC);
-    }
-
-    public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
-    }
-
-    public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
-    }
-
-    public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
-    }
-
-    public BigInteger getCPUUsageNSec() {
-        return properties.getBigInteger(Property.CPU_USAGE_NSEC);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
-    }
-
-    public String getControlGroup() {
-        return properties.getString(Property.CONTROL_GROUP);
     }
 
     public long getControlPID() {
@@ -271,6 +186,10 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public boolean isDelegate() {
         return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
@@ -345,10 +264,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getLong(Property.FILE_DESCRIPTOR_STORE_MAX);
     }
 
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
-    }
-
     public boolean isGuessMainPID() {
         return properties.getBoolean(Property.GUESS_MAIN_PID);
     }
@@ -381,18 +296,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getInteger(Property.MAIN_PID);
     }
 
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryCurrent() {
-        return properties.getBigInteger(Property.MEMORY_CURRENT);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
-    }
-
     public BigInteger getMountFlags() {
         return properties.getBigInteger(Property.MOUNT_FLAGS);
     }
@@ -417,6 +320,10 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getString(Property.NOTIFY_ACCESS);
     }
 
+    public long getNRestarts() {
+        return properties.getLong(Property.N_RESTARTS);
+    }
+
     public int getOOMScoreAdjust() {
         return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
@@ -429,20 +336,8 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getString(Property.PID_FILE);
     }
 
-    public Vector<String> getPassEnvironment() {
-        return properties.getVector(Property.PASS_ENVIRONMENT);
-    }
-
     public boolean isPermissionsStartOnly() {
         return properties.getBoolean(Property.PERMISSIONS_START_ONLY);
-    }
-
-    public String getPersonality() {
-        return properties.getString(Property.PERSONALITY);
-    }
-
-    public boolean isPrivateDevices() {
-        return properties.getBoolean(Property.PRIVATE_DEVICES);
     }
 
     public Vector<String> getReadOnlyPaths() {
@@ -461,14 +356,16 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getString(Property.RESTART);
     }
 
-    public BigInteger getRestartUSec() {
-        return properties.getBigInteger(Property.RESTART_USEC);
+    public ExitStatusType getRestartForceExitStatus() {
+        return ExitStatusType.of((Object[]) properties.getVariant(Property.RESTART_FORCE_EXIT_STATUS).getValue());
     }
 
-    public AddressFamilyRestriction getRestrictAddressFamilies() {
-        Object[] array = (Object[]) properties.getVariant(Property.RESTRICT_ADDRESS_FAMILIES).getValue();
+    public ExitStatusType getRestartPreventExitStatus() {
+        return ExitStatusType.of((Object[]) properties.getVariant(Property.RESTART_PREVENT_EXIT_STATUS).getValue());
+    }
 
-        return new AddressFamilyRestriction(array);
+    public BigInteger getRestartUSec() {
+        return properties.getBigInteger(Property.RESTART_USEC);
     }
 
     public String getResult() {
@@ -485,12 +382,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public BigInteger getRuntimeMaxUSec() {
         return properties.getBigInteger(Property.RUNTIME_MAX_USEC);
-    }
-
-    public SELinuxContext getSELinuxContext() {
-        Object[] array = (Object[]) properties.getVariant(Property.SELINUX_CONTEXT).getValue();
-
-        return new SELinuxContext(array);
     }
 
     public boolean isSameProcessGroup() {
@@ -513,32 +404,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getString(Property.SLICE);
     }
 
-    public SmackProcessLabel getSmackProcessLabel() {
-        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
-
-        return new SmackProcessLabel(array);
-    }
-
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    public BigInteger getStartupBlockIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_BLOCK_IO_WEIGHT);
-    }
-
-    public BigInteger getStartupCPUShares() {
-        return properties.getBigInteger(Property.STARTUP_CPU_SHARES);
-    }
-
     public int getStatusErrno() {
         return properties.getInteger(Property.STATUS_ERRNO);
     }
@@ -547,20 +412,16 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
         return properties.getString(Property.STATUS_TEXT);
     }
 
+    public ExitStatusType getSuccessExitStatus() {
+        return ExitStatusType.of((Object[]) properties.getVariant(Property.SUCCESS_EXIT_STATUS).getValue());
+    }
+
     public Vector<String> getSupplementaryGroups() {
         return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
     }
 
-    public int getSyslogFacility() {
-        return properties.getInteger(Property.SYSLOG_FACILITY);
-    }
-
     public String getSyslogIdentifier() {
         return properties.getString(Property.SYSLOG_IDENTIFIER);
-    }
-
-    public int getSyslogLevel() {
-        return properties.getInteger(Property.SYSLOG_LEVEL);
     }
 
     public boolean isSyslogLevelPrefix() {
@@ -569,14 +430,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public int getSyslogPriority() {
         return properties.getInteger(Property.SYSLOG_PRIORITY);
-    }
-
-    public Vector<String> getSystemCallArchitectures() {
-        return properties.getVector(Property.SYSTEM_CALL_ARCHITECTURES);
-    }
-
-    public int getSystemCallErrorNumber() {
-        return properties.getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
     }
 
     public SystemCallFilter getSystemCallFilter() {
@@ -599,18 +452,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public boolean isTTYVTDisallocate() {
         return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
-    }
-
-    public boolean isTasksAccounting() {
-        return properties.getBoolean(Property.TASKS_ACCOUNTING);
-    }
-
-    public BigInteger getTasksCurrent() {
-        return properties.getBigInteger(Property.TASKS_CURRENT);
-    }
-
-    public BigInteger getTasksMax() {
-        return properties.getBigInteger(Property.TASKS_MAX);
     }
 
     public BigInteger getTimeoutStartUSec() {
@@ -639,18 +480,6 @@ public class Service extends Unit implements DynamicUserAccounting, IoAccounting
 
     public String getUSBFunctionStrings() {
         return properties.getString(Property.USB_FUNCTION_STRINGS);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
-    }
-
-    public String getUtmpMode() {
-        return properties.getString(Property.UTMP_MODE);
     }
 
     public long getWatchdogTimestamp() {

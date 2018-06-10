@@ -14,13 +14,15 @@ package de.thjom.java.systemd.features;
 import java.math.BigInteger;
 
 import de.thjom.java.systemd.InterfaceAdapter;
-import de.thjom.java.systemd.Properties;
 
-public interface MemoryAccounting {
+public interface MemoryAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
+        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
+        public static final String MEMORY_CURRENT = "MemoryCurrent";
         public static final String MEMORY_HIGH = "MemoryHigh";
+        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MEMORY_LOW = "MemoryLow";
         public static final String MEMORY_MAX = "MemoryMax";
         public static final String MEMORY_SWAP_MAX = "MemorySwapMax";
@@ -35,10 +37,20 @@ public interface MemoryAccounting {
 
     }
 
-    Properties getProperties();
+    default boolean isMemoryAccounting() {
+        return getProperties().getBoolean(Property.MEMORY_ACCOUNTING);
+    }
+
+    default BigInteger getMemoryCurrent() {
+        return getProperties().getBigInteger(Property.MEMORY_CURRENT);
+    }
 
     default BigInteger getMemoryHigh() {
         return getProperties().getBigInteger(Property.MEMORY_HIGH);
+    }
+
+    default BigInteger getMemoryLimit() {
+        return getProperties().getBigInteger(Property.MEMORY_LIMIT);
     }
 
     default BigInteger getMemoryLow() {

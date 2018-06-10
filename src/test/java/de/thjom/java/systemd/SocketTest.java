@@ -18,6 +18,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.interfaces.SocketInterface;
@@ -44,10 +45,6 @@ public class SocketTest extends UnitTest {
 
         setupPropertyMocks(Socket.class, Socket.SERVICE_NAME, Socket.Property.getAllNames());
 
-        nonVariantProperties.add(Socket.Property.APP_ARMOR_PROFILE);
-        nonVariantProperties.add(Socket.Property.BLOCK_IO_DEVICE_WEIGHT);
-        nonVariantProperties.add(Socket.Property.BLOCK_IO_READ_BANDWIDTH);
-        nonVariantProperties.add(Socket.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(Socket.Property.DEVICE_ALLOW);
         nonVariantProperties.add(Socket.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Socket.Property.EXEC_START_POST);
@@ -55,14 +52,23 @@ public class SocketTest extends UnitTest {
         nonVariantProperties.add(Socket.Property.EXEC_STOP_POST);
         nonVariantProperties.add(Socket.Property.EXEC_STOP_PRE);
         nonVariantProperties.add(Socket.Property.LISTEN);
-        nonVariantProperties.add(Socket.Property.RESTRICT_ADDRESS_FAMILIES);
-        nonVariantProperties.add(Socket.Property.SELINUX_CONTEXT);
-        nonVariantProperties.add(Socket.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(Socket.Property.SYSTEM_CALL_FILTER);
+
+        nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
+        nonVariantProperties.add(DynamicUserAccounting.Property.BIND_PATHS);
+        nonVariantProperties.add(DynamicUserAccounting.Property.BIND_READ_ONLY_PATHS);
+        nonVariantProperties.add(DynamicUserAccounting.Property.LOG_EXTRA_FIELDS);
+        nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
+        nonVariantProperties.add(DynamicUserAccounting.Property.TEMPORARY_FILE_SYSTEM);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_DENY);
 
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_DEVICE_WEIGHT);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_READ_BANDWIDTH);
+        nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_WRITE_BANDWIDTH);
         nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);

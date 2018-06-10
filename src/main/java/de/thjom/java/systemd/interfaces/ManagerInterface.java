@@ -27,7 +27,7 @@ import de.thjom.java.systemd.types.UnitType;
 public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "CancelJob")
-    void cancelJob(final long id);
+    void cancelJob(long id);
 
     @DBusMemberName(value = "ClearJobs")
     void clearJobs();
@@ -35,8 +35,14 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "Dump")
     String dump();
 
+    @DBusMemberName(value = "Exit")
+    void exit();
+
     @DBusMemberName(value = "GetDefaultTarget")
     String getDefaultTarget();
+
+    @DBusMemberName(value = "GetUnitByPID")
+    Path getUnitByPID(int pid);
 
     @DBusMemberName(value = "Halt")
     void halt();
@@ -45,7 +51,7 @@ public interface ManagerInterface extends DBusInterface {
     void kExec();
 
     @DBusMemberName(value = "KillUnit")
-    void killUnit(final String name, final String who, final int signal);
+    void killUnit(String name, String who, int signal);
 
     @DBusMemberName(value = "ListUnitFiles")
     List<UnitFileType> listUnitFiles();
@@ -53,11 +59,14 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ListUnits")
     List<UnitType> listUnits();
 
+    @DBusMemberName(value = "LoadUnit")
+    Path loadUnit(String name);
+
     @DBusMemberName(value = "LookupDynamicUserByName")
-    long lookupDynamicUserByName(final String name);
+    long lookupDynamicUserByName(String name);
 
     @DBusMemberName(value = "LookupDynamicUserByUID")
-    String lookupDynamicUserByUID(final long uid);
+    String lookupDynamicUserByUID(long uid);
 
     @DBusMemberName(value = "PowerOff")
     void powerOff();
@@ -69,47 +78,68 @@ public interface ManagerInterface extends DBusInterface {
     void reexecute();
 
     @DBusMemberName(value = "RefUnit")
-    void refUnit(final String name);
+    void refUnit(String name);
 
     @DBusMemberName(value = "Reload")
     void reload();
 
     @DBusMemberName(value = "ReloadOrRestartUnit")
-    Path reloadOrRestartUnit(final String name, final String mode);
+    Path reloadOrRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "ReloadOrTryRestartUnit")
-    Path reloadOrTryRestartUnit(final String name, final String mode);
+    Path reloadOrTryRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "ReloadUnit")
-    Path reloadUnit(final String name, final String mode);
+    Path reloadUnit(String name, String mode);
+
+    @DBusMemberName(value = "RemoveSnapshot")
+    void removeSnapshot(String name);
+
+    @DBusMemberName(value = "ResetFailed")
+    void resetFailed();
 
     @DBusMemberName(value = "ResetFailedUnit")
-    void resetFailedUnit(final String name);
+    void resetFailedUnit(String name);
 
     @DBusMemberName(value = "RestartUnit")
-    Path restartUnit(final String name, final String mode);
+    Path restartUnit(String name, String mode);
+
+    @DBusMemberName(value = "SetEnvironment")
+    void setEnvironment(String name);
+
+    @DBusMemberName(value = "SetExitCode")
+    void setExitCode(byte value);
 
     @DBusMemberName(value = "StartUnit")
-    Path startUnit(final String name, final String mode);
+    Path startUnit(String name, String mode);
 
     @DBusMemberName(value = "StopUnit")
-    Path stopUnit(final String name, final String mode);
-
-    @DBusMemberName(value = "TryRestartUnit")
-    Path tryRestartUnit(final String name, final String mode);
-
-    @DBusMemberName(value = "UnrefUnit")
-    void unrefUnit(final String name);
+    Path stopUnit(String name, String mode);
 
     @DBusMemberName(value = "Subscribe")
     void subscribe();
 
+    @DBusMemberName(value = "SwitchRoot")
+    void switchRoot(String newRoot, String init);
+
+    @DBusMemberName(value = "TryRestartUnit")
+    Path tryRestartUnit(String name, String mode);
+
+    @DBusMemberName(value = "UnrefUnit")
+    void unrefUnit(String name);
+
+    @DBusMemberName(value = "UnsetAndSetEnvironment")
+    void unsetAndSetEnvironment(List<String> namesToUnset, List<String> namesToSet);
+
+    @DBusMemberName(value = "UnsetEnvironment")
+    void unsetEnvironment(List<String> names);
+
     @DBusMemberName(value = "Unsubscribe")
     void unsubscribe();
 
-    public final class JobNew extends Signal {
+    class JobNew extends Signal {
 
-        public JobNew(final String objectPath, final long id, final Path job, final String unit) throws DBusException {
+        public JobNew(String objectPath, long id, Path job, String unit) throws DBusException {
             super(objectPath, id, job, unit);
         }
 
@@ -127,9 +157,9 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public final class JobRemoved extends Signal {
+    class JobRemoved extends Signal {
 
-        public JobRemoved(final String objectPath, final long id, final Path job, final String unit, final String result) throws DBusException {
+        public JobRemoved(String objectPath, long id, Path job, String unit, String result) throws DBusException {
             super(objectPath, id, job, unit, result);
         }
 
@@ -151,9 +181,9 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public final class Reloading extends Signal {
+    class Reloading extends Signal {
 
-        public Reloading(final String objectPath, final boolean active) throws DBusException {
+        public Reloading(String objectPath, boolean active) throws DBusException {
             super(objectPath, active);
         }
 
@@ -163,10 +193,10 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public final class StartupFinished extends Signal {
+    class StartupFinished extends Signal {
 
-        public StartupFinished(final String objectPath, final long firmware, final long loader, final long kernel, final long initrd,
-                final long userspace, final long total) throws DBusException {
+        public StartupFinished(String objectPath, long firmware, long loader, long kernel, long initrd,
+                long userspace, long total) throws DBusException {
             super(objectPath, firmware, loader, kernel, initrd, userspace, total);
         }
 
@@ -196,17 +226,17 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public final class UnitFilesChanged extends Signal {
+    class UnitFilesChanged extends Signal {
 
-        public UnitFilesChanged(final String objectPath) throws DBusException {
+        public UnitFilesChanged(String objectPath) throws DBusException {
             super(objectPath);
         }
 
     }
 
-    public final class UnitNew extends Signal {
+    class UnitNew extends Signal {
 
-        public UnitNew(final String objectPath, final String id, final Path unit) throws DBusException {
+        public UnitNew(String objectPath, String id, Path unit) throws DBusException {
             super(objectPath, id, unit);
         }
 
@@ -220,9 +250,9 @@ public interface ManagerInterface extends DBusInterface {
 
     }
 
-    public final class UnitRemoved extends Signal {
+    class UnitRemoved extends Signal {
 
-        public UnitRemoved(final String objectPath, final String id, final Path unit) throws DBusException {
+        public UnitRemoved(String objectPath, String id, Path unit) throws DBusException {
             super(objectPath, id, unit);
         }
 

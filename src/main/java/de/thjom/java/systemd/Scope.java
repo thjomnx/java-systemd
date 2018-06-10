@@ -13,39 +13,34 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.CpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.interfaces.ScopeInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
+import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAccounting {
+public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_SHARES = "CPUShares";
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROLLER = "Controller";
+        public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String RESULT = "Result";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
@@ -59,9 +54,11 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    CpuAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
-                    MemoryAccounting.Property.class
+                    MemoryAccounting.Property.class,
+                    TasksAccounting.Property.class
             );
         }
 
@@ -87,32 +84,16 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
         return (ScopeInterface) super.getInterface();
     }
 
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
+    public void abandon() {
+        getInterface().abandon();
     }
 
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
     }
 
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
-    }
-
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
     public String getControlGroup() {
@@ -121,6 +102,14 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
 
     public String getController() {
         return properties.getString(Property.CONTROLLER);
+    }
+
+    public boolean isDelegate() {
+        return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
@@ -137,14 +126,6 @@ public class Scope extends Unit implements IoAccounting, IpAccounting, MemoryAcc
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
     }
 
     public String getResult() {

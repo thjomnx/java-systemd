@@ -18,39 +18,30 @@ import java.util.Vector;
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.ExtendedCpuAccounting;
+import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
+import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
-import de.thjom.java.systemd.types.IOIops;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, Ulimit {
+public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
 
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
-        public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROL_PID = "ControlPID";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_AFFINITY = "CPUAffinity";
-        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPU_SHARES = "CPUShares";
-        public static final String CPU_WEIGHT = "CPUWeight";
+        public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DYNAMIC_USER = "DynamicUser";
@@ -58,39 +49,22 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String ENVIRONMENT_FILES = "EnvironmentFiles";
         public static final String EXEC_ACTIVATE = "ExecActivate";
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
-        public static final String GID = "GID";
-        public static final String GROUP = "Group";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
-        public static final String IO_ACCOUNTING = "IOAccounting";
-        public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
-        public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
-        public static final String IO_READ_IOPS_MAX = "IOReadIOPSMax";
-        public static final String IO_WEIGHT = "IOWeight";
-        public static final String IO_WRITE_BANDWIDTH_MAX = "IOWriteBandwidthMax";
-        public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_DENY_WRITE_EXECUTE = "MemoryDenyWriteExecute";
-        public static final String MEMORY_HIGH = "MemoryHigh";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
-        public static final String MEMORY_LOW = "MemoryLow";
-        public static final String MEMORY_MAX = "MemoryMax";
-        public static final String MEMORY_SWAP_MAX = "MemorySwapMax";
         public static final String MOUNT_FLAGS = "MountFlags";
         public static final String NICE = "Nice";
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
+        public static final String OPTIONS = "Options";
         public static final String PAM_NAME = "PAMName";
         public static final String PRIORITY = "Priority";
-        public static final String PROTECT_CONTROL_GROUPS = "ProtectControlGroups";
-        public static final String PROTECT_KERNEL_MODULES = "ProtectKernelModules";
-        public static final String PROTECT_KERNEL_TUNABLES = "ProtectKernelTunables";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
-        public static final String RESTRICT_REALTIME = "RestrictRealtime";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -98,14 +72,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_ERROR_FILE_DESCRIPTOR_NAME = "StandardErrorFileDescriptorName";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_INPUT_FILE_DESCRIPTOR_NAME = "StandardInputFileDescriptorName";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME = "StandardOutputFileDescriptorName";
-        public static final String STARTUP_CPU_WEIGHT = "StartupCPUWeight";
-        public static final String STARTUP_IO_WEIGHT = "StartupIOWeight";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
@@ -117,10 +83,7 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
-        public static final String UID = "UID";
         public static final String UMASK = "UMask";
-        public static final String USER = "User";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
         public static final String WHAT = "What";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
 
@@ -131,8 +94,12 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         public static final String[] getAllNames() {
             return getAllNames(
                     Property.class,
+                    ExtendedCpuAccounting.Property.class,
                     DynamicUserAccounting.Property.class,
+                    IoAccounting.Property.class,
                     IpAccounting.Property.class,
+                    ExtendedMemoryAccounting.Property.class,
+                    TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
         }
@@ -159,60 +126,24 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return (SwapInterface) super.getInterface();
     }
 
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
     }
 
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
     }
 
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+    public boolean isDelegate() {
+        return properties.getBoolean(Property.DELEGATE);
     }
 
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
-    }
-
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
-    }
-
-    public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
-    }
-
-    public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
-    }
-
-    public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
-    }
-
-    public BigInteger getCPUWeight() {
-        return properties.getBigInteger(Property.CPU_WEIGHT);
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
-    }
-
-    public String getControlGroup() {
-        return properties.getString(Property.CONTROL_GROUP);
     }
 
     public long getControlPID() {
@@ -225,11 +156,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
 
     public String getDevicePolicy() {
         return properties.getString(Property.DEVICE_POLICY);
-    }
-
-    @Override
-    public boolean isDynamicUser() {
-        return properties.getBoolean(Property.DYNAMIC_USER);
     }
 
     public Vector<String> getEnvironment() {
@@ -248,14 +174,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return ExecutionInfo.list(properties.getVector(Property.EXEC_DEACTIVATE));
     }
 
-    public int getGID() {
-        return properties.getInteger(Property.GID);
-    }
-
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
-    }
-
     public boolean isIgnoreSIGPIPE() {
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
@@ -264,32 +182,12 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
-    public boolean isIOAccounting() {
-        return properties.getBoolean(Property.IO_ACCOUNTING);
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
     }
 
-    public List<IODeviceWeight> getIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getIOReadBandwidthMax() {
-        return IOBandwidth.list(properties.getVector(Property.IO_READ_BANDWIDTH_MAX));
-    }
-
-    public List<IOIops> getIOReadIOPSMax() {
-        return IOIops.list(properties.getVector(Property.IO_READ_IOPS_MAX));
-    }
-
-    public BigInteger getIOWeight() {
-        return properties.getBigInteger(Property.IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getIOWriteBandwidthMax() {
-        return IOBandwidth.list(properties.getVector(Property.IO_WRITE_BANDWIDTH_MAX));
-    }
-
-    public List<IOIops> getIOWriteIOPSMax() {
-        return IOIops.list(properties.getVector(Property.IO_WRITE_IOPS_MAX));
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public String getKillMode() {
@@ -298,34 +196,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
 
     public int getKillSignal() {
         return properties.getInteger(Property.KILL_SIGNAL);
-    }
-
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public boolean isMemoryDenyWriteExecute() {
-        return properties.getBoolean(Property.MEMORY_DENY_WRITE_EXECUTE);
-    }
-
-    public BigInteger getMemoryHigh() {
-        return properties.getBigInteger(Property.MEMORY_HIGH);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
-    }
-
-    public BigInteger getMemoryLow() {
-        return properties.getBigInteger(Property.MEMORY_LOW);
-    }
-
-    public BigInteger getMemoryMax() {
-        return properties.getBigInteger(Property.MEMORY_MAX);
-    }
-
-    public BigInteger getMemorySwapMax() {
-        return properties.getBigInteger(Property.MEMORY_SWAP_MAX);
     }
 
     public BigInteger getMountFlags() {
@@ -348,6 +218,10 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return properties.getInteger(Property.OOM_SCORE_ADJUST);
     }
 
+    public String getOptions() {
+        return properties.getString(Property.OPTIONS);
+    }
+
     public String getPAMName() {
         return properties.getString(Property.PAM_NAME);
     }
@@ -356,28 +230,12 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public boolean isProtectControlGroups() {
-        return properties.getBoolean(Property.PROTECT_CONTROL_GROUPS);
-    }
-
-    public boolean isProtectKernelModules() {
-        return properties.getBoolean(Property.PROTECT_KERNEL_MODULES);
-    }
-
-    public boolean isProtectKernelTunables() {
-        return properties.getBoolean(Property.PROTECT_KERNEL_TUNABLES);
-    }
-
     public Vector<String> getReadOnlyPaths() {
         return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
     public Vector<String> getReadWritePaths() {
         return properties.getVector(Property.READ_WRITE_PATHS);
-    }
-
-    public boolean isRestrictRealtime() {
-        return properties.getBoolean(Property.RESTRICT_REALTIME);
     }
 
     public String getResult() {
@@ -406,38 +264,6 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
 
     public String getSlice() {
         return properties.getString(Property.SLICE);
-    }
-
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
-
-    public String getStandardErrorFileDescriptorName() {
-        return properties.getString(Property.STANDARD_ERROR_FILE_DESCRIPTOR_NAME);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardInputFileDescriptorName() {
-        return properties.getString(Property.STANDARD_INPUT_FILE_DESCRIPTOR_NAME);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    public String getStandardOutputFileDescriptorName() {
-        return properties.getString(Property.STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME);
-    }
-
-    public BigInteger getStartupCPUWeight() {
-        return properties.getBigInteger(Property.STARTUP_CPU_WEIGHT);
-    }
-
-    public BigInteger getStartupIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_IO_WEIGHT);
     }
 
     public Vector<String> getSupplementaryGroups() {
@@ -486,20 +312,8 @@ public class Swap extends Unit implements DynamicUserAccounting, IpAccounting, U
         return properties.getLong(Property.TIMER_SLACK_NSEC);
     }
 
-    public int getUID() {
-        return properties.getInteger(Property.UID);
-    }
-
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
     }
 
     public String getWhat() {
