@@ -32,6 +32,9 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ClearJobs")
     void clearJobs();
 
+    @DBusMemberName(value = "CreateSnapshot")
+    Path createSnapshot(String name, boolean cleanup);
+
     @DBusMemberName(value = "Dump")
     String dump();
 

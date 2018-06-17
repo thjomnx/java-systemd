@@ -168,6 +168,10 @@ public class Manager extends InterfaceAdapter {
         getInterface().clearJobs();
     }
 
+    public void createSnapshot(final String name, final boolean cleanup) {
+        getInterface().createSnapshot(name, cleanup);
+    }
+
     public String dump() {
         return getInterface().dump();
     }
