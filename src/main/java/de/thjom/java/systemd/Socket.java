@@ -17,20 +17,22 @@ import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
+import de.thjom.java.systemd.features.DynamicUserAccounting;
+import de.thjom.java.systemd.features.ExtendedCpuAccounting;
+import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
+import de.thjom.java.systemd.features.IoAccounting;
+import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.TasksAccounting;
+import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SocketInterface;
-import de.thjom.java.systemd.types.AddressFamilyRestriction;
-import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
-import de.thjom.java.systemd.types.IOBandwidth;
-import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.ListenInfo;
-import de.thjom.java.systemd.types.SELinuxContext;
-import de.thjom.java.systemd.types.SmackProcessLabel;
 import de.thjom.java.systemd.types.SystemCallFilter;
+import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Socket extends Unit {
+public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Socket";
     public static final String UNIT_SUFFIX = ".socket";
@@ -38,30 +40,15 @@ public class Socket extends Unit {
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACCEPT = "Accept";
-        public static final String AMBIENT_CAPABILITIES = "AmbientCapabilities";
-        public static final String APP_ARMOR_PROFILE = "AppArmorProfile";
         public static final String BACKLOG = "Backlog";
         public static final String BIND_IPV6_ONLY = "BindIPv6Only";
         public static final String BIND_TO_DEVICE = "BindToDevice";
-        public static final String BLOCK_IO_ACCOUNTING = "BlockIOAccounting";
-        public static final String BLOCK_IO_DEVICE_WEIGHT = "BlockIODeviceWeight";
-        public static final String BLOCK_IO_READ_BANDWIDTH = "BlockIOReadBandwidth";
-        public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
-        public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String BROADCAST = "Broadcast";
-        public static final String CPU_ACCOUNTING = "CPUAccounting";
-        public static final String CPU_AFFINITY = "CPUAffinity";
-        public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
-        public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
-        public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
-        public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
-        public static final String CPU_SHARES = "CPUShares";
-        public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
-        public static final String CAPABILITIES = "Capabilities";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DEFER_ACCEPT_USEC = "DeferAcceptUSec";
         public static final String DELEGATE = "Delegate";
+        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DIRECTORY_MODE = "DirectoryMode";
@@ -74,56 +61,22 @@ public class Socket extends Unit {
         public static final String FILE_DESCRIPTOR_NAME = "FileDescriptorName";
         public static final String FREE_BIND = "FreeBind";
         public static final String GROUP = "Group";
-        public static final String IO_SCHEDULING = "IOScheduling";
+        public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
+        public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IP_TOS = "IPTOS";
         public static final String IP_TTL = "IPTTL";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
-        public static final String INACCESSIBLE_DIRECTORIES = "InaccessibleDirectories";
+        public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String KEEP_ALIVE = "KeepAlive";
         public static final String KEEP_ALIVE_INTERVAL_USEC = "KeepAliveIntervalUSec";
         public static final String KEEP_ALIVE_PROBES = "KeepAliveProbes";
         public static final String KEEP_ALIVE_TIME_USEC = "KeepAliveTimeUSec";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
-        public static final String LIMIT_AS = "LimitAS";
-        public static final String LIMIT_AS_SOFT = "LimitASSoft";
-        public static final String LIMIT_CORE = "LimitCORE";
-        public static final String LIMIT_CORE_SOFT = "LimitCORESoft";
-        public static final String LIMIT_CPU = "LimitCPU";
-        public static final String LIMIT_CPU_SOFT = "LimitCPUSoft";
-        public static final String LIMIT_DATA = "LimitDATA";
-        public static final String LIMIT_DATA_SOFT = "LimitDATASoft";
-        public static final String LIMIT_FSIZE = "LimitFSIZE";
-        public static final String LIMIT_FSIZE_SOFT = "LimitFSIZESoft";
-        public static final String LIMIT_LOCKS = "LimitLOCKS";
-        public static final String LIMIT_LOCKS_SOFT = "LimitLOCKSSoft";
-        public static final String LIMIT_MEMLOCK = "LimitMEMLOCK";
-        public static final String LIMIT_MEMLOCK_SOFT = "LimitMEMLOCKSoft";
-        public static final String LIMIT_MSGQUEUE = "LimitMSGQUEUE";
-        public static final String LIMIT_MSGQUEUE_SOFT = "LimitMSGQUEUESoft";
-        public static final String LIMIT_NICE = "LimitNICE";
-        public static final String LIMIT_NICE_SOFT = "LimitNICESoft";
-        public static final String LIMIT_NOFILE = "LimitNOFILE";
-        public static final String LIMIT_NOFILE_SOFT = "LimitNOFILESoft";
-        public static final String LIMIT_NPROC = "LimitNPROC";
-        public static final String LIMIT_NPROC_SOFT = "LimitNPROCSoft";
-        public static final String LIMIT_RSS = "LimitRSS";
-        public static final String LIMIT_RSS_SOFT = "LimitRSSSoft";
-        public static final String LIMIT_RTPRIO = "LimitRTPRIO";
-        public static final String LIMIT_RTPRIO_SOFT = "LimitRTPRIOSoft";
-        public static final String LIMIT_RTTIME = "LimitRTTIME";
-        public static final String LIMIT_RTTIME_SOFT = "LimitRTTIMESoft";
-        public static final String LIMIT_SIGPENDING = "LimitSIGPENDING";
-        public static final String LIMIT_SIGPENDING_SOFT = "LimitSIGPENDINGSoft";
-        public static final String LIMIT_STACK = "LimitSTACK";
-        public static final String LIMIT_STACK_SOFT = "LimitSTACKSoft";
         public static final String LISTEN = "Listen";
         public static final String MARK = "Mark";
         public static final String MAX_CONNECTIONS = "MaxConnections";
         public static final String MAX_CONNECTIONS_PER_SOURCE = "MaxConnectionsPerSource";
-        public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
-        public static final String MEMORY_CURRENT = "MemoryCurrent";
-        public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MESSAGE_QUEUE_MAX_MESSAGES = "MessageQueueMaxMessages";
         public static final String MESSAGE_QUEUE_MESSAGE_SIZE = "MessageQueueMessageSize";
         public static final String MOUNT_FLAGS = "MountFlags";
@@ -136,27 +89,16 @@ public class Socket extends Unit {
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PASS_CREDENTIALS = "PassCredentials";
-        public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PASS_SECURITY = "PassSecurity";
-        public static final String PERSONALITY = "Personality";
         public static final String PIPE_SIZE = "PipeSize";
         public static final String PRIORITY = "Priority";
-        public static final String PRIVATE_DEVICES = "PrivateDevices";
-        public static final String PRIVATE_NETWORK = "PrivateNetwork";
-        public static final String PRIVATE_TMP = "PrivateTmp";
-        public static final String PROTECT_HOME = "ProtectHome";
-        public static final String PROTECT_SYSTEM = "ProtectSystem";
-        public static final String READ_ONLY_DIRECTORIES = "ReadOnlyDirectories";
-        public static final String READ_WRITE_DIRECTORIES = "ReadWriteDirectories";
+        public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RECEIVE_BUFFER = "ReceiveBuffer";
         public static final String REMOVE_ON_STOP = "RemoveOnStop";
-        public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESULT = "Result";
         public static final String REUSE_PORT = "ReusePort";
         public static final String ROOT_DIRECTORY = "RootDirectory";
-        public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
-        public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
-        public static final String SELINUX_CONTEXT = "SELinuxContext";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
         public static final String SECURE_BITS = "SecureBits";
         public static final String SEND_BUFFER = "SendBuffer";
@@ -166,26 +108,17 @@ public class Socket extends Unit {
         public static final String SMACK_LABEL = "SmackLabel";
         public static final String SMACK_LABEL_IPIN = "SmackLabelIPIn";
         public static final String SMACK_LABEL_IPOUT = "SmackLabelIPOut";
-        public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String SOCKET_GROUP = "SocketGroup";
         public static final String SOCKET_MODE = "SocketMode";
         public static final String SOCKET_PROTOCOL = "SocketProtocol";
         public static final String SOCKET_USER = "SocketUser";
-        public static final String STANDARD_ERROR = "StandardError";
-        public static final String STANDARD_INPUT = "StandardInput";
-        public static final String STANDARD_OUTPUT = "StandardOutput";
-        public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
-        public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String SUPPLEMENTARY_GROUPS = "SupplementaryGroups";
         public static final String SYMLINKS = "Symlinks";
-        public static final String SYSLOG_FACILITY = "SyslogFacility";
         public static final String SYSLOG_IDENTIFIER = "SyslogIdentifier";
-        public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSLOG_LEVEL_PREFIX = "SyslogLevelPrefix";
         public static final String SYSLOG_PRIORITY = "SyslogPriority";
-        public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
-        public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
         public static final String SYSTEM_CALL_FILTER = "SystemCallFilter";
+        public static final String TCP_CONGESTION = "TCPCongestion";
         public static final String TRIGGER_LIMIT_BURST = "TriggerLimitBurst";
         public static final String TRIGGER_LIMIT_INTERVAL_USEC = "TriggerLimitIntervalUSec";
         public static final String TTY_PATH = "TTYPath";
@@ -199,9 +132,6 @@ public class Socket extends Unit {
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TRANSPARENT = "Transparent";
         public static final String UMASK = "UMask";
-        public static final String USER = "User";
-        public static final String UTMP_IDENTIFIER = "UtmpIdentifier";
-        public static final String UTMP_MODE = "UtmpMode";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
         public static final String WRITABLE = "Writable";
 
@@ -210,7 +140,16 @@ public class Socket extends Unit {
         }
 
         public static final String[] getAllNames() {
-            return getAllNames(Property.class);
+            return getAllNames(
+                    Property.class,
+                    ExtendedCpuAccounting.Property.class,
+                    DynamicUserAccounting.Property.class,
+                    IoAccounting.Property.class,
+                    IpAccounting.Property.class,
+                    ExtendedMemoryAccounting.Property.class,
+                    TasksAccounting.Property.class,
+                    Ulimit.Property.class
+            );
         }
 
     }
@@ -235,18 +174,16 @@ public class Socket extends Unit {
         return (SocketInterface) super.getInterface();
     }
 
+    public void attachProcesses(final String cgroupPath, final long[] pids) {
+        getInterface().attachProcesses(cgroupPath, pids);
+    }
+
+    public List<UnitProcessType> getProcesses() {
+        return getInterface().getProcesses();
+    }
+
     public boolean isAccept() {
         return properties.getBoolean(Property.ACCEPT);
-    }
-
-    public BigInteger getAmbientCapabilities() {
-        return properties.getBigInteger(Property.AMBIENT_CAPABILITIES);
-    }
-
-    public AppArmorProfile getAppArmorProfile() {
-        Object[] array = (Object[]) properties.getVariant(Property.APP_ARMOR_PROFILE).getValue();
-
-        return new AppArmorProfile(array);
     }
 
     public long getBacklog() {
@@ -261,64 +198,8 @@ public class Socket extends Unit {
         return properties.getString(Property.BIND_TO_DEVICE);
     }
 
-    public boolean isBlockIOAccounting() {
-        return properties.getBoolean(Property.BLOCK_IO_ACCOUNTING);
-    }
-
-    public List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(properties.getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
-    }
-
-    public List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_READ_BANDWIDTH));
-    }
-
-    public BigInteger getBlockIOWeight() {
-        return properties.getBigInteger(Property.BLOCK_IO_WEIGHT);
-    }
-
-    public List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(properties.getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
-    }
-
     public boolean isBroadcast() {
         return properties.getBoolean(Property.BROADCAST);
-    }
-
-    public boolean isCPUAccounting() {
-        return properties.getBoolean(Property.CPU_ACCOUNTING);
-    }
-
-    public byte[] getCPUAffinity() {
-        return (byte[]) properties.getVariant(Property.CPU_AFFINITY).getValue();
-    }
-
-    public BigInteger getCPUQuotaPerSecUSec() {
-        return properties.getBigInteger(Property.CPU_QUOTA_PER_SEC_USEC);
-    }
-
-    public int getCPUSchedulingPolicy() {
-        return properties.getInteger(Property.CPU_SCHEDULING_POLICY);
-    }
-
-    public int getCPUSchedulingPriority() {
-        return properties.getInteger(Property.CPU_SCHEDULING_PRIORITY);
-    }
-
-    public boolean isCPUSchedulingResetOnFork() {
-        return properties.getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
-    }
-
-    public BigInteger getCPUShares() {
-        return properties.getBigInteger(Property.CPU_SHARES);
-    }
-
-    public BigInteger getCPUUsageNSec() {
-        return properties.getBigInteger(Property.CPU_USAGE_NSEC);
-    }
-
-    public String getCapabilities() {
-        return properties.getString(Property.CAPABILITIES);
     }
 
     public BigInteger getCapabilityBoundingSet() {
@@ -335,6 +216,10 @@ public class Socket extends Unit {
 
     public boolean isDelegate() {
         return properties.getBoolean(Property.DELEGATE);
+    }
+
+    public Vector<String> getDelegateControllers() {
+        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
@@ -381,12 +266,12 @@ public class Socket extends Unit {
         return properties.getBoolean(Property.FREE_BIND);
     }
 
-    public String getGroup() {
-        return properties.getString(Property.GROUP);
+    public int getIOSchedulingClass() {
+        return properties.getInteger(Property.IO_SCHEDULING_CLASS);
     }
 
-    public int getIOScheduling() {
-        return properties.getInteger(Property.IO_SCHEDULING);
+    public int getIOSchedulingPriority() {
+        return properties.getInteger(Property.IO_SCHEDULING_PRIORITY);
     }
 
     public int getIPTOS() {
@@ -401,8 +286,8 @@ public class Socket extends Unit {
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessibleDirectories() {
-        return properties.getVector(Property.INACCESSIBLE_DIRECTORIES);
+    public Vector<String> getInaccessiblePaths() {
+        return properties.getVector(Property.INACCESSIBLE_PATHS);
     }
 
     public boolean isKeepAlive() {
@@ -429,134 +314,6 @@ public class Socket extends Unit {
         return properties.getInteger(Property.KILL_SIGNAL);
     }
 
-    public BigInteger getLimitAS() {
-        return properties.getBigInteger(Property.LIMIT_AS);
-    }
-
-    public BigInteger getLimitASSoft() {
-        return properties.getBigInteger(Property.LIMIT_AS_SOFT);
-    }
-
-    public BigInteger getLimitCORE() {
-        return properties.getBigInteger(Property.LIMIT_CORE);
-    }
-
-    public BigInteger getLimitCORESoft() {
-        return properties.getBigInteger(Property.LIMIT_CORE_SOFT);
-    }
-
-    public BigInteger getLimitCPU() {
-        return properties.getBigInteger(Property.LIMIT_CPU);
-    }
-
-    public BigInteger getLimitCPUSoft() {
-        return properties.getBigInteger(Property.LIMIT_CPU_SOFT);
-    }
-
-    public BigInteger getLimitDATA() {
-        return properties.getBigInteger(Property.LIMIT_DATA);
-    }
-
-    public BigInteger getLimitDATASoft() {
-        return properties.getBigInteger(Property.LIMIT_DATA_SOFT);
-    }
-
-    public BigInteger getLimitFSIZE() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE);
-    }
-
-    public BigInteger getLimitFSIZESoft() {
-        return properties.getBigInteger(Property.LIMIT_FSIZE_SOFT);
-    }
-
-    public BigInteger getLimitLOCKS() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS);
-    }
-
-    public BigInteger getLimitLOCKSSoft() {
-        return properties.getBigInteger(Property.LIMIT_LOCKS_SOFT);
-    }
-
-    public BigInteger getLimitMEMLOCK() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK);
-    }
-
-    public BigInteger getLimitMEMLOCKSoft() {
-        return properties.getBigInteger(Property.LIMIT_MEMLOCK_SOFT);
-    }
-
-    public BigInteger getLimitMSGQUEUE() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE);
-    }
-
-    public BigInteger getLimitMSGQUEUESoft() {
-        return properties.getBigInteger(Property.LIMIT_MSGQUEUE_SOFT);
-    }
-
-    public BigInteger getLimitNICE() {
-        return properties.getBigInteger(Property.LIMIT_NICE);
-    }
-
-    public BigInteger getLimitNICESoft() {
-        return properties.getBigInteger(Property.LIMIT_NICE_SOFT);
-    }
-
-    public BigInteger getLimitNOFILE() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE);
-    }
-
-    public BigInteger getLimitNOFILESoft() {
-        return properties.getBigInteger(Property.LIMIT_NOFILE_SOFT);
-    }
-
-    public BigInteger getLimitNPROC() {
-        return properties.getBigInteger(Property.LIMIT_NPROC);
-    }
-
-    public BigInteger getLimitNPROCSoft() {
-        return properties.getBigInteger(Property.LIMIT_NPROC_SOFT);
-    }
-
-    public BigInteger getLimitRSS() {
-        return properties.getBigInteger(Property.LIMIT_RSS);
-    }
-
-    public BigInteger getLimitRSSSoft() {
-        return properties.getBigInteger(Property.LIMIT_RSS_SOFT);
-    }
-
-    public BigInteger getLimitRTPRIO() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO);
-    }
-
-    public BigInteger getLimitRTPRIOSoft() {
-        return properties.getBigInteger(Property.LIMIT_RTPRIO_SOFT);
-    }
-
-    public BigInteger getLimitRTTIME() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME);
-    }
-
-    public BigInteger getLimitRTTIMESoft() {
-        return properties.getBigInteger(Property.LIMIT_RTTIME_SOFT);
-    }
-
-    public BigInteger getLimitSIGPENDING() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING);
-    }
-
-    public BigInteger getLimitSIGPENDINGSoft() {
-        return properties.getBigInteger(Property.LIMIT_SIGPENDING_SOFT);
-    }
-
-    public BigInteger getLimitSTACK() {
-        return properties.getBigInteger(Property.LIMIT_STACK);
-    }
-
-    public BigInteger getLimitSTACKSoft() {
-        return properties.getBigInteger(Property.LIMIT_STACK_SOFT);
-    }
-
     public List<ListenInfo> getListen() {
         return ListenInfo.list(properties.getVector(Property.LISTEN));
     }
@@ -571,18 +328,6 @@ public class Socket extends Unit {
 
     public long getMaxConnectionsPerSource() {
         return properties.getLong(Property.MAX_CONNECTIONS_PER_SOURCE);
-    }
-
-    public boolean isMemoryAccounting() {
-        return properties.getBoolean(Property.MEMORY_ACCOUNTING);
-    }
-
-    public BigInteger getMemoryCurrent() {
-        return properties.getBigInteger(Property.MEMORY_CURRENT);
-    }
-
-    public BigInteger getMemoryLimit() {
-        return properties.getBigInteger(Property.MEMORY_LIMIT);
     }
 
     public long getMessageQueueMaxMessages() {
@@ -633,16 +378,8 @@ public class Socket extends Unit {
         return properties.getBoolean(Property.PASS_CREDENTIALS);
     }
 
-    public Vector<String> getPassEnvironment() {
-        return properties.getVector(Property.PASS_ENVIRONMENT);
-    }
-
     public boolean isPassSecurity() {
         return properties.getBoolean(Property.PASS_SECURITY);
-    }
-
-    public String getPersonality() {
-        return properties.getString(Property.PERSONALITY);
     }
 
     public BigInteger getPipeSize() {
@@ -653,32 +390,12 @@ public class Socket extends Unit {
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public boolean isPrivateDevices() {
-        return properties.getBoolean(Property.PRIVATE_DEVICES);
+    public Vector<String> getReadOnlyPaths() {
+        return properties.getVector(Property.READ_ONLY_PATHS);
     }
 
-    public boolean isPrivateNetwork() {
-        return properties.getBoolean(Property.PRIVATE_NETWORK);
-    }
-
-    public boolean isPrivateTmp() {
-        return properties.getBoolean(Property.PRIVATE_TMP);
-    }
-
-    public String getProtectHome() {
-        return properties.getString(Property.PROTECT_HOME);
-    }
-
-    public String getProtectSystem() {
-        return properties.getString(Property.PROTECT_SYSTEM);
-    }
-
-    public Vector<String> getReadOnlyDirectories() {
-        return properties.getVector(Property.READ_ONLY_DIRECTORIES);
-    }
-
-    public Vector<String> getReadWriteDirectories() {
-        return properties.getVector(Property.READ_WRITE_DIRECTORIES);
+    public Vector<String> getReadWritePaths() {
+        return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
     public BigInteger getReceiveBuffer() {
@@ -687,12 +404,6 @@ public class Socket extends Unit {
 
     public boolean isRemoveOnStop() {
         return properties.getBoolean(Property.REMOVE_ON_STOP);
-    }
-
-    public AddressFamilyRestriction getRestrictAddressFamilies() {
-        Object[] array = (Object[]) properties.getVariant(Property.RESTRICT_ADDRESS_FAMILIES).getValue();
-
-        return new AddressFamilyRestriction(array);
     }
 
     public String getResult() {
@@ -705,20 +416,6 @@ public class Socket extends Unit {
 
     public String getRootDirectory() {
         return properties.getString(Property.ROOT_DIRECTORY);
-    }
-
-    public Vector<String> getRuntimeDirectory() {
-        return properties.getVector(Property.RUNTIME_DIRECTORY);
-    }
-
-    public long getRuntimeDirectoryMode() {
-        return properties.getLong(Property.RUNTIME_DIRECTORY_MODE);
-    }
-
-    public SELinuxContext getSELinuxContext() {
-        Object[] array = (Object[]) properties.getVariant(Property.SELINUX_CONTEXT).getValue();
-
-        return new SELinuxContext(array);
     }
 
     public boolean isSameProcessGroup() {
@@ -757,12 +454,6 @@ public class Socket extends Unit {
         return properties.getString(Property.SMACK_LABEL_IPOUT);
     }
 
-    public SmackProcessLabel getSmackProcessLabel() {
-        Object[] array = (Object[]) properties.getVariant(Property.SMACK_PROCESS_LABEL).getValue();
-
-        return new SmackProcessLabel(array);
-    }
-
     public String getSocketGroup() {
         return properties.getString(Property.SOCKET_GROUP);
     }
@@ -779,26 +470,6 @@ public class Socket extends Unit {
         return properties.getString(Property.SOCKET_USER);
     }
 
-    public String getStandardError() {
-        return properties.getString(Property.STANDARD_ERROR);
-    }
-
-    public String getStandardInput() {
-        return properties.getString(Property.STANDARD_INPUT);
-    }
-
-    public String getStandardOutput() {
-        return properties.getString(Property.STANDARD_OUTPUT);
-    }
-
-    public BigInteger getStartupBlockIOWeight() {
-        return properties.getBigInteger(Property.STARTUP_BLOCK_IO_WEIGHT);
-    }
-
-    public BigInteger getStartupCPUShares() {
-        return properties.getBigInteger(Property.STARTUP_CPU_SHARES);
-    }
-
     public Vector<String> getSupplementaryGroups() {
         return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
     }
@@ -807,16 +478,8 @@ public class Socket extends Unit {
         return properties.getVector(Property.SYMLINKS);
     }
 
-    public int getSyslogFacility() {
-        return properties.getInteger(Property.SYSLOG_FACILITY);
-    }
-
     public String getSyslogIdentifier() {
         return properties.getString(Property.SYSLOG_IDENTIFIER);
-    }
-
-    public int getSyslogLevel() {
-        return properties.getInteger(Property.SYSLOG_LEVEL);
     }
 
     public boolean isSyslogLevelPrefix() {
@@ -827,18 +490,14 @@ public class Socket extends Unit {
         return properties.getInteger(Property.SYSLOG_PRIORITY);
     }
 
-    public Vector<String> getSystemCallArchitectures() {
-        return properties.getVector(Property.SYSTEM_CALL_ARCHITECTURES);
-    }
-
-    public int getSystemCallErrorNumber() {
-        return properties.getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
-    }
-
     public SystemCallFilter getSystemCallFilter() {
         Object[] array = (Object[]) properties.getVariant(Property.SYSTEM_CALL_FILTER).getValue();
 
         return new SystemCallFilter(array);
+    }
+
+    public String getTCPCongestion() {
+        return properties.getString(Property.TCP_CONGESTION);
     }
 
     public long getTriggerLimitBurst() {
@@ -865,18 +524,6 @@ public class Socket extends Unit {
         return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
     }
 
-    public boolean isTasksAccounting() {
-        return properties.getBoolean(Property.TASKS_ACCOUNTING);
-    }
-
-    public BigInteger getTasksCurrent() {
-        return properties.getBigInteger(Property.TASKS_CURRENT);
-    }
-
-    public BigInteger getTasksMax() {
-        return properties.getBigInteger(Property.TASKS_MAX);
-    }
-
     public BigInteger getTimeoutUSec() {
         return properties.getBigInteger(Property.TIMEOUT_USEC);
     }
@@ -891,18 +538,6 @@ public class Socket extends Unit {
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
-    }
-
-    public String getUser() {
-        return properties.getString(Property.USER);
-    }
-
-    public String getUtmpIdentifier() {
-        return properties.getString(Property.UTMP_IDENTIFIER);
-    }
-
-    public String getUtmpMode() {
-        return properties.getString(Property.UTMP_MODE);
     }
 
     public String getWorkingDirectory() {

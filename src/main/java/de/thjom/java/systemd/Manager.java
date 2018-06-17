@@ -73,7 +73,7 @@ public class Manager extends InterfaceAdapter {
         public static final String DEFAULT_STANDARD_ERROR = "DefaultStandardError";
         public static final String DEFAULT_STANDARD_OUTPUT = "DefaultStandardOutput";
         public static final String DEFAULT_START_LIMIT_BURST = "DefaultStartLimitBurst";
-        public static final String DEFAULT_START_LIMIT_INTERVAL_SEC = "DefaultStartLimitIntervalSec";
+        public static final String DEFAULT_START_LIMIT_INTERVAL_USEC = "DefaultStartLimitIntervalUSec";
         public static final String DEFAULT_TASKS_ACCOUNTING = "DefaultTasksAccounting";
         public static final String DEFAULT_TASKS_MAX = "DefaultTasksMax";
         public static final String DEFAULT_TIMEOUT_START_USEC = "DefaultTimeoutStartUSec";
@@ -109,6 +109,7 @@ public class Manager extends InterfaceAdapter {
         public static final String SECURITY_FINISH_TIMESTAMP_MONOTONIC = "SecurityFinishTimestampMonotonic";
         public static final String SECURITY_START_TIMESTAMP = "SecurityStartTimestamp";
         public static final String SECURITY_START_TIMESTAMP_MONOTONIC = "SecurityStartTimestampMonotonic";
+        public static final String SERVICE_WATCHDOGS = "ServiceWatchdogs";
         public static final String SHOW_STATUS = "ShowStatus";
         public static final String SHUTDOWN_WATCHDOG_USEC = "ShutdownWatchdogUSec";
         public static final String SYSTEM_STATE = "SystemState";
@@ -167,12 +168,24 @@ public class Manager extends InterfaceAdapter {
         getInterface().clearJobs();
     }
 
+    public void createSnapshot(final String name, final boolean cleanup) {
+        getInterface().createSnapshot(name, cleanup);
+    }
+
     public String dump() {
         return getInterface().dump();
     }
 
+    public void exit() {
+        getInterface().exit();
+    }
+
     public String getDefaultTarget() {
         return getInterface().getDefaultTarget();
+    }
+
+    public org.freedesktop.dbus.Path getUnitByPID(final int pid) {
+        return getInterface().getUnitByPID(pid);
     }
 
     public void halt() {
@@ -197,6 +210,18 @@ public class Manager extends InterfaceAdapter {
 
     public List<UnitType> listUnits() {
         return getInterface().listUnits();
+    }
+
+    public org.freedesktop.dbus.Path loadUnit(final String name) {
+        return getInterface().loadUnit(name);
+    }
+
+    public long lookupDynamicUserByName(final String name) {
+        return getInterface().lookupDynamicUserByName(name);
+    }
+
+    public String lookupDynamicUserByUID(final long uid) {
+        return getInterface().lookupDynamicUserByUID(uid);
     }
 
     public void powerOff() {
@@ -243,6 +268,14 @@ public class Manager extends InterfaceAdapter {
         return getInterface().reloadUnit(name, mode);
     }
 
+    public void removeSnapshot(final String name) {
+        getInterface().removeSnapshot(name);
+    }
+
+    public void resetFailed() {
+        getInterface().resetFailed();
+    }
+
     public void resetFailedUnit(final String name) {
         getInterface().resetFailedUnit(name);
     }
@@ -259,6 +292,14 @@ public class Manager extends InterfaceAdapter {
         return startUnit(name, mode.getValue());
     }
 
+    public void setEnvironment(final String name) {
+        getInterface().setEnvironment(name);
+    }
+
+    public void setExitCode(final byte value) {
+        getInterface().setExitCode(value);
+    }
+
     public org.freedesktop.dbus.Path startUnit(final String name, final String mode) {
         return getInterface().startUnit(name, mode);
     }
@@ -269,6 +310,18 @@ public class Manager extends InterfaceAdapter {
 
     public org.freedesktop.dbus.Path stopUnit(final String name, final String mode) {
         return getInterface().stopUnit(name, mode);
+    }
+
+    public synchronized void subscribe() {
+        if (!subscribed) {
+            getInterface().subscribe();
+
+            subscribed = true;
+        }
+    }
+
+    public void switchRoot(final String newRoot, final String init) {
+        getInterface().switchRoot(newRoot, init);
     }
 
     public org.freedesktop.dbus.Path tryRestartUnit(final String name, final Mode mode) {
@@ -283,12 +336,12 @@ public class Manager extends InterfaceAdapter {
         getInterface().unrefUnit(name);
     }
 
-    public synchronized void subscribe() {
-        if (!subscribed) {
-            getInterface().subscribe();
+    public void unsetAndSetEnvironment(final List<String> namesToUnset, final List<String> namesToSet) {
+        getInterface().unsetAndSetEnvironment(namesToUnset, namesToSet);
+    }
 
-            subscribed = true;
-        }
+    public void unsetEnvironment(final List<String> names) {
+        getInterface().unsetEnvironment(names);
     }
 
     public synchronized void unsubscribe() {
@@ -570,8 +623,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.DEFAULT_START_LIMIT_BURST);
     }
 
-    public long getDefaultStartLimitIntervalSec() {
-        return properties.getLong(Property.DEFAULT_START_LIMIT_INTERVAL_SEC);
+    public long getDefaultStartLimitIntervalUSec() {
+        return properties.getLong(Property.DEFAULT_START_LIMIT_INTERVAL_USEC);
     }
 
     public boolean isDefaultTasksAccounting() {
@@ -712,6 +765,10 @@ public class Manager extends InterfaceAdapter {
 
     public long getSecurityStartTimestampMonotonic() {
         return properties.getLong(Property.SECURITY_START_TIMESTAMP_MONOTONIC);
+    }
+
+    public boolean isServiceWatchdogs() {
+        return properties.getBoolean(Property.SERVICE_WATCHDOGS);
     }
 
     public boolean isShowStatus() {

@@ -9,13 +9,12 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd;
+package de.thjom.java.systemd.features;
 
-import java.util.Collection;
+import de.thjom.java.systemd.Properties;
 
-@FunctionalInterface
-public interface UnitMonitorListener {
+interface Feature {
 
-    void monitorRefreshed(Collection<Unit> monitoredUnits);
+    Properties getProperties();
 
 }

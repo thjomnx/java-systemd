@@ -9,13 +9,11 @@
  * Full licence texts are included in the COPYING file with this program.
  */
 
-package de.thjom.java.systemd;
+/**
+ * This package contains types which provide additional features for
+ * "systemd" units. These types serve as pluggable interfaces and
+ * are <i>implemented</i> on unit classes.
+ *
+ */
 
-import java.util.Collection;
-
-@FunctionalInterface
-public interface UnitMonitorListener {
-
-    void monitorRefreshed(Collection<Unit> monitoredUnits);
-
-}
+package de.thjom.java.systemd.features;

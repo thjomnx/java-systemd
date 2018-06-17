@@ -20,28 +20,31 @@ import org.freedesktop.dbus.Path;
 public interface UnitInterface extends DBusInterface {
 
     @DBusMemberName(value = "Start")
-    Path start(final String mode);
+    Path start(String mode);
 
     @DBusMemberName(value = "Stop")
-    Path stop(final String mode);
+    Path stop(String mode);
 
     @DBusMemberName(value = "Reload")
-    Path reload(final String mode);
+    Path reload(String mode);
 
     @DBusMemberName(value = "Restart")
-    Path restart(final String mode);
+    Path restart(String mode);
 
     @DBusMemberName(value = "TryRestart")
-    Path tryRestart(final String mode);
+    Path tryRestart(String mode);
 
     @DBusMemberName(value = "ReloadOrRestart")
-    Path reloadOrRestart(final String mode);
+    Path reloadOrRestart(String mode);
 
     @DBusMemberName(value = "ReloadOrTryRestart")
-    Path reloadOrTryRestart(final String mode);
+    Path reloadOrTryRestart(String mode);
 
     @DBusMemberName(value = "Kill")
-    void kill(final String who, final int signal);
+    void kill(String who, int signal);
+
+    @DBusMemberName(value = "Ref")
+    void ref();
 
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
