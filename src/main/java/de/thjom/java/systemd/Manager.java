@@ -168,10 +168,6 @@ public class Manager extends InterfaceAdapter {
         getInterface().clearJobs();
     }
 
-    public void createSnapshot(final String name, final boolean cleanup) {
-        getInterface().createSnapshot(name, cleanup);
-    }
-
     public String dump() {
         return getInterface().dump();
     }
@@ -266,10 +262,6 @@ public class Manager extends InterfaceAdapter {
 
     public org.freedesktop.dbus.Path reloadUnit(final String name, final String mode) {
         return getInterface().reloadUnit(name, mode);
-    }
-
-    public void removeSnapshot(final String name) {
-        getInterface().removeSnapshot(name);
     }
 
     public void resetFailed() {
