@@ -32,9 +32,6 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "ClearJobs")
     void clearJobs();
 
-    @DBusMemberName(value = "CreateSnapshot")
-    Path createSnapshot(String name, boolean cleanup);
-
     @DBusMemberName(value = "Dump")
     String dump();
 
@@ -94,9 +91,6 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "ReloadUnit")
     Path reloadUnit(String name, String mode);
-
-    @DBusMemberName(value = "RemoveSnapshot")
-    void removeSnapshot(String name);
 
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
