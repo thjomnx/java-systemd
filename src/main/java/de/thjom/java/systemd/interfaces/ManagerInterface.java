@@ -20,6 +20,7 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.DBusInterface;
 
 import de.thjom.java.systemd.Signal;
+import de.thjom.java.systemd.types.UnitFileChange;
 import de.thjom.java.systemd.types.UnitFileType;
 import de.thjom.java.systemd.types.UnitType;
 
@@ -100,6 +101,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "RestartUnit")
     DBusPath restartUnit(String name, String mode);
+
+    @DBusMemberName(value = "SetDefaultTarget")
+    List<UnitFileChange> setDefaultTarget(String name, boolean force);
 
     @DBusMemberName(value = "SetEnvironment")
     void setEnvironment(String name);

@@ -23,6 +23,7 @@ import org.freedesktop.dbus.interfaces.Introspectable;
 import de.thjom.java.systemd.Unit.Mode;
 import de.thjom.java.systemd.Unit.Who;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
+import de.thjom.java.systemd.types.UnitFileChange;
 import de.thjom.java.systemd.types.UnitFileType;
 import de.thjom.java.systemd.types.UnitType;
 
@@ -293,8 +294,8 @@ public class Manager extends InterfaceAdapter {
         return getInterface().restartUnit(name, mode);
     }
 
-    public DBusPath startUnit(final String name, final Mode mode) {
-        return startUnit(name, mode.getValue());
+    public List<UnitFileChange> setDefaultTarget(final String name, final boolean force) {
+        return getInterface().setDefaultTarget(name, force);
     }
 
     public void setEnvironment(final String name) {
@@ -303,6 +304,10 @@ public class Manager extends InterfaceAdapter {
 
     public void setExitCode(final byte value) {
         getInterface().setExitCode(value);
+    }
+
+    public DBusPath startUnit(final String name, final Mode mode) {
+        return startUnit(name, mode.getValue());
     }
 
     public DBusPath startUnit(final String name, final String mode) {
