@@ -91,8 +91,20 @@ public class Manager extends InterfaceAdapter {
         public static final String GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "GeneratorsFinishTimestampMonotonic";
         public static final String GENERATORS_START_TIMESTAMP = "GeneratorsStartTimestamp";
         public static final String GENERATORS_START_TIMESTAMP_MONOTONIC = "GeneratorsStartTimestampMonotonic";
+        public static final String INIT_RD_GENERATORS_FINISH_TIMESTAMP = "InitRDGeneratorsFinishTimestamp";
+        public static final String INIT_RD_GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "InitRDGeneratorsFinishTimestampMonotonic";
+        public static final String INIT_RD_GENERATORS_START_TIMESTAMP = "InitRDGeneratorsStartTimestamp";
+        public static final String INIT_RD_GENERATORS_START_TIMESTAMP_MONOTONIC = "InitRDGeneratorsStartTimestampMonotonic";
+        public static final String INIT_RD_SECURITY_FINISH_TIMESTAMP = "InitRDSecurityFinishTimestamp";
+        public static final String INIT_RD_SECURITY_FINISH_TIMESTAMP_MONOTONIC = "InitRDSecurityFinishTimestampMonotonic";
+        public static final String INIT_RD_SECURITY_START_TIMESTAMP = "InitRDSecurityStartTimestamp";
+        public static final String INIT_RD_SECURITY_START_TIMESTAMP_MONOTONIC = "InitRDSecurityStartTimestampMonotonic";
         public static final String INIT_RD_TIMESTAMP = "InitRDTimestamp";
         public static final String INIT_RD_TIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
+        public static final String INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP = "InitRDUnitsLoadFinishTimestamp";
+        public static final String INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP_MONOTONIC = "InitRDUnitsLoadFinishTimestampMonotonic";
+        public static final String INIT_RD_UNITS_LOAD_START_TIMESTAMP = "InitRDUnitsLoadStartTimestamp";
+        public static final String INIT_RD_UNITS_LOAD_START_TIMESTAMP_MONOTONIC = "InitRDUnitsLoadStartTimestampMonotonic";
         public static final String KERNEL_TIMESTAMP = "KernelTimestamp";
         public static final String KERNEL_TIMESTAMP_MONOTONIC = "KernelTimestampMonotonic";
         public static final String LOADER_TIMESTAMP = "LoaderTimestamp";
@@ -684,12 +696,60 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.GENERATORS_START_TIMESTAMP_MONOTONIC);
     }
 
+    public long getInitRDGeneratorsFinishTimestamp() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_FINISH_TIMESTAMP);
+    }
+
+    public long getInitRDGeneratorsFinishTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_FINISH_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDGeneratorsStartTimestamp() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_START_TIMESTAMP);
+    }
+
+    public long getInitRDGeneratorsStartTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_START_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDSecurityFinishTimestamp() {
+        return properties.getLong(Property.INIT_RD_SECURITY_FINISH_TIMESTAMP);
+    }
+
+    public long getInitRDSecurityFinishTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_SECURITY_FINISH_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDSecurityStartTimestamp() {
+        return properties.getLong(Property.INIT_RD_SECURITY_START_TIMESTAMP);
+    }
+
+    public long getInitRDSecurityStartTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_SECURITY_START_TIMESTAMP_MONOTONIC);
+    }
+
     public long getInitRDTimestamp() {
         return properties.getLong(Property.INIT_RD_TIMESTAMP);
     }
 
     public long getInitRDTimestampMonotonic() {
         return properties.getLong(Property.INIT_RD_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDUnitsLoadFinishTimestamp() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP);
+    }
+
+    public long getInitRDUnitsLoadFinishTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDUnitsLoadStartTimestamp() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_START_TIMESTAMP);
+    }
+
+    public long getInitRDUnitsLoadStartTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_START_TIMESTAMP_MONOTONIC);
     }
 
     public long getKernelTimestamp() {
