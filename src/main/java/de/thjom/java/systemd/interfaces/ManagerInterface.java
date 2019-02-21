@@ -22,6 +22,7 @@ import org.freedesktop.dbus.interfaces.DBusInterface;
 import de.thjom.java.systemd.Signal;
 import de.thjom.java.systemd.types.UnitFileChange;
 import de.thjom.java.systemd.types.UnitFileType;
+import de.thjom.java.systemd.types.UnitProcessType;
 import de.thjom.java.systemd.types.UnitType;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Manager.SERVICE_NAME)
@@ -44,6 +45,15 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "GetUnitByPID")
     DBusPath getUnitByPID(int pid);
+
+    @DBusMemberName(value = "GetUnitFileLinks")
+    List<String> getUnitFileLinks(final String name, final boolean runtime);
+
+    @DBusMemberName(value = "GetUnitFileState")
+    String getUnitFileState(String name);
+
+    @DBusMemberName(value = "GetUnitProcesses")
+    List<UnitProcessType> getUnitProcesses(String name);
 
     @DBusMemberName(value = "Halt")
     void halt();

@@ -25,6 +25,7 @@ import de.thjom.java.systemd.Unit.Who;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.types.UnitFileChange;
 import de.thjom.java.systemd.types.UnitFileType;
+import de.thjom.java.systemd.types.UnitProcessType;
 import de.thjom.java.systemd.types.UnitType;
 
 public class Manager extends InterfaceAdapter {
@@ -196,6 +197,18 @@ public class Manager extends InterfaceAdapter {
 
     public DBusPath getUnitByPID(final int pid) {
         return getInterface().getUnitByPID(pid);
+    }
+
+    public List<String> getUnitFileLinks(final String name, final boolean runtime) {
+        return getInterface().getUnitFileLinks(name, runtime);
+    }
+
+    public String getUnitFileState(final String name) {
+        return getInterface().getUnitFileState(name);
+    }
+
+    public List<UnitProcessType> getUnitProcesses(final String name) {
+        return getInterface().getUnitProcesses(name);
     }
 
     public void halt() {
