@@ -81,7 +81,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PID_FILE = "PIDFile";
-        public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
@@ -334,10 +333,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getPIDFile() {
         return properties.getString(Property.PID_FILE);
-    }
-
-    public boolean isPermissionsStartOnly() {
-        return properties.getBoolean(Property.PERMISSIONS_START_ONLY);
     }
 
     public Vector<String> getReadOnlyPaths() {
