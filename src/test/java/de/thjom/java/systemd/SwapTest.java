@@ -66,6 +66,7 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_READ_BANDWIDTH);
         nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_WRITE_BANDWIDTH);
+        nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_LATENCY_TARGET_USEC);
         nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);

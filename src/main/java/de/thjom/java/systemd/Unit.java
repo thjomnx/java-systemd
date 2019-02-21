@@ -118,6 +118,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String DOCUMENTATION = "Documentation";
         public static final String DROP_IN_PATHS = "DropInPaths";
         public static final String FAILURE_ACTION = "FailureAction";
+        public static final String FAILURE_ACTION_EXIT_STATUS = "FailureActionExitStatus";
         public static final String FOLLOWING = "Following";
         public static final String FRAGMENT_PATH = "FragmentPath";
         public static final String ID = "Id";
@@ -143,6 +144,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String PERPETUAL = "Perpetual";
         public static final String PROPAGATES_RELOAD_TO = "PropagatesReloadTo";
         public static final String REBOOT_ARGUMENT = "RebootArgument";
+        public static final String REFS = "Refs";
         public static final String REFUSE_MANUAL_START = "RefuseManualStart";
         public static final String REFUSE_MANUAL_STOP = "RefuseManualStop";
         public static final String RELOAD_PROPAGATED_FROM = "ReloadPropagatedFrom";
@@ -160,6 +162,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
         public static final String SUB_STATE = "SubState";
         public static final String SUCCESS_ACTION = "SuccessAction";
+        public static final String SUCCESS_ACTION_EXIT_STATUS = "SuccessActionExitStatus";
         public static final String TRANSIENT = "Transient";
         public static final String TRIGGERED_BY = "TriggeredBy";
         public static final String TRIGGERS = "Triggers";
@@ -478,6 +481,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.FAILURE_ACTION);
     }
 
+    public int getFailureActionExitStatus() {
+        return unitProperties.getInteger(Property.FAILURE_ACTION_EXIT_STATUS);
+    }
+
     public String getFollowing() {
         return unitProperties.getString(Property.FOLLOWING);
     }
@@ -582,6 +589,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.REBOOT_ARGUMENT);
     }
 
+    public Vector<String> getRefs() {
+        return unitProperties.getVector(Property.REFS);
+    }
+
     public boolean isRefuseManualStart() {
         return unitProperties.getBoolean(Property.REFUSE_MANUAL_START);
     }
@@ -648,6 +659,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public String getSuccessAction() {
         return unitProperties.getString(Property.SUCCESS_ACTION);
+    }
+
+    public int getSuccessActionExitStatus() {
+        return unitProperties.getInteger(Property.SUCCESS_ACTION_EXIT_STATUS);
     }
 
     public boolean isTransient() {

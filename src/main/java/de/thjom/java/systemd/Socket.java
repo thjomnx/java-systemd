@@ -22,6 +22,7 @@ import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.ResourceControl;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SocketInterface;
@@ -32,7 +33,7 @@ import de.thjom.java.systemd.types.ListenInfo;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
+public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, ResourceControl, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Socket";
     public static final String UNIT_SUFFIX = ".socket";
@@ -47,8 +48,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DEFER_ACCEPT_USEC = "DeferAcceptUSec";
-        public static final String DELEGATE = "Delegate";
-        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DIRECTORY_MODE = "DirectoryMode";
@@ -59,8 +58,8 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String EXEC_STOP_POST = "ExecStopPost";
         public static final String EXEC_STOP_PRE = "ExecStopPre";
         public static final String FILE_DESCRIPTOR_NAME = "FileDescriptorName";
+        public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String FREE_BIND = "FreeBind";
-        public static final String GROUP = "Group";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
         public static final String IP_TOS = "IPTOS";
@@ -86,6 +85,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String NO_DELAY = "NoDelay";
         public static final String NO_NEW_PRIVILEGES = "NoNewPrivileges";
         public static final String NON_BLOCKING = "NonBlocking";
+        public static final String NREFUSED = "NRefused";
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PASS_CREDENTIALS = "PassCredentials";
@@ -125,13 +125,11 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
-        public static final String TASKS_ACCOUNTING = "TasksAccounting";
-        public static final String TASKS_CURRENT = "TasksCurrent";
-        public static final String TASKS_MAX = "TasksMax";
         public static final String TIMEOUT_USEC = "TimeoutUSec";
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TRANSPARENT = "Transparent";
         public static final String UMASK = "UMask";
+        public static final String WATCHDOG_SIGNAL = "WatchdogSignal";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
         public static final String WRITABLE = "Writable";
 
@@ -147,6 +145,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     ExtendedMemoryAccounting.Property.class,
+                    ResourceControl.Property.class,
                     TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
@@ -214,14 +213,6 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getBigInteger(Property.DEFER_ACCEPT_USEC);
     }
 
-    public boolean isDelegate() {
-        return properties.getBoolean(Property.DELEGATE);
-    }
-
-    public Vector<String> getDelegateControllers() {
-        return properties.getVector(Property.DELEGATE_CONTROLLERS);
-    }
-
     public List<DeviceAllowControl> getDeviceAllow() {
         return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
     }
@@ -260,6 +251,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public String getFileDescriptorName() {
         return properties.getString(Property.FILE_DESCRIPTOR_NAME);
+    }
+
+    public int getFinalKillSignal() {
+        return properties.getInteger(Property.FINAL_KILL_SIGNAL);
     }
 
     public boolean isFreeBind() {
@@ -364,6 +359,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public boolean isNonBlocking() {
         return properties.getBoolean(Property.NON_BLOCKING);
+    }
+
+    public long getNRefused() {
+        return properties.getLong(Property.NREFUSED);
     }
 
     public int getOOMScoreAdjust() {
@@ -538,6 +537,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
+    }
+
+    public int getWatchdogSignal() {
+        return properties.getInteger(Property.WATCHDOG_SIGNAL);
     }
 
     public String getWorkingDirectory() {

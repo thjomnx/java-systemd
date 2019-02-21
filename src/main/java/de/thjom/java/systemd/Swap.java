@@ -22,6 +22,7 @@ import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.ResourceControl;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
@@ -31,7 +32,7 @@ import de.thjom.java.systemd.types.ExecutionInfo;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
+public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, ResourceControl, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -40,8 +41,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
-        public static final String DELEGATE = "Delegate";
-        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DYNAMIC_USER = "DynamicUser";
@@ -49,6 +48,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String ENVIRONMENT_FILES = "EnvironmentFiles";
         public static final String EXEC_ACTIVATE = "ExecActivate";
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
+        public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
@@ -84,6 +84,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String UMASK = "UMask";
+        public static final String WATCHDOG_SIGNAL = "WatchdogSignal";
         public static final String WHAT = "What";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
 
@@ -99,6 +100,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     ExtendedMemoryAccounting.Property.class,
+                    ResourceControl.Property.class,
                     TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
@@ -134,14 +136,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return getInterface().getProcesses();
     }
 
-    public boolean isDelegate() {
-        return properties.getBoolean(Property.DELEGATE);
-    }
-
-    public Vector<String> getDelegateControllers() {
-        return properties.getVector(Property.DELEGATE_CONTROLLERS);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -172,6 +166,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public List<ExecutionInfo> getExecDeactivate() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_DEACTIVATE));
+    }
+
+    public int getFinalKillSignal() {
+        return properties.getInteger(Property.FINAL_KILL_SIGNAL);
     }
 
     public boolean isIgnoreSIGPIPE() {
@@ -314,6 +312,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
+    }
+
+    public int getWatchdogSignal() {
+        return properties.getInteger(Property.WATCHDOG_SIGNAL);
     }
 
     public String getWhat() {
