@@ -24,6 +24,7 @@ import de.thjom.java.systemd.Unit.Mode;
 import de.thjom.java.systemd.Unit.Who;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.types.UnitFileChange;
+import de.thjom.java.systemd.types.UnitFileInstallChange;
 import de.thjom.java.systemd.types.UnitFileType;
 import de.thjom.java.systemd.types.UnitProcessType;
 import de.thjom.java.systemd.types.UnitType;
@@ -175,6 +176,10 @@ public class Manager extends InterfaceAdapter {
         return intro.Introspect();
     }
 
+    public List<UnitFileChange> addDependencyUnitFiles(final List<String> names, final String target, final String type, final boolean runtime, final boolean force) {
+        return getInterface().addDependencyUnitFiles(names, target, type, runtime, force);
+    }
+
     public void cancelJob(final long id) {
         getInterface().cancelJob(id);
     }
@@ -183,8 +188,16 @@ public class Manager extends InterfaceAdapter {
         getInterface().clearJobs();
     }
 
+    public List<UnitFileChange> disableUnitFiles(final List<String> names, final boolean runtime) {
+        return getInterface().disableUnitFiles(names, runtime);
+    }
+
     public String dump() {
         return getInterface().dump();
+    }
+
+    public List<UnitFileChange> enableUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().enableUnitFiles(names, runtime, force);
     }
 
     public void exit() {
@@ -227,6 +240,10 @@ public class Manager extends InterfaceAdapter {
         getInterface().killUnit(name, who, signal);
     }
 
+    public List<UnitFileChange> linkUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().linkUnitFiles(names, runtime, force);
+    }
+
     public List<UnitFileType> listUnitFiles() {
         return getInterface().listUnitFiles();
     }
@@ -247,12 +264,28 @@ public class Manager extends InterfaceAdapter {
         return getInterface().lookupDynamicUserByUID(uid);
     }
 
+    public List<UnitFileChange> maskUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().maskUnitFiles(names, runtime, force);
+    }
+
     public void powerOff() {
         getInterface().powerOff();
     }
 
+    public List<UnitFileInstallChange> presetUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().presetUnitFiles(names, runtime, force);
+    }
+
+    public List<UnitFileInstallChange> presetUnitFilesWithMode(final List<String> names, final String mode, final boolean runtime, final boolean force) {
+        return getInterface().presetUnitFilesWithMode(names, mode, runtime, force);
+    }
+
     public void reboot() {
         getInterface().reboot();
+    }
+
+    public List<UnitFileInstallChange> reenableUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().reenableUnitFiles(names, runtime, force);
     }
 
     public void reexecute() {
@@ -307,6 +340,10 @@ public class Manager extends InterfaceAdapter {
         return getInterface().restartUnit(name, mode);
     }
 
+    public List<UnitFileChange> revertUnitFiles(final List<String> names){
+        return getInterface().revertUnitFiles(names);
+    }
+
     public List<UnitFileChange> setDefaultTarget(final String name, final boolean force) {
         return getInterface().setDefaultTarget(name, force);
     }
@@ -353,6 +390,10 @@ public class Manager extends InterfaceAdapter {
 
     public DBusPath tryRestartUnit(final String name, final String mode) {
         return getInterface().tryRestartUnit(name, mode);
+    }
+
+    public List<UnitFileChange> unmaskUnitFiles(final List<String> names, final boolean runtime) {
+        return getInterface().unmaskUnitFiles(names, runtime);
     }
 
     public void unrefUnit(final String name) {

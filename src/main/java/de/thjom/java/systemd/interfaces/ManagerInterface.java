@@ -21,6 +21,7 @@ import org.freedesktop.dbus.interfaces.DBusInterface;
 
 import de.thjom.java.systemd.Signal;
 import de.thjom.java.systemd.types.UnitFileChange;
+import de.thjom.java.systemd.types.UnitFileInstallChange;
 import de.thjom.java.systemd.types.UnitFileType;
 import de.thjom.java.systemd.types.UnitProcessType;
 import de.thjom.java.systemd.types.UnitType;
@@ -28,14 +29,23 @@ import de.thjom.java.systemd.types.UnitType;
 @DBusInterfaceName(value = de.thjom.java.systemd.Manager.SERVICE_NAME)
 public interface ManagerInterface extends DBusInterface {
 
+    @DBusMemberName(value = "AddDependencyUnitFiles")
+    List<UnitFileChange> addDependencyUnitFiles(List<String> names, String target, String type, boolean runtime, boolean force);
+
     @DBusMemberName(value = "CancelJob")
     void cancelJob(long id);
 
     @DBusMemberName(value = "ClearJobs")
     void clearJobs();
 
+    @DBusMemberName(value = "DisableUnitFiles")
+    List<UnitFileChange> disableUnitFiles(List<String> names, boolean runtime);
+
     @DBusMemberName(value = "Dump")
     String dump();
+
+    @DBusMemberName(value = "EnableUnitFiles")
+    List<UnitFileChange> enableUnitFiles(List<String> names, boolean runtime, boolean force);
 
     @DBusMemberName(value = "Exit")
     void exit();
@@ -47,7 +57,7 @@ public interface ManagerInterface extends DBusInterface {
     DBusPath getUnitByPID(int pid);
 
     @DBusMemberName(value = "GetUnitFileLinks")
-    List<String> getUnitFileLinks(final String name, final boolean runtime);
+    List<String> getUnitFileLinks(String name, boolean runtime);
 
     @DBusMemberName(value = "GetUnitFileState")
     String getUnitFileState(String name);
@@ -64,6 +74,9 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "KillUnit")
     void killUnit(String name, String who, int signal);
 
+    @DBusMemberName(value = "LinkUnitFiles")
+    List<UnitFileChange> linkUnitFiles(List<String> names, boolean runtime, boolean force);
+
     @DBusMemberName(value = "ListUnitFiles")
     List<UnitFileType> listUnitFiles();
 
@@ -79,11 +92,23 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "LookupDynamicUserByUID")
     String lookupDynamicUserByUID(long uid);
 
+    @DBusMemberName(value = "MaskUnitFiles")
+    List<UnitFileChange> maskUnitFiles(List<String> names, boolean runtime, boolean force);
+
     @DBusMemberName(value = "PowerOff")
     void powerOff();
 
+    @DBusMemberName(value = "PresetUnitFiles")
+    List<UnitFileInstallChange> presetUnitFiles(List<String> names, boolean runtime, boolean force);
+
+    @DBusMemberName(value = "PresetUnitFilesWithMode")
+    List<UnitFileInstallChange> presetUnitFilesWithMode(List<String> names, String mode, boolean runtime, boolean force);
+
     @DBusMemberName(value = "Reboot")
     void reboot();
+
+    @DBusMemberName(value = "ReenableUnitFiles")
+    List<UnitFileInstallChange> reenableUnitFiles(List<String> names, boolean runtime, boolean force);
 
     @DBusMemberName(value = "Reexecute")
     void reexecute();
@@ -112,6 +137,9 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "RestartUnit")
     DBusPath restartUnit(String name, String mode);
 
+    @DBusMemberName(value = "RevertUnitFiles")
+    List<UnitFileChange> revertUnitFiles(List<String> names);
+
     @DBusMemberName(value = "SetDefaultTarget")
     List<UnitFileChange> setDefaultTarget(String name, boolean force);
 
@@ -135,6 +163,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "TryRestartUnit")
     DBusPath tryRestartUnit(String name, String mode);
+
+    @DBusMemberName(value = "UnmaskUnitFiles")
+    List<UnitFileChange> unmaskUnitFiles(List<String> names, boolean runtime);
 
     @DBusMemberName(value = "UnrefUnit")
     void unrefUnit(String name);
