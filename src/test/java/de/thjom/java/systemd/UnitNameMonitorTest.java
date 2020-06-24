@@ -11,8 +11,8 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.types.Variant;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;

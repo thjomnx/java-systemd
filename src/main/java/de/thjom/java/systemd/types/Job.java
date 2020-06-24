@@ -11,24 +11,25 @@
 
 package de.thjom.java.systemd.types;
 
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.UInt32;
+
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.types.UInt32;
 
 public class Job {
 
     private final long id;
-    private final Path objectPath;
+    private final DBusPath objectPath; 
 
     public Job(final Object[] array) {
         this.id = ((UInt32) array[0]).longValue();
-        this.objectPath = (Path) array[1];
+        this.objectPath = (DBusPath) array[1];
     }
 
     public long getId() {
         return id;
     }
 
-    public Path getObjectPath() {
+    public DBusPath getObjectPath() {
         return objectPath;
     }
 

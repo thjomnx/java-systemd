@@ -11,9 +11,10 @@
 
 package de.thjom.java.systemd.types;
 
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.Position;
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.annotations.Position;
+import org.freedesktop.dbus.types.UInt32;
+
 
 public class UnitType extends UnitBase implements Comparable<UnitType> {
 
@@ -36,7 +37,7 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
     private final String followingUnit;
 
     @Position(6)
-    private final Path unitObjectPath;
+    private final DBusPath unitObjectPath;
 
     @Position(7)
     private final int jobId;
@@ -45,11 +46,11 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
     private final String jobType;
 
     @Position(9)
-    private final Path jobObjectPath;
+    private final DBusPath jobObjectPath;
 
     public UnitType(final String unitName, final String unitDescription, final String loadState,
-            final String activeState, final String subState, final String followingUnit, final Path unitObjectPath,
-            final UInt32 jobId, String jobType, final Path jobObjectPath) {
+            final String activeState, final String subState, final String followingUnit, final DBusPath unitObjectPath,
+            final UInt32 jobId, String jobType, final DBusPath jobObjectPath) {
         super(unitName);
 
         this.unitName = unitName;
@@ -106,7 +107,7 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
         return followingUnit;
     }
 
-    public Path getUnitObjectPath() {
+    public DBusPath getUnitObjectPath() {
         return unitObjectPath;
     }
 
@@ -118,7 +119,7 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
         return jobType;
     }
 
-    public Path getJobObjectPath() {
+    public DBusPath getJobObjectPath() {
         return jobObjectPath;
     }
 

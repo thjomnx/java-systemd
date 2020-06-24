@@ -19,7 +19,8 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.freedesktop.dbus.DBusConnection;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
+import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.exceptions.NotConnected;
 import org.slf4j.Logger;
@@ -29,16 +30,16 @@ public final class Systemd {
 
     public enum InstanceType {
 
-        SYSTEM(DBusConnection.SYSTEM),
-        USER(DBusConnection.SESSION);
+        SYSTEM(DBusConnection.DBusBusType.SYSTEM),
+        USER(DBusConnection.DBusBusType.SESSION);
 
-        private final int index;
+        private final DBusConnection.DBusBusType index;
 
-        private InstanceType(final int index) {
+        private InstanceType(DBusConnection.DBusBusType index) {
             this.index = index;
         }
 
-        public final int getIndex() {
+        public final DBusConnection.DBusBusType getIndex() {
             return index;
         }
 
@@ -104,19 +105,19 @@ public final class Systemd {
     }
 
     public static Systemd get(final InstanceType instanceType) throws DBusException {
-        final int index = instanceType.getIndex();
+        final DBusBusType index = instanceType.getIndex();
 
         Systemd instance;
 
         synchronized (instances) {
-            if (instances[index] == null) {
+            if (instances[index.ordinal()] == null) {
                 instance = new Systemd(instanceType);
                 instance.open();
 
-                instances[index] = instance;
+                instances[index.ordinal()] = instance;
             }
             else {
-                instance = instances[index];
+                instance = instances[index.ordinal()];
             }
         }
 
@@ -132,10 +133,10 @@ public final class Systemd {
     }
 
     public static void disconnect(final InstanceType instanceType, final long retardationTime) {
-        final int index = instanceType.getIndex();
+        final DBusBusType index = instanceType.getIndex();
 
         synchronized (instances) {
-            Systemd instance = instances[index];
+            Systemd instance = instances[index.ordinal()];
 
             if (instance != null) {
                 try {
@@ -148,7 +149,7 @@ public final class Systemd {
                 }
             }
 
-            instances[index] = null;
+            instances[index.ordinal()] = null;
         }
     }
 

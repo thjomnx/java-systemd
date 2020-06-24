@@ -14,10 +14,10 @@ package de.thjom.java.systemd;
 import java.math.BigInteger;
 import java.util.Vector;
 
-import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.UInt64;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.types.UInt64;
+import org.freedesktop.dbus.types.Variant;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 

@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+import org.freedesktop.dbus.messages.DBusSignal;
 
 abstract class AbstractAdapter {
 

@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusInterface;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.messages.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -11,9 +11,9 @@
 
 package de.thjom.java.systemd.types;
 
-import org.freedesktop.dbus.Position;
 import org.freedesktop.dbus.Struct;
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.annotations.Position;
+import org.freedesktop.dbus.types.UInt32;
 
 public class UnitProcessType extends Struct implements Comparable<UnitProcessType> {
 
