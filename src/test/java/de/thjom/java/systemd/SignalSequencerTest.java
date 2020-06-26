@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusInterface;
+import org.freedesktop.dbus.messages.DBusSignal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -186,7 +186,7 @@ public class SignalSequencerTest implements DBusInterface {
         public TestSignal(final long serial) throws DBusException {
             super(Systemd.OBJECT_PATH);
 
-            this.serial = serial;
+            this.setSerial(serial);
         }
 
         @Override

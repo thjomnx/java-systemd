@@ -13,7 +13,7 @@ package de.thjom.java.systemd;
 
 import java.util.Map;
 
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.types.Variant;
 
 @FunctionalInterface
 public interface UnitStateListener {

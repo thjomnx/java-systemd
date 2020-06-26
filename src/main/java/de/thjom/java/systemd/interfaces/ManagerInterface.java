@@ -13,11 +13,11 @@ package de.thjom.java.systemd.interfaces;
 
 import java.util.List;
 
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusInterfaceName;
-import org.freedesktop.dbus.DBusMemberName;
-import org.freedesktop.dbus.Path;
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.annotations.DBusInterfaceName;
+import org.freedesktop.dbus.annotations.DBusMemberName;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusInterface;
 
 import de.thjom.java.systemd.Signal;
 import de.thjom.java.systemd.types.UnitFileType;
@@ -42,7 +42,7 @@ public interface ManagerInterface extends DBusInterface {
     String getDefaultTarget();
 
     @DBusMemberName(value = "GetUnitByPID")
-    Path getUnitByPID(int pid);
+    DBusPath getUnitByPID(int pid);
 
     @DBusMemberName(value = "Halt")
     void halt();
@@ -60,7 +60,7 @@ public interface ManagerInterface extends DBusInterface {
     List<UnitType> listUnits();
 
     @DBusMemberName(value = "LoadUnit")
-    Path loadUnit(String name);
+    DBusPath loadUnit(String name);
 
     @DBusMemberName(value = "LookupDynamicUserByName")
     long lookupDynamicUserByName(String name);
@@ -84,13 +84,13 @@ public interface ManagerInterface extends DBusInterface {
     void reload();
 
     @DBusMemberName(value = "ReloadOrRestartUnit")
-    Path reloadOrRestartUnit(String name, String mode);
+    DBusPath reloadOrRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "ReloadOrTryRestartUnit")
-    Path reloadOrTryRestartUnit(String name, String mode);
+    DBusPath reloadOrTryRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "ReloadUnit")
-    Path reloadUnit(String name, String mode);
+    DBusPath reloadUnit(String name, String mode);
 
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
@@ -99,7 +99,7 @@ public interface ManagerInterface extends DBusInterface {
     void resetFailedUnit(String name);
 
     @DBusMemberName(value = "RestartUnit")
-    Path restartUnit(String name, String mode);
+    DBusPath restartUnit(String name, String mode);
 
     @DBusMemberName(value = "SetEnvironment")
     void setEnvironment(String name);
@@ -108,10 +108,10 @@ public interface ManagerInterface extends DBusInterface {
     void setExitCode(byte value);
 
     @DBusMemberName(value = "StartUnit")
-    Path startUnit(String name, String mode);
+    DBusPath startUnit(String name, String mode);
 
     @DBusMemberName(value = "StopUnit")
-    Path stopUnit(String name, String mode);
+    DBusPath stopUnit(String name, String mode);
 
     @DBusMemberName(value = "Subscribe")
     void subscribe();
@@ -120,7 +120,7 @@ public interface ManagerInterface extends DBusInterface {
     void switchRoot(String newRoot, String init);
 
     @DBusMemberName(value = "TryRestartUnit")
-    Path tryRestartUnit(String name, String mode);
+    DBusPath tryRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "UnrefUnit")
     void unrefUnit(String name);
@@ -136,7 +136,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class JobNew extends Signal {
 
-        public JobNew(String objectPath, long id, Path job, String unit) throws DBusException {
+        public JobNew(String objectPath, long id, DBusPath job, String unit) throws DBusException {
             super(objectPath, id, job, unit);
         }
 
@@ -144,7 +144,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, 0L);
         }
 
-        public Path getJob() {
+        public DBusPath getJob() {
             return getParameter(1, null);
         }
 
@@ -156,7 +156,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class JobRemoved extends Signal {
 
-        public JobRemoved(String objectPath, long id, Path job, String unit, String result) throws DBusException {
+        public JobRemoved(String objectPath, long id, DBusPath job, String unit, String result) throws DBusException {
             super(objectPath, id, job, unit, result);
         }
 
@@ -164,7 +164,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, 0L);
         }
 
-        public Path getJob() {
+        public DBusPath getJob() {
             return getParameter(1, null);
         }
 
@@ -233,7 +233,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class UnitNew extends Signal {
 
-        public UnitNew(String objectPath, String id, Path unit) throws DBusException {
+        public UnitNew(String objectPath, String id, DBusPath unit) throws DBusException {
             super(objectPath, id, unit);
         }
 
@@ -241,7 +241,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, "");
         }
 
-        public Path getUnit() {
+        public DBusPath getUnit() {
             return getParameter(1, null);
         }
 
@@ -249,7 +249,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class UnitRemoved extends Signal {
 
-        public UnitRemoved(String objectPath, String id, Path unit) throws DBusException {
+        public UnitRemoved(String objectPath, String id, DBusPath unit) throws DBusException {
             super(objectPath, id, unit);
         }
 
@@ -257,7 +257,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, "");
         }
 
-        public Path getUnit() {
+        public DBusPath getUnit() {
             return getParameter(1, null);
         }
 

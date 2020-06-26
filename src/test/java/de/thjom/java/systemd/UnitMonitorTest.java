@@ -17,11 +17,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.awaitility.Awaitility;
-import org.freedesktop.DBus;
-import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+import org.freedesktop.dbus.types.Variant;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -56,7 +55,7 @@ public class UnitMonitorTest extends AbstractTestCase {
             };
 
             // Test handler addition and removal
-            DBusSigHandler<PropertiesChanged> handler = new DBusSigHandler<DBus.Properties.PropertiesChanged>() {
+            DBusSigHandler<PropertiesChanged> handler = new DBusSigHandler<PropertiesChanged>() {
 
                 @Override
                 public void handle(PropertiesChanged s) {

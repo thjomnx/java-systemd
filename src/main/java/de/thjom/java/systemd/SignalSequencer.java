@@ -21,7 +21,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.freedesktop.dbus.DBusSignal;
+import org.freedesktop.dbus.messages.DBusSignal;
 
 final class SignalSequencer<T extends DBusSignal> {
 

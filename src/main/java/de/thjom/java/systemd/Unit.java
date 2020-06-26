@@ -20,13 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.freedesktop.DBus.Introspectable;
-import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.interfaces.Introspectable;
+import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+import org.freedesktop.dbus.messages.DBusSignal;
+import org.freedesktop.dbus.types.Variant;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.UnitInterface;
@@ -258,7 +258,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     @Override
     protected SignalConsumer<PropertiesChanged> createStateConsumer() {
         return new SignalConsumer<>(s -> {
-            Map<String, Variant<?>> properties = s.changedProperties;
+            Map<String, Variant<?>> properties = s.getPropertiesChanged();
 
             if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                 synchronized (unitStateListeners) {
@@ -274,59 +274,59 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return intro.Introspect();
     }
 
-    public Path start(final Mode mode) {
+    public DBusPath start(final Mode mode) {
         return start(mode.getValue());
     }
 
-    public Path start(final String mode) {
+    public DBusPath start(final String mode) {
         return manager.startUnit(name, mode);
     }
 
-    public Path stop(final Mode mode) {
+    public DBusPath stop(final Mode mode) {
         return stop(mode.getValue());
     }
 
-    public Path stop(final String mode) {
+    public DBusPath stop(final String mode) {
         return manager.stopUnit(name, mode);
     }
 
-    public Path reload(final Mode mode) {
+    public DBusPath reload(final Mode mode) {
         return reload(mode.getValue());
     }
 
-    public Path reload(final String mode) {
+    public DBusPath reload(final String mode) {
         return manager.reloadUnit(name, mode);
     }
 
-    public Path restart(final Mode mode) {
+    public DBusPath restart(final Mode mode) {
         return restart(mode.getValue());
     }
 
-    public Path restart(final String mode) {
+    public DBusPath restart(final String mode) {
         return manager.restartUnit(name, mode);
     }
 
-    public Path tryRestart(final Mode mode) {
+    public DBusPath tryRestart(final Mode mode) {
         return tryRestart(mode.getValue());
     }
 
-    public Path tryRestart(final String mode) {
+    public DBusPath tryRestart(final String mode) {
         return manager.tryRestartUnit(name, mode);
     }
 
-    public Path reloadOrRestart(final Mode mode) {
+    public DBusPath reloadOrRestart(final Mode mode) {
         return reloadOrRestart(mode.getValue());
     }
 
-    public Path reloadOrRestart(final String mode) {
+    public DBusPath reloadOrRestart(final String mode) {
         return manager.reloadOrRestartUnit(name, mode);
     }
 
-    public Path reloadOrTryRestart(final Mode mode) {
+    public DBusPath reloadOrTryRestart(final Mode mode) {
         return reloadOrTryRestart(mode.getValue());
     }
 
-    public Path reloadOrTryRestart(final String mode) {
+    public DBusPath reloadOrTryRestart(final String mode) {
         return manager.reloadOrTryRestartUnit(name, mode);
     }
 

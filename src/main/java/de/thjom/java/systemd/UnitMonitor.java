@@ -11,10 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
-import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
-import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,11 +22,11 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
-import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+import org.freedesktop.dbus.messages.DBusSignal;
+import org.freedesktop.dbus.types.Variant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +36,10 @@ import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
 abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier {
 
     protected static final String ERROR_MSG_MONITOR_REFRESH = "Error while refreshing internal monitor state";
+
+	private static final Object ACTIVE_STATE = "active";
+	private static final Object LOAD_STATE = "loaded";
+	private static final Object SUB_STATE = "running";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -89,8 +89,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
             Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
 
             if (unit.isPresent()) {
-                Map<String, Variant<?>> properties = s.changedProperties;
-
+                Map<String, Variant<?>> properties = s.getPropertiesChanged();
                 if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                     synchronized (unitStateListeners) {
                         unitStateListeners.forEach(l -> l.stateChanged(unit.get(), properties));

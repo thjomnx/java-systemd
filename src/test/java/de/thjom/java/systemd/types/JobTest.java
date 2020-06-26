@@ -11,16 +11,17 @@
 
 package de.thjom.java.systemd.types;
 
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.types.UInt32;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class JobTest {
 
     @Test(description="Tests parameterized constructor.")
-    public void testConstructor() {
-        Path path = new Path("foo");
+    public void testConstructor() throws DBusException {
+        DBusPath path = new DBusPath("foo");
 
         Job instance = new Job(new Object[] { new UInt32("1234"), path });
 

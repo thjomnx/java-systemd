@@ -11,34 +11,34 @@
 
 package de.thjom.java.systemd.interfaces;
 
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusInterfaceName;
-import org.freedesktop.dbus.DBusMemberName;
-import org.freedesktop.dbus.Path;
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.annotations.DBusInterfaceName;
+import org.freedesktop.dbus.annotations.DBusMemberName;
+import org.freedesktop.dbus.interfaces.DBusInterface;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Unit.SERVICE_NAME)
 public interface UnitInterface extends DBusInterface {
 
     @DBusMemberName(value = "Start")
-    Path start(String mode);
+    DBusPath start(String mode);
 
     @DBusMemberName(value = "Stop")
-    Path stop(String mode);
+    DBusPath stop(String mode);
 
     @DBusMemberName(value = "Reload")
-    Path reload(String mode);
+    DBusPath reload(String mode);
 
     @DBusMemberName(value = "Restart")
-    Path restart(String mode);
+    DBusPath restart(String mode);
 
     @DBusMemberName(value = "TryRestart")
-    Path tryRestart(String mode);
+    DBusPath tryRestart(String mode);
 
     @DBusMemberName(value = "ReloadOrRestart")
-    Path reloadOrRestart(String mode);
+    DBusPath reloadOrRestart(String mode);
 
     @DBusMemberName(value = "ReloadOrTryRestart")
-    Path reloadOrTryRestart(String mode);
+    DBusPath reloadOrTryRestart(String mode);
 
     @DBusMemberName(value = "Kill")
     void kill(String who, int signal);

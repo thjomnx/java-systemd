@@ -11,7 +11,7 @@
 
 package de.thjom.java.systemd.interfaces;
 
-import org.freedesktop.dbus.DBusInterfaceName;
+import org.freedesktop.dbus.annotations.DBusInterfaceName;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Device.SERVICE_NAME)
 public interface DeviceInterface extends UnitInterface {

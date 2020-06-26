@@ -11,7 +11,7 @@
 
 package de.thjom.java.systemd.types;
 
-import org.freedesktop.dbus.Position;
+import org.freedesktop.dbus.annotations.Position;
 
 public class UnitFileType extends UnitBase implements Comparable<UnitFileType> {
 

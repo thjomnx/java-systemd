@@ -11,8 +11,8 @@
 
 package de.thjom.java.systemd.interfaces;
 
-import org.freedesktop.dbus.DBusInterfaceName;
-import org.freedesktop.dbus.DBusMemberName;
+import org.freedesktop.dbus.annotations.DBusInterfaceName;
+import org.freedesktop.dbus.annotations.DBusMemberName;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Snapshot.SERVICE_NAME)
 public interface SnapshotInterface extends UnitInterface {

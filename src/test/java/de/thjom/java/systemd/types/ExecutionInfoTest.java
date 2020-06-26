@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import org.freedesktop.dbus.UInt32;
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt32;
+import org.freedesktop.dbus.types.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

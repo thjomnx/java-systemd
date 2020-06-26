@@ -11,10 +11,10 @@
 
 package de.thjom.java.systemd.interfaces;
 
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusInterfaceName;
-import org.freedesktop.dbus.DBusMemberName;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.annotations.DBusInterfaceName;
+import org.freedesktop.dbus.annotations.DBusMemberName;
+import org.freedesktop.dbus.interfaces.DBusInterface;
+import org.freedesktop.dbus.types.Variant;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Properties.SERVICE_NAME)
 public interface PropertyInterface extends DBusInterface {
