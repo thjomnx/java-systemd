@@ -40,8 +40,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.release>11</maven.compiler.release>
     <sonar.junit.reportsPath>target/surefire-reports/junitreports</sonar.junit.reportsPath>
     <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
   </properties>
@@ -60,29 +59,29 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.5</version>
+      <version>1.7.30</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.5</version>
+      <version>1.7.30</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.11</version>
+      <version>7.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>2.8.9</version>
+      <version>3.6.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>3.0.0</version>
+      <version>4.0.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -92,8 +91,16 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <release>11</release>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.20</version>
+          <version>2.22.2</version>
           <configuration>
             <suiteXmlFiles>
               <suiteXmlFile>src/test/resources/suites/auto.xml</suiteXmlFile>
@@ -127,7 +134,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.2.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -140,7 +147,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.4</version>
+            <version>3.2.0</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -187,14 +194,14 @@
         <dependency>
           <groupId>org.testng</groupId>
           <artifactId>testng</artifactId>
-          <version>6.9.7</version>
+          <version>7.3.0</version>
           <scope>test</scope>
         </dependency>
 
         <dependency>
           <groupId>org.sonarsource.java</groupId>
           <artifactId>sonar-jacoco-listeners</artifactId>
-          <version>4.10.0.10260</version>
+          <version>5.14.0.18788</version>
           <scope>test</scope>
         </dependency>
       </dependencies>
