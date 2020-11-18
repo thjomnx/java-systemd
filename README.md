@@ -35,6 +35,6 @@ LGPL v2.1 and AFL 3.0.
 ## Disclaimer
 
 These are no "official" Java bindings for systemd via D-Bus. I only work on it if the following requisites are met:
-- The kid is sleeping
-- My wife is hacking on her medical research topics
+- The kids are sleeping
+- My wife is hacking on medical research
 - No beers in the fridge
