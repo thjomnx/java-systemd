@@ -22,6 +22,7 @@ import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.ResourceControl;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.ServiceInterface;
@@ -32,7 +33,7 @@ import de.thjom.java.systemd.types.ExitStatusType;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
+public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, ResourceControl, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Service";
     public static final String UNIT_SUFFIX = ".service";
@@ -42,8 +43,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String BUS_NAME = "BusName";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
-        public static final String DELEGATE = "Delegate";
-        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String ENVIRONMENT = "Environment";
@@ -62,7 +61,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String EXEC_STOP = "ExecStop";
         public static final String EXEC_STOP_POST = "ExecStopPost";
         public static final String FILE_DESCRIPTOR_STORE_MAX = "FileDescriptorStoreMax";
-        public static final String GROUP = "Group";
+        public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String GUESS_MAIN_PID = "GuessMainPID";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
@@ -81,7 +80,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PID_FILE = "PIDFile";
-        public static final String PERMISSIONS_START_ONLY = "PermissionsStartOnly";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
@@ -110,9 +108,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
-        public static final String TASKS_ACCOUNTING = "TasksAccounting";
-        public static final String TASKS_CURRENT = "TasksCurrent";
-        public static final String TASKS_MAX = "TasksMax";
         public static final String TIMEOUT_START_USEC = "TimeoutStartUSec";
         public static final String TIMEOUT_STOP_USEC = "TimeoutStopUSec";
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
@@ -120,6 +115,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String UMASK = "UMask";
         public static final String USB_FUNCTION_DESCRIPTORS = "USBFunctionDescriptors";
         public static final String USB_FUNCTION_STRINGS = "USBFunctionStrings";
+        public static final String WATCHDOG_SIGNAL = "WatchdogSignal";
         public static final String WATCHDOG_TIMESTAMP = "WatchdogTimestamp";
         public static final String WATCHDOG_TIMESTAMP_MONOTONIC = "WatchdogTimestampMonotonic";
         public static final String WATCHDOG_USEC = "WatchdogUSec";
@@ -137,6 +133,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     ExtendedMemoryAccounting.Property.class,
+                    ResourceControl.Property.class,
                     TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
@@ -182,14 +179,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public long getControlPID() {
         return properties.getLong(Property.CONTROL_PID);
-    }
-
-    public boolean isDelegate() {
-        return properties.getBoolean(Property.DELEGATE);
-    }
-
-    public Vector<String> getDelegateControllers() {
-        return properties.getVector(Property.DELEGATE_CONTROLLERS);
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
@@ -264,6 +253,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getLong(Property.FILE_DESCRIPTOR_STORE_MAX);
     }
 
+    public int getFinalKillSignal() {
+        return properties.getInteger(Property.FINAL_KILL_SIGNAL);
+    }
+
     public boolean isGuessMainPID() {
         return properties.getBoolean(Property.GUESS_MAIN_PID);
     }
@@ -334,10 +327,6 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getPIDFile() {
         return properties.getString(Property.PID_FILE);
-    }
-
-    public boolean isPermissionsStartOnly() {
-        return properties.getBoolean(Property.PERMISSIONS_START_ONLY);
     }
 
     public Vector<String> getReadOnlyPaths() {
@@ -480,6 +469,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public String getUSBFunctionStrings() {
         return properties.getString(Property.USB_FUNCTION_STRINGS);
+    }
+
+    public int getWatchdogSignal() {
+        return properties.getInteger(Property.WATCHDOG_SIGNAL);
     }
 
     public long getWatchdogTimestamp() {

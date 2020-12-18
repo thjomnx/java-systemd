@@ -25,6 +25,7 @@ public interface MemoryAccounting extends Feature {
         public static final String MEMORY_LIMIT = "MemoryLimit";
         public static final String MEMORY_LOW = "MemoryLow";
         public static final String MEMORY_MAX = "MemoryMax";
+        public static final String MEMORY_MIN = "MemoryMin";
         public static final String MEMORY_SWAP_MAX = "MemorySwapMax";
 
         private Property() {
@@ -59,6 +60,10 @@ public interface MemoryAccounting extends Feature {
 
     default BigInteger getMemoryMax() {
         return getProperties().getBigInteger(Property.MEMORY_MAX);
+    }
+
+    default BigInteger getMemoryMin() {
+        return getProperties().getBigInteger(Property.MEMORY_MIN);
     }
 
     default BigInteger getMemorySwapMax() {

@@ -16,6 +16,7 @@ import java.util.List;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 import de.thjom.java.systemd.types.IOBandwidth;
+import de.thjom.java.systemd.types.IODeviceLatency;
 import de.thjom.java.systemd.types.IODeviceWeight;
 import de.thjom.java.systemd.types.IOIops;
 
@@ -29,6 +30,7 @@ public interface IoAccounting extends Feature {
         public static final String BLOCK_IO_WEIGHT = "BlockIOWeight";
         public static final String BLOCK_IO_WRITE_BANDWIDTH = "BlockIOWriteBandwidth";
         public static final String IO_ACCOUNTING = "IOAccounting";
+        public static final String IO_DEVICE_LATENCY_TARGET_USEC = "IODeviceLatencyTargetUSec";
         public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
         public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
         public static final String IO_READ_IOPS_MAX = "IOReadIOPSMax";
@@ -70,6 +72,10 @@ public interface IoAccounting extends Feature {
 
     default boolean isIOAccounting() {
         return getProperties().getBoolean(Property.IO_ACCOUNTING);
+    }
+
+    default List<IODeviceLatency> getIODeviceLatencyTargetUSec() {
+        return IODeviceLatency.list(getProperties().getVector(Property.IO_DEVICE_LATENCY_TARGET_USEC));
     }
 
     default List<IODeviceWeight> getIODeviceWeight() {

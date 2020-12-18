@@ -23,7 +23,10 @@ import org.freedesktop.dbus.interfaces.Introspectable;
 import de.thjom.java.systemd.Unit.Mode;
 import de.thjom.java.systemd.Unit.Who;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
+import de.thjom.java.systemd.types.UnitFileChange;
+import de.thjom.java.systemd.types.UnitFileInstallChange;
 import de.thjom.java.systemd.types.UnitFileType;
+import de.thjom.java.systemd.types.UnitProcessType;
 import de.thjom.java.systemd.types.UnitType;
 
 public class Manager extends InterfaceAdapter {
@@ -91,8 +94,20 @@ public class Manager extends InterfaceAdapter {
         public static final String GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "GeneratorsFinishTimestampMonotonic";
         public static final String GENERATORS_START_TIMESTAMP = "GeneratorsStartTimestamp";
         public static final String GENERATORS_START_TIMESTAMP_MONOTONIC = "GeneratorsStartTimestampMonotonic";
+        public static final String INIT_RD_GENERATORS_FINISH_TIMESTAMP = "InitRDGeneratorsFinishTimestamp";
+        public static final String INIT_RD_GENERATORS_FINISH_TIMESTAMP_MONOTONIC = "InitRDGeneratorsFinishTimestampMonotonic";
+        public static final String INIT_RD_GENERATORS_START_TIMESTAMP = "InitRDGeneratorsStartTimestamp";
+        public static final String INIT_RD_GENERATORS_START_TIMESTAMP_MONOTONIC = "InitRDGeneratorsStartTimestampMonotonic";
+        public static final String INIT_RD_SECURITY_FINISH_TIMESTAMP = "InitRDSecurityFinishTimestamp";
+        public static final String INIT_RD_SECURITY_FINISH_TIMESTAMP_MONOTONIC = "InitRDSecurityFinishTimestampMonotonic";
+        public static final String INIT_RD_SECURITY_START_TIMESTAMP = "InitRDSecurityStartTimestamp";
+        public static final String INIT_RD_SECURITY_START_TIMESTAMP_MONOTONIC = "InitRDSecurityStartTimestampMonotonic";
         public static final String INIT_RD_TIMESTAMP = "InitRDTimestamp";
         public static final String INIT_RD_TIMESTAMP_MONOTONIC = "InitRDTimestampMonotonic";
+        public static final String INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP = "InitRDUnitsLoadFinishTimestamp";
+        public static final String INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP_MONOTONIC = "InitRDUnitsLoadFinishTimestampMonotonic";
+        public static final String INIT_RD_UNITS_LOAD_START_TIMESTAMP = "InitRDUnitsLoadStartTimestamp";
+        public static final String INIT_RD_UNITS_LOAD_START_TIMESTAMP_MONOTONIC = "InitRDUnitsLoadStartTimestampMonotonic";
         public static final String KERNEL_TIMESTAMP = "KernelTimestamp";
         public static final String KERNEL_TIMESTAMP_MONOTONIC = "KernelTimestampMonotonic";
         public static final String LOADER_TIMESTAMP = "LoaderTimestamp";
@@ -161,6 +176,10 @@ public class Manager extends InterfaceAdapter {
         return intro.Introspect();
     }
 
+    public List<UnitFileChange> addDependencyUnitFiles(final List<String> names, final String target, final String type, final boolean runtime, final boolean force) {
+        return getInterface().addDependencyUnitFiles(names, target, type, runtime, force);
+    }
+
     public void cancelJob(final long id) {
         getInterface().cancelJob(id);
     }
@@ -169,8 +188,16 @@ public class Manager extends InterfaceAdapter {
         getInterface().clearJobs();
     }
 
+    public List<UnitFileChange> disableUnitFiles(final List<String> names, final boolean runtime) {
+        return getInterface().disableUnitFiles(names, runtime);
+    }
+
     public String dump() {
         return getInterface().dump();
+    }
+
+    public List<UnitFileChange> enableUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().enableUnitFiles(names, runtime, force);
     }
 
     public void exit() {
@@ -183,6 +210,18 @@ public class Manager extends InterfaceAdapter {
 
     public DBusPath getUnitByPID(final int pid) {
         return getInterface().getUnitByPID(pid);
+    }
+
+    public List<String> getUnitFileLinks(final String name, final boolean runtime) {
+        return getInterface().getUnitFileLinks(name, runtime);
+    }
+
+    public String getUnitFileState(final String name) {
+        return getInterface().getUnitFileState(name);
+    }
+
+    public List<UnitProcessType> getUnitProcesses(final String name) {
+        return getInterface().getUnitProcesses(name);
     }
 
     public void halt() {
@@ -199,6 +238,10 @@ public class Manager extends InterfaceAdapter {
 
     public void killUnit(final String name, final String who, final int signal) {
         getInterface().killUnit(name, who, signal);
+    }
+
+    public List<UnitFileChange> linkUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().linkUnitFiles(names, runtime, force);
     }
 
     public List<UnitFileType> listUnitFiles() {
@@ -221,12 +264,28 @@ public class Manager extends InterfaceAdapter {
         return getInterface().lookupDynamicUserByUID(uid);
     }
 
+    public List<UnitFileChange> maskUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().maskUnitFiles(names, runtime, force);
+    }
+
     public void powerOff() {
         getInterface().powerOff();
     }
 
+    public List<UnitFileInstallChange> presetUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().presetUnitFiles(names, runtime, force);
+    }
+
+    public List<UnitFileInstallChange> presetUnitFilesWithMode(final List<String> names, final String mode, final boolean runtime, final boolean force) {
+        return getInterface().presetUnitFilesWithMode(names, mode, runtime, force);
+    }
+
     public void reboot() {
         getInterface().reboot();
+    }
+
+    public List<UnitFileInstallChange> reenableUnitFiles(final List<String> names, final boolean runtime, final boolean force) {
+        return getInterface().reenableUnitFiles(names, runtime, force);
     }
 
     public void reexecute() {
@@ -281,8 +340,12 @@ public class Manager extends InterfaceAdapter {
         return getInterface().restartUnit(name, mode);
     }
 
-    public DBusPath startUnit(final String name, final Mode mode) {
-        return startUnit(name, mode.getValue());
+    public List<UnitFileChange> revertUnitFiles(final List<String> names){
+        return getInterface().revertUnitFiles(names);
+    }
+
+    public List<UnitFileChange> setDefaultTarget(final String name, final boolean force) {
+        return getInterface().setDefaultTarget(name, force);
     }
 
     public void setEnvironment(final String name) {
@@ -291,6 +354,10 @@ public class Manager extends InterfaceAdapter {
 
     public void setExitCode(final byte value) {
         getInterface().setExitCode(value);
+    }
+
+    public DBusPath startUnit(final String name, final Mode mode) {
+        return startUnit(name, mode.getValue());
     }
 
     public DBusPath startUnit(final String name, final String mode) {
@@ -323,6 +390,10 @@ public class Manager extends InterfaceAdapter {
 
     public DBusPath tryRestartUnit(final String name, final String mode) {
         return getInterface().tryRestartUnit(name, mode);
+    }
+
+    public List<UnitFileChange> unmaskUnitFiles(final List<String> names, final boolean runtime) {
+        return getInterface().unmaskUnitFiles(names, runtime);
     }
 
     public void unrefUnit(final String name) {
@@ -684,12 +755,60 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.GENERATORS_START_TIMESTAMP_MONOTONIC);
     }
 
+    public long getInitRDGeneratorsFinishTimestamp() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_FINISH_TIMESTAMP);
+    }
+
+    public long getInitRDGeneratorsFinishTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_FINISH_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDGeneratorsStartTimestamp() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_START_TIMESTAMP);
+    }
+
+    public long getInitRDGeneratorsStartTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_GENERATORS_START_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDSecurityFinishTimestamp() {
+        return properties.getLong(Property.INIT_RD_SECURITY_FINISH_TIMESTAMP);
+    }
+
+    public long getInitRDSecurityFinishTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_SECURITY_FINISH_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDSecurityStartTimestamp() {
+        return properties.getLong(Property.INIT_RD_SECURITY_START_TIMESTAMP);
+    }
+
+    public long getInitRDSecurityStartTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_SECURITY_START_TIMESTAMP_MONOTONIC);
+    }
+
     public long getInitRDTimestamp() {
         return properties.getLong(Property.INIT_RD_TIMESTAMP);
     }
 
     public long getInitRDTimestampMonotonic() {
         return properties.getLong(Property.INIT_RD_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDUnitsLoadFinishTimestamp() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP);
+    }
+
+    public long getInitRDUnitsLoadFinishTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_FINISH_TIMESTAMP_MONOTONIC);
+    }
+
+    public long getInitRDUnitsLoadStartTimestamp() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_START_TIMESTAMP);
+    }
+
+    public long getInitRDUnitsLoadStartTimestampMonotonic() {
+        return properties.getLong(Property.INIT_RD_UNITS_LOAD_START_TIMESTAMP_MONOTONIC);
     }
 
     public long getKernelTimestamp() {

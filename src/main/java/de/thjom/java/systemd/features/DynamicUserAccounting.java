@@ -43,12 +43,15 @@ public interface DynamicUserAccounting extends Feature {
         public static final String LOCK_PERSONALITY = "LockPersonality";
         public static final String LOG_EXTRA_FIELDS = "LogExtraFields";
         public static final String LOG_LEVEL_MAX = "LogLevelMax";
+        public static final String LOG_RATE_LIMIT_BURST = "LogRateLimitBurst";
+        public static final String LOG_RATE_LIMIT_INTERVAL_USEC = "LogRateLimitIntervalUSec";
         public static final String LOGS_DIRECTORY = "LogsDirectory";
         public static final String LOGS_DIRECTORY_MODE = "LogsDirectoryMode";
         public static final String MOUNT_APIVFS = "MountAPIVFS";
         public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
+        public static final String PRIVATE_MOUNTS = "PrivateMounts";
         public static final String PRIVATE_NETWORK = "PrivateNetwork";
         public static final String PRIVATE_TMP = "PrivateTmp";
         public static final String PRIVATE_USERS = "PrivateUsers";
@@ -163,6 +166,14 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getInteger(Property.LOG_LEVEL_MAX);
     }
 
+    default long getLogRateLimitBurst() {
+        return getProperties().getLong(Property.LOG_RATE_LIMIT_BURST);
+    }
+
+    default BigInteger getLogRateLimitIntervalUSec() {
+        return getProperties().getBigInteger(Property.LOG_RATE_LIMIT_INTERVAL_USEC);
+    }
+
     default Vector<String> getLogsDirectory() {
         return getProperties().getVector(Property.LOGS_DIRECTORY);
     }
@@ -185,6 +196,10 @@ public interface DynamicUserAccounting extends Feature {
 
     default boolean isPrivateDevices() {
         return getProperties().getBoolean(Property.PRIVATE_DEVICES);
+    }
+
+    default boolean isPrivateMounts() {
+        return getProperties().getBoolean(Property.PRIVATE_MOUNTS);
     }
 
     default boolean isPrivateNetwork() {
