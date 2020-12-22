@@ -277,20 +277,24 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return intro.Introspect();
     }
 
-    public DBusPath start(final Mode mode) {
-        return start(mode.getValue());
+    public void clean(final List<String> mask) {
+        manager.cleanUnit(name, mask);
     }
 
-    public DBusPath start(final String mode) {
-        return manager.startUnit(name, mode);
+    public void freeze() {
+        manager.freezeUnit(name);
     }
 
-    public DBusPath stop(final Mode mode) {
-        return stop(mode.getValue());
+    public void kill(final Who who, final int signal) {
+        kill(who.getValue(), signal);
     }
 
-    public DBusPath stop(final String mode) {
-        return manager.stopUnit(name, mode);
+    public void kill(final String who, final int signal) {
+        manager.killUnit(name, who, signal);
+    }
+
+    public void ref() {
+        manager.refUnit(name);
     }
 
     public DBusPath reload(final Mode mode) {
@@ -299,22 +303,6 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public DBusPath reload(final String mode) {
         return manager.reloadUnit(name, mode);
-    }
-
-    public DBusPath restart(final Mode mode) {
-        return restart(mode.getValue());
-    }
-
-    public DBusPath restart(final String mode) {
-        return manager.restartUnit(name, mode);
-    }
-
-    public DBusPath tryRestart(final Mode mode) {
-        return tryRestart(mode.getValue());
-    }
-
-    public DBusPath tryRestart(final String mode) {
-        return manager.tryRestartUnit(name, mode);
     }
 
     public DBusPath reloadOrRestart(final Mode mode) {
@@ -333,20 +321,44 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return manager.reloadOrTryRestartUnit(name, mode);
     }
 
-    public void kill(final Who who, final int signal) {
-        kill(who.getValue(), signal);
-    }
-
-    public void kill(final String who, final int signal) {
-        manager.killUnit(name, who, signal);
-    }
-
-    public void ref() {
-        manager.refUnit(name);
-    }
-
     public void resetFailed() {
         manager.resetFailedUnit(name);
+    }
+
+    public DBusPath restart(final Mode mode) {
+        return restart(mode.getValue());
+    }
+
+    public DBusPath restart(final String mode) {
+        return manager.restartUnit(name, mode);
+    }
+
+    public DBusPath start(final Mode mode) {
+        return start(mode.getValue());
+    }
+
+    public DBusPath start(final String mode) {
+        return manager.startUnit(name, mode);
+    }
+
+    public DBusPath stop(final Mode mode) {
+        return stop(mode.getValue());
+    }
+
+    public DBusPath stop(final String mode) {
+        return manager.stopUnit(name, mode);
+    }
+
+    public void thaw() {
+        manager.thawUnit(name);
+    }
+
+    public DBusPath tryRestart(final Mode mode) {
+        return tryRestart(mode.getValue());
+    }
+
+    public DBusPath tryRestart(final String mode) {
+        return manager.tryRestartUnit(name, mode);
     }
 
     public void unref() {

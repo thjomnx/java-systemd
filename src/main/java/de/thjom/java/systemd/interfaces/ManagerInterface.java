@@ -35,6 +35,9 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "CancelJob")
     void cancelJob(long id);
 
+    @DBusMemberName(value = "CleanUnit")
+    void cleanUnit(String name, List<String> mask);
+
     @DBusMemberName(value = "ClearJobs")
     void clearJobs();
 
@@ -49,6 +52,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "Exit")
     void exit();
+
+    @DBusMemberName(value = "FreezeUnit")
+    void freezeUnit(String name);
 
     @DBusMemberName(value = "GetDefaultTarget")
     String getDefaultTarget();
@@ -160,6 +166,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "SwitchRoot")
     void switchRoot(String newRoot, String init);
+
+    @DBusMemberName(value = "ThawUnit")
+    void thawUnit(String name);
 
     @DBusMemberName(value = "TryRestartUnit")
     DBusPath tryRestartUnit(String name, String mode);

@@ -127,7 +127,6 @@ public class Manager extends InterfaceAdapter {
         public static final String SECURITY_START_TIMESTAMP_MONOTONIC = "SecurityStartTimestampMonotonic";
         public static final String SERVICE_WATCHDOGS = "ServiceWatchdogs";
         public static final String SHOW_STATUS = "ShowStatus";
-        public static final String SHUTDOWN_WATCHDOG_USEC = "ShutdownWatchdogUSec";
         public static final String SYSTEM_STATE = "SystemState";
         public static final String TAINTED = "Tainted";
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
@@ -184,6 +183,10 @@ public class Manager extends InterfaceAdapter {
         getInterface().cancelJob(id);
     }
 
+    public void cleanUnit(final String name, final List<String> mask) {
+        getInterface().cleanUnit(name, mask);
+    }
+
     public void clearJobs() {
         getInterface().clearJobs();
     }
@@ -202,6 +205,10 @@ public class Manager extends InterfaceAdapter {
 
     public void exit() {
         getInterface().exit();
+    }
+
+    public void freezeUnit(final String name) {
+        getInterface().freezeUnit(name);
     }
 
     public String getDefaultTarget() {
@@ -382,6 +389,10 @@ public class Manager extends InterfaceAdapter {
 
     public void switchRoot(final String newRoot, final String init) {
         getInterface().switchRoot(newRoot, init);
+    }
+
+    public void thawUnit(final String name) {
+        getInterface().thawUnit(name);
     }
 
     public DBusPath tryRestartUnit(final String name, final Mode mode) {
@@ -885,10 +896,6 @@ public class Manager extends InterfaceAdapter {
 
     public boolean isShowStatus() {
         return properties.getBoolean(Property.SHOW_STATUS);
-    }
-
-    public BigInteger getShutdownWatchdogUSec() {
-        return properties.getBigInteger(Property.SHUTDOWN_WATCHDOG_USEC);
     }
 
     public String getSystemState() {
