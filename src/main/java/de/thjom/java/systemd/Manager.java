@@ -11,23 +11,18 @@
 
 package de.thjom.java.systemd;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Vector;
-
+import de.thjom.java.systemd.Unit.Mode;
+import de.thjom.java.systemd.Unit.Who;
+import de.thjom.java.systemd.interfaces.ManagerInterface;
+import de.thjom.java.systemd.types.*;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.Introspectable;
 
-import de.thjom.java.systemd.Unit.Mode;
-import de.thjom.java.systemd.Unit.Who;
-import de.thjom.java.systemd.interfaces.ManagerInterface;
-import de.thjom.java.systemd.types.UnitFileChange;
-import de.thjom.java.systemd.types.UnitFileInstallChange;
-import de.thjom.java.systemd.types.UnitFileType;
-import de.thjom.java.systemd.types.UnitProcessType;
-import de.thjom.java.systemd.types.UnitType;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Vector;
 
 public class Manager extends InterfaceAdapter {
 
@@ -73,6 +68,7 @@ public class Manager extends InterfaceAdapter {
         public static final String DEFAULT_LIMIT_STACK = "DefaultLimitSTACK";
         public static final String DEFAULT_LIMIT_STACK_SOFT = "DefaultLimitSTACKSoft";
         public static final String DEFAULT_MEMORY_ACCOUNTING = "DefaultMemoryAccounting";
+        public static final String DEFAULT_OOM_POLICY = "DefaultOOMPolicy";
         public static final String DEFAULT_RESTART_USEC = "DefaultRestartUSec";
         public static final String DEFAULT_STANDARD_ERROR = "DefaultStandardError";
         public static final String DEFAULT_STANDARD_OUTPUT = "DefaultStandardOutput";
@@ -80,6 +76,7 @@ public class Manager extends InterfaceAdapter {
         public static final String DEFAULT_START_LIMIT_INTERVAL_USEC = "DefaultStartLimitIntervalUSec";
         public static final String DEFAULT_TASKS_ACCOUNTING = "DefaultTasksAccounting";
         public static final String DEFAULT_TASKS_MAX = "DefaultTasksMax";
+        public static final String DEFAULT_TIMEOUT_ABORT_USEC = "DefaultTimeoutAbortUSec";
         public static final String DEFAULT_TIMEOUT_START_USEC = "DefaultTimeoutStartUSec";
         public static final String DEFAULT_TIMEOUT_STOP_USEC = "DefaultTimeoutStopUSec";
         public static final String DEFAULT_TIMER_ACCURACY_USEC = "DefaultTimerAccuracyUSec";
@@ -110,6 +107,7 @@ public class Manager extends InterfaceAdapter {
         public static final String INIT_RD_UNITS_LOAD_START_TIMESTAMP_MONOTONIC = "InitRDUnitsLoadStartTimestampMonotonic";
         public static final String KERNEL_TIMESTAMP = "KernelTimestamp";
         public static final String KERNEL_TIMESTAMP_MONOTONIC = "KernelTimestampMonotonic";
+        public static final String KEXEC_WATCHDOG_USEC = "KExecWatchdogUSec";
         public static final String LOADER_TIMESTAMP = "LoaderTimestamp";
         public static final String LOADER_TIMESTAMP_MONOTONIC = "LoaderTimestampMonotonic";
         public static final String LOG_LEVEL = "LogLevel";
@@ -120,6 +118,7 @@ public class Manager extends InterfaceAdapter {
         public static final String NJOBS = "NJobs";
         public static final String NNAMES = "NNames";
         public static final String PROGRESS = "Progress";
+        public static final String REBOOT_WATCHDOG_USEC = "RebootWatchdogUSec";
         public static final String RUNTIME_WATCHDOG_USEC = "RuntimeWatchdogUSec";
         public static final String SECURITY_FINISH_TIMESTAMP = "SecurityFinishTimestamp";
         public static final String SECURITY_FINISH_TIMESTAMP_MONOTONIC = "SecurityFinishTimestampMonotonic";
@@ -213,6 +212,10 @@ public class Manager extends InterfaceAdapter {
 
     public String getDefaultTarget() {
         return getInterface().getDefaultTarget();
+    }
+
+    public List<DynamicUser> getDynamicUsers() {
+        return getInterface().getDynamicUsers();
     }
 
     public DBusPath getUnitByPID(final int pid) {
@@ -682,6 +685,10 @@ public class Manager extends InterfaceAdapter {
         return properties.getBoolean(Property.DEFAULT_MEMORY_ACCOUNTING);
     }
 
+    public String getDefaultOOMPolicy() {
+        return properties.getString(Property.DEFAULT_OOM_POLICY);
+    }
+
     public BigInteger getDefaultRestartUSec() {
         return properties.getBigInteger(Property.DEFAULT_RESTART_USEC);
     }
@@ -708,6 +715,10 @@ public class Manager extends InterfaceAdapter {
 
     public BigInteger getDefaultTasksMax() {
         return properties.getBigInteger(Property.DEFAULT_TASKS_MAX);
+    }
+
+    public BigInteger getDefaultTimeoutAbortUSec() {
+        return properties.getBigInteger(Property.DEFAULT_TIMEOUT_ABORT_USEC);
     }
 
     public BigInteger getDefaultTimeoutStartUSec() {
@@ -830,6 +841,10 @@ public class Manager extends InterfaceAdapter {
         return properties.getLong(Property.KERNEL_TIMESTAMP_MONOTONIC);
     }
 
+    public BigInteger getKExecWatchdogUSec() {
+        return properties.getBigInteger(Property.KEXEC_WATCHDOG_USEC);
+    }
+
     public long getLoaderTimestamp() {
         return properties.getLong(Property.LOADER_TIMESTAMP);
     }
@@ -868,6 +883,10 @@ public class Manager extends InterfaceAdapter {
 
     public double getProgress() {
         return properties.getDouble(Property.PROGRESS);
+    }
+
+    public BigInteger getRebootWatchdogUSec() {
+        return properties.getBigInteger(Property.REBOOT_WATCHDOG_USEC);
     }
 
     public BigInteger getRuntimeWatchdogUSec() {

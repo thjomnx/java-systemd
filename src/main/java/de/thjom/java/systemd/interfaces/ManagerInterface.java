@@ -11,20 +11,15 @@
 
 package de.thjom.java.systemd.interfaces;
 
-import java.util.List;
-
+import de.thjom.java.systemd.Signal;
+import de.thjom.java.systemd.types.*;
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.annotations.DBusMemberName;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.DBusInterface;
 
-import de.thjom.java.systemd.Signal;
-import de.thjom.java.systemd.types.UnitFileChange;
-import de.thjom.java.systemd.types.UnitFileInstallChange;
-import de.thjom.java.systemd.types.UnitFileType;
-import de.thjom.java.systemd.types.UnitProcessType;
-import de.thjom.java.systemd.types.UnitType;
+import java.util.List;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Manager.SERVICE_NAME)
 public interface ManagerInterface extends DBusInterface {
@@ -58,6 +53,9 @@ public interface ManagerInterface extends DBusInterface {
 
     @DBusMemberName(value = "GetDefaultTarget")
     String getDefaultTarget();
+
+    @DBusMemberName(value = "GetDynamicUsers")
+    List<DynamicUser> getDynamicUsers();
 
     @DBusMemberName(value = "GetUnitByPID")
     DBusPath getUnitByPID(int pid);
