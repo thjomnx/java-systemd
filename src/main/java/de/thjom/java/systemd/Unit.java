@@ -101,6 +101,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String BEFORE = "Before";
         public static final String BINDS_TO = "BindsTo";
         public static final String BOUND_BY = "BoundBy";
+        public static final String CAN_CLEAN = "CanClean";
+        public static final String CAN_FREEZE = "CanFreeze";
         public static final String CAN_ISOLATE = "CanIsolate";
         public static final String CAN_RELOAD = "CanReload";
         public static final String CAN_START = "CanStart";
@@ -121,6 +123,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String FAILURE_ACTION_EXIT_STATUS = "FailureActionExitStatus";
         public static final String FOLLOWING = "Following";
         public static final String FRAGMENT_PATH = "FragmentPath";
+        public static final String FREEZER_STATE = "FreezerState";
         public static final String ID = "Id";
         public static final String IGNORE_ON_ISOLATE = "IgnoreOnIsolate";
         public static final String INACTIVE_ENTER_TIMESTAMP = "InactiveEnterTimestamp";
@@ -425,6 +428,14 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getVector(Property.BOUND_BY);
     }
 
+    public Vector<String> isCanClean() {
+        return unitProperties.getVector(Property.CAN_CLEAN);
+    }
+
+    public boolean isCanFreeze() {
+        return unitProperties.getBoolean(Property.CAN_FREEZE);
+    }
+
     public boolean isCanIsolate() {
         return unitProperties.getBoolean(Property.CAN_ISOLATE);
     }
@@ -503,6 +514,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public String getFragmentPath() {
         return unitProperties.getString(Property.FRAGMENT_PATH);
+    }
+
+    public String getFreezerState() {
+        return unitProperties.getString(Property.FREEZER_STATE);
     }
 
     public String getId() {

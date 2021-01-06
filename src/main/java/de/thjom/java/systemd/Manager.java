@@ -11,18 +11,24 @@
 
 package de.thjom.java.systemd;
 
-import de.thjom.java.systemd.Unit.Mode;
-import de.thjom.java.systemd.Unit.Who;
-import de.thjom.java.systemd.interfaces.ManagerInterface;
-import de.thjom.java.systemd.types.*;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Vector;
+
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.Introspectable;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Vector;
+import de.thjom.java.systemd.Unit.Mode;
+import de.thjom.java.systemd.Unit.Who;
+import de.thjom.java.systemd.interfaces.ManagerInterface;
+import de.thjom.java.systemd.types.DynamicUser;
+import de.thjom.java.systemd.types.UnitFileChange;
+import de.thjom.java.systemd.types.UnitFileInstallChange;
+import de.thjom.java.systemd.types.UnitFileType;
+import de.thjom.java.systemd.types.UnitProcessType;
+import de.thjom.java.systemd.types.UnitType;
 
 public class Manager extends InterfaceAdapter {
 
