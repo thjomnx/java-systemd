@@ -77,6 +77,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String NON_BLOCKING = "NonBlocking";
         public static final String NOTIFY_ACCESS = "NotifyAccess";
         public static final String N_RESTARTS = "NRestarts";
+        public static final String OOM_POLICY = "OOMPolicy";
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PID_FILE = "PIDFile";
@@ -315,6 +316,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public long getNRestarts() {
         return properties.getLong(Property.N_RESTARTS);
+    }
+
+    public String getOOMPolicy() {
+        return properties.getString(Property.OOM_POLICY);
     }
 
     public int getOOMScoreAdjust() {
