@@ -46,6 +46,7 @@ public class ServiceTest extends UnitTest {
         setupPropertyMocks(Service.class, Service.SERVICE_NAME, Service.Property.getAllNames());
 
         nonVariantProperties.add(Service.Property.DEVICE_ALLOW);
+        nonVariantProperties.add(Service.Property.ENVIRONMENT);
         nonVariantProperties.add(Service.Property.ENVIRONMENT_FILES);
         nonVariantProperties.add(Service.Property.EXEC_RELOAD);
         nonVariantProperties.add(Service.Property.EXEC_START);
@@ -63,6 +64,7 @@ public class ServiceTest extends UnitTest {
         nonVariantProperties.add(DynamicUserAccounting.Property.BIND_READ_ONLY_PATHS);
         nonVariantProperties.add(DynamicUserAccounting.Property.LOG_EXTRA_FIELDS);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.ROOT_IMAGE_OPTIONS);
         nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
         nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
         nonVariantProperties.add(DynamicUserAccounting.Property.TEMPORARY_FILE_SYSTEM);

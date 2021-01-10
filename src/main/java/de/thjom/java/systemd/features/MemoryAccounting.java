@@ -12,7 +12,6 @@
 package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
-import java.util.Vector;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 
@@ -46,8 +45,8 @@ public interface MemoryAccounting extends Feature {
 
     }
 
-    default Vector<Byte> getAllowedMemoryNodes() {
-        return getProperties().getVector(Property.ALLOWED_MEMORY_NODES);
+    default byte[] getAllowedMemoryNodes() {
+        return (byte[]) getProperties().getVariant(Property.ALLOWED_MEMORY_NODES).getValue();
     }
 
     default BigInteger getDefaultMemoryLow() {
@@ -58,8 +57,8 @@ public interface MemoryAccounting extends Feature {
         return getProperties().getBigInteger(Property.DEFAULT_MEMORY_MIN);
     }
 
-    default Vector<Byte> getEffectiveMemoryNodes() {
-        return getProperties().getVector(Property.EFFECTIVE_MEMORY_NODES);
+    default byte[] getEffectiveMemoryNodes() {
+        return (byte[]) getProperties().getVariant(Property.EFFECTIVE_MEMORY_NODES).getValue();
     }
 
     default String getManagedOOMMemoryPressure() {

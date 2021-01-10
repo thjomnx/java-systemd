@@ -12,7 +12,6 @@
 package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
-import java.util.Vector;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 
@@ -41,8 +40,8 @@ public interface CpuAccounting extends Feature {
 
     }
 
-    default Vector<Byte> getAllowedCPUs() {
-        return getProperties().getVector(Property.ALLOWED_CPUS);
+    default byte[] getAllowedCPUs() {
+        return (byte[]) getProperties().getVariant(Property.ALLOWED_CPUS).getValue();
     }
 
     default boolean isCPUAccounting() {
@@ -69,8 +68,8 @@ public interface CpuAccounting extends Feature {
         return getProperties().getBigInteger(Property.CPU_WEIGHT);
     }
 
-    default Vector<Byte> getEffectiveCPUs() {
-        return getProperties().getVector(Property.EFFECTIVE_CPUS);
+    default byte[] getEffectiveCPUs() {
+        return (byte[]) getProperties().getVariant(Property.EFFECTIVE_CPUS).getValue();
     }
 
     default BigInteger getStartupCPUShares() {

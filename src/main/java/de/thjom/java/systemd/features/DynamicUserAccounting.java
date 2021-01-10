@@ -284,16 +284,16 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getBoolean(Property.RESTRICT_REALTIME);
     }
 
-    default Vector<Boolean> getRootHash() {
-        return getProperties().getVector(Property.ROOT_HASH);
+    default byte[] getRootHash() {
+        return (byte[]) getProperties().getVariant(Property.ROOT_HASH).getValue();
     }
 
     default String getRootHashPath() {
         return getProperties().getString(Property.ROOT_HASH_PATH);
     }
 
-    default Vector<Boolean> getRootHashSignature() {
-        return getProperties().getVector(Property.ROOT_HASH_SIGNATURE);
+    default byte[] getRootHashSignature() {
+        return (byte[]) getProperties().getVariant(Property.ROOT_HASH_SIGNATURE).getValue();
     }
 
     default String getRootHashSignaturePath() {

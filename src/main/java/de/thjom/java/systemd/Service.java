@@ -190,8 +190,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getString(Property.DEVICE_POLICY);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {

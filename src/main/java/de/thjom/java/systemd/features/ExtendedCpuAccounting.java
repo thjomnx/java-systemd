@@ -11,8 +11,6 @@
 
 package de.thjom.java.systemd.features;
 
-import java.util.Vector;
-
 import de.thjom.java.systemd.InterfaceAdapter;
 
 public interface ExtendedCpuAccounting extends CpuAccounting {
@@ -57,8 +55,8 @@ public interface ExtendedCpuAccounting extends CpuAccounting {
         return getProperties().getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
     }
 
-    default Vector<Byte> getNUMAMask() {
-        return getProperties().getVector(Property.NUMA_MASK);
+    default byte[] getNUMAMask() {
+        return (byte[]) getProperties().getVariant(Property.NUMA_MASK).getValue();
     }
 
     default int getNUMAPolicy() {

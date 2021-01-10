@@ -12,6 +12,7 @@
 package de.thjom.java.systemd;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Vector;
 
 import org.freedesktop.dbus.connections.impl.DBusConnection;
@@ -106,6 +107,11 @@ public class Properties extends InterfaceAdapter {
     @SuppressWarnings("unchecked")
     public <T> Vector<T> getVector(final String propertyName) {
         return (Vector<T>) getVariant(propertyName).getValue();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getList(final String propertyName) {
+        return (List<T>) getVariant(propertyName).getValue();
     }
 
 }

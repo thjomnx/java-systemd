@@ -1,10 +1,21 @@
-package de.thjom.java.systemd.types;
+/*
+ * Java-systemd implementation
+ * Copyright (c) 2016 Markus Enax
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of either the GNU Lesser General Public License Version 2 or the
+ * Academic Free Licence Version 3.0.
+ *
+ * Full licence texts are included in the COPYING file with this program.
+ */
 
-import org.freedesktop.dbus.types.UInt32;
+package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import org.freedesktop.dbus.types.UInt32;
 
 public class DynamicUser {
 
