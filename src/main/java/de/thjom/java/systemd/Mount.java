@@ -66,6 +66,7 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         public static final String OPTIONS = "Options";
         public static final String PAMNAME = "PAMName";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_ONLY = "ReadWriteOnly";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -247,6 +248,10 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
 
     public Vector<String> getReadOnlyPaths() {
         return properties.getVector(Property.READ_ONLY_PATHS);
+    }
+
+    public boolean getReadWriteOnly() {
+        return properties.getBoolean(Property.READ_WRITE_ONLY);
     }
 
     public Vector<String> getReadWritePaths() {

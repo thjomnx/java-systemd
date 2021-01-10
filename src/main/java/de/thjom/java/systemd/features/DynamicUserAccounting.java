@@ -20,6 +20,7 @@ import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.BindPath;
 import de.thjom.java.systemd.types.FileSystemInfo;
+import de.thjom.java.systemd.types.RootImageOptions;
 import de.thjom.java.systemd.types.SELinuxContext;
 import de.thjom.java.systemd.types.SmackProcessLabel;
 
@@ -55,16 +56,27 @@ public interface DynamicUserAccounting extends Feature {
         public static final String PRIVATE_NETWORK = "PrivateNetwork";
         public static final String PRIVATE_TMP = "PrivateTmp";
         public static final String PRIVATE_USERS = "PrivateUsers";
+        public static final String PROC_SUBSET = "ProcSubset";
+        public static final String PROTECT_CLOCK = "ProtectClock";
         public static final String PROTECT_CONTROL_GROUPS = "ProtectControlGroups";
         public static final String PROTECT_HOME = "ProtectHome";
+        public static final String PROTECT_HOSTNAME = "ProtectHostname";
+        public static final String PROTECT_KERNEL_LOGS = "ProtectKernelLogs";
         public static final String PROTECT_KERNEL_MODULES = "ProtectKernelModules";
         public static final String PROTECT_KERNEL_TUNABLES = "ProtectKernelTunables";
+        public static final String PROTECT_PROC = "ProtectProc";
         public static final String PROTECT_SYSTEM = "ProtectSystem";
         public static final String REMOVE_IPC = "RemoveIPC";
         public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESTRICT_NAMESPACES = "RestrictNamespaces";
         public static final String RESTRICT_REALTIME = "RestrictRealtime";
+        public static final String ROOT_HASH = "RootHash";
+        public static final String ROOT_HASH_PATH = "RootHashPath";
+        public static final String ROOT_HASH_SIGNATURE = "RootHashSignature";
+        public static final String ROOT_HASH_SIGNATURE_PATH = "RootHashSignaturePath";
         public static final String ROOT_IMAGE = "RootImage";
+        public static final String ROOT_IMAGE_OPTIONS = "RootImageOptions";
+        public static final String ROOT_VERITY = "RootVerity";
         public static final String RUNTIME_DIRECTORY = "RuntimeDirectory";
         public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String RUNTIME_DIRECTORY_PRESERVE = "RuntimeDirectoryPreserve";
@@ -214,6 +226,14 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getBoolean(Property.PRIVATE_USERS);
     }
 
+    default String getProcSubset() {
+        return getProperties().getString(Property.PROC_SUBSET);
+    }
+
+    default boolean isProtectClock() {
+        return getProperties().getBoolean(Property.PROTECT_CLOCK);
+    }
+
     default boolean isProtectControlGroups() {
         return getProperties().getBoolean(Property.PROTECT_CONTROL_GROUPS);
     }
@@ -222,12 +242,24 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getString(Property.PROTECT_HOME);
     }
 
+    default boolean isProtectHostname() {
+        return getProperties().getBoolean(Property.PROTECT_HOSTNAME);
+    }
+
+    default boolean isProtectKernelLogs() {
+        return getProperties().getBoolean(Property.PROTECT_KERNEL_LOGS);
+    }
+
     default boolean isProtectKernelModules() {
         return getProperties().getBoolean(Property.PROTECT_KERNEL_MODULES);
     }
 
     default boolean isProtectKernelTunables() {
         return getProperties().getBoolean(Property.PROTECT_KERNEL_TUNABLES);
+    }
+
+    default String getProtectProc() {
+        return getProperties().getString(Property.PROTECT_PROC);
     }
 
     default String getProtectSystem() {
@@ -252,8 +284,32 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getBoolean(Property.RESTRICT_REALTIME);
     }
 
+    default Vector<Boolean> getRootHash() {
+        return getProperties().getVector(Property.ROOT_HASH);
+    }
+
+    default String getRootHashPath() {
+        return getProperties().getString(Property.ROOT_HASH_PATH);
+    }
+
+    default Vector<Boolean> getRootHashSignature() {
+        return getProperties().getVector(Property.ROOT_HASH_SIGNATURE);
+    }
+
+    default String getRootHashSignaturePath() {
+        return getProperties().getString(Property.ROOT_HASH_SIGNATURE_PATH);
+    }
+
     default String getRootImage() {
         return getProperties().getString(Property.ROOT_IMAGE);
+    }
+
+    default List<RootImageOptions> getRootImageOptions() {
+        return RootImageOptions.list(getProperties().getVector(Property.ROOT_IMAGE_OPTIONS));
+    }
+
+    default String getRootVerity() {
+        return getProperties().getString(Property.ROOT_VERITY);
     }
 
     default Vector<String> getRuntimeDirectory() {
