@@ -20,9 +20,13 @@ import de.thjom.java.systemd.types.AddressFamilyRestriction;
 import de.thjom.java.systemd.types.AppArmorProfile;
 import de.thjom.java.systemd.types.BindPath;
 import de.thjom.java.systemd.types.FileSystemInfo;
-import de.thjom.java.systemd.types.RootImageOptions;
+import de.thjom.java.systemd.types.ImageOptions;
+import de.thjom.java.systemd.types.LoadCredential;
+import de.thjom.java.systemd.types.MountImage;
 import de.thjom.java.systemd.types.SELinuxContext;
+import de.thjom.java.systemd.types.SetCredential;
 import de.thjom.java.systemd.types.SmackProcessLabel;
+import de.thjom.java.systemd.types.SystemCallLog;
 
 public interface DynamicUserAccounting extends Feature {
 
@@ -37,18 +41,23 @@ public interface DynamicUserAccounting extends Feature {
         public static final String CONFIGURATION_DIRECTORY = "ConfigurationDirectory";
         public static final String CONFIGURATION_DIRECTORY_MODE = "ConfigurationDirectoryMode";
         public static final String CONTROL_GROUP = "ControlGroup";
+        public static final String COREDUMP_FILTER = "CoredumpFilter";
         public static final String DYNAMIC_USER = "DynamicUser";
         public static final String GID = "GID";
         public static final String GROUP = "Group";
         public static final String KEYRING_MODE = "KeyringMode";
+        public static final String LOAD_CREDENTIAL = "LoadCredential";
         public static final String LOCK_PERSONALITY = "LockPersonality";
         public static final String LOG_EXTRA_FIELDS = "LogExtraFields";
         public static final String LOG_LEVEL_MAX = "LogLevelMax";
+        public static final String LOG_NAMESPACE = "LogNamespace";
         public static final String LOG_RATE_LIMIT_BURST = "LogRateLimitBurst";
         public static final String LOG_RATE_LIMIT_INTERVAL_USEC = "LogRateLimitIntervalUSec";
         public static final String LOGS_DIRECTORY = "LogsDirectory";
         public static final String LOGS_DIRECTORY_MODE = "LogsDirectoryMode";
         public static final String MOUNT_APIVFS = "MountAPIVFS";
+        public static final String MOUNT_IMAGES = "MountImages";
+        public static final String NETWORK_NAMESPACE_PATH = "NetworkNamespacePath";
         public static final String PASS_ENVIRONMENT = "PassEnvironment";
         public static final String PERSONALITY = "Personality";
         public static final String PRIVATE_DEVICES = "PrivateDevices";
@@ -70,6 +79,7 @@ public interface DynamicUserAccounting extends Feature {
         public static final String RESTRICT_ADDRESS_FAMILIES = "RestrictAddressFamilies";
         public static final String RESTRICT_NAMESPACES = "RestrictNamespaces";
         public static final String RESTRICT_REALTIME = "RestrictRealtime";
+        public static final String RESTRICT_SUID_SGID = "RestrictSUIDSGID";
         public static final String ROOT_HASH = "RootHash";
         public static final String ROOT_HASH_PATH = "RootHashPath";
         public static final String ROOT_HASH_SIGNATURE = "RootHashSignature";
@@ -81,6 +91,7 @@ public interface DynamicUserAccounting extends Feature {
         public static final String RUNTIME_DIRECTORY_MODE = "RuntimeDirectoryMode";
         public static final String RUNTIME_DIRECTORY_PRESERVE = "RuntimeDirectoryPreserve";
         public static final String SELINUX_CONTEXT = "SELinuxContext";
+        public static final String SET_CREDENTIAL = "SetCredential";
         public static final String SMACK_PROCESS_LABEL = "SmackProcessLabel";
         public static final String STANDARD_ERROR = "StandardError";
         public static final String STANDARD_ERROR_FILE_DESCRIPTOR_NAME = "StandardErrorFileDescriptorName";
@@ -95,7 +106,9 @@ public interface DynamicUserAccounting extends Feature {
         public static final String SYSLOG_LEVEL = "SyslogLevel";
         public static final String SYSTEM_CALL_ARCHITECTURES = "SystemCallArchitectures";
         public static final String SYSTEM_CALL_ERROR_NUMBER = "SystemCallErrorNumber";
+        public static final String SYSTEM_CALL_LOG = "SystemCallLog";
         public static final String TEMPORARY_FILE_SYSTEM = "TemporaryFileSystem";
+        public static final String TIMEOUT_CLEAN_USEC = "TimeoutCleanUSec";
         public static final String UID = "UID";
         public static final String UNSET_ENVIRONMENT = "UnsetEnvironment";
         public static final String USER = "User";
@@ -150,6 +163,10 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getString(Property.CONTROL_GROUP);
     }
 
+    default BigInteger getCoredumpFilter() {
+        return getProperties().getBigInteger(Property.COREDUMP_FILTER);
+    }
+
     default boolean isDynamicUser() {
         return getProperties().getBoolean(Property.DYNAMIC_USER);
     }
@@ -166,6 +183,10 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getString(Property.KEYRING_MODE);
     }
 
+    default List<LoadCredential> getLoadCredential() {
+        return LoadCredential.list(getProperties().getVector(Property.LOAD_CREDENTIAL));
+    }
+
     default boolean isLockPersonality() {
         return getProperties().getBoolean(Property.LOCK_PERSONALITY);
     }
@@ -176,6 +197,10 @@ public interface DynamicUserAccounting extends Feature {
 
     default int getLogLevelMax() {
         return getProperties().getInteger(Property.LOG_LEVEL_MAX);
+    }
+
+    default String getLogNamespace() {
+        return getProperties().getString(Property.LOG_NAMESPACE);
     }
 
     default long getLogRateLimitBurst() {
@@ -196,6 +221,14 @@ public interface DynamicUserAccounting extends Feature {
 
     default boolean isMountAPIVFS() {
         return getProperties().getBoolean(Property.MOUNT_APIVFS);
+    }
+
+    default List<MountImage> getMountImages() {
+        return MountImage.list(getProperties().getVector(Property.MOUNT_IMAGES));
+    }
+
+    default String getNetworkNamespacePath() {
+        return getProperties().getString(Property.NETWORK_NAMESPACE_PATH);
     }
 
     default Vector<String> getPassEnvironment() {
@@ -284,6 +317,10 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getBoolean(Property.RESTRICT_REALTIME);
     }
 
+    default boolean isRestrictSUIDSGID() {
+        return getProperties().getBoolean(Property.RESTRICT_SUID_SGID);
+    }
+
     default byte[] getRootHash() {
         return (byte[]) getProperties().getVariant(Property.ROOT_HASH).getValue();
     }
@@ -304,8 +341,8 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getString(Property.ROOT_IMAGE);
     }
 
-    default List<RootImageOptions> getRootImageOptions() {
-        return RootImageOptions.list(getProperties().getVector(Property.ROOT_IMAGE_OPTIONS));
+    default List<ImageOptions> getRootImageOptions() {
+        return ImageOptions.list(getProperties().getVector(Property.ROOT_IMAGE_OPTIONS));
     }
 
     default String getRootVerity() {
@@ -328,6 +365,10 @@ public interface DynamicUserAccounting extends Feature {
         Object[] array = (Object[]) getProperties().getVariant(Property.SELINUX_CONTEXT).getValue();
 
         return new SELinuxContext(array);
+    }
+
+    default List<SetCredential> getSetCredential() {
+        return SetCredential.list(getProperties().getVector(Property.SET_CREDENTIAL));
     }
 
     default SmackProcessLabel getSmackProcessLabel() {
@@ -388,8 +429,18 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getInteger(Property.SYSTEM_CALL_ERROR_NUMBER);
     }
 
+    default SystemCallLog getSystemCallLog() {
+        Object[] array = (Object[]) getProperties().getVariant(Property.SYSTEM_CALL_LOG).getValue();
+
+        return new SystemCallLog(array);
+    }
+
     default List<FileSystemInfo> getTemporaryFileSystem() {
         return FileSystemInfo.list(getProperties().getVector(Property.TEMPORARY_FILE_SYSTEM));
+    }
+
+    default BigInteger getTimeoutCleanUSec() {
+        return getProperties().getBigInteger(Property.TIMEOUT_CLEAN_USEC);
     }
 
     default int getUID() {

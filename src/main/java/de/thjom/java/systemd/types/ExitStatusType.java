@@ -16,7 +16,6 @@ import java.util.List;
 public class ExitStatusType {
 
     private final List<Integer> customSignals;
-
     private final List<Integer> commonSignals;
 
     @SuppressWarnings("unchecked")

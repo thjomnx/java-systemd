@@ -65,6 +65,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String PRIORITY = "Priority";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -234,6 +235,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public Vector<String> getReadWritePaths() {
         return properties.getVector(Property.READ_WRITE_PATHS);
+    }
+
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
     }
 
     public String getResult() {

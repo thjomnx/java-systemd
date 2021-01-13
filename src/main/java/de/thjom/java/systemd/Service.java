@@ -30,6 +30,7 @@ import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.EnvironmentFile;
 import de.thjom.java.systemd.types.ExecutionInfo;
 import de.thjom.java.systemd.types.ExitStatusType;
+import de.thjom.java.systemd.types.ExtendedExecutionInfo;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
@@ -42,11 +43,14 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
         public static final String BUS_NAME = "BusName";
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
+        public static final String CLEAN_RESULT = "CleanResult";
         public static final String CONTROL_PID = "ControlPID";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String ENVIRONMENT = "Environment";
         public static final String ENVIRONMENT_FILES = "EnvironmentFiles";
+        public static final String EXEC_CONDITION = "ExecCondition";
+        public static final String EXEC_CONDITION_EX = "ExecConditionEx";
         public static final String EXEC_MAIN_CODE = "ExecMainCode";
         public static final String EXEC_MAIN_EXIT_TIMESTAMP = "ExecMainExitTimestamp";
         public static final String EXEC_MAIN_EXIT_TIMESTAMP_MONOTONIC = "ExecMainExitTimestampMonotonic";
@@ -55,11 +59,17 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String EXEC_MAIN_START_TIMESTAMP_MONOTONIC = "ExecMainStartTimestampMonotonic";
         public static final String EXEC_MAIN_STATUS = "ExecMainStatus";
         public static final String EXEC_RELOAD = "ExecReload";
+        public static final String EXEC_RELOAD_EX = "ExecReloadEx";
         public static final String EXEC_START = "ExecStart";
+        public static final String EXEC_START_EX = "ExecStartEx";
         public static final String EXEC_START_POST = "ExecStartPost";
+        public static final String EXEC_START_POST_EX = "ExecStartPostEx";
         public static final String EXEC_START_PRE = "ExecStartPre";
+        public static final String EXEC_START_PRE_EX = "ExecStartPreEx";
         public static final String EXEC_STOP = "ExecStop";
+        public static final String EXEC_STOP_EX = "ExecStopEx";
         public static final String EXEC_STOP_POST = "ExecStopPost";
+        public static final String EXEC_STOP_POST_EX = "ExecStopPostEx";
         public static final String FILE_DESCRIPTOR_STORE_MAX = "FileDescriptorStoreMax";
         public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String GUESS_MAIN_PID = "GuessMainPID";
@@ -83,9 +93,11 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String PID_FILE = "PIDFile";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
+        public static final String RELOAD_RESULT = "ReloadResult";
         public static final String REMAIN_AFTER_EXIT = "RemainAfterExit";
         public static final String RESTART = "Restart";
         public static final String RESTART_FORCE_EXIT_STATUS = "RestartForceExitStatus";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESTART_PREVENT_EXIT_STATUS = "RestartPreventExitStatus";
         public static final String RESTART_USEC = "RestartUSec";
         public static final String RESULT = "Result";
@@ -109,7 +121,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         public static final String TTY_RESET = "TTYReset";
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
+        public static final String TIMEOUT_ABORT_USEC = "TimeoutAbortUSec";
+        public static final String TIMEOUT_START_FAILURE_MODE = "TimeoutStartFailureMode";
         public static final String TIMEOUT_START_USEC = "TimeoutStartUSec";
+        public static final String TIMEOUT_STOP_FAILURE_MODE = "TimeoutStopFailureMode";
         public static final String TIMEOUT_STOP_USEC = "TimeoutStopUSec";
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
         public static final String TYPE = "Type";
@@ -178,6 +193,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
 
+    public String getCleanResult() {
+        return properties.getString(Property.CLEAN_RESULT);
+    }
+
     public long getControlPID() {
         return properties.getLong(Property.CONTROL_PID);
     }
@@ -196,6 +215,14 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public List<EnvironmentFile> getEnvironmentFiles() {
         return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+    }
+
+    public List<ExecutionInfo> getExecCondition() {
+        return ExecutionInfo.list(properties.getVector(Property.EXEC_CONDITION));
+    }
+
+    public List<ExtendedExecutionInfo> getExecConditionEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_CONDITION_EX));
     }
 
     public int getExecMainCode() {
@@ -230,24 +257,48 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return ExecutionInfo.list(properties.getVector(Property.EXEC_RELOAD));
     }
 
+    public List<ExtendedExecutionInfo> getExecReloadEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_RELOAD_EX));
+    }
+
     public List<ExecutionInfo> getExecStart() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_START));
+    }
+
+    public List<ExtendedExecutionInfo> getExecStartEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_START_EX));
     }
 
     public List<ExecutionInfo> getExecStartPost() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_START_POST));
     }
 
+    public List<ExtendedExecutionInfo> getExecStartPostEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_START_POST_EX));
+    }
+
     public List<ExecutionInfo> getExecStartPre() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_START_PRE));
+    }
+
+    public List<ExtendedExecutionInfo> getExecStartPreEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_START_PRE_EX));
     }
 
     public List<ExecutionInfo> getExecStop() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP));
     }
 
+    public List<ExtendedExecutionInfo> getExecStopEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_STOP_EX));
+    }
+
     public List<ExecutionInfo> getExecStopPost() {
         return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
+    }
+
+    public List<ExtendedExecutionInfo> getExecStopPostEx() {
+        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST_EX));
     }
 
     public long getFileDescriptorStoreMax() {
@@ -342,6 +393,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getVector(Property.READ_WRITE_PATHS);
     }
 
+    public String getReloadResult() {
+        return properties.getString(Property.RELOAD_RESULT);
+    }
+
     public boolean isRemainAfterExit() {
         return properties.getBoolean(Property.REMAIN_AFTER_EXIT);
     }
@@ -352,6 +407,10 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
 
     public ExitStatusType getRestartForceExitStatus() {
         return ExitStatusType.of((Object[]) properties.getVariant(Property.RESTART_FORCE_EXIT_STATUS).getValue());
+    }
+
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
     }
 
     public ExitStatusType getRestartPreventExitStatus() {
@@ -448,8 +507,20 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getBoolean(Property.TTY_VT_DISALLOCATE);
     }
 
+    public BigInteger getTimeoutAbortUSec() {
+        return properties.getBigInteger(Property.TIMEOUT_ABORT_USEC);
+    }
+
+    public String getTimeoutStartFailureMode() {
+        return properties.getString(Property.TIMEOUT_START_FAILURE_MODE);
+    }
+
     public BigInteger getTimeoutStartUSec() {
         return properties.getBigInteger(Property.TIMEOUT_START_USEC);
+    }
+
+    public String getTimeoutStopFailureMode() {
+        return properties.getString(Property.TIMEOUT_STOP_FAILURE_MODE);
     }
 
     public BigInteger getTimeoutStopUSec() {
