@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 public class LoadCredential {
 
@@ -25,10 +25,10 @@ public class LoadCredential {
         this.source = String.valueOf(array[1]);
     }
 
-    public static List<LoadCredential> list(final Vector<Object[]> vector) {
-        List<LoadCredential> infos = new ArrayList<>(vector.size());
+    public static List<LoadCredential> list(final Collection<Object[]> arrays) {
+        List<LoadCredential> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             LoadCredential info = new LoadCredential(array);
 
             infos.add(info);

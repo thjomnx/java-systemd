@@ -16,7 +16,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt32;
 
@@ -41,10 +40,10 @@ public class IpAddressPolicy {
         this.prefix = ((UInt32) array[2]).longValue();
     }
 
-    public static List<IpAddressPolicy> list(final Vector<Object[]> vector) {
-        List<IpAddressPolicy> policies = new ArrayList<>(vector.size());
+    public static List<IpAddressPolicy> list(final List<Object[]> arrays) {
+        List<IpAddressPolicy> policies = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             IpAddressPolicy policy = new IpAddressPolicy(array);
 
             policies.add(policy);

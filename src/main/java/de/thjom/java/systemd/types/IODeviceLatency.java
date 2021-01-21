@@ -13,8 +13,8 @@ package de.thjom.java.systemd.types;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt64;
 
@@ -28,10 +28,10 @@ public class IODeviceLatency extends IOPath {
         this.targetUsec = ((UInt64) array[1]).value();
     }
 
-    public static List<IODeviceLatency> list(final Vector<Object[]> vector) {
-        List<IODeviceLatency> targetUsecs = new ArrayList<>(vector.size());
+    public static List<IODeviceLatency> list(final Collection<Object[]> arrays) {
+        List<IODeviceLatency> targetUsecs = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             IODeviceLatency targetUsec = new IODeviceLatency(array);
 
             targetUsecs.add(targetUsec);

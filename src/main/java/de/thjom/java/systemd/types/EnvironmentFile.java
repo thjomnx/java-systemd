@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 public class EnvironmentFile {
 
@@ -25,10 +25,10 @@ public class EnvironmentFile {
         this.prefixed = (boolean) array[1];
     }
 
-    public static List<EnvironmentFile> list(final Vector<Object[]> vector) {
-        List<EnvironmentFile> envFiles = new ArrayList<>(vector.size());
+    public static List<EnvironmentFile> list(final Collection<Object[]> arrays) {
+        List<EnvironmentFile> envFiles = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             EnvironmentFile envFile = new EnvironmentFile(array);
 
             envFiles.add(envFile);

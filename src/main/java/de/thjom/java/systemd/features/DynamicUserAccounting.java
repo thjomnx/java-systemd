@@ -13,7 +13,6 @@ package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 import de.thjom.java.systemd.types.AddressFamilyRestriction;
@@ -136,23 +135,23 @@ public interface DynamicUserAccounting extends Feature {
     }
 
     default List<BindPath> getBindPaths() {
-        return BindPath.list(getProperties().getVector(Property.BIND_PATHS));
+        return BindPath.list(getProperties().getList(Property.BIND_PATHS));
     }
 
     default List<BindPath> getBindReadOnlyPaths() {
-        return BindPath.list(getProperties().getVector(Property.BIND_READ_ONLY_PATHS));
+        return BindPath.list(getProperties().getList(Property.BIND_READ_ONLY_PATHS));
     }
 
-    default Vector<String> getCacheDirectory() {
-        return getProperties().getVector(Property.CACHE_DIRECTORY);
+    default List<String> getCacheDirectory() {
+        return getProperties().getList(Property.CACHE_DIRECTORY);
     }
 
     default long getCacheDirectoryMode() {
         return getProperties().getLong(Property.CACHE_DIRECTORY_MODE);
     }
 
-    default Vector<String> getConfigurationDirectory() {
-        return getProperties().getVector(Property.CONFIGURATION_DIRECTORY);
+    default List<String> getConfigurationDirectory() {
+        return getProperties().getList(Property.CONFIGURATION_DIRECTORY);
     }
 
     default long getConfigurationDirectoryMode() {
@@ -184,15 +183,15 @@ public interface DynamicUserAccounting extends Feature {
     }
 
     default List<LoadCredential> getLoadCredential() {
-        return LoadCredential.list(getProperties().getVector(Property.LOAD_CREDENTIAL));
+        return LoadCredential.list(getProperties().getList(Property.LOAD_CREDENTIAL));
     }
 
     default boolean isLockPersonality() {
         return getProperties().getBoolean(Property.LOCK_PERSONALITY);
     }
 
-    default Vector<byte[]> getLogExtraFields() {
-        return getProperties().getVector(Property.LOG_EXTRA_FIELDS);
+    default List<byte[]> getLogExtraFields() {
+        return getProperties().getList(Property.LOG_EXTRA_FIELDS);
     }
 
     default int getLogLevelMax() {
@@ -211,8 +210,8 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getBigInteger(Property.LOG_RATE_LIMIT_INTERVAL_USEC);
     }
 
-    default Vector<String> getLogsDirectory() {
-        return getProperties().getVector(Property.LOGS_DIRECTORY);
+    default List<String> getLogsDirectory() {
+        return getProperties().getList(Property.LOGS_DIRECTORY);
     }
 
     default long getLogsDirectoryMode() {
@@ -224,15 +223,15 @@ public interface DynamicUserAccounting extends Feature {
     }
 
     default List<MountImage> getMountImages() {
-        return MountImage.list(getProperties().getVector(Property.MOUNT_IMAGES));
+        return MountImage.list(getProperties().getList(Property.MOUNT_IMAGES));
     }
 
     default String getNetworkNamespacePath() {
         return getProperties().getString(Property.NETWORK_NAMESPACE_PATH);
     }
 
-    default Vector<String> getPassEnvironment() {
-        return getProperties().getVector(Property.PASS_ENVIRONMENT);
+    default List<String> getPassEnvironment() {
+        return getProperties().getList(Property.PASS_ENVIRONMENT);
     }
 
     default String getPersonality() {
@@ -342,15 +341,15 @@ public interface DynamicUserAccounting extends Feature {
     }
 
     default List<ImageOptions> getRootImageOptions() {
-        return ImageOptions.list(getProperties().getVector(Property.ROOT_IMAGE_OPTIONS));
+        return ImageOptions.list(getProperties().getList(Property.ROOT_IMAGE_OPTIONS));
     }
 
     default String getRootVerity() {
         return getProperties().getString(Property.ROOT_VERITY);
     }
 
-    default Vector<String> getRuntimeDirectory() {
-        return getProperties().getVector(Property.RUNTIME_DIRECTORY);
+    default List<String> getRuntimeDirectory() {
+        return getProperties().getList(Property.RUNTIME_DIRECTORY);
     }
 
     default long getRuntimeDirectoryMode() {
@@ -368,7 +367,7 @@ public interface DynamicUserAccounting extends Feature {
     }
 
     default List<SetCredential> getSetCredential() {
-        return SetCredential.list(getProperties().getVector(Property.SET_CREDENTIAL));
+        return SetCredential.list(getProperties().getList(Property.SET_CREDENTIAL));
     }
 
     default SmackProcessLabel getSmackProcessLabel() {
@@ -405,8 +404,8 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getString(Property.STANDARD_OUTPUT_FILE_DESCRIPTOR_NAME);
     }
 
-    default Vector<String> getStateDirectory() {
-        return getProperties().getVector(Property.STATE_DIRECTORY);
+    default List<String> getStateDirectory() {
+        return getProperties().getList(Property.STATE_DIRECTORY);
     }
 
     default long getStateDirectoryMode() {
@@ -421,8 +420,8 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getInteger(Property.SYSLOG_LEVEL);
     }
 
-    default Vector<String> getSystemCallArchitectures() {
-        return getProperties().getVector(Property.SYSTEM_CALL_ARCHITECTURES);
+    default List<String> getSystemCallArchitectures() {
+        return getProperties().getList(Property.SYSTEM_CALL_ARCHITECTURES);
     }
 
     default int getSystemCallErrorNumber() {
@@ -436,7 +435,7 @@ public interface DynamicUserAccounting extends Feature {
     }
 
     default List<FileSystemInfo> getTemporaryFileSystem() {
-        return FileSystemInfo.list(getProperties().getVector(Property.TEMPORARY_FILE_SYSTEM));
+        return FileSystemInfo.list(getProperties().getList(Property.TEMPORARY_FILE_SYSTEM));
     }
 
     default BigInteger getTimeoutCleanUSec() {
@@ -447,8 +446,8 @@ public interface DynamicUserAccounting extends Feature {
         return getProperties().getInteger(Property.UID);
     }
 
-    default Vector<String> getUnsetEnvironment() {
-        return getProperties().getVector(Property.UNSET_ENVIRONMENT);
+    default List<String> getUnsetEnvironment() {
+        return getProperties().getList(Property.UNSET_ENVIRONMENT);
     }
 
     default String getUser() {

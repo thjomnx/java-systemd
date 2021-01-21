@@ -13,7 +13,6 @@ package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 import de.thjom.java.systemd.types.IOBandwidth;
@@ -62,11 +61,11 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(getProperties().getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+        return IODeviceWeight.list(getProperties().getList(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
     default List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(getProperties().getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+        return IOBandwidth.list(getProperties().getList(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     default BigInteger getBlockIOWeight() {
@@ -74,7 +73,7 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(getProperties().getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
+        return IOBandwidth.list(getProperties().getList(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     default boolean isIOAccounting() {
@@ -82,15 +81,15 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IODeviceLatency> getIODeviceLatencyTargetUSec() {
-        return IODeviceLatency.list(getProperties().getVector(Property.IO_DEVICE_LATENCY_TARGET_USEC));
+        return IODeviceLatency.list(getProperties().getList(Property.IO_DEVICE_LATENCY_TARGET_USEC));
     }
 
     default List<IODeviceWeight> getIODeviceWeight() {
-        return IODeviceWeight.list(getProperties().getVector(Property.IO_DEVICE_WEIGHT));
+        return IODeviceWeight.list(getProperties().getList(Property.IO_DEVICE_WEIGHT));
     }
 
     default List<IOBandwidth> getIOReadBandwidthMax() {
-        return IOBandwidth.list(getProperties().getVector(Property.IO_READ_BANDWIDTH_MAX));
+        return IOBandwidth.list(getProperties().getList(Property.IO_READ_BANDWIDTH_MAX));
     }
 
     default BigInteger getIOReadBytes() {
@@ -98,7 +97,7 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IOIops> getIOReadIOPSMax() {
-        return IOIops.list(getProperties().getVector(Property.IO_READ_IOPS_MAX));
+        return IOIops.list(getProperties().getList(Property.IO_READ_IOPS_MAX));
     }
 
     default BigInteger getIOReadOperations() {
@@ -110,7 +109,7 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IOBandwidth> getIOWriteBandwidthMax() {
-        return IOBandwidth.list(getProperties().getVector(Property.IO_WRITE_BANDWIDTH_MAX));
+        return IOBandwidth.list(getProperties().getList(Property.IO_WRITE_BANDWIDTH_MAX));
     }
 
     default BigInteger getIOWriteBytes() {
@@ -118,19 +117,19 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IOIops> getIOWriteIOPSMax() {
-        return IOIops.list(getProperties().getVector(Property.IO_WRITE_IOPS_MAX));
+        return IOIops.list(getProperties().getList(Property.IO_WRITE_IOPS_MAX));
     }
 
     default BigInteger getIOWriteOperations() {
         return getProperties().getBigInteger(Property.IO_WRITE_OPERATIONS);
     }
 
-    default Vector<String> getIPEgressFilterPath() {
-        return getProperties().getVector(Property.IP_EGRESS_FILTER_PATH);
+    default List<String> getIPEgressFilterPath() {
+        return getProperties().getList(Property.IP_EGRESS_FILTER_PATH);
     }
 
-    default Vector<String> getIPIngressFilterPath() {
-        return getProperties().getVector(Property.IP_INGRESS_FILTER_PATH);
+    default List<String> getIPIngressFilterPath() {
+        return getProperties().getList(Property.IP_INGRESS_FILTER_PATH);
     }
 
     default BigInteger getStartupBlockIOWeight() {

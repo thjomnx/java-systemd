@@ -11,7 +11,7 @@
 
 package de.thjom.java.systemd.features;
 
-import java.util.Vector;
+import java.util.List;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 
@@ -37,12 +37,12 @@ public interface ResourceControl extends Feature {
         return getProperties().getBoolean(Property.DELEGATE);
     }
 
-    default Vector<String> getDelegateControllers() {
-        return getProperties().getVector(Property.DELEGATE_CONTROLLERS);
+    default List<String> getDelegateControllers() {
+        return getProperties().getList(Property.DELEGATE_CONTROLLERS);
     }
 
-    default Vector<String> getDisableControllers() {
-        return getProperties().getVector(Property.DISABLE_CONTROLLERS);
+    default List<String> getDisableControllers() {
+        return getProperties().getList(Property.DISABLE_CONTROLLERS);
     }
 
 }

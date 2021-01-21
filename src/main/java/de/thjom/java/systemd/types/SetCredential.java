@@ -14,7 +14,6 @@ package de.thjom.java.systemd.types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 public class SetCredential {
 
@@ -35,10 +34,10 @@ public class SetCredential {
         this.data = bytes;
     }
 
-    public static List<SetCredential> list(final Vector<Object[]> vector) {
-        List<SetCredential> infos = new ArrayList<>(vector.size());
+    public static List<SetCredential> list(final List<Object[]> arrays) {
+        List<SetCredential> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             SetCredential info = new SetCredential(array);
 
             infos.add(info);

@@ -18,7 +18,6 @@ import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -392,8 +391,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.ACTIVE_STATE);
     }
 
-    public Vector<String> getAfter() {
-        return unitProperties.getVector(Property.AFTER);
+    public List<String> getAfter() {
+        return unitProperties.getList(Property.AFTER);
     }
 
     public boolean isAllowIsolate() {
@@ -413,23 +412,23 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     public List<Condition> getAsserts() {
-        return Condition.list(unitProperties.getVector(Property.ASSERTS));
+        return Condition.list(unitProperties.getList(Property.ASSERTS));
     }
 
-    public Vector<String> getBefore() {
-        return unitProperties.getVector(Property.BEFORE);
+    public List<String> getBefore() {
+        return unitProperties.getList(Property.BEFORE);
     }
 
-    public Vector<String> getBindsTo() {
-        return unitProperties.getVector(Property.BINDS_TO);
+    public List<String> getBindsTo() {
+        return unitProperties.getList(Property.BINDS_TO);
     }
 
-    public Vector<String> getBoundBy() {
-        return unitProperties.getVector(Property.BOUND_BY);
+    public List<String> getBoundBy() {
+        return unitProperties.getList(Property.BOUND_BY);
     }
 
-    public Vector<String> isCanClean() {
-        return unitProperties.getVector(Property.CAN_CLEAN);
+    public List<String> isCanClean() {
+        return unitProperties.getList(Property.CAN_CLEAN);
     }
 
     public boolean isCanFreeze() {
@@ -469,19 +468,19 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     public List<Condition> getConditions() {
-        return Condition.list(unitProperties.getVector(Property.CONDITIONS));
+        return Condition.list(unitProperties.getList(Property.CONDITIONS));
     }
 
-    public Vector<String> getConflictedBy() {
-        return unitProperties.getVector(Property.CONFLICTED_BY);
+    public List<String> getConflictedBy() {
+        return unitProperties.getList(Property.CONFLICTED_BY);
     }
 
-    public Vector<String> getConflicts() {
-        return unitProperties.getVector(Property.CONFLICTS);
+    public List<String> getConflicts() {
+        return unitProperties.getList(Property.CONFLICTS);
     }
 
-    public Vector<String> getConsistsOf() {
-        return unitProperties.getVector(Property.CONSISTS_OF);
+    public List<String> getConsistsOf() {
+        return unitProperties.getList(Property.CONSISTS_OF);
     }
 
     public boolean isDefaultDependencies() {
@@ -492,12 +491,12 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.DESCRIPTION);
     }
 
-    public Vector<String> getDocumentation() {
-        return unitProperties.getVector(Property.DOCUMENTATION);
+    public List<String> getDocumentation() {
+        return unitProperties.getList(Property.DOCUMENTATION);
     }
 
-    public Vector<String> getDropInPaths() {
-        return unitProperties.getVector(Property.DROP_IN_PATHS);
+    public List<String> getDropInPaths() {
+        return unitProperties.getList(Property.DROP_IN_PATHS);
     }
 
     public String getFailureAction() {
@@ -570,8 +569,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getBigInteger(Property.JOB_TIMEOUT_USEC);
     }
 
-    public Vector<String> getJoinsNamespaceOf() {
-        return unitProperties.getVector(Property.JOINS_NAMESPACE_OF);
+    public List<String> getJoinsNamespaceOf() {
+        return unitProperties.getList(Property.JOINS_NAMESPACE_OF);
     }
 
     public LoadError getLoadError() {
@@ -584,40 +583,40 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.LOAD_STATE);
     }
 
-    public Vector<String> getNames() {
-        return unitProperties.getVector(Property.NAMES);
+    public List<String> getNames() {
+        return unitProperties.getList(Property.NAMES);
     }
 
     public boolean isNeedDaemonReload() {
         return unitProperties.getBoolean(Property.NEED_DAEMON_RELOAD);
     }
 
-    public Vector<String> getOnFailure() {
-        return unitProperties.getVector(Property.ON_FAILURE);
+    public List<String> getOnFailure() {
+        return unitProperties.getList(Property.ON_FAILURE);
     }
 
     public String getOnFailureJobMode() {
         return unitProperties.getString(Property.ON_FAILURE_JOB_MODE);
     }
 
-    public Vector<String> getPartOf() {
-        return unitProperties.getVector(Property.PART_OF);
+    public List<String> getPartOf() {
+        return unitProperties.getList(Property.PART_OF);
     }
 
     public boolean isPerpetual() {
         return unitProperties.getBoolean(Property.PERPETUAL);
     }
 
-    public Vector<String> getPropagatesReloadTo() {
-        return unitProperties.getVector(Property.PROPAGATES_RELOAD_TO);
+    public List<String> getPropagatesReloadTo() {
+        return unitProperties.getList(Property.PROPAGATES_RELOAD_TO);
     }
 
     public String getRebootArgument() {
         return unitProperties.getString(Property.REBOOT_ARGUMENT);
     }
 
-    public Vector<String> getRefs() {
-        return unitProperties.getVector(Property.REFS);
+    public List<String> getRefs() {
+        return unitProperties.getList(Property.REFS);
     }
 
     public boolean isRefuseManualStart() {
@@ -628,28 +627,28 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getBoolean(Property.REFUSE_MANUAL_STOP);
     }
 
-    public Vector<String> getReloadPropagatedFrom() {
-        return unitProperties.getVector(Property.RELOAD_PROPAGATED_FROM);
+    public List<String> getReloadPropagatedFrom() {
+        return unitProperties.getList(Property.RELOAD_PROPAGATED_FROM);
     }
 
-    public Vector<String> getRequiredBy() {
-        return unitProperties.getVector(Property.REQUIRED_BY);
+    public List<String> getRequiredBy() {
+        return unitProperties.getList(Property.REQUIRED_BY);
     }
 
-    public Vector<String> getRequires() {
-        return unitProperties.getVector(Property.REQUIRES);
+    public List<String> getRequires() {
+        return unitProperties.getList(Property.REQUIRES);
     }
 
-    public Vector<String> getRequiresMountsFor() {
-        return unitProperties.getVector(Property.REQUIRES_MOUNTS_FOR);
+    public List<String> getRequiresMountsFor() {
+        return unitProperties.getList(Property.REQUIRES_MOUNTS_FOR);
     }
 
-    public Vector<String> getRequisite() {
-        return unitProperties.getVector(Property.REQUISITE);
+    public List<String> getRequisite() {
+        return unitProperties.getList(Property.REQUISITE);
     }
 
-    public Vector<String> getRequisiteOf() {
-        return unitProperties.getVector(Property.REQUISITE_OF);
+    public List<String> getRequisiteOf() {
+        return unitProperties.getList(Property.REQUISITE_OF);
     }
 
     public String getSourcePath() {
@@ -696,12 +695,12 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getBoolean(Property.TRANSIENT);
     }
 
-    public Vector<String> getTriggeredBy() {
-        return unitProperties.getVector(Property.TRIGGERED_BY);
+    public List<String> getTriggeredBy() {
+        return unitProperties.getList(Property.TRIGGERED_BY);
     }
 
-    public Vector<String> getTriggers() {
-        return unitProperties.getVector(Property.TRIGGERS);
+    public List<String> getTriggers() {
+        return unitProperties.getList(Property.TRIGGERS);
     }
 
     public String getUnitFilePreset() {
@@ -712,12 +711,12 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.UNIT_FILE_STATE);
     }
 
-    public Vector<String> getWantedBy() {
-        return unitProperties.getVector(Property.WANTED_BY);
+    public List<String> getWantedBy() {
+        return unitProperties.getList(Property.WANTED_BY);
     }
 
-    public Vector<String> getWants() {
-        return unitProperties.getVector(Property.WANTS);
+    public List<String> getWants() {
+        return unitProperties.getList(Property.WANTS);
     }
 
     @Override

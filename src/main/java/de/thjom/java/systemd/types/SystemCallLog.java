@@ -11,24 +11,24 @@
 
 package de.thjom.java.systemd.types;
 
-import java.util.Vector;
+import java.util.List;
 
 public class SystemCallLog {
 
     private final boolean allowlist;
-    private final Vector<String> sysCalls;
+    private final List<String> sysCalls;
 
     @SuppressWarnings("unchecked")
     public SystemCallLog(final Object[] array) {
         this.allowlist = (boolean) array[0];
-        this.sysCalls = (Vector<String>) array[1];
+        this.sysCalls = (List<String>) array[1];
     }
 
     public boolean isAllowlist() {
         return allowlist;
     }
 
-    public Vector<String> getSysCalls() {
+    public List<String> getSysCalls() {
         return sysCalls;
     }
 

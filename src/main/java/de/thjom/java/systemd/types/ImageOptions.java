@@ -13,7 +13,6 @@ package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class ImageOptions {
 
@@ -25,10 +24,10 @@ public class ImageOptions {
         this.options = String.valueOf(array[1]);
     }
 
-    public static List<ImageOptions> list(final Vector<Object[]> vector) {
-        List<ImageOptions> infos = new ArrayList<>(vector.size());
+    public static List<ImageOptions> list(final List<Object[]> arrays) {
+        List<ImageOptions> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             ImageOptions info = new ImageOptions(array);
 
             infos.add(info);

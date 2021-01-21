@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 public class MountImage {
 
@@ -28,15 +28,15 @@ public class MountImage {
         this.ignoreENOENT = (boolean) array[2];
 
         @SuppressWarnings("unchecked")
-        Vector<Object[]> options = (Vector<Object[]>) array[3];
+        List<Object[]> options = (List<Object[]>) array[3];
 
         this.mountOptions = ImageOptions.list(options);
     }
 
-    public static List<MountImage> list(final Vector<Object[]> vector) {
-        List<MountImage> infos = new ArrayList<>(vector.size());
+    public static List<MountImage> list(final Collection<Object[]> arrays) {
+        List<MountImage> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             MountImage info = new MountImage(array);
 
             infos.add(info);

@@ -13,7 +13,6 @@ package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt32;
 
@@ -27,10 +26,10 @@ public class DynamicUser {
         this.name = String.valueOf(array[1]);
     }
 
-    public static List<DynamicUser> list(final Vector<Object[]> vector) {
-        List<DynamicUser> infos = new ArrayList<>(vector.size());
+    public static List<DynamicUser> list(final List<Object[]> arrays) {
+        List<DynamicUser> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             DynamicUser info = new DynamicUser(array);
 
             infos.add(info);

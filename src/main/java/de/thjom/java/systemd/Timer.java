@@ -127,11 +127,11 @@ public class Timer extends Unit {
     }
 
     public List<TimersCalendar> getTimersCalendar() {
-        return TimersCalendar.list(properties.getVector(Property.TIMERS_CALENDAR));
+        return TimersCalendar.list(properties.getList(Property.TIMERS_CALENDAR));
     }
 
     public List<TimersMonotonic> getTimersMonotonic() {
-        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
+        return TimersMonotonic.list(properties.getList(Property.TIMERS_MONOTONIC));
     }
 
     public boolean isWakeSystem() {

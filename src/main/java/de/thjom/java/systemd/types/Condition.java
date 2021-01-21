@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 public class Condition {
 
@@ -31,10 +31,10 @@ public class Condition {
         this.status = (int) array[4];
     }
 
-    public static List<Condition> list(final Vector<Object[]> vector) {
-        List<Condition> conds = new ArrayList<>(vector.size());
+    public static List<Condition> list(final Collection<Object[]> arrays) {
+        List<Condition> conds = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             Condition cond = new Condition(array);
 
             conds.add(cond);

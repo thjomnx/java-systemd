@@ -14,7 +14,6 @@ package de.thjom.java.systemd.types;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt64;
 
@@ -30,10 +29,10 @@ public class TimersMonotonic {
         this.nextElapsePoint = ((UInt64) array[2]).longValue();
     }
 
-    public static List<TimersMonotonic> list(final Vector<Object[]> vector) {
-        List<TimersMonotonic> timers = new ArrayList<>(vector.size());
+    public static List<TimersMonotonic> list(final List<Object[]> arrays) {
+        List<TimersMonotonic> timers = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             TimersMonotonic timer = new TimersMonotonic(array);
 
             timers.add(timer);

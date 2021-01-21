@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -146,27 +145,27 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
         return properties.getString(Property.DEVICE_POLICY);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {
-        return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+        return EnvironmentFile.list(properties.getList(Property.ENVIRONMENT_FILES));
     }
 
     public List<ExecutionInfo> getExecActivate() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_ACTIVATE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_ACTIVATE));
     }
 
     public List<ExecutionInfo> getExecDeactivate() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_DEACTIVATE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_DEACTIVATE));
     }
 
     public int getFinalKillSignal() {
@@ -177,8 +176,8 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessiblePaths() {
-        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    public List<String> getInaccessiblePaths() {
+        return properties.getList(Property.INACCESSIBLE_PATHS);
     }
 
     public int getIOSchedulingClass() {
@@ -229,12 +228,12 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public Vector<String> getReadOnlyPaths() {
-        return properties.getVector(Property.READ_ONLY_PATHS);
+    public List<String> getReadOnlyPaths() {
+        return properties.getList(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWritePaths() {
-        return properties.getVector(Property.READ_WRITE_PATHS);
+    public List<String> getReadWritePaths() {
+        return properties.getList(Property.READ_WRITE_PATHS);
     }
 
     public int getRestartKillSignal() {
@@ -269,8 +268,8 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getString(Property.SLICE);
     }
 
-    public Vector<String> getSupplementaryGroups() {
-        return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
+    public List<String> getSupplementaryGroups() {
+        return properties.getList(Property.SUPPLEMENTARY_GROUPS);
     }
 
     public String getSyslogIdentifier() {

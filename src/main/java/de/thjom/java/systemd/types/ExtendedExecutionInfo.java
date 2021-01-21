@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt32;
 import org.freedesktop.dbus.types.UInt64;
@@ -21,8 +21,8 @@ import org.freedesktop.dbus.types.UInt64;
 public class ExtendedExecutionInfo {
 
     private final String binaryPath;
-    private final Vector<String> arguments;
-    private final Vector<String> commandFlags;
+    private final List<String> arguments;
+    private final List<String> commandFlags;
     private final long lastStartTimestamp;
     private final long lastStartTimestampMonotonic;
     private final long lastFinishTimestamp;
@@ -34,8 +34,8 @@ public class ExtendedExecutionInfo {
     @SuppressWarnings("unchecked")
     public ExtendedExecutionInfo(final Object[] array) {
         this.binaryPath = String.valueOf(array[0]);
-        this.arguments = (Vector<String>) array[1];
-        this.commandFlags = (Vector<String>) array[2];
+        this.arguments = (List<String>) array[1];
+        this.commandFlags = (List<String>) array[2];
         this.lastStartTimestamp = ((UInt64) array[3]).longValue();
         this.lastStartTimestampMonotonic = ((UInt64) array[4]).longValue();
         this.lastFinishTimestamp = ((UInt64) array[5]).longValue();
@@ -45,10 +45,10 @@ public class ExtendedExecutionInfo {
         this.lastExitStatus = (int) array[9];
     }
 
-    public static List<ExtendedExecutionInfo> list(final Vector<Object[]> vector) {
-        List<ExtendedExecutionInfo> execs = new ArrayList<>(vector.size());
+    public static List<ExtendedExecutionInfo> list(final Collection<Object[]> arrays) {
+        List<ExtendedExecutionInfo> execs = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             ExtendedExecutionInfo exec = new ExtendedExecutionInfo(array);
 
             execs.add(exec);
@@ -61,11 +61,11 @@ public class ExtendedExecutionInfo {
         return binaryPath;
     }
 
-    public Vector<String> getArguments() {
+    public List<String> getArguments() {
         return arguments;
     }
 
-    public Vector<String> getCommandFlags() {
+    public List<String> getCommandFlags() {
         return commandFlags;
     }
 

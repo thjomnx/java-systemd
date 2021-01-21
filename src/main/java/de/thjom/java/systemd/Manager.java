@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
@@ -739,8 +738,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getBigInteger(Property.DEFAULT_TIMER_ACCURACY_USEC);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public byte getExitCode() {
@@ -935,8 +934,8 @@ public class Manager extends InterfaceAdapter {
         return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
-    public Vector<String> getUnitPath() {
-        return properties.getVector(Property.UNIT_PATH);
+    public List<String> getUnitPath() {
+        return properties.getList(Property.UNIT_PATH);
     }
 
     public long getUnitsLoadFinishTimestamp() {

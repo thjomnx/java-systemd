@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -202,7 +201,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
@@ -214,15 +213,15 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {
-        return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+        return EnvironmentFile.list(properties.getList(Property.ENVIRONMENT_FILES));
     }
 
     public List<ExecutionInfo> getExecCondition() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_CONDITION));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_CONDITION));
     }
 
     public List<ExtendedExecutionInfo> getExecConditionEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_CONDITION_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_CONDITION_EX));
     }
 
     public int getExecMainCode() {
@@ -254,51 +253,51 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
     }
 
     public List<ExecutionInfo> getExecReload() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_RELOAD));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_RELOAD));
     }
 
     public List<ExtendedExecutionInfo> getExecReloadEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_RELOAD_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_RELOAD_EX));
     }
 
     public List<ExecutionInfo> getExecStart() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START));
     }
 
     public List<ExtendedExecutionInfo> getExecStartEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_START_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_START_EX));
     }
 
     public List<ExecutionInfo> getExecStartPost() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START_POST));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START_POST));
     }
 
     public List<ExtendedExecutionInfo> getExecStartPostEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_START_POST_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_START_POST_EX));
     }
 
     public List<ExecutionInfo> getExecStartPre() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START_PRE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START_PRE));
     }
 
     public List<ExtendedExecutionInfo> getExecStartPreEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_START_PRE_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_START_PRE_EX));
     }
 
     public List<ExecutionInfo> getExecStop() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_STOP));
     }
 
     public List<ExtendedExecutionInfo> getExecStopEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_STOP_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_STOP_EX));
     }
 
     public List<ExecutionInfo> getExecStopPost() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_STOP_POST));
     }
 
     public List<ExtendedExecutionInfo> getExecStopPostEx() {
-        return ExtendedExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST_EX));
+        return ExtendedExecutionInfo.list(properties.getList(Property.EXEC_STOP_POST_EX));
     }
 
     public long getFileDescriptorStoreMax() {
@@ -325,8 +324,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessiblePaths() {
-        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    public List<String> getInaccessiblePaths() {
+        return properties.getList(Property.INACCESSIBLE_PATHS);
     }
 
     public String getKillMode() {
@@ -385,12 +384,12 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return properties.getString(Property.PID_FILE);
     }
 
-    public Vector<String> getReadOnlyPaths() {
-        return properties.getVector(Property.READ_ONLY_PATHS);
+    public List<String> getReadOnlyPaths() {
+        return properties.getList(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWritePaths() {
-        return properties.getVector(Property.READ_WRITE_PATHS);
+    public List<String> getReadWritePaths() {
+        return properties.getList(Property.READ_WRITE_PATHS);
     }
 
     public String getReloadResult() {
@@ -469,8 +468,8 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
         return ExitStatusType.of((Object[]) properties.getVariant(Property.SUCCESS_EXIT_STATUS).getValue());
     }
 
-    public Vector<String> getSupplementaryGroups() {
-        return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
+    public List<String> getSupplementaryGroups() {
+        return properties.getList(Property.SUPPLEMENTARY_GROUPS);
     }
 
     public String getSyslogIdentifier() {

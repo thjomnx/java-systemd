@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
-import java.util.Vector;
+import java.util.List;
 
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -137,7 +137,7 @@ class AbstractTestCase {
                             else if (returnType == String[].class) {
                                 return new Variant<>(new String[0]);
                             }
-                            else if (returnType == Vector.class) {
+                            else if (returnType == List.class) {
                                 ParameterizedType paramType = (ParameterizedType) genericReturnType;
                                 String typeName = paramType.getActualTypeArguments()[0].getTypeName();
 

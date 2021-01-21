@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -218,7 +217,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
@@ -229,28 +228,28 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getLong(Property.DIRECTORY_MODE);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {
-        return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+        return EnvironmentFile.list(properties.getList(Property.ENVIRONMENT_FILES));
     }
 
     public List<ExecutionInfo> getExecStartPost() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START_POST));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START_POST));
     }
 
     public List<ExecutionInfo> getExecStartPre() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START_PRE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START_PRE));
     }
 
     public List<ExecutionInfo> getExecStopPost() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_STOP_POST));
     }
 
     public List<ExecutionInfo> getExecStopPre() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_PRE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_STOP_PRE));
     }
 
     public String getFileDescriptorName() {
@@ -289,8 +288,8 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessiblePaths() {
-        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    public List<String> getInaccessiblePaths() {
+        return properties.getList(Property.INACCESSIBLE_PATHS);
     }
 
     public boolean isKeepAlive() {
@@ -318,7 +317,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
     }
 
     public List<ListenInfo> getListen() {
-        return ListenInfo.list(properties.getVector(Property.LISTEN));
+        return ListenInfo.list(properties.getList(Property.LISTEN));
     }
 
     public int getMark() {
@@ -401,12 +400,12 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public Vector<String> getReadOnlyPaths() {
-        return properties.getVector(Property.READ_ONLY_PATHS);
+    public List<String> getReadOnlyPaths() {
+        return properties.getList(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWritePaths() {
-        return properties.getVector(Property.READ_WRITE_PATHS);
+    public List<String> getReadWritePaths() {
+        return properties.getList(Property.READ_WRITE_PATHS);
     }
 
     public BigInteger getReceiveBuffer() {
@@ -485,12 +484,12 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getString(Property.SOCKET_USER);
     }
 
-    public Vector<String> getSupplementaryGroups() {
-        return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
+    public List<String> getSupplementaryGroups() {
+        return properties.getList(Property.SUPPLEMENTARY_GROUPS);
     }
 
-    public Vector<String> getSymlinks() {
-        return properties.getVector(Property.SYMLINKS);
+    public List<String> getSymlinks() {
+        return properties.getList(Property.SYMLINKS);
     }
 
     public String getSyslogIdentifier() {

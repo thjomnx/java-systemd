@@ -13,7 +13,6 @@ package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class PathInfo {
 
@@ -25,10 +24,10 @@ public class PathInfo {
         this.watchedPath = String.valueOf(array[1]);
     }
 
-    public static List<PathInfo> list(final Vector<Object[]> vector) {
-        List<PathInfo> infos = new ArrayList<>(vector.size());
+    public static List<PathInfo> list(final List<Object[]> arrays) {
+        List<PathInfo> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             PathInfo info = new PathInfo(array);
 
             infos.add(info);
