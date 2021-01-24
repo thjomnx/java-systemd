@@ -11,7 +11,9 @@
 
 package de.thjom.java.systemd;
 
-import java.util.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.testng.Assert;
@@ -29,12 +31,20 @@ public class SystemdTest {
         Assert.assertEquals(Systemd.escapePath(null), "");
     }
 
-    @Test(description="Tests micro-timestamp conversion to java.util.Date object.")
+    @Test(description="Tests micro-timestamp conversion to java.time.Instant object.")
     public void testTimestampConversion() {
-        long tstamp = System.currentTimeMillis();
-        Date now = new Date(tstamp);
+        long usecTimestamp = System.currentTimeMillis() * 1000 + 987;
+        Instant now = Instant.EPOCH.plus(usecTimestamp, ChronoUnit.MICROS);
 
-        Assert.assertEquals(Systemd.timestampToDate(tstamp * 1000), now);
+        Assert.assertEquals(Systemd.timestampToInstant(usecTimestamp), now);
+    }
+
+    @Test(description="Tests microsecond duration conversion to java.time.Duration object.")
+    public void testUsecsConversion() {
+        long usecs = 1234567890L;
+        Duration duration = Duration.of(usecs, ChronoUnit.MICROS);
+
+        Assert.assertEquals(Systemd.usecsToDuration(usecs), duration);
     }
 
     @Test(description="Tests conversion of SD-ID128 structs (e.g. 'InvocationID') to java.lang.String object.")

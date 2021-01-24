@@ -11,12 +11,13 @@
 
 package de.thjom.java.systemd;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.xml.bind.DatatypeConverter;
 
 import org.freedesktop.dbus.connections.impl.DBusConnection;
@@ -35,7 +36,7 @@ public final class Systemd {
 
         private final DBusConnection.DBusBusType index;
 
-        private InstanceType(DBusConnection.DBusBusType index) {
+        InstanceType(DBusConnection.DBusBusType index) {
             this.index = index;
         }
 
@@ -66,21 +67,17 @@ public final class Systemd {
     private DBusConnection dbus;
     private Manager manager;
 
-    private Systemd() {
-        this(InstanceType.SYSTEM);
-    }
-
     private Systemd(final InstanceType instanceType) {
         this.instanceType = instanceType;
     }
 
-    public static final String escapePath(final CharSequence path) {
+    public static String escapePath(final CharSequence path) {
         if (path != null) {
-            StringBuffer escaped = new StringBuffer(path.length());
+            StringBuilder escaped = new StringBuilder(path.length());
             Matcher matcher = PATH_ESCAPE_PATTERN.matcher(path);
 
             while (matcher.find()) {
-                String replacement = '_' + Integer.toHexString((int) matcher.group().charAt(0));
+                String replacement = '_' + Integer.toHexString(matcher.group().charAt(0));
                 matcher.appendReplacement(escaped, replacement);
             }
 
@@ -92,11 +89,15 @@ public final class Systemd {
         return "";
     }
 
-    public static final Date timestampToDate(final long timestamp) {
-        return new Date(timestamp / 1000);
+    public static Instant timestampToInstant(final long timestamp) {
+        return Instant.EPOCH.plus(timestamp, ChronoUnit.MICROS);
     }
 
-    public static final String id128ToString(final byte[] id128) {
+    public static Duration usecsToDuration(final long usecs) {
+        return Duration.of(usecs, ChronoUnit.MICROS);
+    }
+
+    public static String id128ToString(final byte[] id128) {
         return DatatypeConverter.printHexBinary(id128).toLowerCase();
     }
 
