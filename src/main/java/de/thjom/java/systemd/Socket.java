@@ -546,8 +546,8 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
     }
 
-    public boolean isTimestamping() {
-        return properties.getBoolean(Property.TIMESTAMPING);
+    public String getTimestamping() {
+        return properties.getString(Property.TIMESTAMPING);
     }
 
     public boolean isTransparent() {
