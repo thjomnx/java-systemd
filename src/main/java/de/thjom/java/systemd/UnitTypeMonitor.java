@@ -28,7 +28,6 @@ public class UnitTypeMonitor extends UnitMonitor {
         SCOPE,
         SERVICE,
         SLICE,
-        SNAPSHOT,
         SOCKET,
         SWAP,
         TARGET,
@@ -69,9 +68,6 @@ public class UnitTypeMonitor extends UnitMonitor {
                     break;
                 case SLICE:
                     monitored = unit.isSlice();
-                    break;
-                case SNAPSHOT:
-                    monitored = unit.isSnapshot();
                     break;
                 case SOCKET:
                     monitored = unit.isSocket();

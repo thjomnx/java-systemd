@@ -467,10 +467,6 @@ public class Manager extends InterfaceAdapter {
         return Slice.create(this, name);
     }
 
-    public Snapshot getSnapshot(final String name) throws DBusException {
-        return Snapshot.create(this, name);
-    }
-
     public Socket getSocket(final String name) throws DBusException {
         return Socket.create(this, name);
     }
@@ -515,9 +511,6 @@ public class Manager extends InterfaceAdapter {
                 break;
             case Slice.UNIT_SUFFIX:
                 unit = getSlice(fullName);
-                break;
-            case Snapshot.UNIT_SUFFIX:
-                unit = getSnapshot(fullName);
                 break;
             case Socket.UNIT_SUFFIX:
                 unit = getSocket(fullName);
