@@ -15,9 +15,8 @@ import org.freedesktop.dbus.Tuple;
 
 public class UnitFileInstallChange extends Tuple {
 
-    private boolean carriesInstallInfo;
-
-    private UnitFileChange unitFileChange;
+    private final boolean carriesInstallInfo;
+    private final UnitFileChange unitFileChange;
 
     public UnitFileInstallChange(final boolean carriesInstallInfo, final UnitFileChange unitFileChange) {
         super();
@@ -27,7 +26,7 @@ public class UnitFileInstallChange extends Tuple {
     }
 
     public String getSummary() {
-        return String.format("%b %s", carriesInstallInfo, unitFileChange);
+        return String.format("%b %s", carriesInstallInfo, unitFileChange != null ? unitFileChange.getSummary() : null);
     }
 
     public boolean isCarriesInstallInfo() {
