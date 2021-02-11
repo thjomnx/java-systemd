@@ -40,7 +40,9 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESULT = "Result";
+        public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
@@ -106,7 +108,7 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
@@ -125,8 +127,16 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         return properties.getInteger(Property.KILL_SIGNAL);
     }
 
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
+    }
+
     public String getResult() {
         return properties.getString(Property.RESULT);
+    }
+
+    public BigInteger getRuntimeMaxUSec() {
+        return properties.getBigInteger(Property.RUNTIME_MAX_USEC);
     }
 
     public boolean isSendSIGHUP() {

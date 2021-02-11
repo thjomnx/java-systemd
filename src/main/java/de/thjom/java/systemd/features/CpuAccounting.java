@@ -19,11 +19,14 @@ public interface CpuAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
+        public static final String ALLOWED_CPUS = "AllowedCPUs";
         public static final String CPU_ACCOUNTING = "CPUAccounting";
         public static final String CPU_QUOTA_PER_SEC_USEC = "CPUQuotaPerSecUSec";
+        public static final String CPU_QUOTA_PERIOD_USEC = "CPUQuotaPeriodUSec";
         public static final String CPU_SHARES = "CPUShares";
         public static final String CPU_USAGE_NSEC = "CPUUsageNSec";
         public static final String CPU_WEIGHT = "CPUWeight";
+        public static final String EFFECTIVE_CPUS = "EffectiveCPUs";
         public static final String STARTUP_CPU_SHARES = "StartupCPUShares";
         public static final String STARTUP_CPU_WEIGHT = "StartupCPUWeight";
 
@@ -37,12 +40,20 @@ public interface CpuAccounting extends Feature {
 
     }
 
+    default byte[] getAllowedCPUs() {
+        return (byte[]) getProperties().getVariant(Property.ALLOWED_CPUS).getValue();
+    }
+
     default boolean isCPUAccounting() {
         return getProperties().getBoolean(Property.CPU_ACCOUNTING);
     }
 
     default BigInteger getCPUQuotaPerSecUSec() {
         return getProperties().getBigInteger(Property.CPU_QUOTA_PER_SEC_USEC);
+    }
+
+    default BigInteger getCPUQuotaPeriodUSec() {
+        return getProperties().getBigInteger(Property.CPU_QUOTA_PERIOD_USEC);
     }
 
     default BigInteger getCPUShares() {
@@ -55,6 +66,10 @@ public interface CpuAccounting extends Feature {
 
     default BigInteger getCPUWeight() {
         return getProperties().getBigInteger(Property.CPU_WEIGHT);
+    }
+
+    default byte[] getEffectiveCPUs() {
+        return (byte[]) getProperties().getVariant(Property.EFFECTIVE_CPUS).getValue();
     }
 
     default BigInteger getStartupCPUShares() {

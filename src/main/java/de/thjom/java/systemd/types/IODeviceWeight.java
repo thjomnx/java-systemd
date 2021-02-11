@@ -13,8 +13,8 @@ package de.thjom.java.systemd.types;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt64;
 
@@ -28,10 +28,10 @@ public class IODeviceWeight extends IOPath {
         this.weight = ((UInt64) array[1]).value();
     }
 
-    public static List<IODeviceWeight> list(final Vector<Object[]> vector) {
-        List<IODeviceWeight> weights = new ArrayList<>(vector.size());
+    public static List<IODeviceWeight> list(final Collection<Object[]> arrays) {
+        List<IODeviceWeight> weights = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             IODeviceWeight weight = new IODeviceWeight(array);
 
             weights.add(weight);

@@ -23,7 +23,6 @@ import de.thjom.java.systemd.Path;
 import de.thjom.java.systemd.Scope;
 import de.thjom.java.systemd.Service;
 import de.thjom.java.systemd.Slice;
-import de.thjom.java.systemd.Snapshot;
 import de.thjom.java.systemd.Socket;
 import de.thjom.java.systemd.Swap;
 import de.thjom.java.systemd.Target;
@@ -67,10 +66,6 @@ abstract class UnitBase extends Struct {
 
     public final boolean isSlice() {
         return identifier.endsWith(Slice.UNIT_SUFFIX);
-    }
-
-    public final boolean isSnapshot() {
-        return identifier.endsWith(Snapshot.UNIT_SUFFIX);
     }
 
     public final boolean isSocket() {

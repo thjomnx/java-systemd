@@ -19,6 +19,13 @@ public interface MemoryAccounting extends Feature {
 
     static class Property extends InterfaceAdapter.AdapterProperty {
 
+        public static final String ALLOWED_MEMORY_NODES = "AllowedMemoryNodes";
+        public static final String DEFAULT_MEMORY_LOW = "DefaultMemoryLow";
+        public static final String DEFAULT_MEMORY_MIN = "DefaultMemoryMin";
+        public static final String EFFECTIVE_MEMORY_NODES = "EffectiveMemoryNodes";
+        public static final String MANAGED_OOM_MEMORY_PRESSURE = "ManagedOOMMemoryPressure";
+        public static final String MANAGED_OOM_MEMORY_PRESSURE_LIMIT_PERCENT = "ManagedOOMMemoryPressureLimitPercent";
+        public static final String MANAGED_OOM_SWAP = "ManagedOOMSwap";
         public static final String MEMORY_ACCOUNTING = "MemoryAccounting";
         public static final String MEMORY_CURRENT = "MemoryCurrent";
         public static final String MEMORY_HIGH = "MemoryHigh";
@@ -36,6 +43,34 @@ public interface MemoryAccounting extends Feature {
             return getAllNames(Property.class);
         }
 
+    }
+
+    default byte[] getAllowedMemoryNodes() {
+        return (byte[]) getProperties().getVariant(Property.ALLOWED_MEMORY_NODES).getValue();
+    }
+
+    default BigInteger getDefaultMemoryLow() {
+        return getProperties().getBigInteger(Property.DEFAULT_MEMORY_LOW);
+    }
+
+    default BigInteger getDefaultMemoryMin() {
+        return getProperties().getBigInteger(Property.DEFAULT_MEMORY_MIN);
+    }
+
+    default byte[] getEffectiveMemoryNodes() {
+        return (byte[]) getProperties().getVariant(Property.EFFECTIVE_MEMORY_NODES).getValue();
+    }
+
+    default String getManagedOOMMemoryPressure() {
+        return getProperties().getString(Property.MANAGED_OOM_MEMORY_PRESSURE);
+    }
+
+    default String getManagedOOMMemoryPressureLimitPercent() {
+        return getProperties().getString(Property.MANAGED_OOM_MEMORY_PRESSURE_LIMIT_PERCENT);
+    }
+
+    default String getManagedOOMSwap() {
+        return getProperties().getString(Property.MANAGED_OOM_SWAP);
     }
 
     default boolean isMemoryAccounting() {

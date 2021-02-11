@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -59,6 +58,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String EXEC_STOP_PRE = "ExecStopPre";
         public static final String FILE_DESCRIPTOR_NAME = "FileDescriptorName";
         public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
+        public static final String FLUSH_PENDING = "FlushPending";
         public static final String FREE_BIND = "FreeBind";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
         public static final String IO_SCHEDULING_PRIORITY = "IOSchedulingPriority";
@@ -89,6 +89,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String OOM_SCORE_ADJUST = "OOMScoreAdjust";
         public static final String PAM_NAME = "PAMName";
         public static final String PASS_CREDENTIALS = "PassCredentials";
+        public static final String PASS_PACKET_INFO = "PassPacketInfo";
         public static final String PASS_SECURITY = "PassSecurity";
         public static final String PIPE_SIZE = "PipeSize";
         public static final String PRIORITY = "Priority";
@@ -96,6 +97,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
         public static final String RECEIVE_BUFFER = "ReceiveBuffer";
         public static final String REMOVE_ON_STOP = "RemoveOnStop";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESULT = "Result";
         public static final String REUSE_PORT = "ReusePort";
         public static final String ROOT_DIRECTORY = "RootDirectory";
@@ -127,6 +129,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String TIMEOUT_USEC = "TimeoutUSec";
         public static final String TIMER_SLACK_NSEC = "TimerSlackNSec";
+        public static final String TIMESTAMPING = "Timestamping";
         public static final String TRANSPARENT = "Transparent";
         public static final String UMASK = "UMask";
         public static final String WATCHDOG_SIGNAL = "WatchdogSignal";
@@ -214,7 +217,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
@@ -225,28 +228,28 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getLong(Property.DIRECTORY_MODE);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {
-        return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+        return EnvironmentFile.list(properties.getList(Property.ENVIRONMENT_FILES));
     }
 
     public List<ExecutionInfo> getExecStartPost() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START_POST));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START_POST));
     }
 
     public List<ExecutionInfo> getExecStartPre() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_START_PRE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_START_PRE));
     }
 
     public List<ExecutionInfo> getExecStopPost() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_POST));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_STOP_POST));
     }
 
     public List<ExecutionInfo> getExecStopPre() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_STOP_PRE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_STOP_PRE));
     }
 
     public String getFileDescriptorName() {
@@ -255,6 +258,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public int getFinalKillSignal() {
         return properties.getInteger(Property.FINAL_KILL_SIGNAL);
+    }
+
+    public boolean isFlushPending() {
+        return properties.getBoolean(Property.FLUSH_PENDING);
     }
 
     public boolean isFreeBind() {
@@ -281,8 +288,8 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessiblePaths() {
-        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    public List<String> getInaccessiblePaths() {
+        return properties.getList(Property.INACCESSIBLE_PATHS);
     }
 
     public boolean isKeepAlive() {
@@ -310,7 +317,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
     }
 
     public List<ListenInfo> getListen() {
-        return ListenInfo.list(properties.getVector(Property.LISTEN));
+        return ListenInfo.list(properties.getList(Property.LISTEN));
     }
 
     public int getMark() {
@@ -377,6 +384,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getBoolean(Property.PASS_CREDENTIALS);
     }
 
+    public boolean isPassPacketInfo() {
+        return properties.getBoolean(Property.PASS_PACKET_INFO);
+    }
+
     public boolean isPassSecurity() {
         return properties.getBoolean(Property.PASS_SECURITY);
     }
@@ -389,12 +400,12 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public Vector<String> getReadOnlyPaths() {
-        return properties.getVector(Property.READ_ONLY_PATHS);
+    public List<String> getReadOnlyPaths() {
+        return properties.getList(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWritePaths() {
-        return properties.getVector(Property.READ_WRITE_PATHS);
+    public List<String> getReadWritePaths() {
+        return properties.getList(Property.READ_WRITE_PATHS);
     }
 
     public BigInteger getReceiveBuffer() {
@@ -403,6 +414,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public boolean isRemoveOnStop() {
         return properties.getBoolean(Property.REMOVE_ON_STOP);
+    }
+
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
     }
 
     public String getResult() {
@@ -469,12 +484,12 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
         return properties.getString(Property.SOCKET_USER);
     }
 
-    public Vector<String> getSupplementaryGroups() {
-        return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
+    public List<String> getSupplementaryGroups() {
+        return properties.getList(Property.SUPPLEMENTARY_GROUPS);
     }
 
-    public Vector<String> getSymlinks() {
-        return properties.getVector(Property.SYMLINKS);
+    public List<String> getSymlinks() {
+        return properties.getList(Property.SYMLINKS);
     }
 
     public String getSyslogIdentifier() {
@@ -529,6 +544,10 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
 
     public BigInteger getTimerSlackNSec() {
         return properties.getBigInteger(Property.TIMER_SLACK_NSEC);
+    }
+
+    public String getTimestamping() {
+        return properties.getString(Property.TIMESTAMPING);
     }
 
     public boolean isTransparent() {

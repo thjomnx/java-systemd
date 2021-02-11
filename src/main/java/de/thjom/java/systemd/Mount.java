@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -66,7 +65,9 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         public static final String OPTIONS = "Options";
         public static final String PAMNAME = "PAMName";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
+        public static final String READ_WRITE_ONLY = "ReadWriteOnly";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -150,7 +151,7 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
@@ -161,24 +162,24 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return properties.getLong(Property.DIRECTORY_MODE);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {
-        return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+        return EnvironmentFile.list(properties.getList(Property.ENVIRONMENT_FILES));
     }
 
     public List<ExecutionInfo> getExecMount() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_MOUNT));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_MOUNT));
     }
 
     public List<ExecutionInfo> getExecRemount() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_REMOUNT));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_REMOUNT));
     }
 
     public List<ExecutionInfo> getExecUnmount() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_UNMOUNT));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_UNMOUNT));
     }
 
     public int getFinalKillSignal() {
@@ -201,8 +202,8 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessiblePaths() {
-        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    public List<String> getInaccessiblePaths() {
+        return properties.getList(Property.INACCESSIBLE_PATHS);
     }
 
     public String getKillMode() {
@@ -245,12 +246,20 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return properties.getString(Property.PAMNAME);
     }
 
-    public Vector<String> getReadOnlyPaths() {
-        return properties.getVector(Property.READ_ONLY_PATHS);
+    public List<String> getReadOnlyPaths() {
+        return properties.getList(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWritePaths() {
-        return properties.getVector(Property.READ_WRITE_PATHS);
+    public boolean getReadWriteOnly() {
+        return properties.getBoolean(Property.READ_WRITE_ONLY);
+    }
+
+    public List<String> getReadWritePaths() {
+        return properties.getList(Property.READ_WRITE_PATHS);
+    }
+
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
     }
 
     public String getResult() {
@@ -285,8 +294,8 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
         return properties.getBoolean(Property.SLOPPY_OPTIONS);
     }
 
-    public Vector<String> getSupplementaryGroups() {
-        return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
+    public List<String> getSupplementaryGroups() {
+        return properties.getList(Property.SUPPLEMENTARY_GROUPS);
     }
 
     public String getSyslogIdentifier() {

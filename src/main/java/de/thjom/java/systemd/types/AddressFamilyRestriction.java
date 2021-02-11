@@ -11,24 +11,24 @@
 
 package de.thjom.java.systemd.types;
 
-import java.util.Vector;
+import java.util.List;
 
 public class AddressFamilyRestriction {
 
     private final boolean blacklist;
-    private final Vector<String> addressFamilies;
+    private final List<String> addressFamilies;
 
     @SuppressWarnings("unchecked")
     public AddressFamilyRestriction(final Object[] array) {
         this.blacklist = (boolean) array[0];
-        this.addressFamilies = (Vector<String>) array[1];
+        this.addressFamilies = (List<String>) array[1];
     }
 
     public boolean isBlacklist() {
         return blacklist;
     }
 
-    public Vector<String> getAddressFamilies() {
+    public List<String> getAddressFamilies() {
         return addressFamilies;
     }
 

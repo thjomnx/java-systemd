@@ -11,9 +11,9 @@
 
 package de.thjom.java.systemd.types;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt32;
 import org.freedesktop.dbus.types.UInt64;
@@ -24,13 +24,13 @@ public class ExecutionInfoTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
-        Vector<String> vec = new Vector<>();
-        vec.add("arg1");
-        vec.add("arg2");
+        List<String> list = new ArrayList<>();
+        list.add("arg1");
+        list.add("arg2");
 
         ExecutionInfo instance = new ExecutionInfo(new Object[] {
                 "foo",
-                vec,
+                list,
                 true,
                 new UInt64("1234"),
                 new UInt64("2345"),
@@ -44,7 +44,7 @@ public class ExecutionInfoTest {
 
         Assert.assertNotNull(instance);
         Assert.assertEquals(instance.getBinaryPath(), "foo");
-        Assert.assertEquals(instance.getArguments(), vec);
+        Assert.assertEquals(instance.getArguments(), list);
         Assert.assertTrue(instance.isFailOnUncleanExit());
         Assert.assertEquals(instance.getLastStartTimestamp(), (long) 1234);
         Assert.assertEquals(instance.getLastStartTimestampMonotonic(), (long) 2345);
@@ -71,17 +71,17 @@ public class ExecutionInfoTest {
 
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
-        Vector<Object[]> vec = new Vector<>();
+        List<Object[]> source = new ArrayList<>();
 
-        List<ExecutionInfo> list = ExecutionInfo.list(vec);
+        List<ExecutionInfo> list = ExecutionInfo.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] {
+        source.add(new Object[] {
                 "foo",
-                new Vector<String>(),
+                new ArrayList<String>(),
                 true,
                 new UInt64("1234"),
                 new UInt64("2345"),
@@ -92,9 +92,9 @@ public class ExecutionInfoTest {
                 (int) 42
                 }
         );
-        vec.add(new Object[] {
+        source.add(new Object[] {
                 "bar",
-                new Vector<String>(),
+                new ArrayList<String>(),
                 false,
                 new UInt64("4321"),
                 new UInt64("5432"),
@@ -106,7 +106,7 @@ public class ExecutionInfoTest {
                 }
         );
 
-        list = ExecutionInfo.list(vec);
+        list = ExecutionInfo.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
@@ -142,13 +142,13 @@ public class ExecutionInfoTest {
 
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
-        Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[0]);
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[0]);
 
         Exception exc = null;
 
         try {
-            ExecutionInfo.list(vec);
+            ExecutionInfo.list(list);
         }
         catch (Exception e) {
             exc = e;
@@ -157,8 +157,8 @@ public class ExecutionInfoTest {
         Assert.assertEquals(exc.getClass(), ArrayIndexOutOfBoundsException.class);
 
         // Next test
-        vec.clear();
-        vec.add(new Object[] {
+        list.clear();
+        list.add(new Object[] {
                 "foo",
                 null,
                 true,
@@ -175,7 +175,7 @@ public class ExecutionInfoTest {
         exc = null;
 
         try {
-            ExecutionInfo.list(vec);
+            ExecutionInfo.list(list);
         }
         catch (Exception e) {
             exc = e;

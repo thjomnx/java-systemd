@@ -14,7 +14,6 @@ package de.thjom.java.systemd.types;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.types.UInt64;
 
@@ -32,10 +31,10 @@ public class BindPath {
         this.recursive = ((UInt64) array[3]).value();
     }
 
-    public static List<BindPath> list(final Vector<Object[]> vector) {
-        List<BindPath> infos = new ArrayList<>(vector.size());
+    public static List<BindPath> list(final List<Object[]> arrays) {
+        List<BindPath> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             BindPath info = new BindPath(array);
 
             infos.add(info);

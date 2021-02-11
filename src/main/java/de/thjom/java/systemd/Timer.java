@@ -28,10 +28,13 @@ public class Timer extends Unit {
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String ACCURACY_USEC = "AccuracyUSec";
+        public static final String FIXED_RANDOM_DELAY = "FixedRandomDelay";
         public static final String LAST_TRIGGER_USEC = "LastTriggerUSec";
         public static final String LAST_TRIGGER_USEC_MONOTONIC = "LastTriggerUSecMonotonic";
         public static final String NEXT_ELAPSE_USEC_MONOTONIC = "NextElapseUSecMonotonic";
         public static final String NEXT_ELAPSE_USEC_REALTIME = "NextElapseUSecRealtime";
+        public static final String ON_CLOCK_CHANGE = "OnClockChange";
+        public static final String ON_TIMEZONE_CHANGE = "OnTimezoneChange";
         public static final String PERSISTENT = "Persistent";
         public static final String RANDOMIZED_DELAY_USEC = "RandomizedDelayUSec";
         public static final String REMAIN_AFTER_ELAPSE = "RemainAfterElapse";
@@ -75,6 +78,10 @@ public class Timer extends Unit {
         return properties.getBigInteger(Property.ACCURACY_USEC);
     }
 
+    public boolean isFixedRandomDelay() {
+        return properties.getBoolean(Property.FIXED_RANDOM_DELAY);
+    }
+
     public BigInteger getLastTriggerUSec() {
         return properties.getBigInteger(Property.LAST_TRIGGER_USEC);
     }
@@ -89,6 +96,14 @@ public class Timer extends Unit {
 
     public BigInteger getNextElapseUSecRealtime() {
         return properties.getBigInteger(Property.NEXT_ELAPSE_USEC_REALTIME);
+    }
+
+    public boolean isOnClockChange() {
+        return properties.getBoolean(Property.ON_CLOCK_CHANGE);
+    }
+
+    public boolean isOnTimezoneChange() {
+        return properties.getBoolean(Property.ON_TIMEZONE_CHANGE);
     }
 
     public boolean isPersistent() {
@@ -112,11 +127,11 @@ public class Timer extends Unit {
     }
 
     public List<TimersCalendar> getTimersCalendar() {
-        return TimersCalendar.list(properties.getVector(Property.TIMERS_CALENDAR));
+        return TimersCalendar.list(properties.getList(Property.TIMERS_CALENDAR));
     }
 
     public List<TimersMonotonic> getTimersMonotonic() {
-        return TimersMonotonic.list(properties.getVector(Property.TIMERS_MONOTONIC));
+        return TimersMonotonic.list(properties.getList(Property.TIMERS_MONOTONIC));
     }
 
     public boolean isWakeSystem() {

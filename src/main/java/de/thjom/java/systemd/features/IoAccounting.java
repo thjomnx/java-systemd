@@ -33,10 +33,16 @@ public interface IoAccounting extends Feature {
         public static final String IO_DEVICE_LATENCY_TARGET_USEC = "IODeviceLatencyTargetUSec";
         public static final String IO_DEVICE_WEIGHT = "IODeviceWeight";
         public static final String IO_READ_BANDWIDTH_MAX = "IOReadBandwidthMax";
+        public static final String IO_READ_BYTES = "IOReadBytes";
         public static final String IO_READ_IOPS_MAX = "IOReadIOPSMax";
+        public static final String IO_READ_OPERATIONS = "IOReadOperations";
         public static final String IO_WEIGHT = "IOWeight";
         public static final String IO_WRITE_BANDWIDTH_MAX = "IOWriteBandwidthMax";
+        public static final String IO_WRITE_BYTES = "IOWriteBytes";
         public static final String IO_WRITE_IOPS_MAX = "IOWriteIOPSMax";
+        public static final String IO_WRITE_OPERATIONS = "IOWriteOperations";
+        public static final String IP_EGRESS_FILTER_PATH = "IPEgressFilterPath";
+        public static final String IP_INGRESS_FILTER_PATH = "IPIngressFilterPath";
         public static final String STARTUP_BLOCK_IO_WEIGHT = "StartupBlockIOWeight";
         public static final String STARTUP_IO_WEIGHT = "StartupIOWeight";
 
@@ -55,11 +61,11 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IODeviceWeight> getBlockIODeviceWeight() {
-        return IODeviceWeight.list(getProperties().getVector(Property.BLOCK_IO_DEVICE_WEIGHT));
+        return IODeviceWeight.list(getProperties().getList(Property.BLOCK_IO_DEVICE_WEIGHT));
     }
 
     default List<IOBandwidth> getBlockIOReadBandwidth() {
-        return IOBandwidth.list(getProperties().getVector(Property.BLOCK_IO_READ_BANDWIDTH));
+        return IOBandwidth.list(getProperties().getList(Property.BLOCK_IO_READ_BANDWIDTH));
     }
 
     default BigInteger getBlockIOWeight() {
@@ -67,7 +73,7 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IOBandwidth> getBlockIOWriteBandwidth() {
-        return IOBandwidth.list(getProperties().getVector(Property.BLOCK_IO_WRITE_BANDWIDTH));
+        return IOBandwidth.list(getProperties().getList(Property.BLOCK_IO_WRITE_BANDWIDTH));
     }
 
     default boolean isIOAccounting() {
@@ -75,19 +81,27 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IODeviceLatency> getIODeviceLatencyTargetUSec() {
-        return IODeviceLatency.list(getProperties().getVector(Property.IO_DEVICE_LATENCY_TARGET_USEC));
+        return IODeviceLatency.list(getProperties().getList(Property.IO_DEVICE_LATENCY_TARGET_USEC));
     }
 
     default List<IODeviceWeight> getIODeviceWeight() {
-        return IODeviceWeight.list(getProperties().getVector(Property.IO_DEVICE_WEIGHT));
+        return IODeviceWeight.list(getProperties().getList(Property.IO_DEVICE_WEIGHT));
     }
 
     default List<IOBandwidth> getIOReadBandwidthMax() {
-        return IOBandwidth.list(getProperties().getVector(Property.IO_READ_BANDWIDTH_MAX));
+        return IOBandwidth.list(getProperties().getList(Property.IO_READ_BANDWIDTH_MAX));
+    }
+
+    default BigInteger getIOReadBytes() {
+        return getProperties().getBigInteger(Property.IO_READ_BYTES);
     }
 
     default List<IOIops> getIOReadIOPSMax() {
-        return IOIops.list(getProperties().getVector(Property.IO_READ_IOPS_MAX));
+        return IOIops.list(getProperties().getList(Property.IO_READ_IOPS_MAX));
+    }
+
+    default BigInteger getIOReadOperations() {
+        return getProperties().getBigInteger(Property.IO_READ_OPERATIONS);
     }
 
     default BigInteger getIOWeight() {
@@ -95,11 +109,27 @@ public interface IoAccounting extends Feature {
     }
 
     default List<IOBandwidth> getIOWriteBandwidthMax() {
-        return IOBandwidth.list(getProperties().getVector(Property.IO_WRITE_BANDWIDTH_MAX));
+        return IOBandwidth.list(getProperties().getList(Property.IO_WRITE_BANDWIDTH_MAX));
+    }
+
+    default BigInteger getIOWriteBytes() {
+        return getProperties().getBigInteger(Property.IO_WRITE_BYTES);
     }
 
     default List<IOIops> getIOWriteIOPSMax() {
-        return IOIops.list(getProperties().getVector(Property.IO_WRITE_IOPS_MAX));
+        return IOIops.list(getProperties().getList(Property.IO_WRITE_IOPS_MAX));
+    }
+
+    default BigInteger getIOWriteOperations() {
+        return getProperties().getBigInteger(Property.IO_WRITE_OPERATIONS);
+    }
+
+    default List<String> getIPEgressFilterPath() {
+        return getProperties().getList(Property.IP_EGRESS_FILTER_PATH);
+    }
+
+    default List<String> getIPIngressFilterPath() {
+        return getProperties().getList(Property.IP_INGRESS_FILTER_PATH);
     }
 
     default BigInteger getStartupBlockIOWeight() {
