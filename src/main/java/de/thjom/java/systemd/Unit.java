@@ -261,8 +261,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     @Override
-    protected SignalConsumer<PropertiesChanged> createStateConsumer() {
-        return new SignalConsumer<>(s -> {
+    protected DBusSigHandler<PropertiesChanged> createStateHandler() {
+        return s -> {
             Map<String, Variant<?>> properties = s.getPropertiesChanged();
 
             if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
@@ -270,7 +270,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
                     unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
                 }
             }
-        });
+        };
     }
 
     public String introspect() throws DBusException {

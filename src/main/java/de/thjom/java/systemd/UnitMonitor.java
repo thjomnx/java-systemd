@@ -72,20 +72,20 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
         manager.subscribe();
 
         reloadingHandler = new ReloadingHandler();
-        manager.addConsumer(Reloading.class, reloadingHandler);
+        manager.addHandler(Reloading.class, reloadingHandler);
 
         unitFilesChangedHandler = new UnitFilesChangedHandler();
-        manager.addConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
+        manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
     }
 
     public void removeDefaultHandlers() throws DBusException {
-        manager.removeConsumer(Reloading.class, reloadingHandler);
-        manager.removeConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
+        manager.removeHandler(Reloading.class, reloadingHandler);
+        manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
     }
 
     @Override
-    protected SignalConsumer<PropertiesChanged> createStateConsumer() {
-        return new SignalConsumer<>(s -> {
+    protected DBusSigHandler<PropertiesChanged> createStateHandler() {
+        return s -> {
             Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
 
             if (unit.isPresent()) {
@@ -96,7 +96,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
                     }
                 }
             }
-        });
+        };
     }
 
     public synchronized void addListener(final UnitMonitorListener listener) {

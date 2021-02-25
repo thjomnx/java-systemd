@@ -70,13 +70,6 @@ public class UnitMonitorTest extends AbstractTestCase {
             // Test lambda expression
             monitor.addHandler(PropertiesChanged.class, s -> { /* Do nothing (test case) */ });
 
-            // Test consumer addition and removal
-            monitor.addConsumer(PropertiesChanged.class, handler);
-            monitor.removeConsumer(PropertiesChanged.class, handler);
-
-            // Test lambda expression
-            monitor.addConsumer(PropertiesChanged.class, s -> { /* Do nothing (test case) */ });
-
             // Test monitor listener addition and removal
             UnitMonitorListener monitorListener= new UnitMonitorListener() {
 
