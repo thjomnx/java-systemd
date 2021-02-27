@@ -56,6 +56,7 @@ public final class Systemd {
 
     public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
 
+    public static final byte DEFAULT_THREAD_POOL_SIZE = 1;
     public static final long DEFAULT_RETARDATION = 50L;
 
     private static final Logger log = LoggerFactory.getLogger(Systemd.class);
@@ -184,6 +185,7 @@ public final class Systemd {
 
         try {
             dbus = DBusConnection.getConnection(instanceType.getIndex());
+            dbus.changeThreadCount(DEFAULT_THREAD_POOL_SIZE);
         }
         catch (final DBusException e) {
             log.error(String.format("Unable to connect to %s bus", instanceType), e);
