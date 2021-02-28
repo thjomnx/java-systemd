@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,7 +53,7 @@ public class UnitTest extends AbstractTestCase {
     }
 
     // This method is called from derived test classes hence no need for annotation
-    public void testUnitProperties(final Unit unit, final String[] propertyNames) {
+    public void testUnitProperties(final Unit unit, final Collection<String> propertyNames) {
         for (String propertyName : Unit.Property.getAllNames()) {
             if (!nonVariantProperties.contains(propertyName)) {
                 Object value = unit.getUnitProperties().getVariant(propertyName).getValue();

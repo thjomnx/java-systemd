@@ -177,7 +177,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

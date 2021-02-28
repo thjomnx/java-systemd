@@ -140,7 +140,7 @@ public class Service extends Unit implements ExtendedCpuAccounting, DynamicUserA
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     ExtendedCpuAccounting.Property.class,

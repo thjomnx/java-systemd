@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.util.Collection;
 import java.util.List;
 
 import org.freedesktop.dbus.connections.impl.DBusConnection;
@@ -58,7 +59,7 @@ class AbstractTestCase {
         }
     }
 
-    protected void setupPropertyMocks(final Class<?> iface, final String serviceName, final String[] propertyNames) {
+    protected void setupPropertyMocks(final Class<?> iface, final String serviceName, final Collection<String> propertyNames) {
         try {
             for (String propertyName : propertyNames) {
                 Method method = null;

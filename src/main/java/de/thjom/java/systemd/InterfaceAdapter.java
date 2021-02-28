@@ -105,7 +105,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
             // Do nothing (static implementation)
         }
 
-        protected static final String[] getAllNames(final Class<?>... types) {
+        protected static final List<String> getAllNames(final Class<?>... types) {
             List<String> names = new ArrayList<>();
 
             for (Class<?> type : types) {
@@ -130,7 +130,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
                 }
             }
 
-            return names.toArray(new String[names.size()]);
+            return names;
         }
 
     }

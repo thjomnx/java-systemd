@@ -140,7 +140,7 @@ public class Socket extends Unit implements ExtendedCpuAccounting, DynamicUserAc
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     ExtendedCpuAccounting.Property.class,

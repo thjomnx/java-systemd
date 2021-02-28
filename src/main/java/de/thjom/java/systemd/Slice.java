@@ -41,7 +41,7 @@ public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccoun
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     CpuAccounting.Property.class,

@@ -12,6 +12,7 @@
 package de.thjom.java.systemd.features;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import de.thjom.java.systemd.InterfaceAdapter;
 
@@ -34,7 +35,7 @@ public interface CpuAccounting extends Feature {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

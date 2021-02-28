@@ -33,7 +33,7 @@ public interface IpAccounting extends Feature {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

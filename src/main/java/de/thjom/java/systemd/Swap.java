@@ -92,7 +92,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     ExtendedCpuAccounting.Property.class,
