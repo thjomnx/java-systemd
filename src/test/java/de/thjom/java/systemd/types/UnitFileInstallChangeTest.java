@@ -26,11 +26,11 @@ public class UnitFileInstallChangeTest {
         Assert.assertEquals(instance.getUnitFileChange(), UNIT_FILE_CHANGE);
     }
 
-    @Test(description="Tests the summary string aggregator.")
-    public void testSummary() {
+    @Test(description="Tests the formatted string aggregator.")
+    public void testFormattedString() {
         UnitFileInstallChange instance = new UnitFileInstallChange(true, UNIT_FILE_CHANGE);
 
-        Assert.assertEquals(instance.getSummary(), "true " + UNIT_FILE_CHANGE.getSummary());
+        Assert.assertEquals(instance.toFormattedString(), "true " + UNIT_FILE_CHANGE.toFormattedString());
     }
 
 }

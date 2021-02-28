@@ -65,24 +65,6 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
         this.jobObjectPath = jobObjectPath;
     }
 
-    public String getSummary() {
-        StringBuilder summary = new StringBuilder(500);
-        summary.append(unitName).append(System.lineSeparator());
-        summary.append(String.format(" Description: %s", unitDescription)).append(System.lineSeparator());
-        summary.append(String.format(" LoadState: %s", loadState)).append(System.lineSeparator());
-        summary.append(String.format(" ActiveState: %s", activeState)).append(System.lineSeparator());
-        summary.append(String.format(" SubState: %s", subState)).append(System.lineSeparator());
-        summary.append(String.format(" FollowingUnit: %s", followingUnit)).append(System.lineSeparator());
-        summary.append(String.format(" ObjectPath: %s", unitObjectPath)).append(System.lineSeparator());
-        summary.append(String.format(" JobID: %d", jobId)).append(System.lineSeparator());
-        summary.append(String.format(" JobType: %s", jobType)).append(System.lineSeparator());
-        summary.append(String.format(" JobObjectPath: %s", jobObjectPath));
-
-        summary.trimToSize();
-
-        return summary.toString();
-    }
-
     public String getUnitName() {
         return unitName;
     }
@@ -121,6 +103,24 @@ public class UnitType extends UnitBase implements Comparable<UnitType> {
 
     public DBusPath getJobObjectPath() {
         return jobObjectPath;
+    }
+
+    public String toFormattedString() {
+        StringBuilder builder = new StringBuilder(500)
+                .append(unitName).append(System.lineSeparator())
+                .append(" Description: ").append(unitDescription).append(System.lineSeparator())
+                .append(" LoadState: ").append(loadState).append(System.lineSeparator())
+                .append(" ActiveState: ").append(activeState).append(System.lineSeparator())
+                .append(" SubState: ").append(subState).append(System.lineSeparator())
+                .append(" FollowingUnit: ").append(followingUnit).append(System.lineSeparator())
+                .append(" ObjectPath: ").append(unitObjectPath).append(System.lineSeparator())
+                .append(" JobID: ").append(jobId).append(System.lineSeparator())
+                .append(" JobType: ").append(jobType).append(System.lineSeparator())
+                .append(" JobObjectPath: ").append(jobObjectPath).append(System.lineSeparator());
+
+        builder.trimToSize();
+
+        return builder.toString();
     }
 
     @Override

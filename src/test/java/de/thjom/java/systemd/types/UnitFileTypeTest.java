@@ -28,11 +28,11 @@ public class UnitFileTypeTest {
         Assert.assertEquals(type.getStatus(), "loaded");
     }
 
-    @Test(description="Tests the summary string aggregator.")
-    public void testSummary() {
+    @Test(description="Tests the formatted string aggregator.")
+    public void testFormattedString() {
         UnitFileType type = new UnitFileType("/usr/lib/systemd/system/avahi-daemon.service", "loaded");
 
-        Assert.assertEquals(type.getSummary(), "/usr/lib/systemd/system/avahi-daemon.service loaded");
+        Assert.assertEquals(type.toFormattedString(), "/usr/lib/systemd/system/avahi-daemon.service loaded");
     }
 
     @Test(description="Tests the implemention of the 'Comparable' interface.")

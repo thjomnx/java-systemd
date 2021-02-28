@@ -30,11 +30,11 @@ public class UnitProcessTypeTest {
         Assert.assertEquals(type.getCommandLine(), "/sbin/init");
     }
 
-    @Test(description="Tests the summary string aggregator.")
-    public void testSummary() {
+    @Test(description="Tests the formatted string aggregator.")
+    public void testFormattedString() {
         UnitProcessType type = new UnitProcessType("/user.slice", new UInt32(23L), "/sbin/init");
 
-        Assert.assertEquals(type.getSummary(), "/user.slice 23 /sbin/init");
+        Assert.assertEquals(type.toFormattedString(), "/user.slice 23 /sbin/init");
     }
 
     @Test(description="Tests the implemention of the 'Comparable' interface.")

@@ -25,16 +25,16 @@ public class UnitFileInstallChange extends Tuple {
         this.unitFileChange = unitFileChange;
     }
 
-    public String getSummary() {
-        return String.format("%b %s", carriesInstallInfo, unitFileChange != null ? unitFileChange.getSummary() : null);
-    }
-
     public boolean isCarriesInstallInfo() {
         return carriesInstallInfo;
     }
 
     public UnitFileChange getUnitFileChange() {
         return unitFileChange;
+    }
+
+    public String toFormattedString() {
+        return String.format("%b %s", carriesInstallInfo, unitFileChange != null ? unitFileChange.toFormattedString() : null);
     }
 
 }

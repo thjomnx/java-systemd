@@ -33,10 +33,6 @@ public class UnitFileChange extends Struct {
         this.changeSource = changeSource;
     }
 
-    public String getSummary() {
-        return String.format("%s %s %s", changeType, changePath, changeSource);
-    }
-
     public String getChangeType() {
         return changeType;
     }
@@ -47,6 +43,10 @@ public class UnitFileChange extends Struct {
 
     public String getChangeSource() {
         return changeSource;
+    }
+
+    public String toFormattedString() {
+        return String.format("%s %s %s", changeType, changePath, changeSource);
     }
 
 }

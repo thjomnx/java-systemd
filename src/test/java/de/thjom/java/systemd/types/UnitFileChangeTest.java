@@ -25,11 +25,11 @@ public class UnitFileChangeTest {
         Assert.assertEquals(type.getChangeSource(), "source0");
     }
 
-    @Test(description="Tests the summary string aggregator.")
-    public void testSummary() {
+    @Test(description="Tests the formatted string aggregator.")
+    public void testFormattedString() {
         UnitFileChange type = new UnitFileChange("type0", "path0", "source0");
 
-        Assert.assertEquals(type.getSummary(), "type0 path0 source0");
+        Assert.assertEquals(type.toFormattedString(), "type0 path0 source0");
     }
 
 }

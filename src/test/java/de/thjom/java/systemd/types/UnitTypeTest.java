@@ -47,8 +47,8 @@ public class UnitTypeTest {
         Assert.assertEquals(type.getJobObjectPath().getPath(), "dummy_path");
     }
 
-    @Test(description="Tests the summary string aggregator.")
-    public void testSummary() {
+    @Test(description="Tests the formatted string aggregator.")
+    public void testFormattedString() {
         String unitName = "dummy.service";
 
         UnitType type = new UnitType(unitName, "Dummy unit",
@@ -57,7 +57,7 @@ public class UnitTypeTest {
                 new DBusPath(Unit.OBJECT_PATH + Systemd.escapePath(unitName)),
                 new UInt32(42L), "dummy type", new DBusPath("dummy_path"));
 
-        Assert.assertFalse(type.getSummary().isEmpty());
+        Assert.assertFalse(type.toFormattedString().isEmpty());
     }
 
     @Test(description="Tests the implemention of the 'Comparable' interface.")

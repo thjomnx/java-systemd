@@ -34,10 +34,6 @@ public class UnitProcessType extends Struct implements Comparable<UnitProcessTyp
         this.commandLine = commandLine;
     }
 
-    public String getSummary() {
-        return String.format("%s %d %s", cgroupPath, pid, commandLine);
-    }
-
     public String getCgroupPath() {
         return cgroupPath;
     }
@@ -48,6 +44,10 @@ public class UnitProcessType extends Struct implements Comparable<UnitProcessTyp
 
     public String getCommandLine() {
         return commandLine;
+    }
+
+    public String toFormattedString() {
+        return String.format("%s %d %s", cgroupPath, pid, commandLine);
     }
 
     @Override

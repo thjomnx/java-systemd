@@ -28,16 +28,16 @@ public class UnitFileType extends UnitBase implements Comparable<UnitFileType> {
         this.status = status;
     }
 
-    public String getSummary() {
-        return String.format("%s %s", path, status);
-    }
-
     public String getPath() {
         return path;
     }
 
     public String getStatus() {
         return status;
+    }
+
+    public String toFormattedString() {
+        return String.format("%s %s", path, status);
     }
 
     @Override
