@@ -28,8 +28,6 @@ import de.thjom.java.systemd.interfaces.PropertyInterface;
 
 public abstract class InterfaceAdapter extends AbstractAdapter implements DBusInterface {
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
-
     protected final DBusConnection dbus;
 
     protected Properties properties;
@@ -97,31 +95,26 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
 
     public static class AdapterProperty {
 
-        protected static final String ERROR_PROPERTY_MISSING = "Unable to retrieve property (not implemented)";
-
         private static final Logger LOG = LoggerFactory.getLogger(AdapterProperty.class);
 
         protected AdapterProperty() {
             // Do nothing (static implementation)
         }
 
-        protected static final List<String> getAllNames(final Class<?>... types) {
+        protected static List<String> getAllNames(final Class<?>... types) {
             List<String> names = new ArrayList<>();
 
             for (Class<?> type : types) {
                 Field[] fields = type.getDeclaredFields();
 
-                for (int i = 0; i < fields.length; i++) {
-                    Field field = fields[i];
-
+                for (Field field : fields) {
                     // Exclude synthetic fields (occurs during code coverage analysis)
                     if (!field.isSynthetic()) {
                         Object obj = "";
 
                         try {
                             obj = field.get(null);
-                        }
-                        catch (final IllegalAccessException | IllegalArgumentException e) {
+                        } catch (final IllegalAccessException | IllegalArgumentException e) {
                             LOG.error("Unable to enumerate field names", e);
                         }
 

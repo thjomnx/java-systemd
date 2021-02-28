@@ -59,9 +59,9 @@ public final class Systemd {
     public static final byte DEFAULT_THREAD_POOL_SIZE = 1;
     public static final long DEFAULT_RETARDATION = 50L;
 
-    private static final Logger log = LoggerFactory.getLogger(Systemd.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Systemd.class);
 
-    private static final Systemd[] instances = new Systemd[InstanceType.values().length];
+    private static final Systemd[] INSTANCES = new Systemd[InstanceType.values().length];
 
     private final InstanceType instanceType;
 
@@ -111,15 +111,15 @@ public final class Systemd {
 
         Systemd instance;
 
-        synchronized (instances) {
-            if (instances[index.ordinal()] == null) {
+        synchronized (INSTANCES) {
+            if (INSTANCES[index.ordinal()] == null) {
                 instance = new Systemd(instanceType);
                 instance.open();
 
-                instances[index.ordinal()] = instance;
+                INSTANCES[index.ordinal()] = instance;
             }
             else {
-                instance = instances[index.ordinal()];
+                instance = INSTANCES[index.ordinal()];
             }
         }
 
@@ -137,21 +137,21 @@ public final class Systemd {
     public static void disconnect(final InstanceType instanceType, final long retardationTime) {
         final DBusBusType index = instanceType.getIndex();
 
-        synchronized (instances) {
-            Systemd instance = instances[index.ordinal()];
+        synchronized (INSTANCES) {
+            Systemd instance = INSTANCES[index.ordinal()];
 
             if (instance != null) {
                 try {
                     instance.close(retardationTime);
                 }
                 catch (final InterruptedException e) {
-                    log.error("Disconnection interrupted while retarding", e);
+                    LOG.error("Disconnection interrupted while retarding", e);
 
                     Thread.currentThread().interrupt();
                 }
             }
 
-            instances[index.ordinal()] = null;
+            INSTANCES[index.ordinal()] = null;
         }
     }
 
@@ -160,27 +160,27 @@ public final class Systemd {
     }
 
     public static void disconnectAll(final long retardationTime) {
-        synchronized (instances) {
-            for (Systemd instance : instances) {
+        synchronized (INSTANCES) {
+            for (Systemd instance : INSTANCES) {
                 if (instance != null) {
                     try {
                         instance.close(retardationTime);
                     }
                     catch (final InterruptedException e) {
-                        log.error("Disconnection interrupted while retarding", e);
+                        LOG.error("Disconnection interrupted while retarding", e);
 
                         Thread.currentThread().interrupt();
                     }
                 }
             }
 
-            Arrays.fill(instances, null);
+            Arrays.fill(INSTANCES, null);
         }
     }
 
     private void open() throws DBusException {
-        if (log.isDebugEnabled()) {
-            log.debug(String.format("Connecting to %s bus", instanceType));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Connecting to %s bus", instanceType));
         }
 
         try {
@@ -188,7 +188,7 @@ public final class Systemd {
             dbus.changeThreadCount(DEFAULT_THREAD_POOL_SIZE);
         }
         catch (final DBusException e) {
-            log.error(String.format("Unable to connect to %s bus", instanceType), e);
+            LOG.error(String.format("Unable to connect to %s bus", instanceType), e);
 
             throw e;
         }
@@ -196,8 +196,8 @@ public final class Systemd {
 
     private void close(final long retardationTime) throws InterruptedException {
         if (isConnected()) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Disconnecting from %s bus", instanceType));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Disconnecting from %s bus", instanceType));
             }
 
             dbus.disconnect();
@@ -223,8 +223,8 @@ public final class Systemd {
                 throw new DBusException("Unable to create manager without bus (please connect first)");
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Creating new manager instance on %s bus", instanceType));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Creating new manager instance on %s bus", instanceType));
             }
 
             manager = Manager.create(dbus);

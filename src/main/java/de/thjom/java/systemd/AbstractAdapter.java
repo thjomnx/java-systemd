@@ -58,7 +58,7 @@ abstract class AbstractAdapter {
     }
 
     protected DBusSigHandler<PropertiesChanged> createStateHandler() {
-        return s -> {};
+        return signal -> {};
     }
 
 }

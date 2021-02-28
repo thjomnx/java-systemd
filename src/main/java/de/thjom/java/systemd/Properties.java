@@ -58,15 +58,11 @@ public class Properties extends InterfaceAdapter {
     }
 
     public boolean getBoolean(final String propertyName) {
-        Boolean value = (Boolean) getVariant(propertyName).getValue();
-
-        return value.booleanValue();
+        return (Boolean) getVariant(propertyName).getValue();
     }
 
     public byte getByte(final String propertyName) {
-        Byte value = (Byte) getVariant(propertyName).getValue();
-
-        return value.byteValue();
+        return (Byte) getVariant(propertyName).getValue();
     }
 
     public short getShort(final String propertyName) {

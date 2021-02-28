@@ -65,20 +65,19 @@ public class Condition {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ConditionInfo [type=");
-        builder.append(type);
-        builder.append(", trigger=");
-        builder.append(trigger);
-        builder.append(", reversed=");
-        builder.append(reversed);
-        builder.append(", value=");
-        builder.append(value);
-        builder.append(", status=");
-        builder.append(status);
-        builder.append("]");
-
-        return builder.toString();
+        return new StringBuilder()
+                .append("ConditionInfo [type=")
+                .append(type)
+                .append(", trigger=")
+                .append(trigger)
+                .append(", reversed=")
+                .append(reversed)
+                .append(", value=")
+                .append(value)
+                .append(", status=")
+                .append(status)
+                .append("]")
+                .toString();
     }
 
 }

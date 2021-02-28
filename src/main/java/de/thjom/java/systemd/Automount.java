@@ -34,7 +34,7 @@ public class Automount extends Unit {
             super();
         }
 
-        public static final List<String> getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

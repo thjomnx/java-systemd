@@ -11,6 +11,7 @@
 
 package de.thjom.java.systemd;
 
+import java.util.Collections;
 import java.util.EnumSet;
 
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -119,9 +120,7 @@ public class UnitTypeMonitor extends UnitMonitor {
     }
 
     public final void addMonitoredTypes(final MonitoredType... monitoredTypes) throws DBusException {
-        for (MonitoredType monitoredType : monitoredTypes) {
-            this.monitoredTypes.add(monitoredType);
-        }
+        Collections.addAll(this.monitoredTypes, monitoredTypes);
 
         refresh();
     }

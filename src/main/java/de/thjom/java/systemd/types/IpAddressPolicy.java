@@ -70,8 +70,7 @@ public class IpAddressPolicy {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IpAddressPolicy [family=");
+        StringBuilder builder = new StringBuilder("IpAddressPolicy [family=");
 
         if (family == 2) {
             builder.append("IPv4");
@@ -83,9 +82,7 @@ public class IpAddressPolicy {
             builder.append("unknown");
         }
 
-        builder.append('(');
-        builder.append(family);
-        builder.append(')');
+        builder.append('(').append(family).append(')');
         builder.append(", address=");
 
         try {
@@ -95,9 +92,7 @@ public class IpAddressPolicy {
             builder.append("unknown");
         }
 
-        builder.append("/");
-        builder.append(prefix);
-        builder.append("]");
+        builder.append("/").append(prefix).append("]");
 
         return builder.toString();
     }

@@ -98,7 +98,7 @@ public class Mount extends Unit implements ExtendedCpuAccounting, DynamicUserAcc
             super();
         }
 
-        public static final List<String> getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     ExtendedCpuAccounting.Property.class,

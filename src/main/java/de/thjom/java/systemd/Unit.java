@@ -45,7 +45,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
         private final String value;
 
-        private Who(final String value) {
+        Who(final String value) {
             this.value = value;
         }
 
@@ -69,7 +69,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
         private final String value;
 
-        private Mode(final String value) {
+        Mode(final String value) {
             this.value = value;
         }
 
@@ -177,7 +177,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
             super();
         }
 
-        public static final List<String> getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 
@@ -262,8 +262,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     @Override
     protected DBusSigHandler<PropertiesChanged> createStateHandler() {
-        return s -> {
-            Map<String, Variant<?>> properties = s.getPropertiesChanged();
+        return signal -> {
+            Map<String, Variant<?>> properties = signal.getPropertiesChanged();
 
             if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                 synchronized (unitStateListeners) {

@@ -24,14 +24,14 @@ public class IpAddressPolicyTest {
     @Test(description = "Tests parameterized constructor.")
     public void testConstructor() {
         IpAddressPolicy instance = new IpAddressPolicy(new Object[] {
-                4,
+                2,
                 Arrays.asList((byte) 127, (byte) 0, (byte) 0, (byte) 1),
                 new UInt32("8")
         }
         );
 
         Assert.assertNotNull(instance);
-        Assert.assertEquals(instance.getFamily(), 4);
+        Assert.assertEquals(instance.getFamily(), 2);
         Assert.assertEquals(instance.getAddress(), new byte[] { 127, 0, 0, 1 });
         Assert.assertEquals(instance.getPrefix(), 8L);
     }

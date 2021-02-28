@@ -148,7 +148,7 @@ public class Manager extends InterfaceAdapter {
             super();
         }
 
-        public static final List<String> getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

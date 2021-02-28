@@ -99,30 +99,29 @@ public class ExecutionInfo {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ExecutionInfo [binaryPath=");
-        builder.append(binaryPath);
-        builder.append(", arguments=");
-        builder.append(arguments);
-        builder.append(", failOnUncleanExit=");
-        builder.append(failOnUncleanExit);
-        builder.append(", lastStartTimestamp=");
-        builder.append(lastStartTimestamp);
-        builder.append(", lastStartTimestampMonotonic=");
-        builder.append(lastStartTimestampMonotonic);
-        builder.append(", lastFinishTimestamp=");
-        builder.append(lastFinishTimestamp);
-        builder.append(", lastFinishTimestampMonotonic=");
-        builder.append(lastFinishTimestampMonotonic);
-        builder.append(", processId=");
-        builder.append(processId);
-        builder.append(", lastExitCode=");
-        builder.append(lastExitCode);
-        builder.append(", lastExitStatus=");
-        builder.append(lastExitStatus);
-        builder.append("]");
-
-        return builder.toString();
+        return new StringBuilder()
+                .append("ExecutionInfo [binaryPath=")
+                .append(binaryPath)
+                .append(", arguments=")
+                .append(arguments)
+                .append(", failOnUncleanExit=")
+                .append(failOnUncleanExit)
+                .append(", lastStartTimestamp=")
+                .append(lastStartTimestamp)
+                .append(", lastStartTimestampMonotonic=")
+                .append(lastStartTimestampMonotonic)
+                .append(", lastFinishTimestamp=")
+                .append(lastFinishTimestamp)
+                .append(", lastFinishTimestampMonotonic=")
+                .append(lastFinishTimestampMonotonic)
+                .append(", processId=")
+                .append(processId)
+                .append(", lastExitCode=")
+                .append(lastExitCode)
+                .append(", lastExitStatus=")
+                .append(lastExitStatus)
+                .append("]")
+                .toString();
     }
 
 }

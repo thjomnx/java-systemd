@@ -61,18 +61,17 @@ public class BindPath {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("BindPath [source=");
-        builder.append(source);
-        builder.append(", destination=");
-        builder.append(destination);
-        builder.append(", ignoreErrorNoEntity=");
-        builder.append(ignoreErrorNoEntity);
-        builder.append(", recursive=");
-        builder.append(recursive);
-        builder.append("]");
-
-        return builder.toString();
+        return new StringBuilder()
+                .append("BindPath [source=")
+                .append(source)
+                .append(", destination=")
+                .append(destination)
+                .append(", ignoreErrorNoEntity=")
+                .append(ignoreErrorNoEntity)
+                .append(", recursive=")
+                .append(recursive)
+                .append("]")
+                .toString();
     }
 
 }
