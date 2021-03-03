@@ -81,8 +81,15 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
         if (this == obj) {
             return true;
         }
-        else if (obj != null) {
-            return obj.hashCode() == hashCode();
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            InterfaceAdapter other = (InterfaceAdapter) obj;
+
+            return dbus.getUniqueName().equals(other.dbus.getUniqueName()) && getObjectPath().equals(other.getObjectPath());
         }
 
         return false;
