@@ -1,4 +1,4 @@
-name: Maven CI/CD
+name: build/tests
 
 on: push
 
