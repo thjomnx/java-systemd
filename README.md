@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/thjomnx/java-systemd.svg?branch=master)](https://travis-ci.org/thjomnx/java-systemd)
+[![Build Status](https://github.com/thjomnx/java-systemd/actions/workflows/ci.yml/badge.svg)](https://github.com/thjomnx/java-systemd/actions)
 [![Sonarqube quality gate](https://sonarcloud.io/api/project_badges/measure?project=com.github.thjomnx%3Ajava-systemd&metric=alert_status)](https://sonarqube.com/dashboard/index?id=com.github.thjomnx:java-systemd)
 [![Sonarqube test coverage](https://sonarcloud.io/api/project_badges/measure?project=com.github.thjomnx%3Ajava-systemd&metric=coverage)](https://sonarqube.com/dashboard/index?id=com.github.thjomnx:java-systemd)
 [![Sonarqube lines of code](https://sonarcloud.io/api/project_badges/measure?project=com.github.thjomnx%3Ajava-systemd&metric=ncloc)](https://sonarqube.com/dashboard/index?id=com.github.thjomnx:java-systemd)
