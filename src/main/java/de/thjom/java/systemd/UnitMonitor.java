@@ -37,9 +37,9 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
 
     protected static final String ERROR_MSG_MONITOR_REFRESH = "Error while refreshing internal monitor state";
 
-	private static final String ACTIVE_STATE = "active";
-	private static final String LOAD_STATE = "loaded";
-	private static final String SUB_STATE = "running";
+	private static final String ACTIVE_STATE = Unit.Property.ACTIVE_STATE;
+	private static final String LOAD_STATE = Unit.Property.LOAD_STATE;
+	private static final String SUB_STATE = Unit.Property.SUB_STATE;
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -86,7 +86,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
     @Override
     protected DBusSigHandler<PropertiesChanged> createStateHandler() {
         return signal -> {
-            Optional<Unit> unit = getMonitoredUnit(Unit.extractName(signal.getPath()));
+            Optional<Unit> unit = findMonitoredUnit(Unit.extractName(signal.getPath()));
 
             if (unit.isPresent()) {
                 Map<String, Variant<?>> properties = signal.getPropertiesChanged();
@@ -150,7 +150,11 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
     }
 
     public Optional<Unit> getMonitoredUnit(final String unitName) {
-        return Optional.ofNullable(monitoredUnits.get(Systemd.escapePath(unitName)));
+        return findMonitoredUnit(Systemd.escapePath(unitName));
+    }
+
+    protected Optional<Unit> findMonitoredUnit(final String escapedUnitName) {
+        return Optional.ofNullable(monitoredUnits.get(escapedUnitName));
     }
 
     public Collection<Unit> getMonitoredUnits() {
