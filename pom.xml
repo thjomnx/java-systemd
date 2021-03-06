@@ -189,35 +189,39 @@
     <profile>
       <id>sonar</id>
 
-      <dependencies>
-        <!-- JaCoCo listeners do not work with recent Surefire/TestNG versions -->
-        <dependency>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-          <version>7.3.0</version>
-          <scope>test</scope>
-        </dependency>
-
-        <dependency>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>sonar-jacoco-listeners</artifactId>
-          <version>5.14.0.18788</version>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
+      <properties>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>thjomnx-github</sonar.organization>
+        <sonar.projectKey>com.github.thjomnx:java-systemd</sonar.projectKey>
+      </properties>
 
       <build>
         <plugins>
           <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.6</version>
+            <executions>
+              <execution>
+                <id>coverage-initialize</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>coverage-report</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <properties>
-                <property>
-                  <name>listener</name>
-                  <value>org.sonar.java.jacoco.TestNGListener</value>
-                </property>
-              </properties>
+              <argLine>@{argLine}</argLine>
             </configuration>
           </plugin>
         </plugins>
