@@ -25,7 +25,8 @@ public class SystemdTest {
 
     @Test(description="Tests object path escape function.")
     public void testPathEscaping() {
-        Assert.assertEquals(Systemd.escapePath("cronie.service"), "cronie_2eservice");
+        Assert.assertEquals(Systemd.escapePath("systemd-backlight@leds:tpacpi::kbd_backlight.service"),
+                "systemd_2dbacklight_40leds_3atpacpi_3a_3akbd_5fbacklight_2eservice");
         Assert.assertEquals(Systemd.escapePath(new StringBuffer("systemd-logind.service")), "systemd_2dlogind_2eservice");
         Assert.assertEquals(Systemd.escapePath(new StringBuilder("user@1000.service")), "user_401000_2eservice");
         Assert.assertEquals(Systemd.escapePath(null), "");

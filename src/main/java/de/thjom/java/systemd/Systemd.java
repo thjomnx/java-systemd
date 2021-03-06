@@ -54,7 +54,7 @@ public final class Systemd {
     public static final String SERVICE_NAME = "org.freedesktop.systemd1";
     public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
 
-    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
+    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("([\\W_])");
 
     public static final byte DEFAULT_THREAD_POOL_SIZE = 1;
 
