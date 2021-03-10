@@ -29,7 +29,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
@@ -48,7 +47,6 @@ class AbstractTestCase {
     @InjectMocks
     protected Systemd systemd;
 
-    @BeforeClass
     public void setup() {
         MockitoAnnotations.openMocks(this);
 
