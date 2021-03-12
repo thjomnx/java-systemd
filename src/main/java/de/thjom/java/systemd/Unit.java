@@ -18,6 +18,7 @@ import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -191,8 +192,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
         super(manager.dbus, iface);
 
-        this.name = name;
-        this.manager = manager;
+        this.name = Objects.requireNonNull(name);
+        this.manager = Objects.requireNonNull(manager);
 
         this.unitProperties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
@@ -226,6 +227,30 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         }
 
         return name;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            Unit other = (Unit) obj;
+
+            return super.equals(obj) && name.equals(other.name);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
     }
 
     @Override

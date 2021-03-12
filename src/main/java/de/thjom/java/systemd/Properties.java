@@ -13,6 +13,7 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -30,13 +31,37 @@ public class Properties extends InterfaceAdapter {
     private Properties(final DBusConnection dbus, final PropertyInterface iface, final String serviceName) {
         super(dbus, iface);
 
-        this.serviceName = serviceName;
+        this.serviceName = Objects.requireNonNull(serviceName);
     }
 
     static Properties create(final DBusConnection dbus, final String objectPath, final String serviceName) throws DBusException {
         PropertyInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, PropertyInterface.class);
 
         return new Properties(dbus, iface, serviceName);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            Properties other = (Properties) obj;
+
+            return super.equals(obj) && serviceName.equals(other.serviceName);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), serviceName);
     }
 
     @Override
