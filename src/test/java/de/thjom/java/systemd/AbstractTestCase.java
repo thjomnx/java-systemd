@@ -33,7 +33,7 @@ import org.testng.Assert;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
-class AbstractTestCase {
+abstract class AbstractTestCase {
 
     @Mock
     protected DBusConnection dbus;
@@ -47,7 +47,7 @@ class AbstractTestCase {
     @InjectMocks
     protected Systemd systemd;
 
-    public void setup() {
+    protected void setup() {
         MockitoAnnotations.openMocks(this);
 
         try {
