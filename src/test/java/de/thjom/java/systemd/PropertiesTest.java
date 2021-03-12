@@ -49,7 +49,8 @@ public class PropertiesTest extends AbstractTestCase {
         Properties bar = Properties.create(dbus, "dummy", Properties.SERVICE_NAME + "bar");
 
         Assert.assertNotEquals(foo0, null);
-        Assert.assertNotEquals(foo0, new Object());
+        Assert.assertFalse(foo0.equals(null));
+        Assert.assertFalse(foo0.equals(new Object()));
         Assert.assertEquals(foo0, foo0);
         Assert.assertEquals(foo0, foo1);
         Assert.assertNotEquals(foo0, bar);

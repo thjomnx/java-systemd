@@ -78,7 +78,8 @@ public class UnitTest extends AbstractTestCase {
         TestUnit bar = TestUnit.create(systemd.getManager(), "bar.service");
 
         Assert.assertNotEquals(foo0, null);
-        Assert.assertNotEquals(foo0, new Object());
+        Assert.assertFalse(foo0.equals(null));
+        Assert.assertFalse(foo0.equals(new Object()));
         Assert.assertEquals(foo0, foo0);
         Assert.assertEquals(foo0, foo1);
         Assert.assertNotEquals(foo0, bar);
