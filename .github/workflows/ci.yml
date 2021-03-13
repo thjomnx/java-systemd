@@ -19,4 +19,6 @@ jobs:
           java-version: 11
 
       - name: Maven build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn --batch-mode -P sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }} verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
