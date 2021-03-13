@@ -23,4 +23,7 @@ jobs:
           java-version: 11
 
       - name: Run SonarCloud analysis
-        run: mvn --batch-mode -P sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }} verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: mvn --batch-mode -P sonar verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
