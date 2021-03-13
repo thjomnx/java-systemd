@@ -41,8 +41,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>11</maven.compiler.release>
-    <sonar.junit.reportsPath>target/surefire-reports/junitreports</sonar.junit.reportsPath>
-    <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
   </properties>
 
   <dependencies>
@@ -148,6 +146,9 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <version>3.2.0</version>
+            <configuration>
+              <javadocExecutable>${java.home}/bin</javadocExecutable>
+            </configuration>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
