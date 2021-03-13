@@ -7,23 +7,16 @@ on:
       - 'release/**'
 
 jobs:
-  sonar_analysis:
-    name: Run Sonar analysis via Maven
+  sonarcloud:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-
       - name: Run SonarCloud analysis
-        run: mvn --batch-mode -P sonar verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

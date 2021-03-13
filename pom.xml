@@ -193,6 +193,7 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.organization>thjomnx-github</sonar.organization>
         <sonar.projectKey>com.github.thjomnx:java-systemd</sonar.projectKey>
+        <sonar.sources>./src</sonar.sources>
       </properties>
 
       <build>
