@@ -3,18 +3,17 @@ name: build
 on: push
 
 jobs:
-  build_and_test:
-    name: Run Maven build
+  maven:
+    name: Project build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Repository checkout
         uses: actions/checkout@v2
 
-      - name: Set up JDK 11
+      - name: JDK setup
         uses: actions/setup-java@v1
         with:
           java-version: 11
 
-      - name: Build and test project
+      - name: Maven build
         run: mvn --batch-mode verify
