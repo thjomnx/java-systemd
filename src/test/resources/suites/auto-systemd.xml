@@ -10,9 +10,9 @@
     <test name="all">
         <packages>
             <package name="de.thjom.java.systemd" />
-            <package name="de.thjom.java.systemd.tools" />
+            <package name="de.thjom.java.systemd.features" />
+            <package name="de.thjom.java.systemd.interfaces" />
             <package name="de.thjom.java.systemd.types" />
-            <package name="de.thjom.java.systemd.utils" />
         </packages>
     </test>
 </suite>
