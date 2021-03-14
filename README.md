@@ -18,16 +18,27 @@ This library shall:
     - omit automatic (and low-performance) reflection stuff being done in dbus-java
     - provide observer-like patterns for objects along D-Bus signalling
 
+## Versions
+
+There are two major versions available on the [central repository](https://search.maven.org/artifact/com.github.thjomnx/java-systemd):
+
+- **2.x** (depends on dbus-java version 3)
+- **1.x** (depends on dbus-java version 2)
+
 ## Usage
 
 Documentation and instructions how to use this library can be found in the [Wiki](https://github.com/thjomnx/java-systemd/wiki).
 
 ## Testing
 
-Unit tests are based on [TestNG](http://testng.org/doc/index.html) and [Mockito](http://mockito.org/). Test methods which require a deployed systemd environment are grouped
-in TestNG group "requireSystemd". There are two TestNG suites available:
+Unit tests are based on [TestNG](http://testng.org/doc/index.html) and [Mockito](http://mockito.org/). Test methods which require
+a deployed systemd environment are grouped in TestNG group "requireSystemd". There are two TestNG suites available:
 - src/test/resources/suites/**auto-systemd.xml** (executes all tests)
 - src/test/resources/suites/**auto.xml** (excludes group "requireSystemd")
+
+## Contributions
+
+- Thanks to [brett-smith](https://github.com/brett-smith) for initial migration work to support dbus-java version 3.
 
 ## License
 

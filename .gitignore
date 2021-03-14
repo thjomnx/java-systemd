@@ -6,7 +6,7 @@ build/
 target/
 test-output/
 
-# Eclipse / idea
+# Eclipse / IntelliJ IDEA
 .idea
 .project
 .classpath
