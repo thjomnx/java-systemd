@@ -11,7 +11,8 @@
 
 package de.thjom.java.systemd.types;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -20,15 +21,15 @@ public class AddressFamilyRestrictionTest {
 
     @Test(description="Tests parameterized constructor.")
     public void testConstructor() {
-        Vector<String> vec = new Vector<>();
-        vec.add("foo");
-        vec.add("bar");
+        List<String> list = new ArrayList<>();
+        list.add("foo");
+        list.add("bar");
 
-        AddressFamilyRestriction instance = new AddressFamilyRestriction(new Object[] { true, vec });
+        AddressFamilyRestriction instance = new AddressFamilyRestriction(new Object[] { true, list });
 
         Assert.assertNotNull(instance);
         Assert.assertTrue(instance.isBlacklist());
-        Assert.assertEquals(instance.getAddressFamilies(), vec);
+        Assert.assertEquals(instance.getAddressFamilies(), list);
     }
 
     @Test(description="Tests constructor failure cases due to malformed arguments.")

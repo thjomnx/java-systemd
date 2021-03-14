@@ -12,10 +12,10 @@
 package de.thjom.java.systemd.types;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -46,21 +46,21 @@ public class IODeviceWeightTest {
 
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
-        Vector<Object[]> vec = new Vector<>();
+        List<Object[]> source = new ArrayList<>();
 
-        List<IODeviceWeight> list = IODeviceWeight.list(vec);
+        List<IODeviceWeight> list = IODeviceWeight.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo", new UInt64("23") });
-        vec.add(new Object[] { "bar", new UInt64("42") });
+        source.add(new Object[] { "foo", new UInt64("23") });
+        source.add(new Object[] { "bar", new UInt64("42") });
 
-        list = IODeviceWeight.list(vec);
+        list = IODeviceWeight.list(source);
 
-        Assert.assertNotNull(list);
-        Assert.assertEquals(list.size(), 2);
+        Assert.assertNotNull(source);
+        Assert.assertEquals(source.size(), 2);
 
         IODeviceWeight item = list.get(0);
 
@@ -77,13 +77,13 @@ public class IODeviceWeightTest {
 
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
-        Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[0]);
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[0]);
 
         Exception exc = null;
 
         try {
-            IODeviceWeight.list(vec);
+            IODeviceWeight.list(list);
         }
         catch (Exception e) {
             exc = e;
@@ -92,13 +92,13 @@ public class IODeviceWeightTest {
         Assert.assertEquals(exc.getClass(), ArrayIndexOutOfBoundsException.class);
 
         // Next test
-        vec.clear();
-        vec.add(new Object[] { "foo", (int) 1 });
+        list.clear();
+        list.add(new Object[] { "foo", (int) 1 });
 
         exc = null;
 
         try {
-            IODeviceWeight.list(vec);
+            IODeviceWeight.list(list);
         }
         catch (Exception e) {
             exc = e;

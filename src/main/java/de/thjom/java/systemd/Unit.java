@@ -18,15 +18,15 @@ import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
+import java.util.Objects;
 
-import org.freedesktop.DBus.Introspectable;
-import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.interfaces.Introspectable;
+import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+import org.freedesktop.dbus.messages.DBusSignal;
+import org.freedesktop.dbus.types.Variant;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 import de.thjom.java.systemd.interfaces.UnitInterface;
@@ -46,7 +46,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
         private final String value;
 
-        private Who(final String value) {
+        Who(final String value) {
             this.value = value;
         }
 
@@ -70,7 +70,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
         private final String value;
 
-        private Mode(final String value) {
+        Mode(final String value) {
             this.value = value;
         }
 
@@ -101,6 +101,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String BEFORE = "Before";
         public static final String BINDS_TO = "BindsTo";
         public static final String BOUND_BY = "BoundBy";
+        public static final String CAN_CLEAN = "CanClean";
+        public static final String CAN_FREEZE = "CanFreeze";
         public static final String CAN_ISOLATE = "CanIsolate";
         public static final String CAN_RELOAD = "CanReload";
         public static final String CAN_START = "CanStart";
@@ -118,8 +120,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String DOCUMENTATION = "Documentation";
         public static final String DROP_IN_PATHS = "DropInPaths";
         public static final String FAILURE_ACTION = "FailureAction";
+        public static final String FAILURE_ACTION_EXIT_STATUS = "FailureActionExitStatus";
         public static final String FOLLOWING = "Following";
         public static final String FRAGMENT_PATH = "FragmentPath";
+        public static final String FREEZER_STATE = "FreezerState";
         public static final String ID = "Id";
         public static final String IGNORE_ON_ISOLATE = "IgnoreOnIsolate";
         public static final String INACTIVE_ENTER_TIMESTAMP = "InactiveEnterTimestamp";
@@ -143,6 +147,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String PERPETUAL = "Perpetual";
         public static final String PROPAGATES_RELOAD_TO = "PropagatesReloadTo";
         public static final String REBOOT_ARGUMENT = "RebootArgument";
+        public static final String REFS = "Refs";
         public static final String REFUSE_MANUAL_START = "RefuseManualStart";
         public static final String REFUSE_MANUAL_STOP = "RefuseManualStop";
         public static final String RELOAD_PROPAGATED_FROM = "ReloadPropagatedFrom";
@@ -160,6 +165,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         public static final String STOP_WHEN_UNNEEDED = "StopWhenUnneeded";
         public static final String SUB_STATE = "SubState";
         public static final String SUCCESS_ACTION = "SuccessAction";
+        public static final String SUCCESS_ACTION_EXIT_STATUS = "SuccessActionExitStatus";
         public static final String TRANSIENT = "Transient";
         public static final String TRIGGERED_BY = "TriggeredBy";
         public static final String TRIGGERS = "Triggers";
@@ -172,7 +178,7 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 
@@ -186,8 +192,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     protected Unit(final Manager manager, final UnitInterface iface, final String name) throws DBusException {
         super(manager.dbus, iface);
 
-        this.name = name;
-        this.manager = manager;
+        this.name = Objects.requireNonNull(name);
+        this.manager = Objects.requireNonNull(manager);
 
         this.unitProperties = Properties.create(dbus, iface.getObjectPath(), SERVICE_NAME);
     }
@@ -224,6 +230,30 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            Unit other = (Unit) obj;
+
+            return super.equals(obj) && name.equals(other.name);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name);
+    }
+
+    @Override
     public UnitInterface getInterface() {
         return (UnitInterface) super.getInterface();
     }
@@ -256,16 +286,16 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     @Override
-    protected SignalConsumer<PropertiesChanged> createStateConsumer() {
-        return new SignalConsumer<>(s -> {
-            Map<String, Variant<?>> properties = s.changedProperties;
+    protected DBusSigHandler<PropertiesChanged> createStateHandler() {
+        return signal -> {
+            Map<String, Variant<?>> properties = signal.getPropertiesChanged();
 
             if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                 synchronized (unitStateListeners) {
                     unitStateListeners.forEach(l -> l.stateChanged(Unit.this, properties));
                 }
             }
-        });
+        };
     }
 
     public String introspect() throws DBusException {
@@ -274,60 +304,12 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return intro.Introspect();
     }
 
-    public Path start(final Mode mode) {
-        return start(mode.getValue());
+    public void clean(final List<String> mask) {
+        manager.cleanUnit(name, mask);
     }
 
-    public Path start(final String mode) {
-        return manager.startUnit(name, mode);
-    }
-
-    public Path stop(final Mode mode) {
-        return stop(mode.getValue());
-    }
-
-    public Path stop(final String mode) {
-        return manager.stopUnit(name, mode);
-    }
-
-    public Path reload(final Mode mode) {
-        return reload(mode.getValue());
-    }
-
-    public Path reload(final String mode) {
-        return manager.reloadUnit(name, mode);
-    }
-
-    public Path restart(final Mode mode) {
-        return restart(mode.getValue());
-    }
-
-    public Path restart(final String mode) {
-        return manager.restartUnit(name, mode);
-    }
-
-    public Path tryRestart(final Mode mode) {
-        return tryRestart(mode.getValue());
-    }
-
-    public Path tryRestart(final String mode) {
-        return manager.tryRestartUnit(name, mode);
-    }
-
-    public Path reloadOrRestart(final Mode mode) {
-        return reloadOrRestart(mode.getValue());
-    }
-
-    public Path reloadOrRestart(final String mode) {
-        return manager.reloadOrRestartUnit(name, mode);
-    }
-
-    public Path reloadOrTryRestart(final Mode mode) {
-        return reloadOrTryRestart(mode.getValue());
-    }
-
-    public Path reloadOrTryRestart(final String mode) {
-        return manager.reloadOrTryRestartUnit(name, mode);
+    public void freeze() {
+        manager.freezeUnit(name);
     }
 
     public void kill(final Who who, final int signal) {
@@ -342,8 +324,68 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         manager.refUnit(name);
     }
 
+    public DBusPath reload(final Mode mode) {
+        return reload(mode.getValue());
+    }
+
+    public DBusPath reload(final String mode) {
+        return manager.reloadUnit(name, mode);
+    }
+
+    public DBusPath reloadOrRestart(final Mode mode) {
+        return reloadOrRestart(mode.getValue());
+    }
+
+    public DBusPath reloadOrRestart(final String mode) {
+        return manager.reloadOrRestartUnit(name, mode);
+    }
+
+    public DBusPath reloadOrTryRestart(final Mode mode) {
+        return reloadOrTryRestart(mode.getValue());
+    }
+
+    public DBusPath reloadOrTryRestart(final String mode) {
+        return manager.reloadOrTryRestartUnit(name, mode);
+    }
+
     public void resetFailed() {
         manager.resetFailedUnit(name);
+    }
+
+    public DBusPath restart(final Mode mode) {
+        return restart(mode.getValue());
+    }
+
+    public DBusPath restart(final String mode) {
+        return manager.restartUnit(name, mode);
+    }
+
+    public DBusPath start(final Mode mode) {
+        return start(mode.getValue());
+    }
+
+    public DBusPath start(final String mode) {
+        return manager.startUnit(name, mode);
+    }
+
+    public DBusPath stop(final Mode mode) {
+        return stop(mode.getValue());
+    }
+
+    public DBusPath stop(final String mode) {
+        return manager.stopUnit(name, mode);
+    }
+
+    public void thaw() {
+        manager.thawUnit(name);
+    }
+
+    public DBusPath tryRestart(final Mode mode) {
+        return tryRestart(mode.getValue());
+    }
+
+    public DBusPath tryRestart(final String mode) {
+        return manager.tryRestartUnit(name, mode);
     }
 
     public void unref() {
@@ -374,8 +416,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.ACTIVE_STATE);
     }
 
-    public Vector<String> getAfter() {
-        return unitProperties.getVector(Property.AFTER);
+    public List<String> getAfter() {
+        return unitProperties.getList(Property.AFTER);
     }
 
     public boolean isAllowIsolate() {
@@ -395,19 +437,27 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     public List<Condition> getAsserts() {
-        return Condition.list(unitProperties.getVector(Property.ASSERTS));
+        return Condition.list(unitProperties.getList(Property.ASSERTS));
     }
 
-    public Vector<String> getBefore() {
-        return unitProperties.getVector(Property.BEFORE);
+    public List<String> getBefore() {
+        return unitProperties.getList(Property.BEFORE);
     }
 
-    public Vector<String> getBindsTo() {
-        return unitProperties.getVector(Property.BINDS_TO);
+    public List<String> getBindsTo() {
+        return unitProperties.getList(Property.BINDS_TO);
     }
 
-    public Vector<String> getBoundBy() {
-        return unitProperties.getVector(Property.BOUND_BY);
+    public List<String> getBoundBy() {
+        return unitProperties.getList(Property.BOUND_BY);
+    }
+
+    public List<String> isCanClean() {
+        return unitProperties.getList(Property.CAN_CLEAN);
+    }
+
+    public boolean isCanFreeze() {
+        return unitProperties.getBoolean(Property.CAN_FREEZE);
     }
 
     public boolean isCanIsolate() {
@@ -443,19 +493,19 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
     }
 
     public List<Condition> getConditions() {
-        return Condition.list(unitProperties.getVector(Property.CONDITIONS));
+        return Condition.list(unitProperties.getList(Property.CONDITIONS));
     }
 
-    public Vector<String> getConflictedBy() {
-        return unitProperties.getVector(Property.CONFLICTED_BY);
+    public List<String> getConflictedBy() {
+        return unitProperties.getList(Property.CONFLICTED_BY);
     }
 
-    public Vector<String> getConflicts() {
-        return unitProperties.getVector(Property.CONFLICTS);
+    public List<String> getConflicts() {
+        return unitProperties.getList(Property.CONFLICTS);
     }
 
-    public Vector<String> getConsistsOf() {
-        return unitProperties.getVector(Property.CONSISTS_OF);
+    public List<String> getConsistsOf() {
+        return unitProperties.getList(Property.CONSISTS_OF);
     }
 
     public boolean isDefaultDependencies() {
@@ -466,16 +516,20 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.DESCRIPTION);
     }
 
-    public Vector<String> getDocumentation() {
-        return unitProperties.getVector(Property.DOCUMENTATION);
+    public List<String> getDocumentation() {
+        return unitProperties.getList(Property.DOCUMENTATION);
     }
 
-    public Vector<String> getDropInPaths() {
-        return unitProperties.getVector(Property.DROP_IN_PATHS);
+    public List<String> getDropInPaths() {
+        return unitProperties.getList(Property.DROP_IN_PATHS);
     }
 
     public String getFailureAction() {
         return unitProperties.getString(Property.FAILURE_ACTION);
+    }
+
+    public int getFailureActionExitStatus() {
+        return unitProperties.getInteger(Property.FAILURE_ACTION_EXIT_STATUS);
     }
 
     public String getFollowing() {
@@ -484,6 +538,10 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
 
     public String getFragmentPath() {
         return unitProperties.getString(Property.FRAGMENT_PATH);
+    }
+
+    public String getFreezerState() {
+        return unitProperties.getString(Property.FREEZER_STATE);
     }
 
     public String getId() {
@@ -536,8 +594,8 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getBigInteger(Property.JOB_TIMEOUT_USEC);
     }
 
-    public Vector<String> getJoinsNamespaceOf() {
-        return unitProperties.getVector(Property.JOINS_NAMESPACE_OF);
+    public List<String> getJoinsNamespaceOf() {
+        return unitProperties.getList(Property.JOINS_NAMESPACE_OF);
     }
 
     public LoadError getLoadError() {
@@ -550,36 +608,40 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.LOAD_STATE);
     }
 
-    public Vector<String> getNames() {
-        return unitProperties.getVector(Property.NAMES);
+    public List<String> getNames() {
+        return unitProperties.getList(Property.NAMES);
     }
 
     public boolean isNeedDaemonReload() {
         return unitProperties.getBoolean(Property.NEED_DAEMON_RELOAD);
     }
 
-    public Vector<String> getOnFailure() {
-        return unitProperties.getVector(Property.ON_FAILURE);
+    public List<String> getOnFailure() {
+        return unitProperties.getList(Property.ON_FAILURE);
     }
 
     public String getOnFailureJobMode() {
         return unitProperties.getString(Property.ON_FAILURE_JOB_MODE);
     }
 
-    public Vector<String> getPartOf() {
-        return unitProperties.getVector(Property.PART_OF);
+    public List<String> getPartOf() {
+        return unitProperties.getList(Property.PART_OF);
     }
 
     public boolean isPerpetual() {
         return unitProperties.getBoolean(Property.PERPETUAL);
     }
 
-    public Vector<String> getPropagatesReloadTo() {
-        return unitProperties.getVector(Property.PROPAGATES_RELOAD_TO);
+    public List<String> getPropagatesReloadTo() {
+        return unitProperties.getList(Property.PROPAGATES_RELOAD_TO);
     }
 
     public String getRebootArgument() {
         return unitProperties.getString(Property.REBOOT_ARGUMENT);
+    }
+
+    public List<String> getRefs() {
+        return unitProperties.getList(Property.REFS);
     }
 
     public boolean isRefuseManualStart() {
@@ -590,28 +652,28 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getBoolean(Property.REFUSE_MANUAL_STOP);
     }
 
-    public Vector<String> getReloadPropagatedFrom() {
-        return unitProperties.getVector(Property.RELOAD_PROPAGATED_FROM);
+    public List<String> getReloadPropagatedFrom() {
+        return unitProperties.getList(Property.RELOAD_PROPAGATED_FROM);
     }
 
-    public Vector<String> getRequiredBy() {
-        return unitProperties.getVector(Property.REQUIRED_BY);
+    public List<String> getRequiredBy() {
+        return unitProperties.getList(Property.REQUIRED_BY);
     }
 
-    public Vector<String> getRequires() {
-        return unitProperties.getVector(Property.REQUIRES);
+    public List<String> getRequires() {
+        return unitProperties.getList(Property.REQUIRES);
     }
 
-    public Vector<String> getRequiresMountsFor() {
-        return unitProperties.getVector(Property.REQUIRES_MOUNTS_FOR);
+    public List<String> getRequiresMountsFor() {
+        return unitProperties.getList(Property.REQUIRES_MOUNTS_FOR);
     }
 
-    public Vector<String> getRequisite() {
-        return unitProperties.getVector(Property.REQUISITE);
+    public List<String> getRequisite() {
+        return unitProperties.getList(Property.REQUISITE);
     }
 
-    public Vector<String> getRequisiteOf() {
-        return unitProperties.getVector(Property.REQUISITE_OF);
+    public List<String> getRequisiteOf() {
+        return unitProperties.getList(Property.REQUISITE_OF);
     }
 
     public String getSourcePath() {
@@ -650,16 +712,20 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.SUCCESS_ACTION);
     }
 
+    public int getSuccessActionExitStatus() {
+        return unitProperties.getInteger(Property.SUCCESS_ACTION_EXIT_STATUS);
+    }
+
     public boolean isTransient() {
         return unitProperties.getBoolean(Property.TRANSIENT);
     }
 
-    public Vector<String> getTriggeredBy() {
-        return unitProperties.getVector(Property.TRIGGERED_BY);
+    public List<String> getTriggeredBy() {
+        return unitProperties.getList(Property.TRIGGERED_BY);
     }
 
-    public Vector<String> getTriggers() {
-        return unitProperties.getVector(Property.TRIGGERS);
+    public List<String> getTriggers() {
+        return unitProperties.getList(Property.TRIGGERS);
     }
 
     public String getUnitFilePreset() {
@@ -670,12 +736,12 @@ public abstract class Unit extends InterfaceAdapter implements UnitStateNotifier
         return unitProperties.getString(Property.UNIT_FILE_STATE);
     }
 
-    public Vector<String> getWantedBy() {
-        return unitProperties.getVector(Property.WANTED_BY);
+    public List<String> getWantedBy() {
+        return unitProperties.getList(Property.WANTED_BY);
     }
 
-    public Vector<String> getWants() {
-        return unitProperties.getVector(Property.WANTS);
+    public List<String> getWants() {
+        return unitProperties.getList(Property.WANTS);
     }
 
     @Override

@@ -11,24 +11,24 @@
 
 package de.thjom.java.systemd.types;
 
-import java.util.Vector;
+import java.util.List;
 
 public class SystemCallFilter {
 
     private final boolean blacklist;
-    private final Vector<String> sysCalls;
+    private final List<String> sysCalls;
 
     @SuppressWarnings("unchecked")
     public SystemCallFilter(final Object[] array) {
         this.blacklist = (boolean) array[0];
-        this.sysCalls = (Vector<String>) array[1];
+        this.sysCalls = (List<String>) array[1];
     }
 
     public boolean isBlacklist() {
         return blacklist;
     }
 
-    public Vector<String> getSysCalls() {
+    public List<String> getSysCalls() {
         return sysCalls;
     }
 

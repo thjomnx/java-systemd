@@ -54,10 +54,15 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(DynamicUserAccounting.Property.APP_ARMOR_PROFILE);
         nonVariantProperties.add(DynamicUserAccounting.Property.BIND_PATHS);
         nonVariantProperties.add(DynamicUserAccounting.Property.BIND_READ_ONLY_PATHS);
+        nonVariantProperties.add(DynamicUserAccounting.Property.LOAD_CREDENTIAL);
         nonVariantProperties.add(DynamicUserAccounting.Property.LOG_EXTRA_FIELDS);
+        nonVariantProperties.add(DynamicUserAccounting.Property.MOUNT_IMAGES);
         nonVariantProperties.add(DynamicUserAccounting.Property.RESTRICT_ADDRESS_FAMILIES);
+        nonVariantProperties.add(DynamicUserAccounting.Property.ROOT_IMAGE_OPTIONS);
         nonVariantProperties.add(DynamicUserAccounting.Property.SELINUX_CONTEXT);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SET_CREDENTIAL);
         nonVariantProperties.add(DynamicUserAccounting.Property.SMACK_PROCESS_LABEL);
+        nonVariantProperties.add(DynamicUserAccounting.Property.SYSTEM_CALL_LOG);
         nonVariantProperties.add(DynamicUserAccounting.Property.TEMPORARY_FILE_SYSTEM);
 
         nonVariantProperties.add(IpAccounting.Property.IP_ADDRESS_ALLOW);
@@ -66,6 +71,7 @@ public class SwapTest extends UnitTest {
         nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_READ_BANDWIDTH);
         nonVariantProperties.add(IoAccounting.Property.BLOCK_IO_WRITE_BANDWIDTH);
+        nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_LATENCY_TARGET_USEC);
         nonVariantProperties.add(IoAccounting.Property.IO_DEVICE_WEIGHT);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_BANDWIDTH_MAX);
         nonVariantProperties.add(IoAccounting.Property.IO_READ_IOPS_MAX);

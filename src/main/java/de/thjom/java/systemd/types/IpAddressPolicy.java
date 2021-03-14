@@ -16,9 +16,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.types.UInt32;
 
 public class IpAddressPolicy {
 
@@ -41,10 +40,10 @@ public class IpAddressPolicy {
         this.prefix = ((UInt32) array[2]).longValue();
     }
 
-    public static List<IpAddressPolicy> list(final Vector<Object[]> vector) {
-        List<IpAddressPolicy> policies = new ArrayList<>(vector.size());
+    public static List<IpAddressPolicy> list(final List<Object[]> arrays) {
+        List<IpAddressPolicy> policies = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             IpAddressPolicy policy = new IpAddressPolicy(array);
 
             policies.add(policy);
@@ -71,8 +70,7 @@ public class IpAddressPolicy {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IpAddressPolicy [family=");
+        StringBuilder builder = new StringBuilder("IpAddressPolicy [family=");
 
         if (family == 2) {
             builder.append("IPv4");
@@ -84,9 +82,7 @@ public class IpAddressPolicy {
             builder.append("unknown");
         }
 
-        builder.append('(');
-        builder.append(family);
-        builder.append(')');
+        builder.append('(').append(family).append(')');
         builder.append(", address=");
 
         try {
@@ -96,9 +92,7 @@ public class IpAddressPolicy {
             builder.append("unknown");
         }
 
-        builder.append("/");
-        builder.append(prefix);
-        builder.append("]");
+        builder.append("/").append(prefix).append("]");
 
         return builder.toString();
     }

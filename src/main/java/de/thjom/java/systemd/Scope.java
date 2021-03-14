@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -21,12 +20,13 @@ import de.thjom.java.systemd.features.CpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.ResourceControl;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.interfaces.ScopeInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
+public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, ResourceControl, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Scope";
     public static final String UNIT_SUFFIX = ".scope";
@@ -35,29 +35,32 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
 
         public static final String CONTROL_GROUP = "ControlGroup";
         public static final String CONTROLLER = "Controller";
-        public static final String DELEGATE = "Delegate";
-        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
+        public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String KILL_MODE = "KillMode";
         public static final String KILL_SIGNAL = "KillSignal";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESULT = "Result";
+        public static final String RUNTIME_MAX_USEC = "RuntimeMaxUSec";
         public static final String SEND_SIGHUP = "SendSIGHUP";
         public static final String SEND_SIGKILL = "SendSIGKILL";
         public static final String SLICE = "Slice";
         public static final String TIMEOUT_STOP_USEC = "TimeoutStopUSec";
+        public static final String WATCHDOG_SIGNAL = "WatchdogSignal";
 
         private Property() {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     CpuAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     MemoryAccounting.Property.class,
+                    ResourceControl.Property.class,
                     TasksAccounting.Property.class
             );
         }
@@ -104,20 +107,16 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         return properties.getString(Property.CONTROLLER);
     }
 
-    public boolean isDelegate() {
-        return properties.getBoolean(Property.DELEGATE);
-    }
-
-    public Vector<String> getDelegateControllers() {
-        return properties.getVector(Property.DELEGATE_CONTROLLERS);
-    }
-
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
         return properties.getString(Property.DEVICE_POLICY);
+    }
+
+    public int getFinalKillSignal() {
+        return properties.getInteger(Property.FINAL_KILL_SIGNAL);
     }
 
     public String getKillMode() {
@@ -128,8 +127,16 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         return properties.getInteger(Property.KILL_SIGNAL);
     }
 
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
+    }
+
     public String getResult() {
         return properties.getString(Property.RESULT);
+    }
+
+    public BigInteger getRuntimeMaxUSec() {
+        return properties.getBigInteger(Property.RUNTIME_MAX_USEC);
     }
 
     public boolean isSendSIGHUP() {
@@ -146,6 +153,10 @@ public class Scope extends Unit implements CpuAccounting, IoAccounting, IpAccoun
 
     public BigInteger getTimeoutStopUSec() {
         return properties.getBigInteger(Property.TIMEOUT_STOP_USEC);
+    }
+
+    public int getWatchdogSignal() {
+        return properties.getInteger(Property.WATCHDOG_SIGNAL);
     }
 
 }

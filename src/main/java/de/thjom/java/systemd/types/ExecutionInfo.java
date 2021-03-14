@@ -12,16 +12,16 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt32;
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt32;
+import org.freedesktop.dbus.types.UInt64;
 
 public class ExecutionInfo {
 
     private final String binaryPath;
-    private final Vector<String> arguments;
+    private final List<String> arguments;
     private final boolean failOnUncleanExit;
     private final long lastStartTimestamp;
     private final long lastStartTimestampMonotonic;
@@ -34,7 +34,7 @@ public class ExecutionInfo {
     @SuppressWarnings("unchecked")
     public ExecutionInfo(final Object[] array) {
         this.binaryPath = String.valueOf(array[0]);
-        this.arguments = (Vector<String>) array[1];
+        this.arguments = (List<String>) array[1];
         this.failOnUncleanExit = (boolean) array[2];
         this.lastStartTimestamp = ((UInt64) array[3]).longValue();
         this.lastStartTimestampMonotonic = ((UInt64) array[4]).longValue();
@@ -45,10 +45,10 @@ public class ExecutionInfo {
         this.lastExitStatus = (int) array[9];
     }
 
-    public static List<ExecutionInfo> list(final Vector<Object[]> vector) {
-        List<ExecutionInfo> execs = new ArrayList<>(vector.size());
+    public static List<ExecutionInfo> list(final Collection<Object[]> arrays) {
+        List<ExecutionInfo> execs = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             ExecutionInfo exec = new ExecutionInfo(array);
 
             execs.add(exec);
@@ -61,7 +61,7 @@ public class ExecutionInfo {
         return binaryPath;
     }
 
-    public Vector<String> getArguments() {
+    public List<String> getArguments() {
         return arguments;
     }
 
@@ -99,30 +99,29 @@ public class ExecutionInfo {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ExecutionInfo [binaryPath=");
-        builder.append(binaryPath);
-        builder.append(", arguments=");
-        builder.append(arguments);
-        builder.append(", failOnUncleanExit=");
-        builder.append(failOnUncleanExit);
-        builder.append(", lastStartTimestamp=");
-        builder.append(lastStartTimestamp);
-        builder.append(", lastStartTimestampMonotonic=");
-        builder.append(lastStartTimestampMonotonic);
-        builder.append(", lastFinishTimestamp=");
-        builder.append(lastFinishTimestamp);
-        builder.append(", lastFinishTimestampMonotonic=");
-        builder.append(lastFinishTimestampMonotonic);
-        builder.append(", processId=");
-        builder.append(processId);
-        builder.append(", lastExitCode=");
-        builder.append(lastExitCode);
-        builder.append(", lastExitStatus=");
-        builder.append(lastExitStatus);
-        builder.append("]");
-
-        return builder.toString();
+        return new StringBuilder()
+                .append("ExecutionInfo [binaryPath=")
+                .append(binaryPath)
+                .append(", arguments=")
+                .append(arguments)
+                .append(", failOnUncleanExit=")
+                .append(failOnUncleanExit)
+                .append(", lastStartTimestamp=")
+                .append(lastStartTimestamp)
+                .append(", lastStartTimestampMonotonic=")
+                .append(lastStartTimestampMonotonic)
+                .append(", lastFinishTimestamp=")
+                .append(lastFinishTimestamp)
+                .append(", lastFinishTimestampMonotonic=")
+                .append(lastFinishTimestampMonotonic)
+                .append(", processId=")
+                .append(processId)
+                .append(", lastExitCode=")
+                .append(lastExitCode)
+                .append(", lastExitStatus=")
+                .append(lastExitStatus)
+                .append("]")
+                .toString();
     }
 
 }

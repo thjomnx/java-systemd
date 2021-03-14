@@ -16,19 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusInterface;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.messages.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
 public abstract class InterfaceAdapter extends AbstractAdapter implements DBusInterface {
-
-    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final DBusConnection dbus;
 
@@ -83,8 +81,15 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
         if (this == obj) {
             return true;
         }
-        else if (obj != null) {
-            return obj.hashCode() == hashCode();
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            InterfaceAdapter other = (InterfaceAdapter) obj;
+
+            return dbus.getUniqueName().equals(other.dbus.getUniqueName()) && getObjectPath().equals(other.getObjectPath());
         }
 
         return false;
@@ -97,31 +102,26 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
 
     public static class AdapterProperty {
 
-        protected static final String ERROR_PROPERTY_MISSING = "Unable to retrieve property (not implemented)";
-
         private static final Logger LOG = LoggerFactory.getLogger(AdapterProperty.class);
 
         protected AdapterProperty() {
             // Do nothing (static implementation)
         }
 
-        protected static final String[] getAllNames(final Class<?>... types) {
+        protected static List<String> getAllNames(final Class<?>... types) {
             List<String> names = new ArrayList<>();
 
             for (Class<?> type : types) {
                 Field[] fields = type.getDeclaredFields();
 
-                for (int i = 0; i < fields.length; i++) {
-                    Field field = fields[i];
-
+                for (Field field : fields) {
                     // Exclude synthetic fields (occurs during code coverage analysis)
                     if (!field.isSynthetic()) {
                         Object obj = "";
 
                         try {
                             obj = field.get(null);
-                        }
-                        catch (final IllegalAccessException | IllegalArgumentException e) {
+                        } catch (final IllegalAccessException | IllegalArgumentException e) {
                             LOG.error("Unable to enumerate field names", e);
                         }
 
@@ -130,7 +130,7 @@ public abstract class InterfaceAdapter extends AbstractAdapter implements DBusIn
                 }
             }
 
-            return names.toArray(new String[names.size()]);
+            return names;
         }
 
     }

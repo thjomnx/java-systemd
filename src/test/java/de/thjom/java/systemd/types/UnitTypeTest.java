@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.types.UInt32;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -32,8 +32,8 @@ public class UnitTypeTest {
         UnitType type = new UnitType(unitName, "Dummy unit",
                                      "loaded", "active", "running",
                                      "Follow",
-                                     new Path(Unit.OBJECT_PATH + Systemd.escapePath(unitName)),
-                                     new UInt32(42L), "dummy type", new Path("dummy_path"));
+                                     new DBusPath(Unit.OBJECT_PATH + Systemd.escapePath(unitName)),
+                                     new UInt32(42L), "dummy type", new DBusPath("dummy_path"));
 
         Assert.assertEquals(type.getUnitName(), unitName);
         Assert.assertEquals(type.getUnitDescription(), "Dummy unit");
@@ -47,17 +47,17 @@ public class UnitTypeTest {
         Assert.assertEquals(type.getJobObjectPath().getPath(), "dummy_path");
     }
 
-    @Test(description="Tests the summary string aggregator.")
-    public void testSummary() {
+    @Test(description="Tests the formatted string aggregator.")
+    public void testFormattedString() {
         String unitName = "dummy.service";
 
         UnitType type = new UnitType(unitName, "Dummy unit",
                 "loaded", "active", "running",
                 "Follow",
-                new Path(Unit.OBJECT_PATH + Systemd.escapePath(unitName)),
-                new UInt32(42L), "dummy type", new Path("dummy_path"));
+                new DBusPath(Unit.OBJECT_PATH + Systemd.escapePath(unitName)),
+                new UInt32(42L), "dummy type", new DBusPath("dummy_path"));
 
-        Assert.assertFalse(type.getSummary().isEmpty());
+        Assert.assertFalse(type.toFormattedString().isEmpty());
     }
 
     @Test(description="Tests the implemention of the 'Comparable' interface.")
@@ -67,16 +67,16 @@ public class UnitTypeTest {
         UnitType type1 = new UnitType(unitName1, "Dummy unit",
                 "loaded", "active", "running",
                 "Follow",
-                new Path(Unit.OBJECT_PATH + Systemd.escapePath(unitName1)),
-                new UInt32(42L), "dummy type", new Path("dummy_path"));
+                new DBusPath(Unit.OBJECT_PATH + Systemd.escapePath(unitName1)),
+                new UInt32(42L), "dummy type", new DBusPath("dummy_path"));
 
         String unitName2 = "dummy2.service";
 
         UnitType type2 = new UnitType(unitName2, "Dummy unit",
                 "loaded", "active", "running",
                 "Follow",
-                new Path(Unit.OBJECT_PATH + Systemd.escapePath(unitName2)),
-                new UInt32(42L), "dummy type", new Path("dummy_path"));
+                new DBusPath(Unit.OBJECT_PATH + Systemd.escapePath(unitName2)),
+                new UInt32(42L), "dummy type", new DBusPath("dummy_path"));
 
         // Test list sorting
         List<UnitType> list = new ArrayList<>();

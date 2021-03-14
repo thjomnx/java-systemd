@@ -11,10 +11,10 @@
 
 package de.thjom.java.systemd.types;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -46,18 +46,18 @@ public class TimersCalendarTest {
 
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
-        Vector<Object[]> vec = new Vector<>();
+        List<Object[]> source = new ArrayList<>();
 
-        List<TimersCalendar> list = TimersCalendar.list(vec);
+        List<TimersCalendar> list = TimersCalendar.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo1", "bar1", new UInt64("1234") });
-        vec.add(new Object[] { "foo2", "bar2", new UInt64("5678") });
+        source.add(new Object[] { "foo1", "bar1", new UInt64("1234") });
+        source.add(new Object[] { "foo2", "bar2", new UInt64("5678") });
 
-        list = TimersCalendar.list(vec);
+        list = TimersCalendar.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
@@ -79,13 +79,13 @@ public class TimersCalendarTest {
 
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
-        Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[0]);
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[0]);
 
         Exception exc = null;
 
         try {
-            TimersCalendar.list(vec);
+            TimersCalendar.list(list);
         }
         catch (Exception e) {
             exc = e;
@@ -94,13 +94,13 @@ public class TimersCalendarTest {
         Assert.assertEquals(exc.getClass(), ArrayIndexOutOfBoundsException.class);
 
         // Next test
-        vec.clear();
-        vec.add(new Object[] { "foo", "bar", 1 });
+        list.clear();
+        list.add(new Object[] { "foo", "bar", 1 });
 
         exc = null;
 
         try {
-            TimersCalendar.list(vec);
+            TimersCalendar.list(list);
         }
         catch (Exception e) {
             exc = e;

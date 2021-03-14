@@ -33,7 +33,7 @@ public interface IpAccounting extends Feature {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 
@@ -44,11 +44,11 @@ public interface IpAccounting extends Feature {
     }
 
     default List<IpAddressPolicy> getIPAddressAllow() {
-        return IpAddressPolicy.list(getProperties().getVector(Property.IP_ADDRESS_ALLOW));
+        return IpAddressPolicy.list(getProperties().getList(Property.IP_ADDRESS_ALLOW));
     }
 
     default List<IpAddressPolicy> getIPAddressDeny() {
-        return IpAddressPolicy.list(getProperties().getVector(Property.IP_ADDRESS_DENY));
+        return IpAddressPolicy.list(getProperties().getList(Property.IP_ADDRESS_DENY));
     }
 
     default BigInteger getIPEgressBytes() {

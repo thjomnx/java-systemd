@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd.features;
 
+import java.util.List;
+
 import de.thjom.java.systemd.InterfaceAdapter;
 
 public interface ExtendedMemoryAccounting extends MemoryAccounting {
@@ -23,7 +25,7 @@ public interface ExtendedMemoryAccounting extends MemoryAccounting {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

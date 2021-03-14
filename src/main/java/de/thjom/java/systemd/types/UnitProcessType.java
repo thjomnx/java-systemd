@@ -11,9 +11,9 @@
 
 package de.thjom.java.systemd.types;
 
-import org.freedesktop.dbus.Position;
 import org.freedesktop.dbus.Struct;
-import org.freedesktop.dbus.UInt32;
+import org.freedesktop.dbus.annotations.Position;
+import org.freedesktop.dbus.types.UInt32;
 
 public class UnitProcessType extends Struct implements Comparable<UnitProcessType> {
 
@@ -34,10 +34,6 @@ public class UnitProcessType extends Struct implements Comparable<UnitProcessTyp
         this.commandLine = commandLine;
     }
 
-    public String getSummary() {
-        return String.format("%s %d %s", cgroupPath, pid, commandLine);
-    }
-
     public String getCgroupPath() {
         return cgroupPath;
     }
@@ -48,6 +44,10 @@ public class UnitProcessType extends Struct implements Comparable<UnitProcessTyp
 
     public String getCommandLine() {
         return commandLine;
+    }
+
+    public String toFormattedString() {
+        return String.format("%s %d %s", cgroupPath, pid, commandLine);
     }
 
     @Override

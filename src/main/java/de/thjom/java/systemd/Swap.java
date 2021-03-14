@@ -13,7 +13,6 @@ package de.thjom.java.systemd;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -22,6 +21,7 @@ import de.thjom.java.systemd.features.ExtendedCpuAccounting;
 import de.thjom.java.systemd.features.ExtendedMemoryAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
+import de.thjom.java.systemd.features.ResourceControl;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.features.Ulimit;
 import de.thjom.java.systemd.interfaces.SwapInterface;
@@ -31,7 +31,7 @@ import de.thjom.java.systemd.types.ExecutionInfo;
 import de.thjom.java.systemd.types.SystemCallFilter;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, TasksAccounting, Ulimit {
+public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAccounting, IoAccounting, IpAccounting, ExtendedMemoryAccounting, ResourceControl, TasksAccounting, Ulimit {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Swap";
     public static final String UNIT_SUFFIX = ".swap";
@@ -40,8 +40,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
         public static final String CAPABILITY_BOUNDING_SET = "CapabilityBoundingSet";
         public static final String CONTROL_PID = "ControlPID";
-        public static final String DELEGATE = "Delegate";
-        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String DYNAMIC_USER = "DynamicUser";
@@ -49,6 +47,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String ENVIRONMENT_FILES = "EnvironmentFiles";
         public static final String EXEC_ACTIVATE = "ExecActivate";
         public static final String EXEC_DEACTIVATE = "ExecDeactivate";
+        public static final String FINAL_KILL_SIGNAL = "FinalKillSignal";
         public static final String IGNORE_SIGPIPE = "IgnoreSIGPIPE";
         public static final String INACCESSIBLE_PATHS = "InaccessiblePaths";
         public static final String IO_SCHEDULING_CLASS = "IOSchedulingClass";
@@ -65,6 +64,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String PRIORITY = "Priority";
         public static final String READ_ONLY_PATHS = "ReadOnlyPaths";
         public static final String READ_WRITE_PATHS = "ReadWritePaths";
+        public static final String RESTART_KILL_SIGNAL = "RestartKillSignal";
         public static final String RESULT = "Result";
         public static final String ROOT_DIRECTORY = "RootDirectory";
         public static final String SAME_PROCESS_GROUP = "SameProcessGroup";
@@ -84,6 +84,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         public static final String TTY_V_HANGUP = "TTYVHangup";
         public static final String TTY_VT_DISALLOCATE = "TTYVTDisallocate";
         public static final String UMASK = "UMask";
+        public static final String WATCHDOG_SIGNAL = "WatchdogSignal";
         public static final String WHAT = "What";
         public static final String WORKING_DIRECTORY = "WorkingDirectory";
 
@@ -91,7 +92,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     ExtendedCpuAccounting.Property.class,
@@ -99,6 +100,7 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     ExtendedMemoryAccounting.Property.class,
+                    ResourceControl.Property.class,
                     TasksAccounting.Property.class,
                     Ulimit.Property.class
             );
@@ -134,14 +136,6 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return getInterface().getProcesses();
     }
 
-    public boolean isDelegate() {
-        return properties.getBoolean(Property.DELEGATE);
-    }
-
-    public Vector<String> getDelegateControllers() {
-        return properties.getVector(Property.DELEGATE_CONTROLLERS);
-    }
-
     public BigInteger getCapabilityBoundingSet() {
         return properties.getBigInteger(Property.CAPABILITY_BOUNDING_SET);
     }
@@ -151,35 +145,39 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
     }
 
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {
         return properties.getString(Property.DEVICE_POLICY);
     }
 
-    public Vector<String> getEnvironment() {
-        return properties.getVector(Property.ENVIRONMENT);
+    public List<String> getEnvironment() {
+        return properties.getList(Property.ENVIRONMENT);
     }
 
     public List<EnvironmentFile> getEnvironmentFiles() {
-        return EnvironmentFile.list(properties.getVector(Property.ENVIRONMENT_FILES));
+        return EnvironmentFile.list(properties.getList(Property.ENVIRONMENT_FILES));
     }
 
     public List<ExecutionInfo> getExecActivate() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_ACTIVATE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_ACTIVATE));
     }
 
     public List<ExecutionInfo> getExecDeactivate() {
-        return ExecutionInfo.list(properties.getVector(Property.EXEC_DEACTIVATE));
+        return ExecutionInfo.list(properties.getList(Property.EXEC_DEACTIVATE));
+    }
+
+    public int getFinalKillSignal() {
+        return properties.getInteger(Property.FINAL_KILL_SIGNAL);
     }
 
     public boolean isIgnoreSIGPIPE() {
         return properties.getBoolean(Property.IGNORE_SIGPIPE);
     }
 
-    public Vector<String> getInaccessiblePaths() {
-        return properties.getVector(Property.INACCESSIBLE_PATHS);
+    public List<String> getInaccessiblePaths() {
+        return properties.getList(Property.INACCESSIBLE_PATHS);
     }
 
     public int getIOSchedulingClass() {
@@ -230,12 +228,16 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getInteger(Property.PRIORITY);
     }
 
-    public Vector<String> getReadOnlyPaths() {
-        return properties.getVector(Property.READ_ONLY_PATHS);
+    public List<String> getReadOnlyPaths() {
+        return properties.getList(Property.READ_ONLY_PATHS);
     }
 
-    public Vector<String> getReadWritePaths() {
-        return properties.getVector(Property.READ_WRITE_PATHS);
+    public List<String> getReadWritePaths() {
+        return properties.getList(Property.READ_WRITE_PATHS);
+    }
+
+    public int getRestartKillSignal() {
+        return properties.getInteger(Property.RESTART_KILL_SIGNAL);
     }
 
     public String getResult() {
@@ -266,8 +268,8 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
         return properties.getString(Property.SLICE);
     }
 
-    public Vector<String> getSupplementaryGroups() {
-        return properties.getVector(Property.SUPPLEMENTARY_GROUPS);
+    public List<String> getSupplementaryGroups() {
+        return properties.getList(Property.SUPPLEMENTARY_GROUPS);
     }
 
     public String getSyslogIdentifier() {
@@ -314,6 +316,10 @@ public class Swap extends Unit implements ExtendedCpuAccounting, DynamicUserAcco
 
     public long getUMask() {
         return properties.getLong(Property.UMASK);
+    }
+
+    public int getWatchdogSignal() {
+        return properties.getInteger(Property.WATCHDOG_SIGNAL);
     }
 
     public String getWhat() {

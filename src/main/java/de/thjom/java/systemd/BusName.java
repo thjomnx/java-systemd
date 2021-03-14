@@ -12,6 +12,7 @@
 package de.thjom.java.systemd;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -35,7 +36,7 @@ public class BusName extends Unit {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

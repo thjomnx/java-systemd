@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd.features;
 
+import java.util.List;
+
 import de.thjom.java.systemd.InterfaceAdapter;
 
 public interface ExtendedCpuAccounting extends CpuAccounting {
@@ -18,15 +20,18 @@ public interface ExtendedCpuAccounting extends CpuAccounting {
     static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String CPU_AFFINITY = "CPUAffinity";
+        public static final String CPU_AFFINITY_FROM_NUMA = "CPUAffinityFromNUMA";
         public static final String CPU_SCHEDULING_POLICY = "CPUSchedulingPolicy";
         public static final String CPU_SCHEDULING_PRIORITY = "CPUSchedulingPriority";
         public static final String CPU_SCHEDULING_RESET_ON_FORK = "CPUSchedulingResetOnFork";
+        public static final String NUMA_MASK = "NUMAMask";
+        public static final String NUMA_POLICY = "NUMAPolicy";
 
         private Property() {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static final List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 
@@ -34,6 +39,10 @@ public interface ExtendedCpuAccounting extends CpuAccounting {
 
     default byte[] getCPUAffinity() {
         return (byte[]) getProperties().getVariant(Property.CPU_AFFINITY).getValue();
+    }
+
+    default boolean getCPUAffinityFromNUMA() {
+        return getProperties().getBoolean(Property.CPU_AFFINITY_FROM_NUMA);
     }
 
     default int getCPUSchedulingPolicy() {
@@ -46,6 +55,14 @@ public interface ExtendedCpuAccounting extends CpuAccounting {
 
     default boolean isCPUSchedulingResetOnFork() {
         return getProperties().getBoolean(Property.CPU_SCHEDULING_RESET_ON_FORK);
+    }
+
+    default byte[] getNUMAMask() {
+        return (byte[]) getProperties().getVariant(Property.NUMA_MASK).getValue();
+    }
+
+    default int getNUMAPolicy() {
+        return getProperties().getInteger(Property.NUMA_POLICY);
     }
 
 }

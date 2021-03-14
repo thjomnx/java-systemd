@@ -11,15 +11,17 @@
 
 package de.thjom.java.systemd;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.xml.bind.DatatypeConverter;
 
-import org.freedesktop.dbus.DBusConnection;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
+import org.freedesktop.dbus.connections.impl.DBusConnection.DBusBusType;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.exceptions.NotConnected;
 import org.slf4j.Logger;
@@ -29,16 +31,16 @@ public final class Systemd {
 
     public enum InstanceType {
 
-        SYSTEM(DBusConnection.SYSTEM),
-        USER(DBusConnection.SESSION);
+        SYSTEM(DBusConnection.DBusBusType.SYSTEM),
+        USER(DBusConnection.DBusBusType.SESSION);
 
-        private final int index;
+        private final DBusConnection.DBusBusType index;
 
-        private InstanceType(final int index) {
+        InstanceType(DBusConnection.DBusBusType index) {
             this.index = index;
         }
 
-        public final int getIndex() {
+        public final DBusConnection.DBusBusType getIndex() {
             return index;
         }
 
@@ -52,34 +54,30 @@ public final class Systemd {
     public static final String SERVICE_NAME = "org.freedesktop.systemd1";
     public static final String OBJECT_PATH = "/org/freedesktop/systemd1";
 
-    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("(\\W)");
+    public static final Pattern PATH_ESCAPE_PATTERN = Pattern.compile("([\\W_])");
 
-    public static final long DEFAULT_RETARDATION = 50L;
+    public static final byte DEFAULT_THREAD_POOL_SIZE = 1;
 
-    private static final Logger log = LoggerFactory.getLogger(Systemd.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Systemd.class);
 
-    private static final Systemd[] instances = new Systemd[InstanceType.values().length];
+    private static final Systemd[] INSTANCES = new Systemd[InstanceType.values().length];
 
     private final InstanceType instanceType;
 
     private DBusConnection dbus;
     private Manager manager;
 
-    private Systemd() {
-        this(InstanceType.SYSTEM);
-    }
-
     private Systemd(final InstanceType instanceType) {
         this.instanceType = instanceType;
     }
 
-    public static final String escapePath(final CharSequence path) {
+    public static String escapePath(final CharSequence path) {
         if (path != null) {
-            StringBuffer escaped = new StringBuffer(path.length());
+            StringBuilder escaped = new StringBuilder(path.length());
             Matcher matcher = PATH_ESCAPE_PATTERN.matcher(path);
 
             while (matcher.find()) {
-                String replacement = '_' + Integer.toHexString((int) matcher.group().charAt(0));
+                String replacement = '_' + Integer.toHexString(matcher.group().charAt(0));
                 matcher.appendReplacement(escaped, replacement);
             }
 
@@ -91,11 +89,15 @@ public final class Systemd {
         return "";
     }
 
-    public static final Date timestampToDate(final long timestamp) {
-        return new Date(timestamp / 1000);
+    public static Instant timestampToInstant(final long timestamp) {
+        return Instant.EPOCH.plus(timestamp, ChronoUnit.MICROS);
     }
 
-    public static final String id128ToString(final byte[] id128) {
+    public static Duration usecsToDuration(final long usecs) {
+        return Duration.of(usecs, ChronoUnit.MICROS);
+    }
+
+    public static String id128ToString(final byte[] id128) {
         return DatatypeConverter.printHexBinary(id128).toLowerCase();
     }
 
@@ -104,19 +106,19 @@ public final class Systemd {
     }
 
     public static Systemd get(final InstanceType instanceType) throws DBusException {
-        final int index = instanceType.getIndex();
+        final DBusBusType index = instanceType.getIndex();
 
         Systemd instance;
 
-        synchronized (instances) {
-            if (instances[index] == null) {
+        synchronized (INSTANCES) {
+            if (INSTANCES[index.ordinal()] == null) {
                 instance = new Systemd(instanceType);
                 instance.open();
 
-                instances[index] = instance;
+                INSTANCES[index.ordinal()] = instance;
             }
             else {
-                instance = instances[index];
+                instance = INSTANCES[index.ordinal()];
             }
         }
 
@@ -128,77 +130,54 @@ public final class Systemd {
     }
 
     public static void disconnect(final InstanceType instanceType) {
-        disconnect(instanceType, DEFAULT_RETARDATION);
-    }
+        final DBusBusType index = instanceType.getIndex();
 
-    public static void disconnect(final InstanceType instanceType, final long retardationTime) {
-        final int index = instanceType.getIndex();
-
-        synchronized (instances) {
-            Systemd instance = instances[index];
+        synchronized (INSTANCES) {
+            Systemd instance = INSTANCES[index.ordinal()];
 
             if (instance != null) {
-                try {
-                    instance.close(retardationTime);
-                }
-                catch (final InterruptedException e) {
-                    log.error("Disconnection interrupted while retarding", e);
-
-                    Thread.currentThread().interrupt();
-                }
+                instance.close();
             }
 
-            instances[index] = null;
+            INSTANCES[index.ordinal()] = null;
         }
     }
 
     public static void disconnectAll() {
-        disconnectAll(DEFAULT_RETARDATION);
-    }
-
-    public static void disconnectAll(final long retardationTime) {
-        synchronized (instances) {
-            for (Systemd instance : instances) {
+        synchronized (INSTANCES) {
+            for (Systemd instance : INSTANCES) {
                 if (instance != null) {
-                    try {
-                        instance.close(retardationTime);
-                    }
-                    catch (final InterruptedException e) {
-                        log.error("Disconnection interrupted while retarding", e);
-
-                        Thread.currentThread().interrupt();
-                    }
+                    instance.close();
                 }
             }
 
-            Arrays.fill(instances, null);
+            Arrays.fill(INSTANCES, null);
         }
     }
 
     private void open() throws DBusException {
-        if (log.isDebugEnabled()) {
-            log.debug(String.format("Connecting to %s bus", instanceType));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("Connecting to %s bus", instanceType));
         }
 
         try {
             dbus = DBusConnection.getConnection(instanceType.getIndex());
+            dbus.changeThreadCount(DEFAULT_THREAD_POOL_SIZE);
         }
         catch (final DBusException e) {
-            log.error(String.format("Unable to connect to %s bus", instanceType), e);
+            LOG.error(String.format("Unable to connect to %s bus", instanceType), e);
 
             throw e;
         }
     }
 
-    private void close(final long retardationTime) throws InterruptedException {
+    private void close() {
         if (isConnected()) {
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Disconnecting from %s bus", instanceType));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Disconnecting from %s bus", instanceType));
             }
 
             dbus.disconnect();
-
-            Thread.sleep(retardationTime);
         }
 
         dbus = null;
@@ -219,8 +198,8 @@ public final class Systemd {
                 throw new DBusException("Unable to create manager without bus (please connect first)");
             }
 
-            if (log.isDebugEnabled()) {
-                log.debug(String.format("Creating new manager instance on %s bus", instanceType));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(String.format("Creating new manager instance on %s bus", instanceType));
             }
 
             manager = Manager.create(dbus);

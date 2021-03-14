@@ -13,10 +13,10 @@ package de.thjom.java.systemd.types;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt64;
 
 public class IOBandwidth extends IOPath {
 
@@ -28,10 +28,10 @@ public class IOBandwidth extends IOPath {
         this.bandwidth = ((UInt64) array[1]).value();
     }
 
-    public static List<IOBandwidth> list(final Vector<Object[]> vector) {
-        List<IOBandwidth> bandwidths = new ArrayList<>(vector.size());
+    public static List<IOBandwidth> list(final Collection<Object[]> arrays) {
+        List<IOBandwidth> bandwidths = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             IOBandwidth bandwidth = new IOBandwidth(array);
 
             bandwidths.add(bandwidth);

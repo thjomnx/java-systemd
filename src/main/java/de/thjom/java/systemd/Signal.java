@@ -11,14 +11,14 @@
 
 package de.thjom.java.systemd;
 
-import org.freedesktop.dbus.DBusSignal;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.messages.DBusSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Signal extends DBusSignal {
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    protected static final Logger LOG = LoggerFactory.getLogger(Signal.class);
 
     protected Signal(final String objectpath, final Object... args) throws DBusException {
         super(objectpath, args);
@@ -30,7 +30,7 @@ public class Signal extends DBusSignal {
             return (T) getParameters()[index];
         }
         catch (final ClassCastException | DBusException e) {
-            log.error(e.getMessage());
+            LOG.error(e.getMessage());
 
             return (T) defaultValue;
         }

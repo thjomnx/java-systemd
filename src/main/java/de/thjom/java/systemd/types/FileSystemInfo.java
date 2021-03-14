@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 public class FileSystemInfo {
 
@@ -25,10 +25,10 @@ public class FileSystemInfo {
         this.options = String.valueOf(array[1]);
     }
 
-    public static List<FileSystemInfo> list(final Vector<Object[]> vector) {
-        List<FileSystemInfo> infos = new ArrayList<>(vector.size());
+    public static List<FileSystemInfo> list(final Collection<Object[]> arrays) {
+        List<FileSystemInfo> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             FileSystemInfo info = new FileSystemInfo(array);
 
             infos.add(info);

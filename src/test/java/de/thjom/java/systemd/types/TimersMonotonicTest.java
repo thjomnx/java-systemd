@@ -12,10 +12,10 @@
 package de.thjom.java.systemd.types;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt64;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -47,18 +47,18 @@ public class TimersMonotonicTest {
 
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
-        Vector<Object[]> vec = new Vector<>();
+        List<Object[]> source = new ArrayList<>();
 
-        List<TimersMonotonic> list = TimersMonotonic.list(vec);
+        List<TimersMonotonic> list = TimersMonotonic.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo1", new UInt64("1234"), new UInt64("2345") });
-        vec.add(new Object[] { "foo2", new UInt64("4321"), new UInt64("5432") });
+        source.add(new Object[] { "foo1", new UInt64("1234"), new UInt64("2345") });
+        source.add(new Object[] { "foo2", new UInt64("4321"), new UInt64("5432") });
 
-        list = TimersMonotonic.list(vec);
+        list = TimersMonotonic.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
@@ -80,13 +80,13 @@ public class TimersMonotonicTest {
 
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
-        Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[0]);
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[0]);
 
         Exception exc = null;
 
         try {
-            TimersMonotonic.list(vec);
+            TimersMonotonic.list(list);
         }
         catch (Exception e) {
             exc = e;
@@ -95,13 +95,13 @@ public class TimersMonotonicTest {
         Assert.assertEquals(exc.getClass(), ArrayIndexOutOfBoundsException.class);
 
         // Next test
-        vec.clear();
-        vec.add(new Object[] { "foo", "bar", 1 });
+        list.clear();
+        list.add(new Object[] { "foo", "bar", 1 });
 
         exc = null;
 
         try {
-            TimersMonotonic.list(vec);
+            TimersMonotonic.list(list);
         }
         catch (Exception e) {
             exc = e;

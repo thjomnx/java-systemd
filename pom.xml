@@ -5,10 +5,10 @@
 
   <groupId>com.github.thjomnx</groupId>
   <artifactId>java-systemd</artifactId>
-  <version>1.1.0</version>
+  <version>2.0.0</version>
   <packaging>jar</packaging>
 
-  <name>Java access to systemd via D-Bus</name>
+  <name>${project.artifactId}</name>
   <description>Java access to systemd via D-Bus</description>
   <url>https://github.com/thjomnx/java-systemd</url>
   <inceptionYear>2016</inceptionYear>
@@ -40,44 +40,46 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <sonar.junit.reportsPath>target/surefire-reports/junitreports</sonar.junit.reportsPath>
-    <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
+    <maven.compiler.release>11</maven.compiler.release>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>com.github.hypfvieh</groupId>
-      <artifactId>dbus-java</artifactId>
-      <version>2.7.2</version>
+	<dependency>
+	  <groupId>com.github.hypfvieh</groupId>
+	  <artifactId>dbus-java</artifactId>
+	  <version>3.2.4</version>
+	</dependency>
+	<dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.4.0-b180830.0359</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.5</version>
+      <version>1.7.30</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.5</version>
+      <version>1.7.30</version>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.11</version>
+      <version>7.4.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>2.8.9</version>
+      <version>3.8.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
-      <version>3.0.0</version>
+      <version>4.0.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -87,8 +89,16 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <release>11</release>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.20</version>
+          <version>2.22.2</version>
           <configuration>
             <suiteXmlFiles>
               <suiteXmlFile>src/test/resources/suites/auto.xml</suiteXmlFile>
@@ -122,7 +132,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-source-plugin</artifactId>
-            <version>3.0.1</version>
+            <version>3.2.1</version>
             <executions>
               <execution>
                 <id>attach-sources</id>
@@ -135,7 +145,10 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.10.4</version>
+            <version>3.2.0</version>
+            <configuration>
+              <javadocExecutable>${java.home}/bin</javadocExecutable>
+            </configuration>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -177,35 +190,39 @@
     <profile>
       <id>sonar</id>
 
-      <dependencies>
-        <!-- JaCoCo listeners do not work with recent Surefire/TestNG versions -->
-        <dependency>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-          <version>6.9.7</version>
-          <scope>test</scope>
-        </dependency>
-
-        <dependency>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>sonar-jacoco-listeners</artifactId>
-          <version>4.10.0.10260</version>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
+      <properties>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>thjomnx-github</sonar.organization>
+        <sonar.projectKey>com.github.thjomnx:java-systemd</sonar.projectKey>
+      </properties>
 
       <build>
         <plugins>
           <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.6</version>
+            <executions>
+              <execution>
+                <id>coverage-initialize</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>coverage-report</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <properties>
-                <property>
-                  <name>listener</name>
-                  <value>org.sonar.java.jacoco.TestNGListener</value>
-                </property>
-              </properties>
+              <argLine>@{argLine}</argLine>
             </configuration>
           </plugin>
         </plugins>

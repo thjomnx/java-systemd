@@ -15,12 +15,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
-import java.util.Vector;
+import java.util.Collection;
+import java.util.List;
 
-import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.UInt64;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.types.UInt64;
+import org.freedesktop.dbus.types.Variant;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -32,7 +33,7 @@ import org.testng.Assert;
 import de.thjom.java.systemd.interfaces.ManagerInterface;
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
-class AbstractTestCase {
+abstract class AbstractTestCase {
 
     @Mock
     protected DBusConnection dbus;
@@ -46,8 +47,8 @@ class AbstractTestCase {
     @InjectMocks
     protected Systemd systemd;
 
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
+    protected void setup() {
+        MockitoAnnotations.openMocks(this);
 
         try {
             Mockito.when(dbus.getRemoteObject(Systemd.SERVICE_NAME, Systemd.OBJECT_PATH, ManagerInterface.class)).thenReturn(miface);
@@ -58,7 +59,7 @@ class AbstractTestCase {
         }
     }
 
-    protected void setupPropertyMocks(final Class<?> iface, final String serviceName, final String[] propertyNames) {
+    protected void setupPropertyMocks(final Class<?> iface, final String serviceName, final Collection<String> propertyNames) {
         try {
             for (String propertyName : propertyNames) {
                 Method method = null;
@@ -137,7 +138,7 @@ class AbstractTestCase {
                             else if (returnType == String[].class) {
                                 return new Variant<>(new String[0]);
                             }
-                            else if (returnType == Vector.class) {
+                            else if (returnType == List.class) {
                                 ParameterizedType paramType = (ParameterizedType) genericReturnType;
                                 String typeName = paramType.getActualTypeArguments()[0].getTypeName();
 

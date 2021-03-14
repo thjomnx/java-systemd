@@ -12,8 +12,8 @@
 package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 public class DeviceAllowControl {
 
@@ -25,10 +25,10 @@ public class DeviceAllowControl {
         this.accessControl = String.valueOf(array[1]);
     }
 
-    public static List<DeviceAllowControl> list(final Vector<Object[]> vector) {
-        List<DeviceAllowControl> ctrls = new ArrayList<>(vector.size());
+    public static List<DeviceAllowControl> list(final Collection<Object[]> arrays) {
+        List<DeviceAllowControl> ctrls = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             DeviceAllowControl ctrl = new DeviceAllowControl(array);
 
             ctrls.add(ctrl);

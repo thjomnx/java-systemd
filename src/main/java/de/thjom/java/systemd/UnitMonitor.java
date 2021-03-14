@@ -11,10 +11,6 @@
 
 package de.thjom.java.systemd;
 
-import static de.thjom.java.systemd.Unit.Property.ACTIVE_STATE;
-import static de.thjom.java.systemd.Unit.Property.LOAD_STATE;
-import static de.thjom.java.systemd.Unit.Property.SUB_STATE;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,11 +22,11 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.freedesktop.DBus.Properties.PropertiesChanged;
-import org.freedesktop.dbus.DBusSigHandler;
-import org.freedesktop.dbus.DBusSignal;
-import org.freedesktop.dbus.Variant;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusSigHandler;
+import org.freedesktop.dbus.interfaces.Properties.PropertiesChanged;
+import org.freedesktop.dbus.messages.DBusSignal;
+import org.freedesktop.dbus.types.Variant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +36,10 @@ import de.thjom.java.systemd.interfaces.ManagerInterface.UnitFilesChanged;
 abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier {
 
     protected static final String ERROR_MSG_MONITOR_REFRESH = "Error while refreshing internal monitor state";
+
+	private static final String ACTIVE_STATE = Unit.Property.ACTIVE_STATE;
+	private static final String LOAD_STATE = Unit.Property.LOAD_STATE;
+	private static final String SUB_STATE = Unit.Property.SUB_STATE;
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -72,24 +72,24 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
         manager.subscribe();
 
         reloadingHandler = new ReloadingHandler();
-        manager.addConsumer(Reloading.class, reloadingHandler);
+        manager.addHandler(Reloading.class, reloadingHandler);
 
         unitFilesChangedHandler = new UnitFilesChangedHandler();
-        manager.addConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
+        manager.addHandler(UnitFilesChanged.class, unitFilesChangedHandler);
     }
 
     public void removeDefaultHandlers() throws DBusException {
-        manager.removeConsumer(Reloading.class, reloadingHandler);
-        manager.removeConsumer(UnitFilesChanged.class, unitFilesChangedHandler);
+        manager.removeHandler(Reloading.class, reloadingHandler);
+        manager.removeHandler(UnitFilesChanged.class, unitFilesChangedHandler);
     }
 
     @Override
-    protected SignalConsumer<PropertiesChanged> createStateConsumer() {
-        return new SignalConsumer<>(s -> {
-            Optional<Unit> unit = getMonitoredUnit(Unit.extractName(s.getPath()));
+    protected DBusSigHandler<PropertiesChanged> createStateHandler() {
+        return signal -> {
+            Optional<Unit> unit = findMonitoredUnit(Unit.extractName(signal.getPath()));
 
             if (unit.isPresent()) {
-                Map<String, Variant<?>> properties = s.changedProperties;
+                Map<String, Variant<?>> properties = signal.getPropertiesChanged();
 
                 if (properties.containsKey(ACTIVE_STATE) || properties.containsKey(LOAD_STATE) || properties.containsKey(SUB_STATE)) {
                     synchronized (unitStateListeners) {
@@ -97,7 +97,7 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
                     }
                 }
             }
-        });
+        };
     }
 
     public synchronized void addListener(final UnitMonitorListener listener) {
@@ -150,7 +150,11 @@ abstract class UnitMonitor extends AbstractAdapter implements UnitStateNotifier 
     }
 
     public Optional<Unit> getMonitoredUnit(final String unitName) {
-        return Optional.ofNullable(monitoredUnits.get(Systemd.escapePath(unitName)));
+        return findMonitoredUnit(Systemd.escapePath(unitName));
+    }
+
+    protected Optional<Unit> findMonitoredUnit(final String escapedUnitName) {
+        return Optional.ofNullable(monitoredUnits.get(escapedUnitName));
     }
 
     public Collection<Unit> getMonitoredUnits() {

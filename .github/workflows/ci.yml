@@ -1,0 +1,24 @@
+name: build
+
+on: push
+
+jobs:
+  maven:
+    name: Project build
+    environment: default
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: JDK setup
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Maven build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn --batch-mode -P sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }} verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar

@@ -11,41 +11,63 @@
 
 package de.thjom.java.systemd.interfaces;
 
-import java.util.List;
-
-import org.freedesktop.dbus.DBusInterface;
-import org.freedesktop.dbus.DBusInterfaceName;
-import org.freedesktop.dbus.DBusMemberName;
-import org.freedesktop.dbus.Path;
-import org.freedesktop.dbus.exceptions.DBusException;
-
 import de.thjom.java.systemd.Signal;
-import de.thjom.java.systemd.types.UnitFileType;
-import de.thjom.java.systemd.types.UnitType;
+import de.thjom.java.systemd.types.*;
+import org.freedesktop.dbus.DBusPath;
+import org.freedesktop.dbus.annotations.DBusInterfaceName;
+import org.freedesktop.dbus.annotations.DBusMemberName;
+import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.interfaces.DBusInterface;
+
+import java.util.List;
 
 @DBusInterfaceName(value = de.thjom.java.systemd.Manager.SERVICE_NAME)
 public interface ManagerInterface extends DBusInterface {
 
+    @DBusMemberName(value = "AddDependencyUnitFiles")
+    List<UnitFileChange> addDependencyUnitFiles(List<String> names, String target, String type, boolean runtime, boolean force);
+
     @DBusMemberName(value = "CancelJob")
     void cancelJob(long id);
+
+    @DBusMemberName(value = "CleanUnit")
+    void cleanUnit(String name, List<String> mask);
 
     @DBusMemberName(value = "ClearJobs")
     void clearJobs();
 
-    @DBusMemberName(value = "CreateSnapshot")
-    Path createSnapshot(String name, boolean cleanup);
+    @DBusMemberName(value = "DisableUnitFiles")
+    List<UnitFileChange> disableUnitFiles(List<String> names, boolean runtime);
 
     @DBusMemberName(value = "Dump")
     String dump();
 
+    @DBusMemberName(value = "EnableUnitFiles")
+    List<UnitFileChange> enableUnitFiles(List<String> names, boolean runtime, boolean force);
+
     @DBusMemberName(value = "Exit")
     void exit();
+
+    @DBusMemberName(value = "FreezeUnit")
+    void freezeUnit(String name);
 
     @DBusMemberName(value = "GetDefaultTarget")
     String getDefaultTarget();
 
+    @DBusMemberName(value = "GetDynamicUsers")
+    List<DynamicUser> getDynamicUsers();
+
     @DBusMemberName(value = "GetUnitByPID")
-    Path getUnitByPID(int pid);
+    DBusPath getUnitByPID(int pid);
+
+    @DBusMemberName(value = "GetUnitFileLinks")
+    List<String> getUnitFileLinks(String name, boolean runtime);
+
+    @DBusMemberName(value = "GetUnitFileState")
+    String getUnitFileState(String name);
+
+    @DBusMemberName(value = "GetUnitProcesses")
+    List<UnitProcessType> getUnitProcesses(String name);
 
     @DBusMemberName(value = "Halt")
     void halt();
@@ -56,6 +78,9 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "KillUnit")
     void killUnit(String name, String who, int signal);
 
+    @DBusMemberName(value = "LinkUnitFiles")
+    List<UnitFileChange> linkUnitFiles(List<String> names, boolean runtime, boolean force);
+
     @DBusMemberName(value = "ListUnitFiles")
     List<UnitFileType> listUnitFiles();
 
@@ -63,7 +88,7 @@ public interface ManagerInterface extends DBusInterface {
     List<UnitType> listUnits();
 
     @DBusMemberName(value = "LoadUnit")
-    Path loadUnit(String name);
+    DBusPath loadUnit(String name);
 
     @DBusMemberName(value = "LookupDynamicUserByName")
     long lookupDynamicUserByName(String name);
@@ -71,11 +96,23 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "LookupDynamicUserByUID")
     String lookupDynamicUserByUID(long uid);
 
+    @DBusMemberName(value = "MaskUnitFiles")
+    List<UnitFileChange> maskUnitFiles(List<String> names, boolean runtime, boolean force);
+
     @DBusMemberName(value = "PowerOff")
     void powerOff();
 
+    @DBusMemberName(value = "PresetUnitFiles")
+    List<UnitFileInstallChange> presetUnitFiles(List<String> names, boolean runtime, boolean force);
+
+    @DBusMemberName(value = "PresetUnitFilesWithMode")
+    List<UnitFileInstallChange> presetUnitFilesWithMode(List<String> names, String mode, boolean runtime, boolean force);
+
     @DBusMemberName(value = "Reboot")
     void reboot();
+
+    @DBusMemberName(value = "ReenableUnitFiles")
+    List<UnitFileInstallChange> reenableUnitFiles(List<String> names, boolean runtime, boolean force);
 
     @DBusMemberName(value = "Reexecute")
     void reexecute();
@@ -87,16 +124,13 @@ public interface ManagerInterface extends DBusInterface {
     void reload();
 
     @DBusMemberName(value = "ReloadOrRestartUnit")
-    Path reloadOrRestartUnit(String name, String mode);
+    DBusPath reloadOrRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "ReloadOrTryRestartUnit")
-    Path reloadOrTryRestartUnit(String name, String mode);
+    DBusPath reloadOrTryRestartUnit(String name, String mode);
 
     @DBusMemberName(value = "ReloadUnit")
-    Path reloadUnit(String name, String mode);
-
-    @DBusMemberName(value = "RemoveSnapshot")
-    void removeSnapshot(String name);
+    DBusPath reloadUnit(String name, String mode);
 
     @DBusMemberName(value = "ResetFailed")
     void resetFailed();
@@ -105,7 +139,13 @@ public interface ManagerInterface extends DBusInterface {
     void resetFailedUnit(String name);
 
     @DBusMemberName(value = "RestartUnit")
-    Path restartUnit(String name, String mode);
+    DBusPath restartUnit(String name, String mode);
+
+    @DBusMemberName(value = "RevertUnitFiles")
+    List<UnitFileChange> revertUnitFiles(List<String> names);
+
+    @DBusMemberName(value = "SetDefaultTarget")
+    List<UnitFileChange> setDefaultTarget(String name, boolean force);
 
     @DBusMemberName(value = "SetEnvironment")
     void setEnvironment(String name);
@@ -114,10 +154,10 @@ public interface ManagerInterface extends DBusInterface {
     void setExitCode(byte value);
 
     @DBusMemberName(value = "StartUnit")
-    Path startUnit(String name, String mode);
+    DBusPath startUnit(String name, String mode);
 
     @DBusMemberName(value = "StopUnit")
-    Path stopUnit(String name, String mode);
+    DBusPath stopUnit(String name, String mode);
 
     @DBusMemberName(value = "Subscribe")
     void subscribe();
@@ -125,8 +165,14 @@ public interface ManagerInterface extends DBusInterface {
     @DBusMemberName(value = "SwitchRoot")
     void switchRoot(String newRoot, String init);
 
+    @DBusMemberName(value = "ThawUnit")
+    void thawUnit(String name);
+
     @DBusMemberName(value = "TryRestartUnit")
-    Path tryRestartUnit(String name, String mode);
+    DBusPath tryRestartUnit(String name, String mode);
+
+    @DBusMemberName(value = "UnmaskUnitFiles")
+    List<UnitFileChange> unmaskUnitFiles(List<String> names, boolean runtime);
 
     @DBusMemberName(value = "UnrefUnit")
     void unrefUnit(String name);
@@ -142,7 +188,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class JobNew extends Signal {
 
-        public JobNew(String objectPath, long id, Path job, String unit) throws DBusException {
+        public JobNew(String objectPath, long id, DBusPath job, String unit) throws DBusException {
             super(objectPath, id, job, unit);
         }
 
@@ -150,7 +196,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, 0L);
         }
 
-        public Path getJob() {
+        public DBusPath getJob() {
             return getParameter(1, null);
         }
 
@@ -162,7 +208,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class JobRemoved extends Signal {
 
-        public JobRemoved(String objectPath, long id, Path job, String unit, String result) throws DBusException {
+        public JobRemoved(String objectPath, long id, DBusPath job, String unit, String result) throws DBusException {
             super(objectPath, id, job, unit, result);
         }
 
@@ -170,7 +216,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, 0L);
         }
 
-        public Path getJob() {
+        public DBusPath getJob() {
             return getParameter(1, null);
         }
 
@@ -239,7 +285,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class UnitNew extends Signal {
 
-        public UnitNew(String objectPath, String id, Path unit) throws DBusException {
+        public UnitNew(String objectPath, String id, DBusPath unit) throws DBusException {
             super(objectPath, id, unit);
         }
 
@@ -247,7 +293,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, "");
         }
 
-        public Path getUnit() {
+        public DBusPath getUnit() {
             return getParameter(1, null);
         }
 
@@ -255,7 +301,7 @@ public interface ManagerInterface extends DBusInterface {
 
     class UnitRemoved extends Signal {
 
-        public UnitRemoved(String objectPath, String id, Path unit) throws DBusException {
+        public UnitRemoved(String objectPath, String id, DBusPath unit) throws DBusException {
             super(objectPath, id, unit);
         }
 
@@ -263,7 +309,7 @@ public interface ManagerInterface extends DBusInterface {
             return getParameter(0, "");
         }
 
-        public Path getUnit() {
+        public DBusPath getUnit() {
             return getParameter(1, null);
         }
 

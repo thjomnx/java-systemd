@@ -11,8 +11,8 @@
 
 package de.thjom.java.systemd.types;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -44,18 +44,18 @@ public class DeviceAllowControlTest {
 
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
-        Vector<Object[]> vec = new Vector<>();
+        List<Object[]> source = new ArrayList<>();
 
-        List<DeviceAllowControl> list = DeviceAllowControl.list(vec);
+        List<DeviceAllowControl> list = DeviceAllowControl.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo1", "bar1" });
-        vec.add(new Object[] { "foo2", "bar2" });
+        source.add(new Object[] { "foo1", "bar1" });
+        source.add(new Object[] { "foo2", "bar2" });
 
-        list = DeviceAllowControl.list(vec);
+        list = DeviceAllowControl.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
@@ -75,13 +75,13 @@ public class DeviceAllowControlTest {
 
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
-        Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[0]);
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[0]);
 
         Exception exc = null;
 
         try {
-            DeviceAllowControl.list(vec);
+            DeviceAllowControl.list(list);
         }
         catch (Exception e) {
             exc = e;

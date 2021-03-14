@@ -11,6 +11,8 @@
 
 package de.thjom.java.systemd;
 
+import java.util.List;
+
 import org.freedesktop.dbus.exceptions.DBusException;
 
 import de.thjom.java.systemd.interfaces.DeviceInterface;
@@ -28,7 +30,7 @@ public class Device extends Unit {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 

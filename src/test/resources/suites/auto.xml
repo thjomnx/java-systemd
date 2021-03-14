@@ -1,4 +1,4 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
 <suite name="auto">
     <groups>
@@ -11,9 +11,9 @@
     <test name="all">
         <packages>
             <package name="de.thjom.java.systemd" />
-            <package name="de.thjom.java.systemd.tools" />
+            <package name="de.thjom.java.systemd.features" />
+            <package name="de.thjom.java.systemd.interfaces" />
             <package name="de.thjom.java.systemd.types" />
-            <package name="de.thjom.java.systemd.utils" />
         </packages>
     </test>
 </suite>

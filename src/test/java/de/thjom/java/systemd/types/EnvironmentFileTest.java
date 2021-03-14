@@ -11,8 +11,8 @@
 
 package de.thjom.java.systemd.types;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -44,18 +44,18 @@ public class EnvironmentFileTest {
 
     @Test(description="Tests processing of multiple data rows.")
     public void testBulkProcessing() {
-        Vector<Object[]> vec = new Vector<>();
+        List<Object[]> source = new ArrayList<>();
 
-        List<EnvironmentFile> list = EnvironmentFile.list(vec);
+        List<EnvironmentFile> list = EnvironmentFile.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 0);
 
         // Next test
-        vec.add(new Object[] { "foo", true });
-        vec.add(new Object[] { "bar", false });
+        source.add(new Object[] { "foo", true });
+        source.add(new Object[] { "bar", false });
 
-        list = EnvironmentFile.list(vec);
+        list = EnvironmentFile.list(source);
 
         Assert.assertNotNull(list);
         Assert.assertEquals(list.size(), 2);
@@ -75,13 +75,13 @@ public class EnvironmentFileTest {
 
     @Test(description="Tests processing failure cases on multiple data rows.")
     public void testBulkProcessingFailures() {
-        Vector<Object[]> vec = new Vector<>();
-        vec.add(new Object[0]);
+        List<Object[]> list = new ArrayList<>();
+        list.add(new Object[0]);
 
         Exception exc = null;
 
         try {
-            EnvironmentFile.list(vec);
+            EnvironmentFile.list(list);
         }
         catch (Exception e) {
             exc = e;
@@ -90,13 +90,13 @@ public class EnvironmentFileTest {
         Assert.assertEquals(exc.getClass(), ArrayIndexOutOfBoundsException.class);
 
         // Next test
-        vec.clear();
-        vec.add(new Object[] { "foo", 1 });
+        list.clear();
+        list.add(new Object[] { "foo", 1 });
 
         exc = null;
 
         try {
-            EnvironmentFile.list(vec);
+            EnvironmentFile.list(list);
         }
         catch (Exception e) {
             exc = e;

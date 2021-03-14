@@ -13,10 +13,10 @@ package de.thjom.java.systemd.types;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt64;
 
 public class IOIops extends IOPath {
 
@@ -28,10 +28,10 @@ public class IOIops extends IOPath {
         this.iops = ((UInt64) array[1]).value();
     }
 
-    public static List<IOIops> list(final Vector<Object[]> vector) {
-        List<IOIops> list = new ArrayList<>(vector.size());
+    public static List<IOIops> list(final Collection<Object[]> arrays) {
+        List<IOIops> list = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             IOIops iops = new IOIops(array);
 
             list.add(iops);

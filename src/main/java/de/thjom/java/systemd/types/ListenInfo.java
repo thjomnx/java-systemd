@@ -13,7 +13,6 @@ package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class ListenInfo {
 
@@ -25,10 +24,10 @@ public class ListenInfo {
         this.filePath = String.valueOf(array[1]);
     }
 
-    public static List<ListenInfo> list(final Vector<Object[]> vector) {
-        List<ListenInfo> infos = new ArrayList<>(vector.size());
+    public static List<ListenInfo> list(final List<Object[]> arrays) {
+        List<ListenInfo> infos = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             ListenInfo info = new ListenInfo(array);
 
             infos.add(info);

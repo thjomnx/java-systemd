@@ -35,7 +35,7 @@ public class Path extends Unit {
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(Property.class);
         }
 
@@ -70,7 +70,7 @@ public class Path extends Unit {
     }
 
     public List<PathInfo> getPaths() {
-        return PathInfo.list(properties.getVector(Property.PATHS));
+        return PathInfo.list(properties.getList(Property.PATHS));
     }
 
     public String getResult() {

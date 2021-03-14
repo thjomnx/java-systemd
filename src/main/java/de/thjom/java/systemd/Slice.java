@@ -12,7 +12,6 @@
 package de.thjom.java.systemd;
 
 import java.util.List;
-import java.util.Vector;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 
@@ -20,12 +19,13 @@ import de.thjom.java.systemd.features.CpuAccounting;
 import de.thjom.java.systemd.features.IoAccounting;
 import de.thjom.java.systemd.features.IpAccounting;
 import de.thjom.java.systemd.features.MemoryAccounting;
+import de.thjom.java.systemd.features.ResourceControl;
 import de.thjom.java.systemd.features.TasksAccounting;
 import de.thjom.java.systemd.interfaces.SliceInterface;
 import de.thjom.java.systemd.types.DeviceAllowControl;
 import de.thjom.java.systemd.types.UnitProcessType;
 
-public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, TasksAccounting {
+public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccounting, MemoryAccounting, ResourceControl, TasksAccounting {
 
     public static final String SERVICE_NAME = Systemd.SERVICE_NAME + ".Slice";
     public static final String UNIT_SUFFIX = ".slice";
@@ -33,8 +33,6 @@ public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccoun
     public static class Property extends InterfaceAdapter.AdapterProperty {
 
         public static final String CONTROL_GROUP = "ControlGroup";
-        public static final String DELEGATE = "Delegate";
-        public static final String DELEGATE_CONTROLLERS = "DelegateControllers";
         public static final String DEVICE_ALLOW = "DeviceAllow";
         public static final String DEVICE_POLICY = "DevicePolicy";
         public static final String SLICE = "Slice";
@@ -43,13 +41,14 @@ public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccoun
             super();
         }
 
-        public static final String[] getAllNames() {
+        public static List<String> getAllNames() {
             return getAllNames(
                     Property.class,
                     CpuAccounting.Property.class,
                     IoAccounting.Property.class,
                     IpAccounting.Property.class,
                     MemoryAccounting.Property.class,
+                    ResourceControl.Property.class,
                     TasksAccounting.Property.class
             );
         }
@@ -88,16 +87,8 @@ public class Slice extends Unit implements CpuAccounting, IoAccounting, IpAccoun
         return properties.getString(Property.CONTROL_GROUP);
     }
 
-    public boolean isDelegate() {
-        return properties.getBoolean(Property.DELEGATE);
-    }
-
-    public Vector<String> getDelegateControllers() {
-        return properties.getVector(Property.DELEGATE_CONTROLLERS);
-    }
-
     public List<DeviceAllowControl> getDeviceAllow() {
-        return DeviceAllowControl.list(properties.getVector(Property.DEVICE_ALLOW));
+        return DeviceAllowControl.list(properties.getList(Property.DEVICE_ALLOW));
     }
 
     public String getDevicePolicy() {

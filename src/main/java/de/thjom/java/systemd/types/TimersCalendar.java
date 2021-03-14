@@ -13,9 +13,8 @@ package de.thjom.java.systemd.types;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-import org.freedesktop.dbus.UInt64;
+import org.freedesktop.dbus.types.UInt64;
 
 public class TimersCalendar {
 
@@ -29,10 +28,10 @@ public class TimersCalendar {
         this.nextElapsePoint = ((UInt64) array[2]).longValue();
     }
 
-    public static List<TimersCalendar> list(final Vector<Object[]> vector) {
-        List<TimersCalendar> timers = new ArrayList<>(vector.size());
+    public static List<TimersCalendar> list(final List<Object[]> arrays) {
+        List<TimersCalendar> timers = new ArrayList<>(arrays.size());
 
-        for (Object[] array : vector) {
+        for (Object[] array : arrays) {
             TimersCalendar timer = new TimersCalendar(array);
 
             timers.add(timer);

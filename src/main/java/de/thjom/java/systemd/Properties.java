@@ -12,12 +12,13 @@
 package de.thjom.java.systemd;
 
 import java.math.BigInteger;
-import java.util.Vector;
+import java.util.List;
+import java.util.Objects;
 
-import org.freedesktop.dbus.DBusConnection;
-import org.freedesktop.dbus.UInt64;
-import org.freedesktop.dbus.Variant;
+import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
+import org.freedesktop.dbus.types.UInt64;
+import org.freedesktop.dbus.types.Variant;
 
 import de.thjom.java.systemd.interfaces.PropertyInterface;
 
@@ -30,13 +31,37 @@ public class Properties extends InterfaceAdapter {
     private Properties(final DBusConnection dbus, final PropertyInterface iface, final String serviceName) {
         super(dbus, iface);
 
-        this.serviceName = serviceName;
+        this.serviceName = Objects.requireNonNull(serviceName);
     }
 
     static Properties create(final DBusConnection dbus, final String objectPath, final String serviceName) throws DBusException {
         PropertyInterface iface = dbus.getRemoteObject(Systemd.SERVICE_NAME, objectPath, PropertyInterface.class);
 
         return new Properties(dbus, iface, serviceName);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            Properties other = (Properties) obj;
+
+            return super.equals(obj) && serviceName.equals(other.serviceName);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), serviceName);
     }
 
     @Override
@@ -58,15 +83,11 @@ public class Properties extends InterfaceAdapter {
     }
 
     public boolean getBoolean(final String propertyName) {
-        Boolean value = (Boolean) getVariant(propertyName).getValue();
-
-        return value.booleanValue();
+        return (Boolean) getVariant(propertyName).getValue();
     }
 
     public byte getByte(final String propertyName) {
-        Byte value = (Byte) getVariant(propertyName).getValue();
-
-        return value.byteValue();
+        return (Byte) getVariant(propertyName).getValue();
     }
 
     public short getShort(final String propertyName) {
@@ -104,8 +125,8 @@ public class Properties extends InterfaceAdapter {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Vector<T> getVector(final String propertyName) {
-        return (Vector<T>) getVariant(propertyName).getValue();
+    public <T> List<T> getList(final String propertyName) {
+        return (List<T>) getVariant(propertyName).getValue();
     }
 
 }
