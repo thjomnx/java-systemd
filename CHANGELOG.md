@@ -2,11 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2021-03-25
+
+### Added
+
+- Java modularization (`module-info.java`).
+  - Thanks for contribution of [brett-smith](https://github.com/thjomnx/java-systemd/commit/5650f9f67c8389ba2cd7b9321cf4453baa7c764e).
+  - [dbus-java](https://github.com/hypfvieh/dbus-java) is now used in version 3.3.0.
+
 ## [2.0.0] - 2021-03-14
 
-The project has been migrated to use [dbus-java](https://github.com/hypfvieh/dbus-java) version 3.2.4. This introduces
-some breaking changes on **this project** compared to the previous 1.x stream. Many thanks for
-contributions of [brett-smith](https://github.com/thjomnx/java-systemd/commit/da9d79d15b9c30f8ba90bfa378bc8676e7e275fb).
+The project has been migrated to use [dbus-java](https://github.com/hypfvieh/dbus-java) version 3.2.4.
+This introduces some breaking changes on **this project** compared to the previous 1.x stream.
+Many thanks for contributions of [brett-smith](https://github.com/thjomnx/java-systemd/commit/da9d79d15b9c30f8ba90bfa378bc8676e7e275fb).
 
 The build environment is now based on JDK 11.
 

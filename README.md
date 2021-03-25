@@ -12,6 +12,7 @@
 Java access to systemd via D-Bus. Java D-Bus bindings (dbus-java) are required.
 
 This library shall:
+
 - Provide Java access to systemd interfaces via D-Bus (Manager, Unit, Service, Target, etc.)
 - Provide adapters for the internals of the dbus-java API in order to
     - ease the access to systemds methods and properties
@@ -23,6 +24,7 @@ This library shall:
 There are two major versions available on the [central repository](https://search.maven.org/artifact/com.github.thjomnx/java-systemd):
 
 - **2.x** (depends on dbus-java version 3)
+  - 2.1.x and later deploy this library as a Java module in the JPMS
 - **1.x** (depends on dbus-java version 2)
 
 ## Usage
@@ -33,12 +35,13 @@ Documentation and instructions how to use this library can be found in the [Wiki
 
 Unit tests are based on [TestNG](http://testng.org/doc/index.html) and [Mockito](http://mockito.org/). Test methods which require
 a deployed systemd environment are grouped in TestNG group "requireSystemd". There are two TestNG suites available:
+
 - src/test/resources/suites/**auto-systemd.xml** (executes all tests)
 - src/test/resources/suites/**auto.xml** (excludes group "requireSystemd")
 
 ## Contributions
 
-- Thanks to [brett-smith](https://github.com/brett-smith) for initial migration work to support dbus-java version 3.
+- Thanks to [brett-smith](https://github.com/brett-smith) for initial migration work to support dbus-java version 3 and for JPMS support.
 
 ## License
 
@@ -47,6 +50,7 @@ LGPL v2.1 and AFL 3.0.
 ## Disclaimer
 
 These are no "official" Java bindings for systemd via D-Bus. I only work on it if the following requisites are met:
+
 - The kids are sleeping
 - My wife is hacking on medical research
 - No beers in the fridge
