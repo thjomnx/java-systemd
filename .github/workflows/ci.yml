@@ -21,4 +21,4 @@ jobs:
       - name: Maven build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn --batch-mode verify
+        run: mvn --batch-mode -P sonar verify sonar:sonar
