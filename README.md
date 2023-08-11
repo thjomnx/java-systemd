@@ -1,7 +1,6 @@
 [![Build Status](https://github.com/thjomnx/java-systemd/actions/workflows/ci.yml/badge.svg)](https://github.com/thjomnx/java-systemd/actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=thjomnx_java-systemd&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=thjomnx_java-systemd)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=thjomnx_java-systemd&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=thjomnx_java-systemd)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=thjomnx_java-systemd&metric=coverage)](https://sonarcloud.io/summary/new_code?id=thjomnx_java-systemd)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=thjomnx_java-systemd&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=thjomnx_java-systemd)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.thjomnx/java-systemd.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.thjomnx/java-systemd)
 [![License: LGPL v2.1](https://img.shields.io/badge/license-LGPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1)
